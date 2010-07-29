@@ -1,0 +1,24 @@
+<% if @contact -%>
+<table>
+<tr><td class="contact_info_label">Name:</td><td><%= @contact.FirstName %> <%= @contact.LastName %></td></tr>
+<tr><td class="contact_info_label">Institute:</td><td><%= @contact.Institute %></td></tr>
+<tr><td class="contact_info_label">Address:</td><td><%= @contact.Address%></td></tr>
+<tr><td class="contact_info_label">Telephone:</td><td><%= @contact.telephone%></td></tr>
+<tr><td class="contact_info_label">Fax:</td><td><%= @contact.fax %></td></tr>
+<tr><td class="contact_info_label">Email:</td><td><%= @contact.email %></td></tr>
+</table>
+<br />
+<table id="contact_cruises">
+  <caption>Cruises</caption>
+  <tr><th>Line</th><th>ExpoCode</th><th>Ship</th><th>Date of Departure</th><th>Date of Return</th></tr>
+  <% for cruise in @contact.cruises -%>
+    <tr>
+      <td><a href="/data_access?ExpoCode=<%= cruise.ExpoCode -%>"><%= cruise.Line -%></a></td>
+      <td><%= cruise.ExpoCode %></td>
+      <td><%= cruise.Ship_Name %></td><td><%= cruise.Begin_Date -%></td><td><%= cruise.EndDate -%></td>
+    </tr>
+  <% end -%>
+</table>
+<% else -%>
+<p>No contact found.</p>
+<% end -%>

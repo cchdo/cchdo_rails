@@ -1,0 +1,48 @@
+.slider {
+	position: relative;
+	border: 1px solid black;
+	background-color: #aaaaff;
+	width: 200px;
+	height: 20px;
+}
+.slider_display {
+}
+#cover {
+	height: 20px;
+	background-color: #4444ff;
+	position: absolute;
+}
+.slider_track {
+	position: absolute;
+	height: 2px;
+	top: 10px;
+	bottom: 10px;
+	width: inherit;
+}
+.point_left, .point_right {
+	height: 20px;
+	width: 5px;
+	margin-left: -3px; /*offset*/
+	position: absolute;
+	top: -1px;
+}
+#min_time {
+	background-color: cyan;
+	border: 1px solid blue;
+}
+#max_time {
+	background-color: orange;
+	border: 1px solid magenta;
+}
+.point_right > p, .point_left > p {
+	margin-top: -1px;
+	background-color: inherit;
+	border: inherit;
+	width: 5ex;
+}
+.point_right > p {
+	margin-left: 4px;
+}
+.point_left > p {
+	margin-left: -5ex;
+}

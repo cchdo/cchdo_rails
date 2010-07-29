@@ -1,0 +1,5 @@
+var countries = new Array(<%= @countries.size %>);
+
+<% @countries.each_with_index do |country,index| %>
+   countries[<%= index %>] = "<%= country.Country %>";
+<% end %>

@@ -1,0 +1,5 @@
+var lines = new Array(<%= @lines.size %>);
+
+<% @lines.each_with_index do |line,index| %>
+   lines[<%= index %>] = "<%= line.Expo %>";
+<% end %>

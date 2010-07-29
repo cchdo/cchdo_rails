@@ -1,0 +1,22 @@
+<table>
+<tr>
+<td valign="top">
+<div style="height:300px; width:200px; overflow:auto">
+ <ul>
+<% for group in @groups %>
+ <li><%= link_to_remote "#{group.Group}", :update => "group_contents",:url => { :action => "show_group", :group => "#{group.Group}"} %></li>
+<% end %>
+</ul>
+</div>
+</td>
+<td  valign="top"><div id="group_contents" style="height:300px; overflow:auto">List of cruises</div></td>
+<td  valign="top">
+	
+
+</td>
+</tr></table>
+<hr>
+Create a new Group
+<% remote_form_for :cruise_group,  :url => { :action => :create_group},:update => "entry" do |form| %>
+<%= form.text_field :Group %>
+<% end %>

@@ -1,0 +1,5 @@
+var contacts = new Array(<%= @contacts.size %>);
+
+<% @contacts.each_with_index do |contact,index| %>
+   contacts[<%= index %>] = "<%= contact.LastName %>";
+<% end %>

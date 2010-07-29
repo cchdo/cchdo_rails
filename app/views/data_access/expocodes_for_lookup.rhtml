@@ -1,0 +1,5 @@
+var expocodes = new Array(<%= @expocodes.size %>);
+
+<% @expocodes.each_with_index do |expocode,index| %>
+   expocodes[<%= index %>] = "<%= expocode.ExpoCode %>";
+<% end %>

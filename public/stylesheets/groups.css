@@ -1,0 +1,119 @@
+
+#group_search_maps{
+	float:left;
+	height:500px;
+	width:648px;
+}
+#current_group_map {
+	float: left; 
+	top:1px;
+/*	position:relative;*/
+	margin: 0px;
+	width: 400px;
+	height:490px;
+}
+
+#pac_group {
+	float: right;
+	text-align:left;
+}
+
+#current_map{
+	float:right;
+	/*position: relative;*/
+	margin-top: 20px;
+	height:155px;
+	width:150px;
+	border: 1px solid #999;
+}
+/*
+.group_page_cruise_link_left{
+	float:left;
+    background:white;
+	color:black;
+	width: 140px;
+}
+.group_page_cruise_link_right{
+    float:right;
+    background:white;
+	color:black;
+	width: 140px;
+}
+*/
+.arrowlistmenu{
+width: 374px; /*width of accordion menu*/
+}
+
+.arrowlistmenu .menuheader{ /*CSS class for menu headers in general (expanding or not!)*/
+color: #006f89;
+background: black url('/images/group/titlebar.jpg') repeat-x center left;
+margin-bottom: 4px; /*bottom spacing between header and rest of content*/
+text-transform: uppercase;
+padding: 4px 0 4px 1px; /*header text is indented 10px*/
+cursor: hand;
+cursor: pointer;
+}
+
+.arrowlistmenu .openheader{ /*CSS class to apply to expandable header when it's expanded*/
+background: black;
+color: white;
+}
+
+.arrowlistmenu ul{ /*CSS for UL of each sub menu*/
+list-style-type: none;
+margin: 0;
+padding: 0;
+margin-bottom: 1px; /*bottom spacing between each UL and rest of content*/
+}
+
+.arrowlistmenu ul li{
+padding-bottom: 1px; /*bottom spacing between menu items*/
+}
+
+.arrowlistmenu ul li .opensubheader{ /*Open state CSS for sub menu header*/
+display: block;
+background: #e0e0e0 !important;
+color: black;
+}
+
+.arrowlistmenu ul li .closedsubheader{ /*Closed state CSS for sub menu header*/
+display: block;
+background: #006f89 !important;
+}
+
+.arrowlistmenu ul li .opensubheader2{ /*Open state CSS for 2nd sub menu header*/
+display: block;
+background: #9ec4cd !important;
+color: white;
+}
+
+.arrowlistmenu ul li .closedsubheader2{ /*Closed state CSS for 2nd sub menu header*/
+display: block;
+background: #006f89 !important;
+}
+.arrowlistmenu ul li a{
+color:black;
+padding-left: 19px; /*link text is indented 19px*/
+text-decoration: none;
+}
+
+.arrowlistmenu ul li a:visited{
+color:black;
+}
+
+.arrowlistmenu ul li a:hover{ /*hover state CSS*/
+background-color: #f0f0f0;
+}
+
+.subexpandable {
+color: #000;
+}
+.subcategoryitems {
+display: block;
+}
+
+.subcategoryitems li {
+background-color: #9ec4cd;
+display: block;
+padding-left: 15px;
+}

@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>CCHDO | CLIVAR & Carbon Hydrographic Data Office</title>
+<script language="JavaScript1.2" type="text/javascript" src="http://cchdo.ucsd.edu/javascripts/application.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+menu_status = new Array();
+
+function showHide(theid){
+    if (document.getElementById) {
+    var switch_id = document.getElementById(theid);
+
+        if(menu_status[theid] != 'show') {
+           switch_id.className = 'show';
+           menu_status[theid] = 'show';
+        }else{
+           switch_id.className = 'hide';
+           menu_status[theid] = 'hide';
+        }
+    }
+}
+
+//-->
+</script>
+<style type="text/css" media="screen">
+	@import url("cchdo2.css");
+</style>
+</head>
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<table width="1024" border="0" cellpadding="0" cellspacing="0" align="center">
+<form method="post" action="http://cchdo.ucsd.edu/search" enctype="multipart/form-data">
+	<tr>
+		<td>
+			<img src="images/cchdo2_01.jpg" width="267" height="130" alt=""></td>
+		<td>
+			<img src="images/cchdo2_02.jpg" width="551" height="130" alt=""></td>
+		<td colspan="2" background="images/cchdo2_03.jpg" width="206" height="130" valign="bottom" align="left" class="search">&nbsp;&nbsp;SEARCH</td>
+	</tr>
+	<tr>
+		<td bgcolor="#06629b" class="thedate" width="267">
+			<script>document.write(theDays[theDate.getDay()]+", "+theMonths[theDate.getMonth()]+" "+theDate.getDate()+", "+theDate.getFullYear());</script>
+</td>
+		<td>
+			<img src="images/cchdo2_05.jpg" width="551" height="38" alt=""></td>
+		<td background="images/cchdo2_06.jpg" width="154" height="38" valign="top" align="right"><input type="text" name="query" size="20" value=""/></td>
+		<td bgcolor="#06629b"><input type="image" src="images/cchdo2_07.jpg" width="52" height="38"name="query" alt="SEARCH"/></td>
+	</tr></form>
+</table>
+<table width="1024" cellpadding="0" cellspacing="0">
+	<tr>
+		<td valign="top">
+		<table border="0" cellpadding="0" cellspacing="0">
+<!-- Navigaion Menu -->
+		<tr>
+		<td valign="top">
+		<!-- HOME -->	
+		<a href="http://cchdo.ucsd.edu/"><img src="images/cchdo2_09.jpg" width="212" height="30" alt="HOME" border="0"></a><br>
+
+		<!-- DATA BY REGION -->
+		<a class="themenu" onclick="showHide('databyregion')"><img src="images/cchdo2_12.jpg" width="212" height="31" alt="DATA BY REGION" border="0"></a>
+		<div id="databyregion" class="hide">
+			<a class="submenu" href="arctic.htm">Arctic</a><br>
+			<a class="submenu" href="atlantic.htm">Atlantic Ocean</a><br>
+			<a class="submenu" href="pacific.htm">Pacific Ocean</a><br>
+			<a class="submenu" href="indian.htm">Indian Ocean</a><br>
+			<a class="submenu" href="southern.htm">Southern Ocean</a><br>
+		</div>
+
+		<!-- SEARCH -->
+		<a class="themenu" onclick="showHide('search')"><img src="images/cchdo2_13.jpg" width="212" height="30" alt="SEARCH" border="0"></a>
+		<div id="search" class="hide">
+			<a class="submenu" href="#">Bulk Download</a><br>
+			<a class="submenu" href="#">Advanced Search</a><br>
+			<a class="submenu" href="#">Cruise Maps</a><br>
+		</div>
+
+		<!-- SUBMIT --> 
+		<a href="#"><img src="images/cchdo2_14.jpg" width="212" height="31" alt="SUBMIT" border="0"></a><br>
+
+		<!-- INFO -->
+		<a class="themenu" onclick="showHide('info')"><img src="images/cchdo2_15.jpg" width="212" height="28" alt="INFO" border="0"></a>
+		<div id="info" class="hide">
+			<a class="submenu" href="formats.htm">Formats</a><br>
+			<a class="submenu" href="policies.htm">Policies</a><br>
+			<a class="submenu" href="manuals.htm">Manuals</a><br>
+			<a class="submenu" href="contact.htm">Contact</a><br>
+		</div>
+</td>
+</tr>
+<!-- End of Navigation Menu -->
+		</table>
+		</td>
+		<td><p>&nbsp;</p>
+<!-- Page content goes here -->
+
+<table><tr><td valign="top" rowspan="2"><img src="http://cchdo.ucsd.edu/images/front_page.jpg" alt="some random image" /></td>
+<td valign="top" height="20"><h1>Welcome to the CCHDO</h1>
+
+<p>The CCHDO's primary mission is to be a repository and distribution center
+for CTD and Hydrographic data sets of the highest possible quality. These
+data are a product of WOCE, CLIVAR and numerous other oceanographic research
+programs -- past, present and to come.<p>
+
+<p>Whenever possible we provide these
+data in three widely-used formats:
+<a href="http://cchdo.ucsd.edu/format.htm">WOCE</a>, 
+<a href="http://cchdo.ucsd.edu/format.htm">netCDF</a> and 
+<a href="http://cchdo.ucsd.edu/format.htm">WHP-Exchange</a>, 
+which we recommend for data
+submissions to the CCHDO.</p>
+
+<!--Here is a guide on navigating around the site for an optimal search:<br><a href="guide.htm">Guide to the CCHDO Website</a>-->
+</td></tr>
+
+<tr><td><p class="footer">This site is funded by the <a href="http://www.nsf.gov">National Science
+Foundation</a>.</p></td>
+</tr></table>
+
+<!-- End of page content -->
+		</td>
+</tr>
+</table>
+<!-- End ImageReady Slices -->
+</body>
+</html>

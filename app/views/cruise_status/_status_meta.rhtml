@@ -1,0 +1,72 @@
+<% if @file_result %>
+Missing:
+<ul>
+<% for key in @file_result.keys %>
+  <% unless @file_result[key] %>
+	<li style="color:#FF0000"><%= key %></li>
+  <% end %>
+<% end%>
+</ul>
+Online:
+<br>
+<% if @file_result['exchange_bot'] %>
+   <% trash,path = @file_result['exchange_bot'].FileName.split(/data/) %>
+	<a href="/data<%= path %>">Exchange Bottle</a>
+	<%= @file_result['exchange_bot'].Stamp %>
+<% end %>
+ <br>
+<% if @file_result['exchange_ctd'] %>
+   <% trash,path = @file_result['exchange_ctd'].FileName.split(/data/) %>
+	<a href="/data<%= path %>">Exchange CTD</a>
+	<%= @file_result['exchange_ctd'].Stamp %>
+<% end %>
+
+<% if @file_result['woce_sum'] %>
+   <br>
+   <% trash,path = @file_result['woce_sum'].FileName.split(/data/) %>
+	<a href="/data<%= path %>">Sum File</a>
+	<%= @file_result['woce_sum'].Stamp %>
+<% end %>
+
+
+<% if @file_result['woce_ctd'] %>
+   <br>
+   <% trash,path = @file_result['woce_ctd'].FileName.split(/data/) %>
+	<a href="http://132.239.23.87/data<%= path %>">Woce CTD</a>
+	<!-- <%= @file_result['woce_ctd'].Stamp %> -->
+<% end %> 
+
+
+<% if @file_result['woce_bot'] %>
+   <br>
+   <% trash,path = @file_result['woce_bot'].FileName.split(/data/) %>
+	<a href="http://132.239.23.87/data<%= path %>">Woce Bottle</a>
+	 <%= @file_result['woce_bot'].Stamp %>
+<% end %>
+
+<% if @file_result['netcdf_bot'] %>
+   <br>
+   <% trash,path = @file_result['netcdf_bot'].FileName.split(/data/) %>
+	<a href="http://132.239.23.87/data<%= path %>">NetCDF Bottle</a>
+<% end %>
+
+<% if @file_result['netcdf_ctd'] %>
+   <br>
+   <% trash,path = @file_result['netcdf_ctd'].FileName.split(/data/) %>
+	<a href="http://132.239.23.87/data<%= path %>">NetCDF CTD</a>
+<% end %>
+
+<% if @file_result['text_doc'] %>
+   <br>
+   <% trash,path = @file_result['text_doc'].FileName.split(/data/) %>
+	<a href="http://132.239.23.87/data<%= path %>">Text Document</a>
+<% end %>
+
+<% if @file_result['pdf_doc'] %>
+   <br>
+   <% trash,path = @file_result['pdf_doc'].FileName.split(/data/) %>
+	<a href="http://132.239.23.87/data<%= path %>">PDF Document</a>
+<% end %>
+<% else %>
+<h1> No info found on cruise </h1>
+<% end %>

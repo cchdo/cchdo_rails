@@ -1,0 +1,43 @@
+
+<a href="/staff/submitted_files/">Back to Recent Submissions </a>
+<table id="old_submissions_table" border="colapse" height="15">
+	<colgroup >
+		<col span="1" width="85px">
+		<col span="1" width="115px">
+		<col span="1">
+		<col span="1" width="300px">
+	</colgroup>
+    <tr>
+		<th>Date</th>
+		<th>Name</th>
+		<th>File</th>
+		<th>View</th>
+    </tr>
+</table>
+
+<!-- <div class="scroll"> -->
+<table id="old_submissions_table" rules="rows" summary="">
+
+	<colgroup >
+		<col span="1">
+		<col span="1">
+		<col span="1">
+		<col span="1" width="300px">
+	</colgroup>
+
+	<% if @old_submissions %>	
+		<% for entry in @old_submissions%>
+
+			<% entry.Location.sub!('incoming_data','submissions') %>
+	
+			<tr>
+				<td><%= entry.Date %></td><td><%= entry.Name %></td><td><%= entry.Filename %></td><td><a href="<%= entry.Location %>"> View File </a></td>
+			</tr>
+		<% end %>
+	
+	<% else %>
+		No Files
+	<% end %>
+
+</table>
+<!-- </div> -->

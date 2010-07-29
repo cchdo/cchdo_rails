@@ -1,0 +1,4 @@
+<%= link_to_remote "Enter Minutes", :update => "minutes_frame", :url => { :action => "enter_minutes" } %><br>
+<div id="minutes_frame">
+	<%= render :partial => "minutes", :update => "minutes_frame" %>
+</div>

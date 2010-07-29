@@ -1,0 +1,5 @@
+var ships = new Array(<%= @ships.size %>);
+
+<% @ships.each_with_index do |ship,index| %>
+   ships[<%= index %>] = "<%= ship.Ship_Name %>";
+<% end %>

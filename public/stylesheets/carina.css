@@ -1,0 +1,82 @@
+#carina_tab_bar {
+	background-color: #006f8a;
+	color: #ffffff;
+	text-align: center;
+	z-index: 100;
+}
+
+#carina_menu {
+	margin-bottom: 3px;
+	padding-top: 18px;
+	text-align: left;
+}
+
+#carina_menu li {
+	display: inline;
+	list-style: none;
+}	
+
+#carina_menu a {
+	color: #ffffff;
+}
+
+#carina_menu a span.left {
+	background: url(../images/tabs/inactive_tab_left.jpg) no-repeat top left;
+	height: 39px;
+        padding: 18px 6px;
+	width: 16px;
+}
+
+#carina_menu a span.center {
+	background: url(../images/tabs/inactive_tab_center.jpg) repeat-x top left;
+	height: 39px;
+        padding: 18px 6px;
+}
+
+#carina_menu a span.right {
+	background: url(../images/tabs/inactive_tab_right.jpg) no-repeat top left;
+	height: 39px;
+        padding: 18px 7px;
+	width: 14px;
+}
+
+#carina_menu a span.active_left {
+	background: url(../images/tabs/active_tab_left.jpg) no-repeat top left;
+	height: 39px;
+	padding: 18px 6px;
+	width: 16px;
+}
+
+#carina_menu a span.active_center {
+	background: url(../images/tabs/active_tab_center.jpg) repeat-x top left;
+	height: 39px;
+        padding: 18px 6px;
+}
+
+#carina_menu a span.active_right {
+	background: url(../images/tabs/active_tab_right.jpg) no-repeat top left;
+	height: 39px;
+	padding: 18px 7px;
+	width: 14px;
+}
+
+#carina_menu a:visited {
+	text-decoration: none;
+}
+
+#carina_menu a.active {
+	color: #ffffff;
+	font-weight: bold;
+}
+
+/* Results */
+.heading_table_carina {
+	background-color:#d1edec;
+	color:#515151;
+	text-transform: uppercase;
+	vertical-align: top;
+}
+
+p.carina {
+	max-width: 100% !important;
+}

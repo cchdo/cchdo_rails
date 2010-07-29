@@ -1,0 +1,3 @@
+<p><b>Detailed Notes</b> - <em><%= @note_entry.LastName -%>, <%= @note_entry.First_Name -%></em></p>
+<p class="note"><%= @note_entry.Note -%></p>
+<div style="float: right;"><a href="javascript:void(0);" onclick="$('note_<%= @note_entry.ID -%>').hide();">Close</a></div>

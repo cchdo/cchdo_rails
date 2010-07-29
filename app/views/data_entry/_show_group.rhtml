@@ -1,0 +1,39 @@
+<table>
+	<tr>
+		<td width="200px">
+			<div style=" overflow:auto">
+          <% if @cruises %>
+          <% if @cruises.length > 0 %>
+          <table>
+          <% for cruise in @cruises %>
+           <tr>
+             <td>
+               <%= cruise.Line %>
+             </td>
+             <td>
+	           <%= cruise.ExpoCode %>
+	         </td>
+             <td>
+	            <%= link_to_remote "(Remove)",:update => "group_contents",:url =>{:action => "remove_group", :group => @group, :remove_expocode => "#{cruise.ExpoCode}",:remove =>"true"} %>
+	         </td>
+	       </tr>
+          <% end %>
+          </table>
+          <% end %>
+          <% end %>
+           </div>
+		</td>
+		<td valign="top" width="200px">
+			<div id="group_cruise_selection" >
+	        	<% remote_form_for :cruise,  :url => { :action => :show_lines_for_group},:update => "group_list" do |form| %>
+	   				<%= form.text_field :Line %>
+					<div class="auto_complete" id="line_auto_complete"></div>
+          		    <%= javascript_tag("new Autocompleter.Local('cruise_Line','line_auto_complete',lines,{fullSearch: true, frequency: 0, minChars:1});")%>      		
+					<%= form.hidden_field :Group, :value => "#{@group}" %>
+				<% end %>   
+        		<div id="group_list">
+	       		</div>
+           </div>
+        </td>
+    </tr>
+</table>

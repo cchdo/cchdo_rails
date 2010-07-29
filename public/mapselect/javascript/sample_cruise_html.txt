@@ -1,0 +1,24 @@
+<tr class="cruise" id="35A3CITHER3_2">
+	<td id="expocode" class="selected"><a href="http://watershed.ucsd.edu/data_access?ExpoCode=35A3CITHER3_2">35A3CITHER3_2</a></td>
+	<td id="line">A13 (1995)</td>
+	<td id="ship">L'ATALANTE</td>
+	<td id="country">FRA</td>
+	<td id="pi">Arhan/LPO</td>
+	<td id="date">1995-02-22</td>
+</tr>
+<tr class="cruise" id="35A3CITHER1_1">
+	<td id="expocode" class="selected"><a href="http://watershed.ucsd.edu/data_access?ExpoCode=35A3CITHER1_1">35A3CITHER1_1</a></td>
+	<td id="line">A07   (1993)</td>
+	<td id="ship">L'ATALANTE</td>
+	<td id="country">FRA</td>
+       	<td id="pi">Morliere/LODYC</td>
+	<td id="date">1993-01-02</td>
+</tr>
+<tr class="cruise" id="35A3CITHER1_2">
+	<td id="expocode" class="selected"><a href="http://watershed.ucsd.edu/data_access?ExpoCode=35A3CITHER1_2">35A3CITHER1_2</a></td>
+       	<td id="line">A06 (1993)</td>
+	<td id="ship">L'ATALANTE</td>
+	<td id="country">FRA</td>
+	<td id="pi">Colin/ORSTOM</td>
+	<td id="date">1993-02-13</td>
+</tr>

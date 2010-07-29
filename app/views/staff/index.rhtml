@@ -1,0 +1,31 @@
+<%
+type_rails = 'rails test server'
+
+list_of_servers = [
+    ['CCHDO', 'http://cchdo.ucsd.edu:80', 'CCHDO'],
+    ['USHYDRO', 'http://ushydro.ucsd.edu:80', 'USHYDRO'],
+    ['Seahunt', 'http://seahunt.ucsd.edu:80', 'BLANK!'],
+    ['goship Seahunt', 'http://goship.ucsd.edu', 'current goship'],
+    ['JOA', 'http://joa.ucsd.edu', 'virtual named host on goship'],
+    ['DPO', 'http://seahunt.ucsd.edu:8080', 'DPO'],
+    ['goship Seahunt', 'http://goship.ucsd.edu:3001', type_rails],
+    ['Web tools', 'http://goship.ucsd.edu:3000', type_rails],
+    ["Andrew's sandbox", 'http://goship.ucsd.edu:3001', type_rails],
+    ['repos', 'http://cchdoimac3.ucsd.edu', 'repositories'],
+]
+%>
+<table>
+  <tr>
+    <td>
+		  <div id="staff_div">
+        <h1>List of servers that CCHDO is maintaining</h1>
+        <p>The order is by importance</p>
+        <ol>
+        <% list_of_servers.each do |info| -%>
+            <li><%= link_to(info[0], info[1]) -%> <%=info[1]%> (<%=info[2]%>)</li>
+        <% end -%>
+        </ol>
+		  </div>
+    </td>
+  </tr>
+</table>

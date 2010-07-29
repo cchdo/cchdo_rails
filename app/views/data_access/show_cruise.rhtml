@@ -1,0 +1,128 @@
+<!-- Data Info and Files column -->
+<div id="data_access_left_column">
+<div class="boxed">
+	<h1>Data Info and Files</h1>
+	<div class="box_content">
+<!-- Data Info -->
+<% if (@cruise) %>
+	<div class="data_summary_header"><h2>General Information</h2></div>
+		<strong>ExpoCode:</strong> <%= @cruise.ExpoCode %><br />
+		<strong>Line:</strong> <%= @cruise.Line %><br />
+		<% if @cruise.Alias =~/\w/ %>
+	   	<strong>Alias:</strong> <%= @cruise.Alias ? @cruise.Alias : "" %><br />
+	   	<% end %>
+		<strong>Ship/Country:</strong> <%= @cruise.Ship_Name ? @cruise.Ship_Name : "" %>/<%= @cruise.Country ? @cruise.Country : "" %><br />
+		<strong>Chief Scientists:</strong> <%= @cruise.Chief_Scientist ? @cruise.Chief_Scientist : "" %><br />
+		<strong>Cruise Dates:</strong> <%= @cruise.Begin_Date ? @cruise.Begin_Date.strftime("%a %b %e, %Y") : "" %> <b>-</b> <%= @cruise.EndDate ? @cruise.EndDate.strftime("%a %b %e, %Y") : "" %><br />
+		<% if ((@file_result['big_pic']!=0) and (@file_result['small_pic']!=0)) %>
+  			   		<p class="data_access_map_thumb"><a href="<%= @file_result['big_pic'] %>"><img height="80px" width="80px" src="<%= @file_result['small_pic'] %>"><br>Full Size</a></p>
+  		<% end %>
+
+
+<!-- Files -->
+<div class="data_summary_header"><h2>Data Files</h2></div>
+	<% if @preliminary =~ /\w/ %>
+	    <p style="color:#FF0900; font-size:1.3em;  font-weight:bold;" ><%= @preliminary %></p>
+	<% end %>
+	
+	<p><strong><em>Exchange</em></strong><br />
+	<% if(@file_result['exchange_ctd']!=0) %>
+	<a href="<%= @file_result['exchange_ctd'] %>">CTD</a>  - ZIP archive of ASCII .csv CTD data with station information
+	<% end %>
+	<% if(@file_result['exchange_bot']!=0) %>
+	<br /><a href="<%= @file_result['exchange_bot'] %>">BOT</a> - ASCII .csv bottle data with station information
+	<% end %>
+	</p>
+	
+	<p><strong><em>NetCDF</em></strong><br />
+	<% if(@file_result['netcdf_ctd']!=0) %>
+	<a href="<%= @file_result['netcdf_ctd'] %>">CTD</a> - ZIP archive of binary CTD data with station information
+	<% end %>
+	<% if(@file_result['netcdf_bot']!=0) %>
+	<br /><a href="<%= @file_result['netcdf_bot'] %>">BOT</a> - Binary bottle data with station information
+	<% end %>
+	</p>
+	
+	<p><strong><em>WOCE</em></strong><br />
+	<% if(@file_result['woce_sum']!=0) %>
+	<a href="<%= @file_result['woce_sum'] %>">SUM</a> - ASCII station/cast information
+	<% end %>
+	<% if(@file_result['woce_ctd']!=0) %>
+	<br /><a href="<%= @file_result['woce_ctd'] %>">CTD</a> - ASCII CTD data without station information
+	<% end %>
+	<% if(@file_result['woce_bot']!= 0) %>
+	<br /><a href="<%= @file_result['woce_bot'] %>">BOT</a> - ASCII bottle data without station information
+	<% end %>
+	<% if(@file_result['large_volume']!= 0) %>
+	<br /><a href="<%= @file_result['large_volume'] %>">Large Volume</a> - ASCII bottle data without station information
+	<% end %>
+	</p>
+	
+	<p><strong><em>Documentation</em></strong><br />
+	<% if(@file_result['text_doc']!=0) %>
+	<a href="<%= @file_result['text_doc'] %>">Text</a> - ASCII cruise and data documentation
+	<% end %>
+	<% if(@file_result['pdf_doc']!=0) %>
+	<br /><a href="<%= @file_result['pdf_doc'] %>">PDF</a> - Portable Document Format cruise and data information
+	<% end %>
+	</p>
+	
+	<p>&nbsp;</p>
+	
+</div>
+<div class="box_bottom"></div>
+</div>
+</div>
+<!-- End Data Info and Files column -->
+
+<!-- Data Histories and Notes column -->
+<div id="data_access_right_column">
+<div class="boxed">
+<h1>Data Histories and Notes</h1>
+<div class="box_content">
+	  		<table id="data_summary_table_history" cellspacing="0" align="left">
+				<tr>
+	   				<td class="data_summary_header" align="left" colspan="3"><h2><a href="/data_history?ExpoCode=<%= @cruise.ExpoCode %>">Data Histories</a></h2></td>
+	   			</tr>
+				<tr>
+					<td>
+	   					<div class="data_histories_in_access">
+	   						<%= render :partial => 'history' -%>
+	   					</div>
+	   				</td>
+				</tr>
+	  		</table> 
+</div>
+<div class="box_bottom"></div>
+</div>
+</div>
+<!-- End Data Histories and Notes column -->
+
+<div class="clear"></div>
+
+<!-- Updates Section -->
+<% if @queue_files and @queue_files.length > 0 %>
+<div class="data_access_updates">
+	<div class="boxed">
+	<h1>Updates</h1>
+	<div class="box_content">
+    <div class="data_summary_header"><h2>Updates <span class="data_access_updates_note"> 
+	(These files have been submitted, but have not yet been merged into the CCHDO data set.)</span></h2></div>
+		<table width="100%">
+	    <% for @file in @queue_files %>
+                  <% if @file.Merged == 1 %> <% next %> <% end %>
+	  	  <tr><td> <a href="<%= @file.UnprocessedInput%>"><%= @file.Name %></a></td><td width="75%"><% if @file.Notes %> <%= @file.Notes %> <% end %></td></tr>
+	  	<% end %>
+	    </table>
+	</div>
+	<div class="box_bottom"></div>
+	</div>
+</div>
+<% end %>
+<!-- End Updates Section -->	
+	
+  <% else # if @cruise %>
+  	<h4>Cruise not found.</h4>
+  <% end %>
+
+

@@ -1,0 +1,93 @@
+<div class="boxed">
+	<h1>Search Results by Data File</h1>
+	<div class="box_content">
+<table width="100%">
+	<% if @expo_dates %>
+	<% for expo_obj in @expo_dates %>
+		<% if expo_obj.expo !~ /NULL/ %>
+		<tr>		
+                 <td class="data_table" width="200">
+                    <table align="left">
+                       <tr>
+					      <td>
+						    <strong>Line:</strong> <%=@changed_sets[expo_obj.expo]["Line"] %><br /> 
+						    <strong>ExpoCode:</strong> <%= expo_obj.expo %><br /> 
+						    <strong>Ship:</strong>  <%= @changed_sets[expo_obj.expo]["Ship_Name"] %> <br /> 
+						    <strong>Country:</strong> <%= @changed_sets[expo_obj.expo]["Country"] %> <br/>
+                          </td>
+                       </tr>
+					</table>
+				</td>
+                <td class="data_files">
+	            <table>
+				<% if(@changed_sets[expo_obj.expo]['woce_sum']) %>
+				<tr>
+					<td><a href="<%= @changed_sets[expo_obj.expo]['woce_sum'] %>">SUM</a> <%= @changed_sets[expo_obj.expo]['woce_sum_date'] %></td>
+				</tr>
+				<% end %>
+				<% if(@changed_sets[expo_obj.expo]['woce_ctd']) %>
+				<tr>
+					<td><a href="<%= @changed_sets[expo_obj.expo]['woce_ctd'] %>">WOCE CTD</a> <%= @changed_sets[expo_obj.expo]['woce_ctd_date'] %></td>
+				</tr>
+				<% end %>
+				<% if(@changed_sets[expo_obj.expo]['woce_bot']) %>
+				<tr>
+					<td><a href="<%= @changed_sets[expo_obj.expo]['woce_bot'] %>">WOCE BOT</a> <%= @changed_sets[expo_obj.expo]['woce_bot_date'] %></td>
+				</tr>
+				<% end %>
+				<% if(@changed_sets[expo_obj.expo]['large_volume']) %>
+				<tr>
+					<td><a href="<%= @changed_sets[expo_obj.expo]['large_volume'] %>">Large Volume</a> <%= @changed_sets[expo_obj.expo]['large_volume_date'] %></td>
+				</tr>
+				<% end %>
+				<tr>
+					<td></td>
+				</tr>
+				<% if(@changed_sets[expo_obj.expo]['exchange_ctd']) %>
+				<tr>
+					<td><a href="<%= @changed_sets[expo_obj.expo]['exchange_ctd'] %>">Exchange CTD</a> <%= @changed_sets[expo_obj.expo]['exchange_ctd_date'] %></td>
+				</tr>
+				<% end %>
+				<% if(@changed_sets[expo_obj.expo]['exchange_bot']) %>
+				<tr>
+					<td><a href="<%= @changed_sets[expo_obj.expo]['exchange_bot'] %>">Exchange BOT</a> <%= @changed_sets[expo_obj.expo]['exchange_bot_date'] %></td>
+				</tr>
+				<% end %>
+				<tr>
+					<td></td>
+				</tr>
+				<% if(@changed_sets[expo_obj.expo]['netcdf_ctd']) %>
+			   <tr>
+					<td><a href="<%= @changed_sets[expo_obj.expo]['netcdf_ctd'] %>">NetCDF CTD</a> <%= @changed_sets[expo_obj.expo]['netcdf_ctd_date'] %></td>
+				</tr>
+				<% end %>
+				<% if(@changed_sets[expo_obj.expo]['netcdf_bot']) %>
+				<tr>
+					<td><a href="<%= @changed_sets[expo_obj.expo]['netcdf_bot'] %>">NetCDF BOT</a> <%= @changed_sets[expo_obj.expo]['netcdf_bot_date'] %></td>
+				</tr>
+				<% end %>
+				<tr>
+					<td></td>
+				</tr>
+				<% if(@changed_sets[expo_obj.expo]['text_doc']) %>
+			   <tr>
+					<td><a href="<%= @changed_sets[expo_obj.expo]['text_doc'] %>">Text Documentation</a> <%= @changed_sets[expo_obj.expo]['text_doc_date'] %></td>
+				</tr>
+				<% end %>
+				<% if(@changed_sets[expo_obj.expo]['pdf_doc']) %>
+				<tr>
+					<td><a href="<%= @changed_sets[expo_obj.expo]['pdf_doc'] %>">PDF Documentation</a> <%= @changed_sets[expo_obj.expo]['pdf_doc_date'] %></td>
+				</tr>
+				<% end %>
+				</table>
+				</td>
+
+				
+		</tr>
+		<% end %>
+	<% end %>
+	<% end %>
+</table>
+</div>
+<div class="box_bottom"></div>
+</div>

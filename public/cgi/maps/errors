@@ -1,0 +1,4 @@
+SELECT distinct  cruises.Line , internal.File,internal.ExpoCode
+                 FROM internal,cruises
+                 WHERE internal.Basin = '' and cruises.ExpoCode = internal.ExpoCode
+                 ORDER BY cruises.Line

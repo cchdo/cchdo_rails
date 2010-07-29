@@ -1,0 +1,11 @@
+<% @seperated_path = @submission.file.split('/') %>
+File: <%= @seperated_path[@seperated_path.length - 1] %> Type:  Status: <%= @submission[:public] %>
+Location: <%= @submission.file %>
+<% @file_split = @submission.file.split('public') %>
+Name: <%= @submission.name %>
+Institute: <%= @submission.institute %>
+Country: <%= @submission.Country %>
+Expo: <%= @submission.ExpoCode %> Line: <%= @submission.Line %>
+Date: <%= @submission.cruise_date %> 
+Action: <%= @submission.action %>
+Notes: <%= @submission.notes %>

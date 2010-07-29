@@ -1,0 +1,165 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CCHDO | CLIVAR & Carbon Hydrographic Data Office</title>
+<script language="JavaScript1.2" type="text/javascript" src="/javascripts/application.js"></script>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+<script type="text/javascript"> _uacct = "UA-2167386-1";urchinTracker(); </script>
+<script type="text/javascript"> _uacct = "UA-2201797-1"; urchinTracker();</script>
+
+<style type="text/css" media="screen">
+	@import url("/stylesheets/main.css");
+</style>
+</head>
+   <body  topmargin="0" leftmargin="0">
+			<div id="Body_Container">
+<table border="0" cellpadding="0" cellspacing="0" width="817" align="center">
+  <tr>
+   <td colspan="6"><a href="/index.html"><img name="main_r1_c1" src="/images/row1_col1.jpg" width="817" height="128" border="0" id="main_r1_c1" alt="" /></a></td>
+  </tr>
+<!-- JavaScript Menu goes here -->
+  <tr>
+   <td><a href="/index.html" onmouseout="StartTimeout(350);" onmouseover="ShowMenu('Home_div', 'Home',11,31,'r2_c1');"><img name="main_r2_c1" src="/images/row2_col1.jpg" width="184" height="31" border="0" id="main_r2_c1" alt="" /></a></td>
+   <td><a onmouseout="StartTimeout(350);" onmouseover="ShowMenu('Data_By_Ocean_div', 'Data_By_Ocean',-39,31,'r2_c3');"><img name="main_r2_c3" src="/images/row2_col3.jpg" width="128" height="31" border="0" id="main_r2_c3" alt="" /></a></td>
+   <td><a href="javascript:;" onmouseout="StartTimeout(350);" onmouseover="ShowMenu('Search_Data_div', 'Search_Data',-64,31,'r2_c4');"><img name="main_r2_c4" src="/images/row2_col4.jpg" width="120" height="31" border="0" id="main_r2_c4" alt="" /></a></td>
+   <td><a href="/submit" onmouseout="StartTimeout(350);" onmouseover="ShowMenu('Submit_div', 'Submit',-64,31,'r2_c6');"><img name="main_r2_c5" src="/images/row2_col5.jpg" width="107" height="31" border="0" id="main_r2_c5" alt="" /></a></td>
+   <td><a href="/contact.htm" onmouseout="StartTimeout(350);" onmouseover="ShowMenu('Contact_div', 'Contact',-64,31,'r2_c8');"><img name="main_r2_c6" src="/images/row2_col6.jpg" width="89" height="31" border="0" id="main_r2_c6" alt="" /></a></td>
+   <td><a href="javascript:;" onmouseout="StartTimeout(350);" onmouseover="ShowMenu('Info_div', 'Info',-72,31,'r2_c9');"><img name="main_r2_c7" src="/images/row2_col7.jpg" width="189" height="31" border="0" id="main_r2_c7" alt="" /></a></td>
+  </tr>
+  <tr>
+   <td colspan="6"><img name="main_r3_col1" src="/images/row3_col1.jpg" width="817" height="23" border="0" id="main_r3_c1" alt="" /></td>
+  </tr>
+  </table>
+				<!-- End of JavaScript menu -->
+
+				<!-- Table row for search 'n' date -->
+				<table border="0" cellspacing="0" cellpadding="0" width="817"><form method="post" action="/search" enctype="multipart/form-data">
+				<tr>
+				   <td background="/images/row4_col1.jpg" width="20">&nbsp;</td>
+				   <td bgcolor="#ffffff" class="thedate" align="left">
+						<script>document.write(theDays[theDate.getDay()]+", "+theMonths[theDate.getMonth()]+" "+theDate.getDate()+", "+theDate.getFullYear());</script></td>
+				   <td align="right" bgcolor="#ffffff">
+					<table cellpadding="0" cellspacing="0" height="27">
+				   	<tr><td width="10" align="right" valign="center" bgcolor="#ffffff">&nbsp;</td>
+				   		 <td width="58" align="right" valign="top" background="//images/searchbar.jpg"><img border="0" id="r4_c4" src="/images/row4_col4.jpg" /></td>
+							 <td width="120"><input type="text" name="query" size="20" value=""/></td>
+							 <td align="left"><input type="image" src="/images/row4_col10.jpg" name="query" alt="SEARCH"/></td>
+						</tr>
+				   </table>
+ 				</td>
+				   <td background="/images/row4_col8.jpg" width="25">&nbsp;</td>
+				   </tr>
+				</form>
+				</table>
+				<!-- End of table row for search 'n' date -->
+		<!-- End of table row for date and search bar -->
+<table border="0" cellpadding="0" cellspacing="0" width="817"><tr>
+   <td background="/images/row4_col1.jpg" width="20">&nbsp;</td>
+   <td width="772" height="541" border="0"  bgcolor="#ffffff" valign="top">
+   <!-- Page content goes here! -->
+<b>How to Obtain the PGP Software</b>
+<ul>
+<li><a href="http://web.mit.edu/network/pgp.html">U.S. and Canadian users</a><br>
+Obtain public domain versions of PGP for the United States and Canada.
+<br><br>
+<li><a href="http://www.pgpi.org">Non-U.S. users</a><br>
+Information on how to obtain PGP's international versions. 
+</ul>
+
+<b>How to Use PGP</b>
+<ul>
+The PGP is relatively simple to use, especially on the WHPO data files. Each one of our datafiles has been "ASCII-Armor" encrypted, meaning that the files are encryted into the ASCII character set in order to easily transmit them over email or through your internet browser. 
+<br><br>
+Once you obtain the PGP software for your computer, you simply decrypt the file and wait for the "Key" or "Password" prompt from PGP. 
+<br><br>
+Under UNIX: (<i>Using the line P01W encrypted CTD file</i>) 
+<br><br>
+<font face="Courier New, Courier">pgp p01wct.asc</font>	(<i>typed at the command line</i>)
+<br><br>
+(<i>you should see the following response</i>)
+<br><br>
+<font face="Courier New, Courier">Pretty Good Privacy(tm) 2.6.2 - Public-key encryption for the masses. (c) 1990-1994 Philip Zimmermann, Phil's Pretty Good Software. 11 Oct 94
+Uses the RSAREF(tm) Toolkit, which is copyright RSA Data Security, Inc.
+Distributed by the Massachusetts Institute of Technology.
+Export of this software may be restricted by the U.S. government.
+Current time: 1998/02/07 18:23 GMT
+<br><br>
+File is conventionally encrypted.<br>
+You need a pass phrase to decrypt this file.<br>
+Enter pass phrase:</font>(<i>Enter the key/pass phrase here obtained from WHPO</i>)<br>
+<br><br>
+PGP will decrypt the file, if the proper key/pass phrase is given and retain the original copy of the file. For the bottle files, you will get a single, ASCII/plain-text file, and with CTD files, you will receive a DOS-style ZIP archive file to be expanded into individual files using UNZIP or PKUNZIP.
+</ul>
+Questions/Comments: <a href="mailto:sdiggs@ucsd.edu">Steve Diggs</a> &#149; 858-534-1108 
+
+
+<!-- End of page content -->
+   </td>
+   <td background="/images/row4_col8.jpg" width="25" height="541">&nbsp;</td>
+  </tr>
+  <tr>
+   <td colspan="3" background="/images/row5_col1.jpg" width="817" height="36" border="0" id="main_r5_c1">&nbsp;</td>
+  </tr>
+</table>
+<div id="Home_div">
+					<div id="Home" onmouseout="StartTimeout(350);" onmouseover="ResetTimeout();">
+						&nbsp;
+					</div>
+				</div>
+				<div id="Data_By_Ocean_div">
+					<div id="Data_By_Ocean" onmouseout="StartTimeout(350);" onmouseover="ResetTimeout();">
+						<a href="/arctic.htm" id="Data_By_Ocean_Item_1" class="Data_By_Ocean_Menu_Style2" onmouseover="OverMenuItem('Data_By_Ocean');">
+							Arctic&nbsp;Ocean
+						</a>
+						<a href="/atlantic.htm" id="Data_By_Ocean_Item_2" class="Data_By_Ocean_Menu_Style2" onmouseover="OverMenuItem('Data_By_Ocean');">
+							Atlantic&nbsp;Ocean
+						</a>
+						<a href="/pacific.htm" id="Data_By_Ocean_Item_3" class="Data_By_Ocean_Menu_Style2" onmouseover="OverMenuItem('Data_By_Ocean');">
+							Pacific&nbsp;Ocean
+						</a>
+						<a href="/indian.htm" id="Data_By_Ocean_Item_4" class="Data_By_Ocean_Menu_Style2" onmouseover="OverMenuItem('Data_By_Ocean');">
+							Indian&nbsp;Ocean
+						</a>
+						<a href="/southern.htm" id="Data_By_Ocean_Item_5" class="Data_By_Ocean_Menu_Style2" onmouseover="OverMenuItem('Data_By_Ocean');">
+							Southern&nbsp;Ocean
+						</a>
+					</div>
+				</div>
+				<div id="Search_Data_div">
+					<div id="Search_Data" onmouseout="StartTimeout(350);" onmouseover="ResetTimeout();">
+						<a href="/search_cart" id="Search_Data_Item_1" class="Search_Data_Menu_Style2" onmouseover="OverMenuItem('Search_Data');">
+							Bulk Download
+						</a>
+						<a href="/data_access" id="Search_Data_Item_2" class="Search_Data_Menu_Style2" onmouseover="OverMenuItem('Search_Data');">
+							Advanced&nbsp;Search
+						</a>
+						<a href="/map_search" id="Search_Data_Item_4" class="Search_Data_Menu_Style2" onmouseover="OverMenuItem('Search_Data');">
+							Cruise&nbsp;Maps
+						</a>
+					</div>
+				</div>
+				<div id="Submit_div">
+					<div id="Submit" onmouseout="StartTimeout(350);" onmouseover="ResetTimeout();">
+						&nbsp;
+					</div>
+				</div>
+				<div id="Contact_div">
+					<div id="Contact" onmouseout="StartTimeout(350);" onmouseover="ResetTimeout();">
+						&nbsp;
+					</div>
+				</div>
+				<div id="Info_div">
+					<div id="Info" onmouseout="StartTimeout(350);" onmouseover="ResetTimeout();">
+						<a href="/manuals.htm" id="Info_Item_1" class="Info_Menu_Style2" onmouseover="OverMenuItem('Info');">
+							Manuals
+						</a>
+						<a href="/policies.htm" id="Info_Item_2" class="Info_Menu_Style2" onmouseover="OverMenuItem('Info');">
+							Policies
+						</a>
+						<a href="/format.htm" id="Info_Item_3" class="Info_Menu_Style2" onmouseover="OverMenuItem('Info');">
+							Format
+						</a>
+					</div>
+				</div>
+				</div>
+</body>
+</html>

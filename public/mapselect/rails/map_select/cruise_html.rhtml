@@ -1,0 +1,12 @@
+<% for cruise in @cruises %>
+<% if cruise.Begin_Date %><% (year, month, day) = cruise.Begin_Date.year %>
+<% else %><% year = "Unknown" %><% end %>
+<tr id="<%= cruise.ExpoCode %>">
+	<td id="expocode"><a href="/data_access?ExpoCode=<%= cruise.ExpoCode %>"><%= cruise.ExpoCode %></a></td>
+	<td id="line"><%= cruise.Line %> (<%= year %>)</td>
+	<td id="ship"><%= cruise.Ship_Name %></td>
+	<td id="country"><%= cruise.Country %></td>
+	<td id="pi"><%= cruise.Chief_Scientist %></td>
+	<td id="date"><%= cruise.Begin_Date %></td>
+</tr>
+<% end %>

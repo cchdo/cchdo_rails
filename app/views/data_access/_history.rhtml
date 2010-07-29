@@ -1,0 +1,36 @@
+<% unless @events.blank? %>
+<div id="data_access_history">
+  <table>
+    <tr class="header"><th>Date</th><th>Data Type</th><th>Action</th><th>Summary</th></tr>
+    <% @events.each do |event|
+       date_Entered = event.Date_Entered || ''
+       lastName = event.LastName || ''
+       firstName = event.First_Name || ''
+       data_Type = event.Data_Type || ''
+       action = event.Action || ''
+       summary = event.Summary || 'None'
+       cycle_class = cycle '', ' class="hl"'
+    -%>
+    
+     <tr<%= cycle_class -%>>
+       <td><b><%= date_Entered -%></b></td>
+       <td><%= data_Type -%></td>
+       <td><%= action -%></td>
+       <td>
+         <div id="data_history_link"><%= link_to_remote(summary,
+           :update => "note_#{event.ID}",
+           :loaded => "$('note_#{event.ID}').show();",
+           :url => {:controller => 'data_access',
+                    :action => 'note',
+                    :Entry => "#{event.ID}"}) -%></div>
+       </td>
+     </tr>
+     <tr<%= cycle_class -%>>
+       <td id="note_<%= event.ID -%>" class="note_display" colspan="4"></td>
+     </tr>
+    <% end # for events %>
+  </table>
+</div>
+<% else -%>
+  <h4>No cruise history.</h4>
+<% end -%>

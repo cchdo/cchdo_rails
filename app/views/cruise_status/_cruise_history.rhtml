@@ -1,0 +1,60 @@
+<% if @events %>
+<div id="note">
+<% if @note %>
+	 <%= render :partial => 'note' %>
+<% end %>
+</div>
+<br><br>
+<table width="80%">
+	<tr>
+		<td align="center">Sort By: 
+           <a href="/cruise_status?expo=<%= @cruise.ExpoCode%>&Sort=Date_Entered">Date</a>
+         | <a href="/cruise_status?expo=<%= @cruise.ExpoCode%>&Sort=LastName">Person</a> 
+         | <a href="/cruise_status?expo=<%= @cruise.ExpoCode%>&Sort=Data_Type">Type</a>
+		 | <a href="/cruise_status?expo=<%= @cruise.ExpoCode%>">Data Files</a>
+        </td>
+		<td align="right">
+			<a href="/data_access">New Search</a>
+		</td>
+	</tr>
+</table>
+
+<table frame="none" rules="rows" cellspacing="0" align="center">
+	<tr id="data_summary_header">
+		<td>Date</td><td>Person</td><td>Data Type</td><td>Action</td><td>Summary</td>
+	</tr>
+	<% for cnt in 0..@events.length()-1 %>
+	   <% if (not @events[cnt].Date_Entered)%> <% @Date_Entered = "&nbsp"  %> <% else %> <% @Date_Entered= @events[cnt].Date_Entered %><% end %>
+	   <% if (not @events[cnt].LastName =~ /\w/)%> <% @LastName = "&nbsp"  %> <% else %> <% @LastName= @events[cnt].LastName %><% end %>
+	   <% if (not @events[cnt].Data_Type=~ /\w/)%> <% @Data_Type = "&nbsp"  %> <% else %> <% @Data_Type= @events[cnt].Data_Type %><% end %>
+	   <% if (not @events[cnt].Action=~ /\w/)%> <% @Action = "&nbsp"  %> <% else %> <% @Action= @events[cnt].Action %><% end %>
+	   <% if (not @events[cnt].Summary =~ /\w/)%> 
+	      <% @Sum_Link = " "  %>
+		  <% @Summary= "None" %>
+		  <% @end= " " %> 
+	   <% else %> 
+		  <% @Summary = @events[cnt].Summary %>
+		  <% @Sum_Link= "<a href=\"/cruise_status?expo=#{@cruise.ExpoCode}&Entry=#{@events[cnt].ID}&Sort=#{@cur_sort}&Note=true\">"%>
+     	  <% @end = "</a>" %>
+	  <% end %>
+	
+	<tr id="doc_cell">
+		<td class="Hist_Cell"><b><%= @Date_Entered %></b></td>
+		<td class="Hist_Cell"><em><%= @LastName %> </em>   </td>
+		<td class="Hist_Cell"><%= @Data_Type %>   </td>
+		<td class="Hist_Cell"><%= @Action %>   </td>
+		<td class="Hist_Cell">
+		 <% if not @Summary.eql? "None" %>
+	      <%= link_to_remote("#{@Summary}",:update => "note",:url=>{:controller=>'cruise_status',:action =>'note',:Entry => "#{@events[cnt].ID}"})%>
+	     <% else %>
+		  <%= @Sum_Link %><%= @Summary %> <%= @end %>
+		 <% end %>
+		</td>
+	</tr>
+	<% end %>
+</table>
+
+<% else %>
+<h4>Cruise history not found</h4>
+<% end %>
+

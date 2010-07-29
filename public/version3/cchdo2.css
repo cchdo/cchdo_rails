@@ -1,0 +1,111 @@
+/* Data Table Results*/
+
+.heading_table {
+	background-color: #06629b;
+	border-top: 1px ridge #012437;
+	color: #ffffff;
+	font-size: 10pt;
+	font-weight: bolder;
+}
+
+
+.highlighted_cell {
+	background-color: #78a9c8;
+}
+
+body {  
+	background-image: url('images/bg.jpg'); 
+	background-position: left top; 
+	background-repeat:repeat-x;
+	font-family:Verdana,Arial, Helvetica, sans-serif;
+}
+
+a {color:#06629b; text-decoration:none;}
+
+a.home {
+	color: #012437;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+
+a.home:visited {
+	color: #012437;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a.navigate:link{
+	color: #ffffff;
+	margin: 30px;
+	text-decoration: none;
+}
+
+a.navigate:hover{
+	color: #012437;
+	margin: 30px;
+	text-decoration: none;
+}
+
+a.navigate:visited{
+	color: #ffffff;
+	margin: 30px;
+	text-decoration: none;
+}
+
+p { text-align:justify; }
+
+p.footer { font-style:italic; font-size:0.9em;}
+
+.nav_section {
+	background-color: #06629b;
+	border-top: 1px solid #ffffff;
+	color: #ffffff;
+	text-transform: capitalize;
+}
+
+.search {
+	color: #ffffff;
+}
+
+.thedate {
+	color: #ffffff;
+	font-weight: bold;
+	text-transform: capitalize;
+}
+
+/* Version 3 Dynamic Menu */
+.themenu {
+	background-color: #06629b;
+	border-top: 1px solid #ffffff;
+	color: #ffffff;
+	display: block;
+	text-transform: capitalize;
+}
+
+.submenu {
+	color: #ffffff;
+	margin-left: 30px;
+}
+
+a.submenu:link {
+	color: #06629b;
+	text-decoration: none;
+}
+
+a.submenu:hover {
+	color: #000000;
+	text-decoration: none;
+}
+
+a.submenu:visited {
+	text-decoration: none;
+}
+
+.hide{
+	display: none;
+}
+
+.show{
+	display: block;
+}

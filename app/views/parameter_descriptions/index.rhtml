@@ -1,0 +1,57 @@
+<div class="boxed">
+<h1>Parameter Descriptions</h1>
+<div class="box_content">
+<table id="parameter_descriptions_table" rules="rows" class="parameter_list"  >
+<tr>
+	<td class="parameter_header">Parameter</td>
+	<td class="parameter_header">Alias</td>
+	<td class="parameter_header">Full Name</td>
+	<td class="parameter_header">Description</td>
+	<td class="parameter_header">Units</td>
+	<td class="parameter_header">Unit Mnemonics</td>
+	<td class="parameter_header">Range</td>
+	<td class="parameter_header">Precision</td>
+</tr>
+<% ctr = 0 %>
+<% for row in @parameters %>
+   <% unless row.Private == 1 %>
+    <% if ctr % 2 == 0 %>
+        <tr>
+    <% else %>
+    	<tr  class="hl">
+    <% end %>
+   	    <td >
+	    	<%= row.Parameter%>
+	    </td>
+	    <td>
+	    	<% if row.Alias =~ /\w/ %>
+	    	  <%= row.Alias.gsub(/,/,", ") %>
+	    	<% end %>
+	    </td>
+	    <td >
+	    	<%= row[:FullName] %>
+	    </td>
+	    <td>
+	    	<%= row.Description %>
+	    </td>
+	    <td>
+	    	<%= row.Units %>
+	    </td>
+	    <td>
+	    	<%= row.Unit_Mnemonic %>
+	    </td>
+	    <td>
+	    	<%= row.Range %>
+	    </td>
+	    <td>
+	    	<%= row.Precision %>
+	    </td>
+
+    </tr>
+    <% ctr += 1 %>
+   <% end %>
+<% end %>
+</table>
+</div>
+<div class="box_bottom"></div>
+</div>

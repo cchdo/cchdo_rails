@@ -1,0 +1,51 @@
+<table cellspacing="0" width="100%">
+	<tr>
+		<td>
+			<table cellspacing="0" width="100%">
+				<tr>
+					<td class="data_detail_header">
+						Event Date
+					</td>
+					<td class="data_detail_header">
+						Person
+					</td>
+					<td class="data_detail_header">
+						Date Type
+					</td>
+
+					<td class="data_detail_header">
+						Summary
+					</td>
+				</tr>
+				<tr align="left" valign="top">
+					<td>
+						<% if @note_entry %>
+						<b><%= @note_entry.Date_Entered %></b>
+					    <% end %>
+					</td>
+					<td>
+						<em><%= @note_entry.LastName %>, <%= @note_entry.First_Name %></em>
+					</td>
+					<td>
+						<%= @note_entry.Data_Type %>
+					</td>
+
+					<td>
+						<%= @note_entry.Summary %>
+					</td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>	
+					<td>
+						<b>Detailed Notes</b><br>
+						<%= @note_entry.Note %>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>

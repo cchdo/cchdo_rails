@@ -1,0 +1,1160 @@
+h1 {
+	text-align: center;
+}
+
+/*  Firefox starting having an outlined box around
+focused links */
+a:focus {outline: none;}
+/* . = class  # = id */
+
+
+/*0000000000 Data Access 000000000000000000000*/
+.parameter_updates {
+	width: 686px;
+	font: 65% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+	border: 1px solid #999;
+	background-color: #E0E3E4;
+}
+.parameter_updates td{
+	text-align:	left;
+	
+}
+.parameter_updates th{
+	width: 680px;
+	border: 1px solid #999;
+	background-color: #7f97b9;
+	font-weight: bold;
+	text-align: left;
+}
+
+
+/*00000000000 Data Access -00000000000000*/
+
+/* Sections:
+     File Box
+     Data Tables
+     Map Search
+     Task Manager
+     Data Submission Page
+
+/*00000000  File Box 0000000000000*/
+
+#title_bar_row{
+	background-color: #BDC4D1;
+	width: 500px;
+	height: 50px;
+}
+
+#file_box_view_row{
+	background-color: #FF9B00;
+	width: 50px;
+	height: 700px;
+}
+#file_box_menu_cell{
+	/*valign: bottom; #valign doesn't exist*/
+	background: #A0B6C9;
+	width:100px;
+	height:300px;
+}
+.file_box_menu_link:visited, .file_box_menu_link:link{
+	 color: #E3F2F2;
+	 text-decoration:	none;
+}
+#file_box_view_cell{
+	background: #E4F2F2;
+	width: 700px;
+	height: 700px; 
+}
+
+#file_box_main_table{
+	width:	750px;
+}
+
+#file_box_users_menu{
+	position:relative;
+	right:170px;
+	top: 0px;
+	margin:0 auto;
+	width:280px;
+	height:auto;
+	background-color: white;
+}
+
+#file_box_groups_menu{
+	position:absolute;
+	left:440px;
+	top: 288px;
+	margin:0 auto;
+	width:300px;
+	height:auto;
+	background-color: white;
+}
+.file_box_user_cell{
+	font: 75%  Verdana, sans-serif;
+}
+.file_box_group_cell{
+	font: 75%  Verdana, sans-serif;
+}
+
+#file_box_sections_menu{
+	position:relative;
+	right:170px;
+	top: 10px;
+	margin:0 auto;
+	width:280px;
+	height:auto;
+	background-color: white;
+	
+}
+/*00000000  File Box 0000000000000*/
+
+.parameter_list{
+	font-size: 9pt;
+}
+
+#argo_note {
+	font-size: 9pt;
+}
+
+/* CCHDO Guide */
+div.figures {
+	margin: 0 0 0 0;
+}
+
+/* New WOCE-centric Data Table */
+.status_table{
+	font-size:0.78em;
+	border-width: 0px;
+	margin: 1px;
+	width:770px;
+}
+
+.parameter_cell {
+	font-size:9pt;
+}
+#heading {
+	height:10px;
+}
+.heading_table {
+	background: #7f97b9;
+	border-bottom: 3px ridge #e5e5e5;
+	border-top: 1px solid #022237;
+	color: #ffffff;
+	font-size: 10pt;
+	font-weight: bolder;
+}
+
+.highlighted_cell {
+	background: #e5e5e5;
+	/*font-size: 10pt;*/
+}
+
+.sub_header {
+	font-size:0.8em;
+}
+/*---------- Tables ----------------------------------*/
+/* Map Search */
+
+#map_search_table {
+	font-size: 9pt;
+}
+
+#file_collection {
+	font-size: 10pt;
+	font-family: arial, sans-serif;
+	text-align: left;
+	width:200px; height:480px;overflow:auto
+}
+#red_link a{
+	color: red;
+}
+#yellow_link a{
+	color: yellow;
+}
+#green_link a{
+	color: green;
+}
+#warning_text {
+	font-size: 8pt;
+}
+/*-----------Map Search---------------*/
+
+/* Task Manager ----------------------*/
+
+
+#task_color_key{
+	border: 1px solid #FFF;
+}
+#tm_row_priority_6_box{
+	border-color: 000;
+        border: 1px solid black
+}
+div.tm_auto_complete {
+    width: 50px;
+    background: #fff;}
+div.tm_auto_complete ul {
+    border:1px solid #888;
+    margin:0;
+    padding:0;
+    width:100%;
+    list-style-type:none;}
+div.tm_auto_complete ul li {
+    margin:0;
+    padding:3px;}
+div.tm_auto_complete ul li.selected {
+    background-color:  #ffb; }
+div.tm_auto_complete ul strong.highlight {
+    color: #800;
+    margin: 0;
+    padding:0;}
+img{
+    border: none;}
+.task_manager_action_cell{
+	right:100px;
+}
+.assignment_details_cell{
+
+	background:#D2D2D2;
+}
+.assignment_details{
+	background:#D2D2D2;
+}
+
+.assignment_details_key{
+	background:#FFF;
+}	
+.assignment_details_value{
+	background:#FFF;
+}
+
+#task_assignment_table{
+padding: 0px;
+margin: 0px;
+}
+
+.tm_cell{
+	border-width: 0px;
+	margin: 0px;
+	padding: 0px;
+	text-align: left;
+	font-family: Arial, "Helvetica", sans-serif;
+	font-size: 12px;
+}
+
+.tm_text_box{
+	font-family: Arial, "Helvetica", sans-serif;
+	font-size: 12px;
+}
+.tm_row1{
+	opacity: 0.8;
+	-moz-opacity: 0.8;
+	/*filter:alpha(opacity=80); #please no.*/
+}
+.tm_row{
+	opacity: 0.8;
+	-moz-opacity: 0.8;
+	/*filter:alpha(opacity=80); #please no.*/
+}
+.tm_header{
+	background:#EEE7D5;
+}
+
+.tm_row_priority_1{
+	background:#FF524D;
+ 	margin: 0px;
+	padding: 0px;
+	border-width: 0px;
+	border-collapse: collapse;
+	
+}
+.tm_row_priority_2{
+	background:#FF9750;
+	margin: 0px;
+	padding: 0px;
+	border-width: 0px;
+	border-collapse: collapse;
+	
+}
+.tm_row_priority_3{
+	background:#FFD83E;
+	margin: 0px;
+	padding: 0px;
+	border-width: 0px;
+	border-collapse: collapse;
+	
+}
+.tm_row_priority_4{
+	background:#63FF70;
+	margin: 0px;
+	padding: 0px;
+	border-width: 0px;
+	border-collapse: collapse;
+	
+}
+.tm_row_priority_5{
+	background:#6B6B6B;
+	margin: 0px;
+	padding: 0px;
+	border-width: 0px;
+	border-collapse: collapse;
+	
+}
+.tm_row_priority_6{
+	background:#FFF;
+	margin: 0px;
+	padding: 0px;
+	border-width: 0px;
+	border-collapse: collapse;
+	
+}
+.tm_row_priority_7{
+	background:#2D2CFF;
+	margin: 0px;
+	padding: 0px;
+	border-width: 0px;
+	border-collapse: collapse;
+}
+.tm_row_priority_unknown{
+	background:#B3F6E0;
+	margin: 0px;
+	padding: 0px;
+	border-width: 0px;
+	border-collapse: collapse;
+}
+#task_group_type{
+	font-size:12pt;
+}
+
+.assignment_project_cell{
+	color: #000001;
+	font: 110% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+	
+}
+
+#task_assignments_main_table{
+	border-top: 1px solid #999;
+	border-right: 1px solid #999;
+	border-bottom: 1px solid #999;
+	border-left: 1px solid #999;
+}
+/*---------Task Manager ----------------*/
+
+
+
+/* Data Submission Page */
+.table_header{background:#7f97b9;color: white; height:20px;}
+.data_types{font-size: 8pt;color: black;border:3px;}
+.cchdo_table{width: 180px;background:#F6F6F6; border: 1px solid black;border-spacing:2px;border-collapse:separate;}
+.ExpoList{background:#F6F6F6; border: 1px solid black;border-collapse:collapse;}
+.response{background: #FFFFFF;}
+.Incomplete{color:red;font-size:14px;}
+.conf_table{border:1px solid black; }
+.sub_table{background:#f6f6f6;width:370px;height:280px;border: 1px solid black; border-spacing: 0px;}
+.master_table{width:750px;border: 1px solid black; border-spacing: 2px; text-align:center;}
+.submit_bold{color:white;}
+.submission_suggestions li{ font-size:12px; }
+.submission_suggestions a{ font-size:16px; }
+
+/*--------Data Submission Page------------------*/
+
+/*--------  Staff Submited Files ---------------*/
+#submissions{width:700px;}
+#submitted_files{
+	margin: 0px;
+	padding: 0px;
+	border-width: 0px;
+	border-collapse: collapse;
+	}
+.assimilated_submission_1 {
+	background:#D3864E;
+	}
+.assimilated_submission_2 {
+		background:#927B72;
+		}
+.incomplete_submission_1 {
+			background:#EDE8C1;
+			}
+.incomplete_submission_2{
+	background:#C8EBE5;
+}
+/*-------   Staff Submited Files ---------------*/
+
+.fieldWithErrors{
+	padding: 2px;
+	background-color: red;
+	display: table;
+}
+
+body {  
+	background-image: url('/images/bg.jpg'); 
+	font-family: sans-serif;
+	text-align: center;
+}
+
+a {color:#06629b; text-decoration:none;}
+
+a:visited {color:#06629b;text-decoration:underline;}
+
+p { text-align:justify; }
+
+.footer { font-style:italic; font-size:0.9em;}
+
+.thedate { font-weight:bold; color:#06629b; text-align:left; }
+
+td img {
+/* Another Mozilla/Netscape bug with making sure our images display correctly */
+	display: block;
+}
+
+td.data_detail_header {
+	border-top: 1px solid #262626;
+	border-bottom: 1px solid #dddddd;
+	background-color: #7f97b9;
+	font-weight: bold;
+	text-align: left;
+}
+
+.Open_Line_Info{
+	border: 1px solid grey;
+	width: 680px;
+}
+.cruise_info{
+   height: 200px;
+   width: 356;
+	border: 1px solid black;
+}
+.file_boxes{
+	border: 1px solid black;
+	height:200px;
+	width: 356px;
+}
+
+.file_type{
+	font-size:.9em;
+}
+#bottle_cell{
+	vertical-align: top;
+	border:  1px solid black;
+	width: 190px;
+	font-size: 0.8em;
+}
+.data_files{
+	
+	border: 1px solid black;
+}
+
+#ctd_cell{
+	vertical-align: top;
+	border:  1px solid black;
+	width: 190px;
+	font-size: 0.8em;
+}
+
+#data_summary_table{
+	background-color: #f6f6f6;
+	width: 686px;
+	text-align: left;
+}
+
+#data_summary_header{
+	background-color: #7f97b9;
+	font-weight: bold;
+	text-align: left;
+}
+#group_table{
+	background-color: #f6f6f6;
+	width: 686px;
+}
+
+#group_header{
+	background-color: #7f97b9;
+	font-weight: bold;
+	text-align: left;
+}
+#doc_cell{
+	vertical-align: top;
+	border:  1px solid black;
+	width: 190px;
+	font-size: 0.8em;
+}
+
+#Body_Container {
+/* The master div to make sure that our popup menus get aligned correctly.  Be careful when playing with this one. */
+	position:relative;
+	margin:0 auto;
+	width:750px;
+	height:auto;
+}
+
+#Body_Container_Staff { /* The master div to make sure that our popup menus get aligned correctly.  Be careful when playing with this one. */
+	/*position: relative;*/
+	/*right:-385px;
+	top: 300px;
+	top: 0;
+	margin:0 auto;*/
+	/*width:700px;
+	/*width: auto;
+	height:auto;*/
+	/*align: center; #align doesn't exist either. text-align?*/
+	background-color: white;
+}
+#staff_links {
+	background-color: #fff;
+}
+#staff_links > h1 {
+	font-size: medium;
+	text-align: center;
+}
+#staff_links_table a {
+  padding: 2px 8px 2px 8px;
+  background-color: Orange;
+}
+
+#Home_div {
+/* This ID is related to the master menu div for menu Home_div and contains the important positioning information for the menu as a whole */
+	position:absolute;
+	left:18px;
+	top:168px;
+	visibility:hidden;
+	z-index:300;
+	}
+
+#Home {	
+/* This class defines things about menu Home's div. */
+	position:absolute;
+	left:0px;
+	top:0px;
+	visibility:hidden;
+	background-color:transparent;
+	width:730px;
+	height:21px;
+	}
+
+
+#Data_By_Ocean_div {
+/* This ID is related to the master menu div for menu Data_By_Ocean_div and contains the important positioning information for the menu as a whole */
+	position:absolute;
+	left:94px;
+	top:160px;
+	visibility:hidden;
+	z-index:300;
+}
+
+#Data_By_Ocean {
+/* This class defines things about menu Data_By_Ocean's div. */
+	position:absolute;
+	left:0px;
+	top:0px;
+	visibility:hidden;
+	width:128px;
+	height:21px;
+}
+
+.Data_By_Ocean_Menu_Style2 {
+/* This class determines the general characteristics of the menu items in menu Data_By_Ocean */
+	width:128px;
+	height:21px;
+	voice-family: "\"}\"";
+	voice-family:inherit;
+}
+
+#Data_By_Ocean_Item_1 {
+/* Unique ID for item 1 of menu Data_By_Ocean so we can set its position */
+	left:94px;
+	top:0px;
+}
+
+#Data_By_Ocean_Item_2 {
+/* Unique ID for item 2 of menu Data_By_Ocean so we can set its position */
+	left:94px;
+	top:22px;
+}
+
+#Data_By_Ocean_Item_3 {
+/* Unique ID for item 3 of menu Data_By_Ocean so we can set its position */
+	left:94px;
+	top:44px;
+}
+
+#Data_By_Ocean_Item_4 {
+/* Unique ID for item 4 of menu Data_By_Ocean so we can set its position */
+	left:94px;
+	top:66px;
+}
+
+#Data_By_Ocean_Item_5 {
+/* Unique ID for item 5 of menu Data_By_Ocean so we can set its position */
+	left:94px;
+	top:88px;
+}
+
+#Data_By_Ocean_Item_6 {
+/* Unique ID for item 6 of menu Data_By_Ocean so we can set its position */
+	left:94px;
+	top:110px;
+}
+
+#Data_By_Ocean_div img {
+/* needed for Mozilla/Camino/Netscape */
+	border:0px;
+}
+
+#Data_By_Ocean_div a {
+/* Controls the general apperance for menu Data_By_Ocean_div's items, including color and font */
+	text-decoration:none;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#000000;
+	text-align:center;
+	vertical-align:middle;
+	background-color:silver;
+	border-bottom: 2px solid #ffffff;
+	font-weight:normal;
+	font-style:normal;
+	display:block;
+	position:absolute;
+}
+
+#Data_By_Ocean_div a:hover {
+/* Controls the mouse over effects for menu Data_By_Ocean_div */
+	border-bottom: 2px solid #99ccff;
+	color:#ffffff;
+	background-color:#06629b;
+}
+#Search_Data_div {
+/* This ID is related to the master menu div for menu Search_Data_div and contains the important positioning information for the menu as a whole */
+	position:absolute;
+	left:158px;
+	top:160px;
+	visibility:hidden;
+	z-index:300;
+}
+
+#Search_Data {
+/* This class defines things about menu Search_Data's div. */
+	position:absolute;
+	left:0px;
+	top:0px;
+	visibility:hidden;
+	background-color:transparent;
+	width:113px;
+	height:21px;
+}
+
+.Search_Data_Menu_Style2 {
+/* This class determines the general characteristics of the menu items in menu Search_Data */
+	width:113px;
+	height:21px;
+	voice-family: "\"}\"";
+	voice-family:inherit;
+}
+
+
+#Search_Data_Item_1 {
+/* Unique ID for item 1 of menu Search_Data so we can set its position */
+	left:158px;
+	top:0px;
+}
+
+#Search_Data_Item_2 {
+/* Unique ID for item 2 of menu Search_Data so we can set its position */
+	left:158px;
+	top:22px;
+}
+
+/* Took out the Data Changes link in the Search Data Menu - this explains why there is no Search_Data_Item3 */
+
+#Search_Data_Item_4 {
+/* Unique ID for item 4 of menu Search_Data so we can set its position */
+	left:158px;
+	top:44px;
+}
+
+#Search_Data_div img {
+/* needed for Mozilla/Camino/Netscape */
+	border:0px;
+}
+
+#Search_Data_div a {
+/* Controls the general apperance for menu Search_Data_div's items, including color and font */
+	text-decoration:none;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#000000;
+	text-align:center;
+	vertical-align:middle;
+	background-color:silver;
+	border-bottom: 2px solid #ffffff;
+	font-weight:normal;
+	font-style:normal;
+	display:block;
+	position:absolute;
+}
+
+#Search_Data_div a:hover {
+/* Controls the mouse over effects for menu Search_Data_div */
+	border-bottom: 2px solid #99ccff;
+	color:#ffffff;
+	background-color:#06629b;
+}
+
+#Submit_div {
+/* This ID is related to the master menu div for menu Submit_div and contains the important positioning information for the menu as a whole */
+	position:absolute;
+	left:18px;
+	top:159px;
+	visibility:hidden;
+	z-index:300;
+	}
+
+#Submit {	
+/* This class defines things about menu Submit's div. */
+	position:absolute;
+	left:0px;
+	top:0px;
+	visibility:hidden;
+	background-color:transparent;
+	width:730px;
+	height:21px;
+	}
+
+#Links_div {
+/* This ID is related to the master menu div for menu Links_div and contains the important positioning information for the menu as a whole */
+	position:absolute;
+	left:465px;
+	top:159px;
+	visibility:hidden;
+	z-index:300;
+	}
+	
+	.Links_Menu_Style2 {
+/* This class determines the general characteristics of the menu items in menu Info */
+	width:87px;
+	height:21px;
+	voice-family: "\"}\"";
+	voice-family:inherit;
+}
+
+#Links {	
+/* This class defines things about menu Contact's div. */
+	position:absolute;
+	left:0px;
+	top:0px;
+	visibility:hidden;
+	background-color:transparent;
+	width:730px;
+	height:21px;
+	}
+
+#Links_div img {
+/* needed for Mozilla/Camino/Netscape */
+	border:0px;
+}
+
+#Links_div a {
+/* Controls the general apperance for menu Search_Data_div's items, including color and font */
+	text-decoration:none;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#000000;
+	text-align:center;
+	vertical-align:middle;
+	background-color:silver;
+	border-bottom: 2px solid #ffffff;
+	font-weight:normal;
+	font-style:normal;
+	display:block;
+	position:absolute;
+}
+
+#Links_div a:hover {
+/* Controls the mouse over effects for menu Search_Data_div */
+	border-bottom: 2px solid #99ccff;
+	color:#ffffff;
+	background-color:#06629b;
+}
+
+
+#Info_div {
+/* This ID is related to the master menu div for menu Info_div and contains the important positioning information for the menu as a whole */
+	position:absolute;
+	left:540px;
+
+	top:160px;
+	visibility:hidden;
+	z-index:300;
+}
+
+
+#Links_Item_1 {
+/* Unique ID for item 1 of menu Search_Data so we can set its position */
+	left:158px;
+	top:0px;
+}
+
+#Links_Item_2 {
+/* Unique ID for item 2 of menu Search_Data so we can set its position */
+	left:158px;
+	top:22px;
+}
+#Info {
+/* This class defines things about menu Info's div. */
+	position:absolute;
+	left:0px;
+	top:0px;
+	visibility:hidden;
+}
+
+.Info_Menu_Style2 {
+/* This class determines the general characteristics of the menu items in menu Info */
+	width:80px;
+	height:21px;
+	voice-family: "\"}\"";
+	voice-family:inherit;
+}
+
+#Info_Item_1 {
+/* Unique ID for item 1 of menu Info so we can set its position */
+	left:0px;
+	top:0px;
+}
+
+#Info_Item_2 {
+/* Unique ID for item 2 of menu Info so we can set its position */
+	left:0px;
+	top:22px;
+}
+
+#Info_Item_3 {
+/* Unique ID for item 3 of menu Info so we can set its position */
+	left:0px;
+	top:44px;
+}
+#Info_Item_4 {
+/* Unique ID for item 3 of menu Info so we can set its position */
+	left:0px;
+	top:66px;
+}
+
+#Info_div img {
+/* needed for Mozilla/Camino/Netscape */
+	border:0px;
+}
+
+#Info_div a {
+/* Controls the general apperance for menu Info_div's items, including color and font */
+	text-decoration:none;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#000000;
+	text-align:center;
+	vertical-align:middle;
+	background-color:silver;
+	border-bottom: 2px solid #ffffff;
+	font-weight:normal;
+	font-style:normal;
+	display:block;
+	position:absolute;
+}
+
+#Info_div a:hover {
+/* Controls the mouse over effects for menu Info_div */
+	border-bottom: 2px solid #99ccff;
+	color:#ffffff;
+	background-color:#06629b;
+}
+
+/*Pulled out from files*/
+div.auto_complete {
+    width: 350px;
+    background: #fff;
+}
+div.auto_complete ul {
+    border:1px solid #888;
+    margin:0;
+    padding:0;
+    width:100%;
+    list-style-type:none;
+}
+div.auto_complete ul li {
+    margin:0;
+    padding:3px;
+}
+div.auto_complete ul li.selected {
+    background-color:  #ffb; 
+}
+div.auto_complete ul strong.highlight {
+    color: #800;
+    margin: 0;
+    padding: 0;
+}
+img {
+    border: none;
+}
+/*.img-shadow {
+	float: left;
+	background: url('/images/shadowAlpha.png') no-repeat bottom right !important;
+	margin: 10px 0 0 10px !important;
+}
+.img-shadow > * {
+	display: block;
+	position: relative;
+	background-color: #fff;
+	border: 1px solid #a9a9a9;
+	margin: -5px 5px 5px -5px;
+}*/
+
+#staff_links {
+  background-color: Orange;
+  padding: 3px;
+}
+
+
+/* ---- CCHDO NOTES PAGE ---- */
+#notes_content{
+	position:relative;
+	width:40em;
+	height:100em;
+}
+#notes_results {
+	position: absolute;
+	left:0;
+	top:0;
+	width:11em;
+	border: 1px solid #999;
+	
+}
+
+#cchdo_note_div{
+	position: absolute;
+	right:0;
+	top:0;
+	width:28em;
+	height:100em;
+	border: 1px solid #999;
+}
+
+#cchdo_note_div table {
+	font: 65% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+	text-align:left;
+	
+}
+#cchdo_note{
+	position: absolute;
+	top:9em;
+	height:5em;
+	width:27em;
+	border: 1px solid #999;
+	overflow:auto
+}
+#cchdo_notes_events_table{
+	position:absolute;
+	top:16em;
+	height:30em;
+}
+
+
+/* --- Paramter Descriptions Table --- */
+
+
+
+/*#paramater_descriptions_table tr:hover {
+	background: #D0DAFD !important;
+	color: #000000 !important;
+}*/
+
+#parameter_descriptions_table tr:hover {
+	background: #7EB6FF !important;
+	color: #000000 !important;
+}
+
+table#parameter_descriptions_table {
+	border: 3px ridge;
+}
+#parameter_descriptions_table tr{
+	background: #E3F2F2 none repeat scroll 0 0;
+}
+
+#parameter_descriptions_table th {
+
+	border-bottom: 2px ridge #7A7A7A !important;
+	border-right: 2px ridge #7A7A7A !important;
+	color: #7A7A7A;
+	padding: 7px;
+	width: 50px !important;
+	font-family:Arial,"Helvetica",sans-serif;
+}
+
+#parameter_descriptions_table td {
+	border-bottom: 2px solid #7A7A7A;
+	border-top: 2px solid #7A7A7A;
+	border-left: 2px solid #7A7A7A;
+	border-right: 2px solid #7A7A7A;
+	border-collapse: separate;
+	color: #000000;
+	padding: 7px;
+	min-width: 60px;
+	max-width: 165px;
+	font-family:Arial,"Helvetica",sans-serif;
+}
+
+tr#darkBlue {
+	background: #E0EEFF !important;  
+}
+
+tr#lightBlue {
+	background: #E3F2F2 none repeat scroll 0 0 !important;
+}
+
+
+
+/*  ------ sea_hunt tables --------- */
+
+#sea_hunt_table{
+        border: 2px solid #4A7D99;
+        height: 40px;
+        width: 100%;
+        padding: 15px;
+		padding-top: 10px;
+        font-size: x-small;
+}
+
+#sea_hunt_table th{
+        font-weight: bold;
+        text-align:left;
+       	height: 40px;
+		background-color:#6C84A6;
+		padding:6;
+		color:#000;
+		font-size: medium;
+
+}
+#sea_hunt_table tr{
+        border: 2px solid #4A7D99;
+        border-bottom: 2px solid #99ccff;
+}
+
+#sea_hunt_table td{
+        text-align:left;
+        padding:6;
+       	height: 160px;
+}
+
+#sea_hunt_table tr:hover td{
+        background: #CCE1E7 !important;
+}
+
+#sea_hunt_table td:hover {
+        background: #d0dafd !important;
+}
+
+#wider td{
+        width: 155px;
+}
+
+#sea_hunt_future_table{
+	border: 2px solid #4A7D99;
+    height: 40px;
+    width: 100%;
+    padding: 15px;
+	padding-top: 10px;
+    font-size: small;
+	
+}
+#sea_hunt_future_table th{
+        font-weight: bold;
+        text-align:left;
+       	height: 40px;
+		background-color:#6C84A6;
+		padding:6;
+		color:#000;
+		font-size: medium;
+}
+#sea_hunt_future_table tr{
+        border: 2px solid #4A7D99;
+        border-bottom: 2px solid #99ccff;
+}
+
+#sea_hunt_future_table td{
+        text-align:left;
+		background-color:#DBF8FF;
+        padding:6;
+       	height: 60px;
+}
+
+#sea_hunt_future_table tr:hover td{
+        background: #CCE1E7 !important;
+}
+
+#sea_hunt_future_table td:hover {
+        background: #d0dafd !important;
+}
+
+.entry_table .prompt {
+	padding-right: 1em;
+	width: 200px;
+}
+
+
+/******  Queue Files *********/
+
+#queue_box_table {
+  border: 2px solid #4A7D99;
+  width:500px;
+}
+
+.queue_cruise_row {
+        background:#8190B2;
+}
+
+
+/****** Generic table ******/
+
+.gen_title_row {
+        background-color:#596BA9;
+}
+.gen_alt_row1 {
+        background-color:#6B97AB;
+}
+.gen_alt_row2 {
+        background-color:#618F9B;
+}
+
+/*  ------ Old Submissions --------- */
+
+#old_submissions_table{
+        border: 2px solid #000;
+        width: 100%;
+        padding: 15px;
+		padding-top: 10px;
+        font-size: small;
+		border-collapse: collapse
+
+}
+
+#old_submissions_table th{
+        font-weight: bold;
+        text-align:left;
+		background-color:#6C84A6;
+		padding:6;
+		color:#000;
+		font-size: medium;
+		height: 3em;
+
+}
+#old_submissions_table tr{
+        border: 2px solid #000;
+        border-bottom: 2px solid #000;
+}
+
+#old_submissions_table td{
+        text-align:left;
+        padding:6;
+}
+
+#old_submissions_table tr:hover td{
+        background: #D8D8D8 !important;
+}
+
+div.scroll {overflow: auto; width: 100%; height: 36em;}
+

@@ -1,0 +1,67 @@
+<div id="carina_main_nav">
+	<ul class="carina_menu">
+		<% page = params[:current_tab] %>
+		<li<% if page == 'ship_tab' %> id="current_tab"<% end %>>
+		   <%= link_to_remote "<div class=\"tab_left\"></div>Ship<div class=\"tab_right\"></div>", :update => "content_container", :url => { :action => "sort_by_ship" } %>
+        </li>
+		<li<% if page == 'year_tab' %> id="current_tab"<% end %>>
+		   <%= link_to_remote "<div class=\"tab_left\"></div>Year<div class=\"tab_right\"></div>", :update => "content_container", :url => { :action => "year_by_ship" } %>
+        </li>
+		<li<% if page == 'country_tab' %> id="current_tab"<% end %>>
+		   <%= link_to_remote "<div class=\"tab_left\"></div>Country<div class=\"tab_right\"></div>", :update => "content_container", :url => { :action => "country_by_ship" } %>
+        </li>
+	</ul>	
+</div>
+<% current_year = "22342" %>
+<% ctr = 0 %>
+<% year = "" %>
+<% cruise_ctr = 0 %>
+<table>
+	<tr>
+		<td>
+			<table>
+<% for cruise in @cruises %>
+  <% if cruise.Begin_Date %>
+      <% date = cruise.Begin_Date %>
+      <% if date %>
+       <% year = date.year %>
+      <% end %>
+  <% end %>
+  <% if year != current_year %>
+
+    <% unless ctr < 1 %>
+     </table>
+     </td> 
+     </tr>
+      <tr>
+	    <td>
+		  <table>
+			<tr><td colspan="4"><b><%= year %></b></td></tr>
+			<tr>
+				<td colspan="4" class="carina_file_box">
+                 <div id="<%= year %>_files" class="carina_file_box">
+	             </div>
+	            </td>
+	        </tr>
+	        <tr>
+	<% end %>
+    <% current_year = year %>
+    <% ctr += 1 %>
+  <% end %>
+  <% if cruise_ctr % 4 == 0 %>
+    <td><%= link_to_remote "#{cruise.ExpoCode}(#{cruise.Line})", :update => "#{year}_files", :url => { :action => "show_files", :expo => "#{cruise.ExpoCode}" } %>  </td>
+    </tr>
+    <tr>
+  <% else %>
+  <td>
+  <%= link_to_remote "#{cruise.ExpoCode}(#{cruise.Line})", :update => "#{year}_files", :url => { :action => "show_files", :expo => "#{cruise.ExpoCode}" } %>
+  </td>
+  <% end %>
+	<% cruise_ctr +=1 %>
+
+<% end %>
+</tr>
+</table>
+</td>
+</tr>
+</table>

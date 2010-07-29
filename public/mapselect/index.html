@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>CCHDO Map Select &beta;</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/mapselect.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/slider.css" />
+    <!-- Google Maps API key for watershed.ucsd.edu -->
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key="ABQIAAAATXJifusyeTqIXK5-oRfMqRRkZzjLi0nUJ4TwOC8xt4Ov2IJhKBQTGSNz9nt4_eT3w1Wv_O1VSaMyBA" type="text/javascript"></script>
+    <script src="javascript/LatLonGraticule.js" type="text/javascript"></script>
+    <script src="javascript/dragSelect.js" type="text/javascript"></script>
+    <script src="javascript/mapSelect.js" type="text/javascript"></script>
+    <script src="javascript/sortable/sortable.js" type="text/javascript"></script>
+    <script src="javascript/slider.js" type="text/javascript"></script>
+  </head>
+  <body onload="initialize()" onunload="GUnload()">
+    <h1>CCHDO Map Select &beta;</h1>
+    <div id="map"></div>
+    <div id="controls">
+      <h2>Controls</h2>
+      <p>Click the select button on the map to try it out. Try scrolling or dragging! Or, type in some coordinates.The time range can be used to limit searches. Slider coming soon.</p>
+      <form name="selection">
+        <table>
+          <tr><td></td><td>Latitude</td><td>Longitude</td></tr>
+          <tr><td>Maximum</td><td><input id="ne_lat" type="text" value="3.0" onChange="formChange()" /></td><td><input id="ne_lng" type="text" value="3.0" onChange="formChange()" /></td></tr>
+          <tr><td>Minimum</td><td><input id="sw_lat" type="text" value="-3.0" onChange="formChange()" /></td><td><input id="sw_lng" type="text" value="-3.0" onChange="formChange()" /></td></tr>
+        </table>
+       <!-- <table>
+          <tr><td>Time Range</td><td><input id="min_time" type="text" value="1980" onChange="formChange()" /></td><td><input id="max_time" type="text" value="2008" onChange="formChange()" /></td></tr>
+        </table>-->
+	<table class="slider_display"><tr><td id="min_time">1980</td><td id="max_time">2008</td></tr></table>
+	<div class="slider">
+		<div id="cover"></div>
+		<div class="slider_track"></div>
+		<div id="min_time" class="point_left" style="left: 0px;" onmousedown="startSlide(event)"></div>
+		<div id="max_time" class="point_right" style="left: 200px;" onmousedown="startSlide(event)"></div>
+	</div>
+        <input type="button" value="select" onClick="formSelect()"/>
+      </form>
+    </div>
+    <div id="info">
+      <table id="cruise_table" class="sortable">
+        <thead>
+          <tr><td>ExpoCode</td><td>Line</td><td>Ship</td><td>Country</td><td>PI</td><td>Date</td></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div id="footer"><a href="http://watershed.ucsd.edu/">CCHDO -- CLIVAR & Carbon Hydrographic Data Office</a></div>
+  </body>
+</html>

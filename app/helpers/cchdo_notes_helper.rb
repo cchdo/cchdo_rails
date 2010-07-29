@@ -1,0 +1,2 @@
+module CchdoNotesHelper
+end

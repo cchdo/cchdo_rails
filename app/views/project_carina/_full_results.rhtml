@@ -1,0 +1,201 @@
+<ul id="carina_menu">
+	<li> 
+	   <% if @sort == 'ExpoCode' %>
+	   <%= link_to_remote "<span class='active_left'></span><span class='active_center'>ExpoCode</span><span class='active_right'></span>",{ :update => "search_results", :url => { :action => "sort", :sort => 'ExpoCode' }}, {:class => "active"} %>
+	   <% else %>
+	   <%= link_to_remote  "<span class='left'></span><span class='center'>ExpoCode</span><span class='right'></span>", :update => "search_results", :url => { :action => "sort", :sort => 'ExpoCode' } %>
+	   <% end %>
+	</li>
+	<li> 
+	   <% if @sort == 'Ship_Name' %>
+	   <%= link_to_remote "<span class='active_left'></span><span class='active_center'>Ship</span><span class='active_right'>",{ :update => "search_results", :url => { :action => "sort", :sort => 'Ship_Name' }}, {:class => "active"} %>
+	   <% else %>
+	   <%= link_to_remote "<span class='left'></span><span class='center'>Ship</span><span class='right'></span>", :update => "search_results", :url => { :action => "sort", :sort => 'Ship_Name' } %>
+	   <% end %>
+	</li>
+	<li>
+		<% if @sort == 'Begin_Date' %>
+	   <%= link_to_remote "<span class='active_left'></span><span class='active_center'>Year</span><span class='active_right'>", {:update => "search_results", :url => { :action => "sort", :sort => 'Begin_Date' }},{:class =>"active"} %>
+	   <% else %>
+	   <%= link_to_remote "<span class='left'></span><span class='center'>Year</span><span class='right'></span>", :update => "search_results", :url => { :action => "sort", :sort => 'Begin_Date' } %>
+	   <% end %>
+	</li>
+	<li>
+		<% if @sort == 'Country' %>
+	   <%= link_to_remote "<span class='active_left'></span><span class='active_center'>Country</span><span class='active_right'>", {:update => "search_results", :url => { :action => "sort", :sort => 'Country' }},{:class =>"active"} %>
+	   <% else %>
+	   <%= link_to_remote "<span class='left'></span><span class='center'>Country</span><span class='right'></span>", :update => "search_results", :url => { :action => "sort", :sort => 'Country' } %>
+	   <% end %>
+	</li>
+</ul>
+<div id="carina_tab_bar">&nbsp;</div>	
+<table width="100%">
+	<tbody><tr>
+		
+		<% if @sort == "ExpoCode" %>
+		
+		<td class="heading_table_carina" valign="bottom" width="200">ExpoCode
+			<%= link_to_remote "<img src=images/arrow-down.gif  align=left border=0>", {:update => "search_results", :url => { :action => "sort", :sort => 'ExpoCode',:order => "DESC" }}%>
+			<%= link_to_remote "<img src=images/arrow-up.gif  align=left border=0>", {:update => "search_results", :url => { :action => "sort", :sort => 'ExpoCode',:order => "ASC" }}%>
+		</td>
+		<td class="heading_table_carina" valign="bottom">Year</td>
+		<td class="heading_table_carina" valign="bottom">Ship</td>
+		<td class="heading_table_carina" valign="bottom">Country</td>
+		<td class="heading_table_carina" valign="bottom">Data Files</td>
+		<% elsif @sort == "Begin_Date" %>
+		<td class="heading_table_carina" valign="bottom" width="200">Year
+			 <%= link_to_remote "<img src=images/arrow-down.gif  align=left border=0>", {:update => "search_results", :url => { :action => "sort", :sort => 'Begin_Date',:order => "DESC" }}%>
+			<%= link_to_remote "<img src=images/arrow-up.gif  align=left border=0>", {:update => "search_results", :url => { :action => "sort", :sort => 'Begin_Date',:order => "ASC" }}%>
+		</td>
+		<td class="heading_table_carina" valign="bottom">ExpoCode</td>
+		<td class="heading_table_carina" valign="bottom">Ship</td>
+		<td class="heading_table_carina" valign="bottom">Country</td>
+		<td class="heading_table_carina" valign="bottom">Data Files</td>
+		<% elsif @sort == "Ship_Name" %>
+		
+		<td class="heading_table_carina" valign="bottom" width="200">Ship
+			 <%= link_to_remote "<img src=/images/arrow-down.gif  align=left border=0>", {:update => "search_results", :url => { :action => "sort", :sort => 'Ship_Name',:order => "DESC" }}%>
+			<%= link_to_remote "<img src=/images/arrow-up.gif  align=left border=0>", {:update => "search_results", :url => { :action => "sort", :sort => 'Ship_Name',:order => "ASC" }}%>
+		</td>
+		<td class="heading_table_carina" valign="bottom">ExpoCode</td>
+		<td class="heading_table_carina" valign="bottom">Year</td>
+		<td class="heading_table_carina" valign="bottom">Country</td>
+		<td class="heading_table_carina" valign="bottom">Data Files</td>
+		<% elsif @sort == "Country" %>
+		<td class="heading_table_carina" valign="bottom" width="200">Country
+			<%= link_to_remote "<img src=images/arrow-down.gif  align=left border=0>", {:update => "search_results", :url => { :action => "sort", :sort => 'Country',:order => "DESC" }}%>
+			<%= link_to_remote "<img src=images/arrow-up.gif  align=left border=0>", {:update => "search_results", :url => { :action => "sort", :sort => 'Country',:order => "ASC" }}%>
+		</td>
+		<td class="heading_table_carina" valign="bottom">ExpoCode</td>
+		<td class="heading_table_carina" valign="bottom">Year</td>
+		<td class="heading_table_carina" valign="bottom">Ship</td>
+		<td class="heading_table_carina" valign="bottom">Data Files</td>
+		<% end %>
+		
+	   </tr>
+	
+	<% ctr = 0 %>
+	<% for cruise in @cruises %>
+	<% if ctr % 2 == 0 %>
+	<tr class="hl" valign="top">
+	<% else %>
+	<tr valign="top">
+    <% end %>
+	<% if @sort == "ExpoCode" %>
+	
+		<td><strong><%= cruise.ExpoCode %> &nbsp;<%= cruise.Line %></strong><br>
+			<% if @table_list[cruise.ExpoCode]['events'] and @table_list[cruise.ExpoCode]['events'] > 0 %>
+			<a href="/carina_data_history?ExpoCode=<%= cruise.ExpoCode %>">Data History(<%= @table_list[cruise.ExpoCode]['events'] %>)</a>     
+			<% else %>  
+			&nbsp;
+			<% end %>
+		</td>
+		<td><%= cruise.Begin_Date %></td>
+		<td><%= cruise.Ship_Name %></td>
+		<td><%= cruise.Country %></td>
+		<td>	
+		    <% if(@table_list[cruise.ExpoCode]['Copied'] == 0) %>
+		      <% if(@table_list[cruise.ExpoCode]['exchange_bot']!= 0) %>
+			  <a href="<%= @table_list[cruise.ExpoCode]['exchange_bot'] %>"><%= File.basename(@table_list[cruise.ExpoCode]['exchange_bot']) %></a>
+		      <% end %>
+		      <% if(@table_list[cruise.ExpoCode]['pdf_doc'] != 0)and(@table_list[cruise.ExpoCode]['pdf_doc'] =~ /\w/) %>
+			  <br><a href="<%= @table_list[cruise.ExpoCode]['pdf_doc'] %>"> <%= File.basename(@table_list[cruise.ExpoCode]['pdf_doc']) %></a> 
+		      <% end %>
+	 	      <% if(@table_list[cruise.ExpoCode]['text_doc'] != 0)and(@table_list[cruise.ExpoCode]['text_doc'] =~ /\w/) %>
+			  <br><a href="<%= @table_list[cruise.ExpoCode]['text_doc'] %>"> <%= File.basename(@table_list[cruise.ExpoCode]['text_doc']) %></a> 
+		      <% end %>
+                    <% else %>
+                      <a href="/data_access?ExpoCode=<%=cruise.ExpoCode %>" ><%= File.basename(@table_list[cruise.ExpoCode]['exchange_bot']) %></a>
+                    <% end %>
+		</td>
+	<% elsif @sort == "Begin_Date" %>
+		<td><%= cruise.Begin_Date %></td>
+		<td><strong><%= cruise.ExpoCode %> &nbsp;<%= cruise.Line %></strong>
+			<% if @table_list[cruise.ExpoCode]['events'] and @table_list[cruise.ExpoCode]['events'] > 0 %>
+			<br><a href="//carina_data_history?ExpoCode=<%= cruise.ExpoCode %>">Data History(<%= @table_list[cruise.ExpoCode]['events'] %>)</a>     
+			<% else %>  
+			&nbsp;
+			<% end %>
+		</td>	    
+		<td><%= cruise.Ship_Name %></td>
+		<td><%= cruise.Country %></td>
+		<td>
+		    <% if(@table_list[cruise.ExpoCode]['Copied'] == 0) %>
+		      <% if(@table_list[cruise.ExpoCode]['exchange_bot']!= 0) %>
+			  <a href="<%= @table_list[cruise.ExpoCode]['exchange_bot'] %>"><%= File.basename(@table_list[cruise.ExpoCode]['exchange_bot']) %></a>
+		      <% end %>
+		      <% if(@table_list[cruise.ExpoCode]['pdf_doc'] != 0)and(@table_list[cruise.ExpoCode]['pdf_doc'] =~ /\w/) %>
+			  <br><a href="<%= @table_list[cruise.ExpoCode]['pdf_doc'] %>"> <%= File.basename(@table_list[cruise.ExpoCode]['pdf_doc']) %></a> 
+		      <% end %>
+	 	      <% if(@table_list[cruise.ExpoCode]['text_doc'] != 0)and(@table_list[cruise.ExpoCode]['text_doc'] =~ /\w/) %>
+			  <br><a href="<%= @table_list[cruise.ExpoCode]['text_doc'] %>"> <%= File.basename(@table_list[cruise.ExpoCode]['text_doc']) %></a> 
+		      <% end %>
+                    <% else %>
+                      <a href="/data_access?ExpoCode=<%=cruise.ExpoCode %>" ><%= File.basename(@table_list[cruise.ExpoCode]['exchange_bot']) %></a>
+                    <% end %>
+		</td>
+	<% elsif @sort == "Ship_Name" %>
+	     <td><%= cruise.Ship_Name %></td>
+	
+		<td valign="middle"><strong><%= cruise.ExpoCode %> &nbsp;<%= cruise.Line %></strong>
+			<% if @table_list[cruise.ExpoCode]['events'] and @table_list[cruise.ExpoCode]['events'] > 0 %>
+			<br><a href="/carina_data_history?ExpoCode=<%= cruise.ExpoCode %>">Data History(<%= @table_list[cruise.ExpoCode]['events'] %>)</a>     
+			<% else %>  
+			&nbsp;
+			<% end %>
+		</td>	    
+		<td><%= cruise.Begin_Date %></td>
+		<td><%= cruise.Country %></td>
+		<td>	
+		    <% if(@table_list[cruise.ExpoCode]['Copied'] == 0) %>
+		      <% if(@table_list[cruise.ExpoCode]['exchange_bot']!= 0) %>
+			  <a href="<%= @table_list[cruise.ExpoCode]['exchange_bot'] %>"><%= File.basename(@table_list[cruise.ExpoCode]['exchange_bot']) %></a>
+		      <% end %>
+		      <% if(@table_list[cruise.ExpoCode]['pdf_doc'] != 0)and(@table_list[cruise.ExpoCode]['pdf_doc'] =~ /\w/) %>
+			  <br><a href="<%= @table_list[cruise.ExpoCode]['pdf_doc'] %>"> <%= File.basename(@table_list[cruise.ExpoCode]['pdf_doc']) %></a> 
+		      <% end %>
+	 	      <% if(@table_list[cruise.ExpoCode]['text_doc'] != 0)and(@table_list[cruise.ExpoCode]['text_doc'] =~ /\w/) %>
+			  <br><a href="<%= @table_list[cruise.ExpoCode]['text_doc'] %>"> <%= File.basename(@table_list[cruise.ExpoCode]['text_doc']) %></a> 
+		      <% end %>
+                    <% else %>
+                      <a href="/data_access?ExpoCode=<%=cruise.ExpoCode %>" ><%= File.basename(@table_list[cruise.ExpoCode]['exchange_bot']) %></a>
+                    <% end %>
+
+		</td>
+	<% elsif @sort == "Country" %>
+	  	<td><%= cruise.Country %></td>
+		<td><strong><%= cruise.ExpoCode %> &nbsp;<%= cruise.Line %></strong><br>
+			<% if @table_list[cruise.ExpoCode]['events'] and @table_list[cruise.ExpoCode]['events'] > 0 %>
+			<a href="/carina_data_history?ExpoCode=<%= cruise.ExpoCode %>">Data History(<%= @table_list[cruise.ExpoCode]['events'] %>)</a>     
+			<% else %>  
+			&nbsp;
+			<% end %>
+		</td>
+			     <td><%= cruise.Begin_Date %></td>
+	     <td><%= cruise.Ship_Name %></td>
+
+
+		<td>
+		    <% if(@table_list[cruise.ExpoCode]['Copied'] == 0) %>
+		      <% if(@table_list[cruise.ExpoCode]['exchange_bot']!= 0) %>
+			  <a href="<%= @table_list[cruise.ExpoCode]['exchange_bot'] %>"><%= File.basename(@table_list[cruise.ExpoCode]['exchange_bot']) %></a>
+		      <% end %>
+		      <% if(@table_list[cruise.ExpoCode]['pdf_doc'] != 0)and(@table_list[cruise.ExpoCode]['pdf_doc'] =~ /\w/) %>
+			  <br><a href="<%= @table_list[cruise.ExpoCode]['pdf_doc'] %>"> <%= File.basename(@table_list[cruise.ExpoCode]['pdf_doc']) %></a> 
+		      <% end %>
+	 	      <% if(@table_list[cruise.ExpoCode]['text_doc'] != 0)and(@table_list[cruise.ExpoCode]['text_doc'] =~ /\w/) %>
+			  <br><a href="<%= @table_list[cruise.ExpoCode]['text_doc'] %>"> <%= File.basename(@table_list[cruise.ExpoCode]['text_doc']) %></a> 
+		      <% end %>
+                    <% else %>
+                      <a href="/data_access?ExpoCode=<%=cruise.ExpoCode %>" ><%= File.basename(@table_list[cruise.ExpoCode]['exchange_bot']) %></a>
+                    <% end %>
+                 
+		</td>
+	<% end %>
+		
+	
+	</tr>
+	
+    <% ctr += 1 %>
+	<% end %>
+</tbody></table>

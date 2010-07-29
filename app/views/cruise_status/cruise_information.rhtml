@@ -1,0 +1,20 @@
+<table border="1">
+	<tr>
+		<td valign="top">
+			<table>
+		      <tr>
+		        <td rowspan = "3" valign="top">
+			      <div id="cruise_list" style="height:770px; width:270px; overflow:auto">
+			       <%= render :partial => "cruise_list", :update => "cruise_list" %>
+			      </div>
+		        </td>
+		      </tr>
+		   </table>
+		</td>
+		<td>
+		<div id="all_cruise_meta">
+		<%= render :partial => "all_cruise_meta",:update => "all_cruise_meta" %>
+     </div>
+       </td>
+</tr>
+</table>

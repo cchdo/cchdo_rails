@@ -1,0 +1,34 @@
+<div class="staff_header">Recent Updates</div>
+<% if recent = Document.find(:all,
+                             :select => 'DISTINCT ExpoCode,FileType,FileName,LastModified',
+                             :conditions => ['FileType != "Directory"'],
+                             :order => 'LastModified DESC', :limit => 300)
+     expocode_map_hash = {}
+     recent.compact.collect {|file| file.ExpoCode}.uniq.each do |expocode|
+       expocode_map_hash[expocode] = Document.find(:first,
+                                                   :conditions => ["FileType='Small Plot' AND ExpoCode=?",
+                                                   expocode])
+     end %>
+<table align="center" id="results">
+<% ctr = 1 %>
+<% recent.compact.each do |file| %>
+<% if file.ExpoCode =~ /\w/ and file.ExpoCode !~ /NULL/i%>
+<% if ctr % 2 == 0 %>
+  <tr class="incomplete_submission_1">
+<% else %>
+  <tr class="incomplete_submission_2">
+<% end %>
+<td>
+<% cruise = Cruise.find(:first,:conditions => ["ExpoCode = ?", file.ExpoCode]) %>
+<% if expocode_map_hash[file.ExpoCode] %>
+   <a href='/search?query="<%= file.ExpoCode %>"'>
+     <img style="width: 50px; height: 50px" src="http://cchdo.ucsd.edu<%= expocode_map_hash[file.ExpoCode].FileName %>" />
+   </a>
+<% end %><% if cruise %> <b><%= cruise.Line %></b><% end %>      <%= file.ExpoCode %><br />
+<span class='date'><%= file.LastModified %></span><br />
+<a href="http://cchdo.ucsd.edu<%= file.FileName %>"><%= file.FileType %></a> <br>  </td></tr>
+<% ctr += 1 %>
+<% end %>
+<% end %>
+</table>
+<% end %>

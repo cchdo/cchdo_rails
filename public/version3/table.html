@@ -1,0 +1,551 @@
+<html>
+<head>
+<title>CCHDO | CLIVAR & Carbon Hydrographic Data Office</title>
+<script language="JavaScript1.2" type="text/javascript" src="http://cchdo.ucsd.edu/javascripts/application.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+menu_status = new Array();
+
+function showHide(theid){
+    if (document.getElementById) {
+    var switch_id = document.getElementById(theid);
+
+        if(menu_status[theid] != 'show') {
+           switch_id.className = 'show';
+           menu_status[theid] = 'show';
+        }else{
+           switch_id.className = 'hide';
+           menu_status[theid] = 'hide';
+        }
+    }
+}
+
+//-->
+</script>
+<style type="text/css" media="screen">
+	@import url("cchdo2.css");
+</style>
+</head>
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<table width="1024" border="0" cellpadding="0" cellspacing="0" align="center">
+<form method="post" action="http://cchdo.ucsd.edu/search" enctype="multipart/form-data">
+	<tr>
+		<td>
+			<img src="images/cchdo2_01.jpg" width="267" height="130" border="0"></td>
+		<td>
+			<a href="http://cchdo.ucsd.edu/"><img src="images/cchdo2_02.jpg" width="551" height="130" alt="CCHDO" border="0"></a></td>
+		<td colspan="2" background="images/cchdo2_03.jpg" width="206" height="130" valign="bottom" align="left" class="search">&nbsp;&nbsp;SEARCH</td>
+	</tr>
+	<tr>
+		<td bgcolor="#06629b" class="thedate" width="267" valign="top">
+			<script>document.write(theDays[theDate.getDay()]+", "+theMonths[theDate.getMonth()]+" "+theDate.getDate()+", "+theDate.getFullYear());</script>
+</td>
+		<td>
+			<a href="http://cchdo.ucsd.edu/"><img src="images/cchdo2_05.jpg" width="551" height="38" alt="CCHDO" border="0"></a></td>
+		<td background="images/cchdo2_06.jpg" width="154" height="38" valign="top" align="right"><input type="text" name="query" size="20" value=""/></td>
+		<td bgcolor="#06629b"><input type="image" src="images/cchdo2_07.jpg" width="52" height="38"name="query" alt="SEARCH"/></td>
+	</tr></form>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+	<tr>
+		<td valign="top">
+		<table border="0" cellpadding="0" cellspacing="0">
+<!-- Navigaion Menu -->
+		<tr>
+		<td valign="top">
+		<!-- HOME -->	
+		<div><a href="http://cchdo.ucsd.edu/"><img src="images/cchdo2_09.jpg" width="212" height="30" alt="HOME" border="0"></a></div>
+
+		<!-- DATA BY REGION -->
+		<a class="themenu" onclick="showHide('databyregion')"><img src="images/cchdo2_12.jpg" width="212" height="31" alt="DATA BY REGION" border="0"></a>
+		<div id="databyregion" class="hide">
+			<a class="submenu" href="arctic.htm">Arctic</a><br>
+			<a class="submenu" href="atlantic.htm">Atlantic Ocean</a><br>
+			<a class="submenu" href="pacific.htm">Pacific Ocean</a><br>
+			<a class="submenu" href="indian.htm">Indian Ocean</a><br>
+			<a class="submenu" href="southern.htm">Southern Ocean</a><br>
+		</div>
+
+		<!-- SEARCH -->
+		<a class="themenu" onclick="showHide('search')"><img src="images/cchdo2_13.jpg" width="212" height="31" alt="SEARCH" border="0"></a>
+		<div id="search" class="hide">
+			<a class="submenu" href="#">Bulk Download</a><br>
+			<a class="submenu" href="#">Advanced Search</a><br>
+			<a class="submenu" href="#">Cruise Maps</a><br>
+		</div>
+
+		<!-- SUBMIT --> 
+		<div><a href="#"><img src="images/cchdo2_14.jpg" width="212" height="31" alt="SUBMIT" border="0"></a></div>
+
+		<!-- INFO -->
+		<a class="themenu" onclick="showHide('info')"><img src="images/cchdo2_15.jpg" width="212" height="28" alt="INFO" border="0"></a>
+		<div id="info" class="hide">
+			<a class="submenu" href="formats.htm">Formats</a><br>
+			<a class="submenu" href="policies.htm">Policies</a><br>
+			<a class="submenu" href="manuals.htm">Manuals</a><br>
+			<a class="submenu" href="contact.htm">Contact</a><br>
+		</div>
+</td>
+</tr>
+<!-- End of Navigation Menu -->
+		</table>
+		</td>
+		<td width="100%"><p>&nbsp;</p>
+<!-- Page content goes here -->
+
+<table align="center" width="750" BORDER=0 CELLSPACING=1 cellpadding=0>
+   
+   
+     
+       
+   	 <TR  VALIGN="bottom">
+	       <TD  valign=bottom class="heading_table"><b>Line/ExpoCode/Dates</B></TD>
+	       <TD  valign=bottom class="heading_table"><b>PI/Ship/Country</B></TD>
+
+		    
+		       
+	             <TD  valign=bottom class="heading_table"><b>CFCs</B></TD>
+	          
+	             <TD  valign=bottom class="heading_table"><b>NUTs</B></TD>
+	          
+	             <TD  valign=bottom class="heading_table"><b>Tr/He/Ne</B></TD>
+	          
+	             <TD  valign=bottom class="heading_table"><b>BOT</B></TD>
+	          
+	             <TD  valign=bottom class="heading_table"><b>CARBON</B></TD>
+	          
+	             <TD  valign=bottom class="heading_table"><b>CTD</B></TD>
+
+	          
+	             <TD  valign=bottom class="heading_table"><b>Radio Carbons</B></TD>
+	          
+	         
+       </tr>
+	
+			
+				<tr class="highlighted_cell">
+			
+			
+				<tr class="highlighted_cell">
+			
+			
+				<tr class="highlighted_cell">
+			
+			
+				<tr class="highlighted_cell">
+			
+         <td><a href="http://cchdo.ucsd.edu/data_access?ExpoCode=31TTTPS47">P01</a><br><i>31TTTPS47</i>
+
+	      <br>1985-08-04
+         </td>
+         <td>Talley/SIO<br>THOMAS G. THOMPSON<br>USA
+         </td>
+         
+            
+            
+            
+            <td >OnLine</td>
+            
+         
+            
+            
+            
+            <td >OnLine</td>
+            
+         
+            
+            
+            
+            <td >OnLine</td>
+
+            
+         
+            
+            
+            
+            <td >OnLine</td>
+            
+         
+            
+            
+            
+            <td >NotMeasured</td>
+            
+         
+            
+            
+            
+            <td >OnLine</td>
+            
+         
+            
+            
+            
+            <td >No<br>Information</td>
+            
+         
+     </tr>
+       
+     
+       
+			
+			
+			
+			
+         <td><a href="http://cchdo.ucsd.edu/data_access?ExpoCode=49NZ199905_1">P01C</a><br><i>49NZ199905_1</i>
+
+	      <br>1999-08-24
+         </td>
+         <td>Fukasawa/TU<br>MIRAI<br>JPN
+         </td>
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >No<br>Information</td>
+
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >Proposed</td>
+            
+         
+     </tr>
+       
+     
+       
+			
+				<tr class="highlighted_cell">
+			
+			
+			
+			
+         <td><a href="http://cchdo.ucsd.edu/data_access?ExpoCode=18DD199905_1">P01E</a><br><i>18DD199905_1</i>
+
+	      <br>1999-05-31
+         </td>
+         <td>Perkin/IOS<br>JOHN P TULLY<br>CAN
+         </td>
+         
+            
+            
+            
+            <td >No<br>Information</td>
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >No<br>Information</td>
+
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >No<br>Information</td>
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >No<br>Information</td>
+            
+         
+     </tr>
+       
+     
+       
+			
+			
+			
+			
+         <td><a href="http://cchdo.ucsd.edu/data_access?ExpoCode=49NZ199909_2">P01H</a><br><i>49NZ199909_2</i>
+
+	      <br>1999-09-11
+         </td>
+         <td>Takizawa/JAMSTEC<br>MIRAI<br>JPN
+         </td>
+         
+            
+            
+            
+            <td >No<br>Information</td>
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >No<br>Information</td>
+
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >No<br>Information</td>
+            
+         
+     </tr>
+       
+     
+       
+			
+				<tr class="highlighted_cell">
+
+			
+			
+				<tr class="highlighted_cell">
+			
+			
+			
+         <td><a href="http://cchdo.ucsd.edu/data_access?ExpoCode=90BM9316_1">P01W</a><br><i>90BM9316_1</i>
+	      <br>1993-08-30
+         </td>
+         <td>Whitney/IOS BC<br>A. NESMEYANOV<br>CAN
+         </td>
+         
+            
+            
+            
+            <td >OnLine</td>
+
+            
+         
+            
+            
+            
+            <td >OnLine</td>
+            
+         
+            
+            
+            
+            <td >OnLine</td>
+            
+         
+            
+            
+            
+            <td >OnLine</td>
+            
+         
+            
+            
+            
+            <td >OnLine</td>
+            
+         
+            
+            
+            
+            <td >OnLine</td>
+            
+         
+            
+            
+            
+            <td >OnLine</td>
+
+            
+         
+     </tr>
+       
+     
+       
+			
+			
+			
+			
+         <td><a href="http://cchdo.ucsd.edu/data_access?ExpoCode=49KA199905_1">P01W</a><br><i>49KA199905_1</i>
+	      <br>1999-05-23
+         </td>
+         <td>Watanabe/NIRE<br>KAIYO MARU<br>JPN
+         </td>
+         
+            
+            
+            
+            <td >Submitted</td>
+
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >No<br>Information</td>
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+            
+         
+            
+            
+            
+            <td >Submitted</td>
+
+            
+         
+     </tr>
+       
+     
+       
+			
+				<tr class="highlighted_cell">
+			
+			
+			
+				<tr class="highlighted_cell">
+			
+			
+         <td><a href="http://cchdo.ucsd.edu/data_access?ExpoCode=">P01_2007</a><br><i></i>
+	      <br>
+         </td>
+         <td><br><br>JPN
+         </td>
+         
+            
+            
+            <td>No<br>Information</td>
+
+            
+         
+            
+            
+            <td>No<br>Information</td>
+            
+         
+            
+            
+            <td>No<br>Information</td>
+            
+         
+            
+            
+            <td>No<br>Information</td>
+            
+         
+            
+            
+            <td>No<br>Information</td>
+            
+         
+            
+            
+            <td>No<br>Information</td>
+
+            
+         
+            
+            
+            <td>No<br>Information</td>
+            
+         
+     </tr>
+       
+     
+   
+</Table>
+
+<!-- End of page content -->
+		</td>
+</tr>
+</table>
+<!-- End ImageReady Slices -->
+</body>
+</html>

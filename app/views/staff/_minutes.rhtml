@@ -1,0 +1,81 @@
+<head>
+<style type="text/css">
+table
+{
+border-collapse:collapse;
+}
+</style>
+</head>
+
+
+<table id="minutes_color_key">
+    <tr>
+        <td colspan="2" align="center"><strong>Minutes Color Key</strong></td>
+    </tr>
+    <tr>
+        <td class="completed_action_item" width="20" align="center"></td><td align="center">Completed Action Items</td>
+    </tr>
+    <tr><td colspan="2" align="center"><hr></td></tr>
+    <tr>
+        <td class="action_item" width="20" align="center"></td><td align="center">Action Items</td>
+    </tr>
+</table>
+</br>
+<% ctr = 0 %>
+<% for meeting in @minutes %>
+
+  <table class="minutes_table">
+    <tr>
+        <td colspan="2" class="date_row">
+              <b><%= meeting.Date %></b>
+          </td>
+    <tr>
+    <tr>
+        <td class="minutes_text_column"rowspan="2">
+                <pre class="minutes_text"><%= meeting.Text %></pre>
+        </td>
+        <td class="minutes_action_item_column"height="20px">
+            <pre>Number of Action Items: <%= meeting.number_action_items %></pre>
+        </td>
+    </tr>
+    <tr>
+        <td class="minutes_action_item_column">
+                <% if meeting.action_items %>
+                <table width="100%">
+                    <% array = meeting.action_items.split(',')
+  					for index in 0...array.length 
+					 	array[index] = array[index].strip%>
+                        <% if array[index] =~ /\(\*\)/ %>
+                            <tr class="completed_action_item">
+                                <td>
+                                    <%form_remote_for :clicked_action_item, :url => { :action => :undo_action_items},:update => "minutes_frame" do |form|%>
+									<%= array[index].gsub(/\(\*\)/, '')%>
+									<%= text_field_tag :clicked_action_item, array[index], :type => 'hidden' , :size => 			"53" -%>
+									<%= submit_tag "Undo" %>
+									<%end%>
+                                </td>
+                        </tr>
+                        <% else %>
+                            <tr class="action_item">
+                                <td>
+	
+								<%form_remote_for :clicked_action_item, :url => { :action => :update_action_items},:update => "minutes_frame" do |form|%>
+									<%= array[index]%>
+									<%= text_field_tag :clicked_action_item, array[index], :type => 'hidden', :size => "53" -%>
+									<%= submit_tag "Done" %>
+									<%end%>
+                                    
+                                </td>
+
+                            </tr>
+                        <% end %>
+                    <% end %>
+                    </table>
+                <% end %>
+            </td>
+    </tr>    
+  <table>
+<% end %>
+<br>
+
+

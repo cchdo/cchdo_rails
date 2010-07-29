@@ -1,0 +1,139 @@
+<div class="boxed">
+<h1>Advanced Search</h1>
+<div class="box_content">
+<h2>Search by Cruises</h2>
+<form action="list_cruises" >
+<table align="center">
+  <tr>
+    <td align="left">Line Number <%= text_field_tag "Line", "", :size => 12%></td>
+    <td align="left" colspan="3">ExpoCode <%= text_field_tag "ExpoCode", "", :size=>16 %>
+      <div class="auto_complete" id="expocode_auto_complete"></div>
+      <%= javascript_tag("new Autocompleter.Local('ExpoCode','expocode_auto_complete',expocodes,{fullSearch: true, frequency: 0, minChars:1});")%>
+    </td>
+  </tr>
+  <tr>
+    <td align="left">Data Contact <%= text_field_tag "Chief_Scientist", "", :size=>14 %>   
+      <div class="auto_complete" id="Chief_Scientist_auto_complete"></div>
+      <%= javascript_tag("new Autocompleter.Local('Chief_Scientist','Chief_Scientist_auto_complete',pis,{fullSearch: true, frequency: 0, minChars:1});")%>	
+    </td>
+    <td align="left">Ship <%= text_field_tag "Ship_Name", "", :size=>12 %>   
+      <div class="auto_complete" id="Ship_Name_auto_complete"></div>
+      <%= javascript_tag("new Autocompleter.Local('Ship_Name','Ship_Name_auto_complete',ships,{fullSearch: true, frequency: 0, minChars:1});")%>
+    </td>
+    <td colspan="2" align="left">Country <%= text_field_tag "Country", "", :size=>12 %>
+      <div class="auto_complete" id="Country_auto_complete"></div>
+      <%= javascript_tag("new Autocompleter.Local('Country','Country_auto_complete',countries,{fullSearch: true, frequency: 0, minChars:1});")%>
+    </td>
+  </tr>
+  <tr>
+	<td colspan="4">
+<table cellpadding="0" cellspacing="0">
+	<tr>
+	<td align="right">From</td>
+    <td>
+      <%#= date_select("MONTHSTART", :start_year => 1980, :discard_day => true) %>
+	<select name="MONTHSTART">
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10</option>
+	<option value="11">11</option>
+	<option value="12">12</option>
+	</select>	
+        <select name="YEARSTART">
+	<% for year_ctr in (1980..Date.today.year) %>
+	<option value="<%= year_ctr %>"><%= year_ctr %></option>
+	<% end %>
+	</select>
+      </td>
+	<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	<td align="right">To</td>
+      <td>
+	<select name="MONTHEND">
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10</option>
+	<option value="11">11</option>
+	<option value="12">12</option>
+	</select>
+        <select name="YEAREND">
+	<% for year_ctr in (1980..Date.today.year) %>
+	<option value="<%= year_ctr %>"><%= year_ctr %></option>
+	<% end %>
+	</select>
+      </td>
+</tr>
+</table>
+	</td>
+    </tr>
+<tr>
+	<td colspan="4"><%= submit_tag "Find Cruises" %></td>
+</tr>
+</table>
+</form>
+
+  Search by specific parameters is also supported by the always present search bar at the top right.  To
+match a search to a specific parameter, use the following syntax:  parameter:query.  For example, ship:knorr line:p10  chief_scientist:swift.<br>
+The following parameters are valid:    Group, Chief_Scientist, ExpoCode, Alias, Ship, Line.
+<hr />
+<h2>Search by Data Files</h2>
+<form action="list_files">
+<table align="center">
+<tr>
+  <td>File Type(s)<br>
+    <select name="FileType">
+    <option value="all">all</option>
+    <option value="sum">Sum File</option>
+    <option value="bottle">bottle</option>
+    <option value="ctd">ctd</option>
+    <option value="documentation">Documentation</option>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td>Modified Since</td>
+</tr>
+<tr>
+  <td colspan="4">
+    <select name="MONTHSTART">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="9">9</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+    </select> <select name="YEARSTART">
+		<% for year_ctr in (1994..Date.today.year) %>
+		<option value="<%= year_ctr %>"><%= year_ctr %></option>
+		<% end %>
+
+    </select>
+  </td>
+</tr>
+<tr>
+	<td><%= submit_tag "Find Files"%></td>
+</tr>
+</table>
+</form>
+</div>
+<div class="box_bottom"></div>
+</div>

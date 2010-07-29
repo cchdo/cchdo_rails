@@ -1,0 +1,20 @@
+
+<% form_remote_for :minutes, :url => { :action => :create_minutes},:update => "minutes_frame" do |form| %>
+<table>	
+	<tr>
+		<td>Date:
+		</td>
+		<td>
+	       <%= form.date_select :Date, :start_year => 2001, :end_year => 2020 %>	
+	    </td>
+	</tr>
+	<tr><td>Minutes:</td><td><%= form.text_area :Text, :cols => "50", :rows => "20" %>
+	</td></tr>
+	<tr><td>Action Items:</td><td><%= form.text_area :action_items, :cols => "50", :rows => "3" %>
+	</td></tr>	
+	<tr><td>Number of Action Items:</td><td><%= form.text_field :number_action_items, :size => "53" %>
+	</td></tr>
+	<tr><td><%= submit_tag %></td><td></td></tr>
+	
+</table>
+<% end %>

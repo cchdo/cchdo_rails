@@ -1,0 +1,138 @@
+#centering {
+	width: 99% !important;
+  min-width: 1024px;
+}
+
+#map_space {
+  width: 100%;
+  min-width: 770px;
+  position: relative;
+  vertical-align: top;
+}
+#map_space, #map, #map_pane, #pane_handle, #info_table {
+  height: 600px;/*inherit;*/
+}
+#map, #map_pane, #pane_handle {
+  position: absolute;
+}
+#pane_handle {
+  background-color: #dddddd;
+}
+#pane_handle:hover {
+  background-color: #aaaaaa;
+}
+#info_table {
+  clear: both;
+	font-size: small;
+	position: relative;
+	overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Tools */
+#tool_details {
+  position: relative;
+  height: 8em;
+  background-color: #D1EDEC;
+  background-image: url('/images/map_search/tool_details_gradient.png');
+  background-repeat: repeat-x;
+  background-position: bottom left;
+}
+.tool {
+  height: inherit;
+  display: none;
+  padding-left: 1em;
+}
+#tool_details #search {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  height: 1.5em;
+  margin-top: -0.75em;
+}
+#tool_details #granularity {
+  position: absolute;
+  text-align: center;
+  width: 17.5em;
+  right: 8em;
+  top: 0;
+}
+#tool_details #imported_files {
+  height: 3em;
+  overflow: auto;
+}
+#tool_bar {
+  background-color: #EFEFEF;
+  position: relative;
+  height: 28px;
+}
+#tool_bar img {
+  float: left;
+}
+#tool_bar #status {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  height: 28px;
+  margin-top: -10px;
+  vertical-align: middle;
+}
+.tool_button {
+  padding-bottom: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.tool_button.active {
+  background-color: #7CA7D8;
+  cursor: pointer;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-left: 1px solid #C1DDDC;
+  border-right: 1px solid #C1DDDC;
+}
+
+#pane_handle {
+  cursor: pointer;
+}
+#pop_button {
+  float: right;
+  text-align: right;
+  cursor: pointer;
+  z-index: 100;
+  color: #697676;
+}
+#pop_button:hover {
+  background-color: #EEEEEE;
+}
+#query_details #query {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.75em;
+  font-size: 1.5em;
+}
+
+/*
+#timeslider {
+  position: relative;
+  margin: auto;
+	background-color: #66A7DD;
+	width: 200px;
+	height: 10px;
+}
+#timeslider .handle {
+  position: absolute;
+	height: 10px;
+	width: 7px;
+	background-color: #EFEFEF;
+	border: 1px solid #66A7DD;
+  cursor: move;
+}
+#min_time_display, #max_time_display {
+	color: #000000;
+	text-align: center;
+}
+#min_time, #min_time_display, #max_time, #max_time_display {
+	background-color: #EFEFEF;
+	border: 1px solid #66A7DD;
+}
+*/

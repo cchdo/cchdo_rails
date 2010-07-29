@@ -1,0 +1,6 @@
+var parameters = new Array(<%= @parameters.length %>);
+<% ctr = 0 %>
+<% for parameter in @parameters%>
+   parameters[<%= ctr %>] = "<%= parameter%>";
+ <%   ctr= ctr+1 %>
+<% end %>

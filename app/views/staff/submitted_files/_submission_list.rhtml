@@ -1,0 +1,124 @@
+<%= link_to_remote("Go to Old Submissions", :update => "submissions",:url=>{:controller=>'staff',:action =>'old_submissions'})%>
+<table id="submission_color_key">
+	<tr>
+		<td colspan="3" align="center"><strong>Submission Color Key</strong></td>
+	</tr>
+	<tr>
+		<td class="assimilated_submission_1" width="20" align="center"></td><td class="assimilated_submission_2" width="20" align="center"></td><td align="center">Assimilated</td>
+	</tr>
+	<tr><td colspan="3" align="center"><hr></td></tr>
+	<tr>
+		<td class="incomplete_submission_1" width="20" align="center"></td><td class="incomplete_submission_2" width="20" align="center"></td><td align="center">Untouched</td>
+	</tr>
+
+</table>
+
+<% if @submissions %>
+<% @columns = ["name","institute","Country","email","Line","ExpoCode","Ship_Name", "cruise_date","submission_date"] %>
+<table width="100%">
+
+		<tr class="tm_header">
+			<td width="158px"><strong>Sort by:</strong></td>
+		<% for column in @columns %>
+		<td width="158px">
+		  <%= link_to_remote "#{column}", :update => "submissions",:url => { :action => "submission_list", :query => @query, :Sort => "#{column}",:submission_list => "all" } %>
+		</td>
+        <% end %>
+   </tr>
+</table>
+	<table id="submitted_files">
+		<thead>
+		<tr>
+	      <th>Name</th>
+	      <th>Institute</th>
+	      <th>Country</th>
+	      <th>E-mail</th>
+	      <th>Line</th>
+	      <th>ExpoCode</th>
+	      <th>Ship</th>
+	      <th>Cruise Date</th>
+		<th>Date Submitted</th>
+	   </tr>
+	   </thead>
+	    <% ctr = 1 %>
+		<% for submission in @submissions %>
+		    <% if ctr % 2 == 0 %>
+		    <% if submission.assimilated  %>
+		    <tr class="assimilated_submission_1">
+		    <% else %>
+		    <tr class="incomplete_submission_1">
+		    <% end %>	
+		    <% else %>	
+		    <% if submission.assimilated  %>
+		    <tr class="assimilated_submission_2">
+		    <% else %>
+		    <tr class="incomplete_submission_2">
+		    <% end %>
+		    <% end %>
+		    	<td><%= submission.name %></td>
+		    	<td><%= submission.institute %></td>
+		    	<td><%= submission.Country %></td>
+		    	<td><%= submission.email %></td>
+	            <td><%= submission.Line %></td>
+	            <td><%= submission.ExpoCode %></td>
+	            <td><%= submission.Ship_Name %></td>
+	            <td><%= submission.cruise_date %></td>
+	            <td><%= submission.submission_date %></td>	 
+	            <td></td>
+	        </tr>
+		    <% if ctr % 2 == 0 %>
+		        <% if submission.assimilated  %>
+		        <tr class="assimilated_submission_1">
+	            <% else %>
+	            <tr class="incomplete_submission_1">
+	            <% end %>
+		        <% base,filename = File.split(submission.file) %>
+	              <td colspan="10"><a href="/submissions/<%= File.basename(base)%>/<%= filename %>"><%= filename %></a></td>
+	            </tr>
+	            <% if submission.assimilated  %>
+		        <tr class="assimilated_submission_1">
+		        <% else %>
+		        <tr class="incomplete_submission_1">
+		        <% end %>
+		           <td colspan = "10">
+		             <div id="show_note_<%= submission.id %>">
+		                <%= link_to_remote "Show Notes", :update =>"show_note_#{submission.id}",:url => { :action => "show_note",:sub_id =>"#{submission.id}"} %>	
+		             </div>
+                   </td>
+                </tr>
+	            <% if submission.assimilated  %>
+		        <tr class="assimilated_submission_1">
+		        <% else %>
+		        <tr class="incomplete_submission_1">
+		        <% end %>
+		           <td colspan = "10">
+		             <div id="assign_submission_<%= submission.id %>"></div>
+                   </td>
+               </tr>
+		    <% else %>
+		      <% if submission.assimilated  %>
+		      <tr class="assimilated_submission_2">
+              <% else %>
+              <tr class="incomplete_submission_2">
+              <% end %>	
+		      <% base,filename = File.split(submission.file) %>
+	            <td colspan="10"><a href="/submissions/<%= File.basename(base)%>/<%= filename %>"><%= filename %></a></td>
+	          </tr>
+	          <% if submission.assimilated  %>
+		      <tr class="assimilated_submission_2">
+		      <% else %>
+		      <tr class="incomplete_submission_2">
+		      <% end %>
+		         <td colspan = "10">
+		           <div id="show_note_<%= submission.id %>">
+		              <%= link_to_remote "Show Notes", :update =>"show_note_#{submission.id}",:url => { :action => "show_note",:sub_id =>"#{submission.id}"} %>	
+		           </div>
+                 </td>
+              </tr>
+            <% end %>
+		    <% ctr += 1 %>
+		<% end %>
+	</table>
+<% else %>
+No results for <%= @query %>
+<% end %>

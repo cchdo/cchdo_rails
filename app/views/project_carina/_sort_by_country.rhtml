@@ -1,0 +1,33 @@
+<div id="carina_main_nav">
+	<ul class="carina_menu">
+		<% page = params[:current_tab] %>
+		<li<% if page == 'ship_tab' %> id="current_tab"<% end %>>
+		   <%= link_to_remote "<div class=\"tab_left\"></div>Ship<div class=\"tab_right\"></div>", :update => "content_container", :url => { :action => "sort_by_ship" } %>
+        </li>
+		<li<% if page == 'year_tab' %> id="current_tab"<% end %>>
+		   <%= link_to_remote "<div class=\"tab_left\"></div>Year<div class=\"tab_right\"></div>", :update => "content_container", :url => { :action => "sort_by_year" } %>
+        </li>
+		<li<% if page == 'country_tab' %> id="current_tab"<% end %>>
+		   <%= link_to_remote "<div class=\"tab_left\"></div>Country<div class=\"tab_right\"></div>", :update => "content_container", :url => { :action => "sort_by_country" } %>
+        </li>
+	</ul>	
+</div>
+<% country = "" %>
+<% ctr = 0 %>
+<% for cruise in @cruises %>
+  <% if cruise.Country != country %>
+    <% unless ctr > 1 %>
+      <div id="<%= country %>_files" class="carina_file_box">
+	  </div>
+	<% end %>
+    <br><b><%= cruise.Country %></b>
+    <br>
+    <% country = cruise.Country %>
+    <% ctr += 1 %>
+  <% end %>
+  <%= link_to_remote "#{cruise.ExpoCode}(#{cruise.Line})", :update => "#{cruise.Country}_files", :url => { :action => "show_files", :expo => "#{cruise.ExpoCode}" } %>
+<% end %>
+<% unless ctr > 1 %>
+  <div id="<%= country %>_files" class="carina_file_box">
+  </div>
+<% end %>

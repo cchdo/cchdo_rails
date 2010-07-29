@@ -1,0 +1,47 @@
+<%=render :partial => 'menu'%>
+<h1>Applications and Referrers for <%= @subdomain %></h1>
+<h2>Applications</h2>
+<div id="path_stats_refst">
+  <table class="list">
+    <thead><th>Application</th><th>Resource</th><th>Parameter</th><th>Hits</th></thead>
+    <tbody>
+      <% for row in @applications %>
+          <tr class="<%= alternator %>">
+            <td><%= row['app'] %></td>
+            <td><%= row['resource'] %></td>
+            <td><%= row['parameter'] %></td>
+            <td><%= row['count'] %></td>
+          </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<h2>Referrers</h2>
+<div id="path_stats_refsd">
+  <table class="list">
+    <tr>
+      <th>Application</th>
+      <th>Referrer</th>
+      <th>Resource</th>
+      <th>Parameter</th>
+      <th>Hits</th>
+    </tr>
+    <% for row in @refs %>
+    <tr class="<%= alternator %>">
+      <td><%= row['app'] %></td>
+      <% if row['referer'] != "" %>
+        <td><a href='<%= row['referer'] %>' title='<%= row['resource'] %>'><%=row['domain']%></a></td>
+      <% else %>
+        <td>None</td>
+      <% end %>
+      <td><%= row['resource'] %></td>
+      <td><%= row['parameter'] %></td>
+      <td><%= row['total'] %></td>
+    </tr>
+    <% end %>
+  </table>
+</div>
+
+</div>
+</div>

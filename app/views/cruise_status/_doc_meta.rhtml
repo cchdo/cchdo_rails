@@ -1,0 +1,10 @@
+<% form_for :document, @doc, :url => { :action => "cruise_information" } do |f| %>
+<table class="cruise_meta_staff">
+  <tr >
+	<td>Location:</td><td><%= f.text_field :FileName ,:size => "50"%></td>
+	</tr>
+	<tr>
+    <td valign = "top" >Documents:</td><td><%= f.text_area :Files %></td>
+  </tr>
+</table>	
+<% end %>

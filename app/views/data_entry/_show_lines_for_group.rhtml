@@ -1,0 +1,10 @@
+<br>
+<table>
+<% if @lines %>
+	<% for line in @lines %>
+	   <tr><td>
+	   <%= link_to_remote "#{line.ExpoCode}", :update => "group_contents",:url => { :action => "show_group", :group => @group, :expocode => "#{line.ExpoCode}"} %>
+	   </td></tr>
+	<% end %>
+<% end %>
+</table>

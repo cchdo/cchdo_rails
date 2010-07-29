@@ -1,0 +1,43 @@
+
+<table>
+	<% for cruise in @cruises %>
+	<tr class="queue_cruise_row">
+		<td><%= link_to_remote "#{cruise.Line} #{cruise.ExpoCode}", :update =>"queue_box",:url => { :action => "cruise_queue", :cruise => "#{cruise.ExpoCode}"} %></td><td>Status</td><td>Contact</td><td>Recieved</td><td>Merged</td><td>Responsible</td>
+	</tr>
+
+    <% for file in @files %>
+    <% if file.ExpoCode == cruise.ExpoCode %>
+    <% if file.Merged == 1 %>
+	<tr class="merged_file">
+    <% else %>
+    <tr class="unmerged_file">
+	<% end %>
+		<td>
+            <%= file.Name %>
+        </td>
+        <td >
+	        <% if file.Merged == 1 %>
+		   
+	         Merged
+	       <% else %>
+	         Pending
+	       <% end %>
+	    </td>
+	    <td>
+		  <%= file.Contact %>
+		</td>
+		<td>
+		  <%= file.DateRecieved %>	
+		</td>
+                <td>
+		  <%= file.DateMerged %>	
+                </td>
+		<td>
+			<%= file.CCHDOContact %>
+		</td>
+    </tr>
+    <% end %>
+    <% end %>
+
+    <% end %>
+</table>

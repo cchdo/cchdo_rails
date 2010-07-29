@@ -1,0 +1,79 @@
+
+<% if @group %>
+  <% if !@cruise_groups.blank? %>
+<h1><%= @group %></h1>
+<div id="group_search_maps">
+<% if @cruise_groups[0].Image =~ /\w/ %>
+   <div id='current_group_map'><img height="480px" width="480px" src="<%= @cruise_groups[0].Image %>">
+</div>
+<% end %>
+
+<div id="current_map">
+	
+</div>
+</div>
+<div class='box_content'>
+  <div id='pac_group'>
+
+    <div class='arrowlistmenu'>
+	  <h3 class='menuheader expandable'>
+		<table width='100%' border='0'>
+			<tr><td width='90%'><%= @group %></td>
+			<td align='right'><img src='images/group/expand.gif'></td></tr>
+		</table>
+	  </h3>
+
+	  <ul class='categoryitems' style="height:400px; width:370px; overflow:auto;">
+	  <% for cruisegroup_object in @cruise_groups %>
+	 <% if cruisegroup_object.Image =~ /\w/ %>
+     	  <% string = "document.getElementById('current_group_map').innerHTML='&lt;img height=&quot;480px&quot; width=&quot;480px&quot; src=&quot;#{cruisegroup_object.Image}&quot; &gt;';" %>
+     <% else %>
+          <% string = "" %>
+     <% end %>
+        <li><a href='#' class='subexpandable'>
+	        <table width='100%' border='0'>
+              <tr><td width='90%' class="group_name_cell" 
+onclick="<%= string %>"
+	               >
+	              <%= cruisegroup_object.Group %></td>
+	              <td align='right'><img src='images/group/expand2.gif'></td></tr>
+	        </table>
+	        </a>
+			<ul class='subcategoryitems'>
+			  <% cruises = cruisegroup_object.Cruises.split(',') %>
+			  <% if !cruises.blank? %>
+				<li>
+				  <% col_ctr =  0 %>
+			      <% for cruise in cruises %>
+			        <% cruise_string = "#{@cruise_hash[cruise]} #{cruise}".strip %>
+			        <%   if cruise_string.length < 17  %>
+				      <%  (cruise_string.length() .. 17).each do %>
+					    <% cruise_string << "&nbsp;" %>
+			          <% end %>
+			        <% end %>
+			       <% if col_ctr %2 == 0 %>
+			       <span class="group_page_cruise_link_left" >
+				   <% else %>
+				   <span class="group_page_cruise_link_right" >
+			       <% end %>
+                   <%= link_to "#{cruise_string}", 
+                      {:controller => "data_access", :ExpoCode =>"#{cruise}" } ,
+                  {"onmouseover" => " document.getElementById('current_map').innerHTML='<h4>#{cruise_string}</h4><img height=\"120px\" width=\"120px\" src=\"#{@plot_hash[cruise]}\">';"  } 
+                  %></span>
+                     <% col_ctr += 1 %>
+                     <% if col_ctr % 2 == 0 %>
+                       </li><li>
+	                 <% end %>
+	              <% end #for cruise in cruises  %>
+                </li>
+              <% end # if !cruises.blank?%>	
+			</ul>
+        </li>
+      <% end # for cruisegroup_object in @cruise_groups%>
+      </ul>
+    </div>
+  </div>
+</div>
+	
+<% end %>
+<% end %>
