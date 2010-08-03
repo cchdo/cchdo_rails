@@ -1279,50 +1279,58 @@ div.tm_auto_complete ul strong.highlight {
 .small_font {
 	font-size: smaller;
 }
-/*****************************************************************/
-
-/*** Minutes ***/
+/* Minutes */
 #minutes_color_key
 {
-margin: 10px;
+	margin: 10px;
 }
 .minutes_table
 {
-border:0px;
+	border:0px;
 }
 td.date_row
 {
-background-color:#c9c4bd;
-color:black;
+	background-color:#c9c4bd;
+	color:black;
 }
 pre.minutes_text
 {
-vertical-align:top;
-white-space:pre-wrap;
-width:500px;
+	vertical-align:top;
+	white-space:pre-wrap;
+	width:500px;
 }
 td.minutes_action_item_column
 {
-vertical-align:top;
-background-color:#e3ded7;
-width:500px;
+	vertical-align:top;
+	background-color:#e3ded7;
+	width:500px;
 }
 .completed_action_item
 {
-vertical-align:top;
-background-color:#e3ded7;
-border: 2px solid #e3ded7;
+	vertical-align:top;
+	background-color:#e3ded7;
+	border: 2px solid #e3ded7;
 
 }
 .action_item
 {
-vertical-align:top;
-background-color:white;
-border: 2px solid #e3ded7;
-
+	vertical-align:top;
+	background-color:white;
+	border: 2px solid #e3ded7;
 }
-/***************** Minutes   ****************************/
-/************ Southern Ocean ****************************/
+/* Parameter Entry and Descriptions */
+td.parameter_entry
+{
+vertical-align:top;
+}
+td.parameter_order
+{
+	background-color:#7889AB;
+	text-align:center;
+	color:white;
+	font-size:large;
+}
+/* Southern Ocean */
 .southern_map {
 	float: left;
 	width: 59%;
@@ -1373,8 +1381,19 @@ border: 2px solid #e3ded7;
 .view_basin_header {
   border-bottom: 3px solid #aaa !important;
 }
-/************ Southern Ocean ****************************/
 
-.sub_highlighted_cell {
-    background-color: #f8f8f8;
+/* Data sharing */
+.data_sharing h1 {
+	font-weight: bold;
 }
+.data_sharing p {
+	margin: 0.5em 0;
+}
+.data_sharing ol {
+	list-style: decimal;
+}
+.data_sharing li {
+	max-width: 66ex;
+	margin: 0.5em 0;
+}
+/************ Southern Ocean ****************************/
