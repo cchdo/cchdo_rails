@@ -354,6 +354,7 @@ td.map img {
   position: relative;
   padding-top: 84px; /* Push the menu down */
   z-index: 100;
+  background: url('/images/banners/banner.jpg');
 }
 #banner {
   position: absolute;

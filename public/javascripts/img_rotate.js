@@ -1,30 +1,59 @@
-//Rotate banner
-var ImgRotate = {
-  id: 'banner',
-  rotate_speed: 20000,
-  rotate_timer: null,
-  to_rotate: null,
-  index: 1,
-  index_max: 14
-};
-ImgRotate.next_image_in_rotation = function() {
-	var next_img = '/images/banners/banner_' + this.index + '.jpg';
-	this.index++;
-	if (this.index > this.index_max) this.index = 1;
-	return next_img;
-}
-ImgRotate.setTimeout = function(time) { this.rotate_timer = setTimeout('ImgRotate.rotate_banner()', time); }
-ImgRotate.rotate_banner = function() {
-	if (this.rotate_timer) {
-		clearTimeout(this.rotate_timer);
-		this.rotate_timer = null;
-	}
-	if (this.to_rotate) {
-		this.to_rotate.src = this.next_image_in_rotation();
-	  this.setTimeout(this.rotate_speed);
-	} else {
-		this.to_rotate = document.getElementById(this.id);
-		this.setTimeout(200);
-	}
-}
-ImgRotate.rotate_banner();
+// Rotate banner
+var ImgRotate = (function () {
+  var style = null;
+  var delay = 20000;
+  var timer = null;
+
+  var offset = 0;
+  var next = 0;
+  var height = 125;
+  var minoffset = -height * 50;
+
+  var tickDelay = 0;
+  var animateTime = 600;
+  var startTime = 0;
+
+  var _ = function (domobj) {
+    style = domobj.style;
+
+    start();
+  };  
+
+  function nextOffset() {
+    if (offset < minoffset) {
+      offset = -height - 5;
+      return 0;
+    }
+    return offset - height;
+  }
+
+  function animate() {
+    var now = new Date();
+    var elapsed = now - startTime
+
+    offset -= -10.0 * (next - offset) / (animateTime - elapsed);
+    if (elapsed >= animateTime) {
+      offset = next;
+    }
+    style.backgroundPosition = ['0 ', offset, 'px'].join('');
+
+
+    if (offset > next) {
+      setTimeout(arguments.callee, tickDelay);
+    }
+  }
+
+  function start() {
+    if (timer) {
+      clearTimeout(timer);
+      next = nextOffset(offset);
+      startTime = new Date();
+      animate();
+    }
+    timer = setTimeout(arguments.callee, delay);
+  }
+
+  return _;
+})();
+
+new ImgRotate(document.getElementById('picture'));
