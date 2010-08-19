@@ -146,7 +146,7 @@ class MapSearchController < ApplicationController
     selection << selection.first # add start point at end for polygon
     polygon_string = selection.map{|x| x.join(' ')}.join(',')
 
-    min_time, max_time = min_time || 1975, max_time || DateTime.today.year
+    min_time, max_time = min_time || 1975, max_time || Date.today.year
     return TrackLine.find_by_sql(["SELECT DISTINCT cruises.ExpoCode,Track FROM track_lines JOIN cruises ON cruises.ExpoCode = track_lines.ExpoCode WHERE Begin_Date > '?' AND Begin_Date < '?-12-31' AND Intersects(GeomFromText(\"POLYGON((#{polygon_string}))\"),Track)", min_time, max_time])
   end
 
