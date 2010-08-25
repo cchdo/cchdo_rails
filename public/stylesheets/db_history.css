@@ -1,0 +1,111 @@
+.timeline {
+	position:relative;
+	height:500px;
+	width:1024px;
+	overflow-x:auto;
+	overflow-y:hidden;
+	font-family: sans-serif;
+}
+.timeline_elements{
+	width:810em;
+	padding:0px;
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+}
+.day h3{
+	border-bottom: solid;
+	border-color: #d1edec;
+	border-width: 2px;
+	margin: 0px;
+	padding-top: 18px;
+	padding-bottom: 18px;
+	background-color: #afc7c6;
+}
+.month{
+	list-style:none;
+	float:left;
+	clear:none;
+	position: relative;
+	height: 100%;
+}
+.day {
+	float:left;
+	position: relative;
+	width:26em;
+	height: 100%;
+	padding: 0px;
+	background-color: #efefef;
+}
+.even {
+	background-color: #fff;
+}
+.day h3{
+	padding-left: 1em;
+}
+.item{
+	list-style: none;
+	padding: 0px;
+	position: absolute;
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 26em;
+	top: 60px;
+	bottom: 35px;
+	}
+.box{
+	margin-bottom: 0.2em;
+	margin-left: 0.2em;
+	margin-right: 0.2em;
+	border-radius: 0.2em;
+}
+.box p{
+	margin: 10px;
+}
+.box h4{
+	border-top-right-radius: 0.2em;
+	border-top-left-radius: 0.2em;
+	padding: 4px;
+}
+.doc_with_event{
+	background-color: #ace0bc;
+}
+.doc_with_event h4{
+	background-color: #86c8a1;
+	font-weight: bold;
+}
+.doc_without_event{
+	background-color: #e89e98;
+}
+.doc_without_event h4{
+	background-color: #d27778;
+	font-weight: bold;
+}
+.event_no_doc{
+	background-color: #d1dfa1;
+}
+.event_no_doc h4{
+	background-color: #b1c68d;
+	font-weight: bold;
+}
+dl dt
+{
+	clear: left;
+	float: left;
+	width: 100px;
+	margin: 0;
+	padding: 5px;
+	font-weight: bold;
+}
+
+dl dd
+{
+	margin-left: 100px;
+	padding: 5px;
+	width: 300px
+	overflow:;
+	overflow: hidden;
+}
+ul.square_bullet {
+	list-style-type:square;
+}

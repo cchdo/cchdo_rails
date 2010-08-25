@@ -135,7 +135,7 @@
     <h1>Recent Developments</h1>
 <%# recent = Document.find_by_sql("SELECT distinct documents.FileName,documents.ExpoCode,documents.LastModified,cruises.Line,cruises.Ship_Name,cruises.Country,cruises.Begin_Date,cruises.EndDate from cruises,documents where documents.ExpoCode = cruises.ExpoCode") %>
     <div class='box_content'>
-      <% if recent = Document.find_by_sql("SELECT distinct documents.FileName,documents.ExpoCode,documents.LastModified,documents.FileType,cruises.Line,cruises.Ship_Name,cruises.Country,cruises.Begin_Date,cruises.EndDate from cruises,documents where documents.ExpoCode = cruises.ExpoCode and documents.FileType != 'directory' and documents.FileType != 'Small Plot' and documents.FileType != 'Large Plot' order by documents.LastModified DESC limit 20")
+      <% if recent = Document.find_by_sql("SELECT documents.FileName,documents.ExpoCode,documents.LastModified,documents.FileType,cruises.Line,cruises.Ship_Name,cruises.Country,cruises.Begin_Date,cruises.EndDate from cruises,documents where documents.ExpoCode = cruises.ExpoCode and documents.FileType != 'directory' and documents.FileType != 'Small Plot' and documents.FileType != 'Large Plot' order by documents.LastModified DESC limit 20")
            expocode_map_hash = {}
            recent.compact.collect {|file| file.ExpoCode}.uniq.each do |expocode|
              expocode_map_hash[expocode] = Document.find(:first, :conditions => ["FileType='Small Plot' AND ExpoCode=?", expocode])
