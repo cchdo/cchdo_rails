@@ -1,4 +1,10 @@
 ActionController::Routing::Routes.draw do |map|
+  map.namespace(:argo) do |argo|
+    argo.resources :files do |files|
+        files.resources :user
+    end
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   
   # Sample of regular route:

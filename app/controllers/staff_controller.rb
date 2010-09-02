@@ -7,32 +7,6 @@ layout "staff", :except => [:pis_for_lookup, :ships_for_lookup, :countries_for_l
 before_filter :check_authentication, :except => [:signin, :images, :pis_for_lookup, :ships_for_lookup, :countries_for_lookup,:parameters_for_lookup, :expocodes_for_lookup, :contacts_for_lookup, :lines_for_lookup]
 #cache_sweeper :task_tracker
 
-def check_authentication
-   unless session[:user]
-      session[:intended_action] = action_name
-      session[:intended_controller] = controller_name
-      redirect_to :action => "signin"
-   end
-end
-
-def signin
-  if request.post?            
-    if user = User.authenticate(params[:username],params[:password])
-      session[:user] = user.id
-      session[:username] = params[:username]
-      redirect_to :controller => session[:intended_controller],
-                  :action => session[:intended_action]
-    else
-      flash[:notice] = "Invalid user name or password"
-    end
-  end
-end
-
-def signout
-   session[:user] = nil
-   redirect_to :controller => 'staff'
-end
-
 def index
    @user = User.find(session[:user])
    @user = @user.username

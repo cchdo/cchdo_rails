@@ -1,0 +1,35 @@
+<div class="boxed">
+<h1>Argo Secure File Repository</h1>
+<div class="box_content">
+
+<% unless @files.blank? -%>
+    <table>
+        <tr>
+            <th>File</th>
+            <th>ExpoCode</th>
+            <th>User</th>
+            <th>Description</th>
+        </tr>
+        <% @files.each do |file| %>
+            <tr>
+                <td><%= link_to(h(file.filename), file.public_filename) %></td>
+                <td><%= h(file.ExpoCode || 'Unknown') %></td>
+                <td><%= h(file.user ? file.user.username : 'Unknown') %></td>
+                <td><pre><%= h(file.description) %></pre></td>
+                <td><%= link_to 'Show', file %></td>
+                <td><%= link_to 'Edit', edit_argo_file_path(file) %></td>
+                <td><%= link_to 'Destroy', file, :confirm => 'Are you sure?', :method => :delete %></td>
+            </tr>
+        <% end %>
+    </table>
+<% else -%>
+    <p>There are no files.</p>
+<% end -%>
+
+<p>
+  <%= link_to('Add file', new_argo_file_path) %>
+</p>
+
+</div>
+<div class="box_bottom"></div>
+</div>

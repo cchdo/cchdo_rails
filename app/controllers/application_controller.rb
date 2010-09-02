@@ -27,50 +27,69 @@ class Array
 end
 
 COUNTRIES = {
-  'germany' => 'ger', 'japan'     => 'jpn', 'france'  => 'fra', 'england'		=> 'uk',
-  'canada'  => 'can', 'us'        => 'usa', 'india'   => 'ind', 'russia'		=> 'rus',
-  'spain'   => 'spn', 'argentina'	=> 'arg', 'ukrain'  => 'ukr', 'netherlands'	=> 'net',
-  'norway'  => 'nor', 'finland'   => 'fin', 'iceland' => 'ice', 'australia'	=> 'aus',
+  'germany' => 'ger', 'japan'     => 'jpn', 'france'  => 'fra', 'england'    => 'uk',
+  'canada'  => 'can', 'us'        => 'usa', 'india'   => 'ind', 'russia'    => 'rus',
+  'spain'   => 'spn', 'argentina'  => 'arg', 'ukrain'  => 'ukr', 'netherlands'  => 'net',
+  'norway'  => 'nor', 'finland'   => 'fin', 'iceland' => 'ice', 'australia'  => 'aus',
   'chile'   => 'chi', 'china'     => 'prc', 'taiwan'  => 'tai'
 }
 
 class ApplicationController < ActionController::Base
-	layout 'standard'
+    layout 'standard'
   
-  private
-
-	def check_authentication
-		unless session[:user]
-			session[:intended_action] = action_name
-			session[:intended_controller] = controller_name
-			redirect_to :controller => "staff", :action => "signin"
-		end
-    user = User.find(session[:user])
-    if user.username =~ /guest/
-      redirect_to :controller => 'staff'
+    def signin
+        if request.post?
+            if user = User.authenticate(params[:username], params[:password])
+                session[:user] = user.id
+                session[:username] = params[:username]
+                redirect_to :controller => session[:intended_controller],
+                            :action => session[:intended_action]
+            else
+                flash[:notice] = "Invalid user name or password"
+            end
+        end
     end
-	end
-	
-	def chief_scientists_to_links!(pi)
-  # Turn the chief scientists into links if we have a contact entries.
-    if pi
-      # Take Chief Scientist string and extract multiple names
-      pi_names = pi.split(/\/|\\|\:/)
-      # Substitute name matches for links to the contact's page
-      pi_names.each do |name|
-        if Contact.exists?(:LastName => name)
-          pi.sub!(name, "<a href=\"/search?query=#{name}\">#{name}</a>")
+
+    def signout
+        session[:user] = nil
+        redirect_to :controller => 'staff'
+    end
+    
+    protected
+  
+    def check_authentication
+        unless session[:user]
+            session[:intended_action] = action_name
+            session[:intended_controller] = controller_name
+            redirect_to :action => :signin
+        else
+            user = User.find(session[:user])
+            if user.username =~ /guest/
+                redirect_to :controller => :staff
+            end
+        end
+    end
+
+    def chief_scientists_to_links!(pi)
+    # Turn the chief scientists into links if we have a contact entries.
+      if pi
+        # Take Chief Scientist string and extract multiple names
+        pi_names = pi.split(/\/|\\|\:/)
+        # Substitute name matches for links to the contact's page
+        pi_names.each do |name|
+          if Contact.exists?(:LastName => name)
+            pi.sub!(name, "<a href=\"/search?query=#{name}\">#{name}</a>")
+          end
         end
       end
     end
-  end
-	
-	def thumbnail_uri(expocode)
-    if map = Document.find(:first, :conditions => { :ExpoCode => expocode, :FileType => 'Small Plot'})
-      return map.FileName[0..-5]
+  
+  def thumbnail_uri(expocode)
+      if map = Document.find(:first, :conditions => { :ExpoCode => expocode, :FileType => 'Small Plot'})
+        return map.FileName[0..-5]
+      end
+      return nil
     end
-    return nil
-  end
   
   def best_query_type(query)
     best_queries = Hash.new

@@ -1,0 +1,26 @@
+<h1>Listing files</h1>
+
+<table>
+  <tr>
+    <th>Expocode</th>
+    <th>Filename</th>
+    <th>Description</th>
+    <th>Display</th>
+  </tr>
+
+<% @files.each do |file| %>
+  <tr>
+    <td><%=h file.ExpoCode %></td>
+    <td><%=link_to(h(file.filename), file.public_filename)%></td>
+    <td><%=h file.description %></td>
+    <td><%=h file.display %></td>
+    <td><%= link_to 'Show', file %></td>
+    <td><%= link_to 'Edit', edit_argo_file_path(file) %></td>
+    <td><%= link_to 'Destroy', file, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New file', new_argo_file_path %>

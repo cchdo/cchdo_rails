@@ -1,0 +1,27 @@
+<p>
+  <b>Expocode:</b>
+  <%=h @file.ExpoCode %>
+</p>
+
+<p>
+  <b>Filename:</b>
+  <%=h @file.filename %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @file.description %>
+</p>
+
+<p>
+  <b>Display:</b>
+  <%=h @file.display %>
+</p>
+
+<p>
+  <%=link_to(@file.filename, h(@file.public_filename))%>
+</p>
+
+
+<%= link_to 'Edit', edit_argo_file_path(@file) %> |
+<%= link_to 'Back', argo_files_path %>

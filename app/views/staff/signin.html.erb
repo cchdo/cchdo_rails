@@ -1,17 +1,23 @@
-<% if flash[:notice] %>
-<h3><%= flash[:notice] %></h3>
-<% end %>
-<% form_tag :action => "signin"  do %>
+<div class="boxed">
+<h1></h1>
+
+<div class="box_content">
+
+<% form_tag :action => :signin do %>
 <table>
-	<tr>
+  <tr>
     <td><label for="username">Username:</label></td>
     <td><%= text_field_tag "username" %></td>
-   </tr>
-   <tr>
+  </tr>
+  <tr>
     <td><label for="password">Password:</label></td>
     <td><%= password_field_tag "password" %></td>
-   </tr>
-   <tr><td colspan="2"><%= submit_tag "Sign in" %></td>
-	</tr>
+  </tr>
 </table>
+<%= submit_tag "Sign in" %>
 <% end %>
+
+</div>
+
+<div class="box_bottom"></div>
+</div>

@@ -9,401 +9,424 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090106014008) do
+ActiveRecord::Schema.define(:version => 20100902192845) do
+
+  create_table "argo_files", :force => true do |t|
+    t.column "user_id", :integer
+    t.column "ExpoCode", :string
+    t.column "description", :text
+    t.column "display", :boolean, :default => false
+    t.column "link", :boolean, :default => false
+    t.column "size", :integer
+    t.column "filename", :string
+    t.column "content_type", :string
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
+  end
 
   create_table "assignments", :force => true do |t|
-    t.text    "ExpoCode"
-    t.text    "project"
-    t.text    "current_status"
-    t.text    "cchdo_contact"
-    t.text    "data_contact"
-    t.text    "action"
-    t.text    "parameter"
-    t.text    "history"
-    t.date    "changed"
-    t.text    "notes"
-    t.integer "priority"
-    t.date    "deadline"
-    t.string  "manager"
+    t.column "ExpoCode", :text
+    t.column "project", :text
+    t.column "current_status", :text
+    t.column "cchdo_contact", :text
+    t.column "data_contact", :text
+    t.column "action", :text
+    t.column "parameter", :text
+    t.column "history", :text
+    t.column "changed", :date
+    t.column "notes", :text
+    t.column "priority", :integer
+    t.column "deadline", :date
+    t.column "manager", :string
   end
 
   create_table "audit_trails", :force => true do |t|
-    t.integer "record_id"
-    t.string  "record_type"
-    t.string  "event"
-    t.integer "user_id"
-    t.date    "time"
+    t.column "record_id", :integer
+    t.column "record_type", :string
+    t.column "event", :string
+    t.column "user_id", :integer
+    t.column "time", :date
+  end
+
+  create_table "carina_cruises", :force => true do |t|
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
+  end
+
+  create_table "carina_documents", :force => true do |t|
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
   end
 
   create_table "codes", :force => true do |t|
-    t.integer "Code"
-    t.text    "Status"
+    t.column "Code", :integer
+    t.column "Status", :text
   end
 
   create_table "contacts", :force => true do |t|
   end
 
   create_table "cruises", :force => true do |t|
-    t.text "ExpoCode"
-    t.text "Line"
-    t.text "Country"
-    t.text "Chief_Scientist"
-    t.date "Begin_Date"
-    t.date "EndDate"
-    t.text "Ship_Name"
-    t.text "Alias"
-    t.text "Group"
+    t.column "ExpoCode", :text
+    t.column "Line", :text
+    t.column "Country", :text
+    t.column "Chief_Scientist", :text
+    t.column "Begin_Date", :date
+    t.column "EndDate", :date
+    t.column "Ship_Name", :text
+    t.column "Alias", :text
+    t.column "Group", :text
   end
 
   create_table "documents", :force => true do |t|
-    t.text "Size"
-    t.text "FileType"
-    t.text "FileName"
-    t.text "ExpoCode"
-    t.text "Files"
-    t.date "LastModified"
-    t.text "Modified"
+    t.column "Size", :text
+    t.column "FileType", :text
+    t.column "FileName", :text
+    t.column "ExpoCode", :text
+    t.column "Files", :text
+    t.column "LastModified", :date
+    t.column "Modified", :text
   end
 
   create_table "events", :force => true do |t|
-    t.text "ExpoCode"
-    t.text "First_Name"
-    t.text "LastName"
-    t.text "Data_Type"
-    t.date "Date_Entered"
-    t.text "Summary"
-    t.text "Note"
+    t.column "ExpoCode", :text
+    t.column "First_Name", :text
+    t.column "LastName", :text
+    t.column "Data_Type", :text
+    t.column "Date_Entered", :date
+    t.column "Summary", :text
+    t.column "Note", :text
   end
 
   create_table "map_images", :force => true do |t|
-    t.string   "expocode",                                            :null => false
-    t.string   "line",                     :default => "Cruise"
-    t.string   "west",                     :default => "179W"
-    t.string   "east",                     :default => "179E"
-    t.string   "south",                    :default => "80S"
-    t.string   "north",                    :default => "80N"
-    t.string   "label_mod",                :default => "12"
-    t.string   "font_type",                :default => "1"
-    t.string   "font_size",                :default => "8"
-    t.string   "angle",                    :default => "25.0"
-    t.string   "justify",                  :default => "LT"
-    t.string   "label_color",              :default => "BLACK"
-    t.string   "x_shift",                  :default => "0.1i"
-    t.string   "y_shift",                  :default => "0.1i"
-    t.string   "lon_annot",                :default => "20"
-    t.string   "lat_annot",                :default => "10"
-    t.string   "annot_font_size",          :default => "12"
-    t.string   "header_font",              :default => "1"
-    t.string   "header_font_size",         :default => "18"
-    t.string   "ocean_color",              :default => "100/180/255"
-    t.string   "land_color",               :default => "BLACK"
-    t.string   "coastline_color",          :default => "BLACK"
-    t.string   "coastline_width",          :default => "0.00i"
-    t.string   "map_frame_width",          :default => "6.0i"
-    t.string   "station_size_inches",      :default => "0.04i"
-    t.string   "station_color",            :default => "255/48/48"
-    t.string   "station_outline_color",    :default => "139/0/0"
-    t.string   "station_outline_width",    :default => "0.0i"
-    t.string   "cruise_line_width_inches", :default => "0.01i"
-    t.string   "cruise_line_color",        :default => "BLACK"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.column "expocode", :string, :null => false
+    t.column "line", :string, :default => "Cruise"
+    t.column "west", :string, :default => "179W"
+    t.column "east", :string, :default => "179E"
+    t.column "south", :string, :default => "80S"
+    t.column "north", :string, :default => "80N"
+    t.column "label_mod", :string, :default => "12"
+    t.column "font_type", :string, :default => "1"
+    t.column "font_size", :string, :default => "8"
+    t.column "angle", :string, :default => "25.0"
+    t.column "justify", :string, :default => "LT"
+    t.column "label_color", :string, :default => "BLACK"
+    t.column "x_shift", :string, :default => "0.1i"
+    t.column "y_shift", :string, :default => "0.1i"
+    t.column "lon_annot", :string, :default => "20"
+    t.column "lat_annot", :string, :default => "10"
+    t.column "annot_font_size", :string, :default => "12"
+    t.column "header_font", :string, :default => "1"
+    t.column "header_font_size", :string, :default => "18"
+    t.column "ocean_color", :string, :default => "100/180/255"
+    t.column "land_color", :string, :default => "BLACK"
+    t.column "coastline_color", :string, :default => "BLACK"
+    t.column "coastline_width", :string, :default => "0.00i"
+    t.column "map_frame_width", :string, :default => "6.0i"
+    t.column "station_size_inches", :string, :default => "0.04i"
+    t.column "station_color", :string, :default => "255/48/48"
+    t.column "station_outline_color", :string, :default => "139/0/0"
+    t.column "station_outline_width", :string, :default => "0.0i"
+    t.column "cruise_line_width_inches", :string, :default => "0.01i"
+    t.column "cruise_line_color", :string, :default => "BLACK"
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
   end
 
   create_table "maps", :force => true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
   end
 
   create_table "parameter_descriptions", :force => true do |t|
-    t.string "Parameter"
-    t.string "FullName"
-    t.string "Description"
-    t.string "Units"
-    t.string "Range"
-    t.string "Alias"
-    t.string "Group"
+    t.column "Parameter", :string
+    t.column "FullName", :string
+    t.column "Description", :string
+    t.column "Units", :string
+    t.column "Range", :string
+    t.column "Alias", :string
+    t.column "Group", :string
   end
 
   create_table "parameter_groups", :force => true do |t|
-    t.text "group"
-    t.text "parameters"
+    t.column "group", :text
+    t.column "parameters", :text
   end
 
   create_table "parameters", :force => true do |t|
-    t.text "ExpoCode"
-    t.text "SALNTY"
-    t.text "SALNTY_PI"
-    t.text "OXYGEN"
-    t.text "OXYGEN_PI"
-    t.text "SILCAT"
-    t.text "SILCAT_PI"
-    t.text "NITRAT"
-    t.text "NITRAT_PI"
-    t.text "NITRIT"
-    t.text "NITRIT_PI"
-    t.text "PHSPHT"
-    t.text "PHSPHT_PI"
-    t.text "CFC-11"
-    t.text "CFC-11_PI"
-    t.text "CFC-12"
-    t.text "CFC-12_PI"
-    t.text "TRITUM"
-    t.text "TRITUM_PI"
-    t.text "HELIUM"
-    t.text "HELIUM_PI"
-    t.text "DELHE3"
-    t.text "DELHE3_PI"
-    t.text "DELC14"
-    t.text "DELC14_PI"
-    t.text "DELC13"
-    t.text "DELC13_PI"
-    t.text "KR-85"
-    t.text "KR-85_PI"
-    t.text "ARGON"
-    t.text "ARGON_PI"
-    t.text "AR-39"
-    t.text "AR-39_PI"
-    t.text "NEON"
-    t.text "NEON_PI"
-    t.text "RA-228"
-    t.text "RA-228_PI"
-    t.text "RA-226"
-    t.text "RA-226_PI"
-    t.text "O18/O16"
-    t.text "O18/O16_PI"
-    t.text "SR-90"
-    t.text "SR-90_PI"
-    t.text "CS-137"
-    t.text "CS-137_PI"
-    t.text "TCARBN"
-    t.text "TCARBN_PI"
-    t.text "ALKALI"
-    t.text "ALKALI_PI"
-    t.text "PCO2"
-    t.text "PCO2_PI"
-    t.text "PH"
-    t.text "PH_PI"
-    t.text "CFC113"
-    t.text "CFC113_PI"
-    t.text "CCL4"
-    t.text "CCL4_PI"
-    t.text "IODATE"
-    t.text "IODATE_PI"
-    t.text "IODIDE"
-    t.text "IODIDE_PI"
-    t.text "NH4"
-    t.text "NH4_PI"
-    t.text "CH4"
-    t.text "CH4_PI"
-    t.text "DON"
-    t.text "DON_PI"
-    t.text "N2O"
-    t.text "N2O_PI"
-    t.text "CHLORA"
-    t.text "CHLORA_PI"
-    t.text "PPHYTN"
-    t.text "PPHYTN_PI"
-    t.text "DMS"
-    t.text "DMS_PI"
-    t.text "BARIUM"
-    t.text "BARIUM_PI"
-    t.text "POC"
-    t.text "POC_PI"
-    t.text "PON"
-    t.text "PON_PI"
-    t.text "BACT"
-    t.text "BACT_PI"
-    t.text "DOC"
-    t.text "DOC_PI"
-    t.text "COMON"
-    t.text "COMON_PI"
-    t.text "C13ERR"
-    t.text "C13ERR_PI"
-    t.text "C14ERR"
-    t.text "C14ERR_PI"
-    t.text "BTLNBR"
-    t.text "BTLNBR_PI"
-    t.text "CASTNO"
-    t.text "CASTNO_PI"
-    t.text "CTDOXY"
-    t.text "CTDOXY_PI"
-    t.text "CTDPRS"
-    t.text "CTDPRS_PI"
-    t.text "CTDRAW"
-    t.text "CTDRAW_PI"
-    t.text "CTDSAL"
-    t.text "CTDSAL_PI"
-    t.text "CTDTMP"
-    t.text "CTDTMP_PI"
-    t.text "FLUOR"
-    t.text "FLUOR_PI"
-    t.text "NO2+NO3"
-    t.text "NO2+NO3_PI"
-    t.text "PCO2TMP"
-    t.text "PCO2TMP_PI"
-    t.text "PHTEMP"
-    t.text "PHTEMP_PI"
-    t.text "REVPRS"
-    t.text "REVPRS_PI"
-    t.text "REVTMP"
-    t.text "REVTMP_PI"
-    t.text "SAMPNO"
-    t.text "SAMPNO_PI"
-    t.text "STNNBR"
-    t.text "STNNBR_PI"
-    t.text "TDN"
-    t.text "TDN_PI"
-    t.text "THETA"
-    t.text "THETA_PI"
-    t.text "XMISS"
-    t.text "XMISS_PI"
-    t.text "AOU"
-    t.text "AOU_PI"
-    t.text "ARAB"
-    t.text "ARAB_PI"
-    t.text "AZOTE"
-    t.text "AZOTE_PI"
-    t.text "BRDU"
-    t.text "BRDU_PI"
-    t.text "CALCIUM"
-    t.text "CALCIUM_PI"
-    t.text "CU"
-    t.text "CU_PI"
-    t.text "DCNS"
-    t.text "DCNS_PI"
-    t.text "DELHE4"
-    t.text "DELHE4_PI"
-    t.text "DELHER"
-    t.text "DELHER_PI"
-    t.text "DIC"
-    t.text "DIC_PI"
-    t.text "FUC"
-    t.text "FUC_PI"
-    t.text "GAL"
-    t.text "GAL_PI"
-    t.text "GLU"
-    t.text "GLU_PI"
-    t.text "HELIER"
-    t.text "HELIER_PI"
-    t.text "IOD-129"
-    t.text "IOD-129_PI"
-    t.text "MAN"
-    t.text "MAN_PI"
-    t.text "MCHFRM"
-    t.text "MCHFRM_PI"
-    t.text "NEONER"
-    t.text "NEONER_PI"
-    t.text "NI"
-    t.text "NI_PI"
-    t.text "NO2"
-    t.text "NO2_PI"
-    t.text "PEUK"
-    t.text "PEUK_PI"
-    t.text "PRO"
-    t.text "PRO_PI"
-    t.text "RHAM"
-    t.text "RHAM_PI"
-    t.text "SF6"
-    t.text "SF6_PI"
-    t.text "SYN"
-    t.text "SYN_PI"
-    t.text "TOC"
-    t.text "TOC_PI"
-    t.text "TRITER"
-    t.text "TRITER_PI"
-    t.text "CF12ER"
-    t.text "CF12ER_PI"
-    t.text "PHPUNC"
-    t.text "PHPUNC_PI"
-    t.text "SILUNC"
-    t.text "SILUNC_PI"
-    t.text "NRAUNC"
-    t.text "NRAUNC_PI"
-    t.text "NRIUNC"
-    t.text "NRIUNC_PI"
+    t.column "ExpoCode", :text
+    t.column "SALNTY", :text
+    t.column "SALNTY_PI", :text
+    t.column "OXYGEN", :text
+    t.column "OXYGEN_PI", :text
+    t.column "SILCAT", :text
+    t.column "SILCAT_PI", :text
+    t.column "NITRAT", :text
+    t.column "NITRAT_PI", :text
+    t.column "NITRIT", :text
+    t.column "NITRIT_PI", :text
+    t.column "PHSPHT", :text
+    t.column "PHSPHT_PI", :text
+    t.column "CFC-11", :text
+    t.column "CFC-11_PI", :text
+    t.column "CFC-12", :text
+    t.column "CFC-12_PI", :text
+    t.column "TRITUM", :text
+    t.column "TRITUM_PI", :text
+    t.column "HELIUM", :text
+    t.column "HELIUM_PI", :text
+    t.column "DELHE3", :text
+    t.column "DELHE3_PI", :text
+    t.column "DELC14", :text
+    t.column "DELC14_PI", :text
+    t.column "DELC13", :text
+    t.column "DELC13_PI", :text
+    t.column "KR-85", :text
+    t.column "KR-85_PI", :text
+    t.column "ARGON", :text
+    t.column "ARGON_PI", :text
+    t.column "AR-39", :text
+    t.column "AR-39_PI", :text
+    t.column "NEON", :text
+    t.column "NEON_PI", :text
+    t.column "RA-228", :text
+    t.column "RA-228_PI", :text
+    t.column "RA-226", :text
+    t.column "RA-226_PI", :text
+    t.column "O18/O16", :text
+    t.column "O18/O16_PI", :text
+    t.column "SR-90", :text
+    t.column "SR-90_PI", :text
+    t.column "CS-137", :text
+    t.column "CS-137_PI", :text
+    t.column "TCARBN", :text
+    t.column "TCARBN_PI", :text
+    t.column "ALKALI", :text
+    t.column "ALKALI_PI", :text
+    t.column "PCO2", :text
+    t.column "PCO2_PI", :text
+    t.column "PH", :text
+    t.column "PH_PI", :text
+    t.column "CFC113", :text
+    t.column "CFC113_PI", :text
+    t.column "CCL4", :text
+    t.column "CCL4_PI", :text
+    t.column "IODATE", :text
+    t.column "IODATE_PI", :text
+    t.column "IODIDE", :text
+    t.column "IODIDE_PI", :text
+    t.column "NH4", :text
+    t.column "NH4_PI", :text
+    t.column "CH4", :text
+    t.column "CH4_PI", :text
+    t.column "DON", :text
+    t.column "DON_PI", :text
+    t.column "N2O", :text
+    t.column "N2O_PI", :text
+    t.column "CHLORA", :text
+    t.column "CHLORA_PI", :text
+    t.column "PPHYTN", :text
+    t.column "PPHYTN_PI", :text
+    t.column "DMS", :text
+    t.column "DMS_PI", :text
+    t.column "BARIUM", :text
+    t.column "BARIUM_PI", :text
+    t.column "POC", :text
+    t.column "POC_PI", :text
+    t.column "PON", :text
+    t.column "PON_PI", :text
+    t.column "BACT", :text
+    t.column "BACT_PI", :text
+    t.column "DOC", :text
+    t.column "DOC_PI", :text
+    t.column "COMON", :text
+    t.column "COMON_PI", :text
+    t.column "C13ERR", :text
+    t.column "C13ERR_PI", :text
+    t.column "C14ERR", :text
+    t.column "C14ERR_PI", :text
+    t.column "BTLNBR", :text
+    t.column "BTLNBR_PI", :text
+    t.column "CASTNO", :text
+    t.column "CASTNO_PI", :text
+    t.column "CTDOXY", :text
+    t.column "CTDOXY_PI", :text
+    t.column "CTDPRS", :text
+    t.column "CTDPRS_PI", :text
+    t.column "CTDRAW", :text
+    t.column "CTDRAW_PI", :text
+    t.column "CTDSAL", :text
+    t.column "CTDSAL_PI", :text
+    t.column "CTDTMP", :text
+    t.column "CTDTMP_PI", :text
+    t.column "FLUOR", :text
+    t.column "FLUOR_PI", :text
+    t.column "NO2+NO3", :text
+    t.column "NO2+NO3_PI", :text
+    t.column "PCO2TMP", :text
+    t.column "PCO2TMP_PI", :text
+    t.column "PHTEMP", :text
+    t.column "PHTEMP_PI", :text
+    t.column "REVPRS", :text
+    t.column "REVPRS_PI", :text
+    t.column "REVTMP", :text
+    t.column "REVTMP_PI", :text
+    t.column "SAMPNO", :text
+    t.column "SAMPNO_PI", :text
+    t.column "STNNBR", :text
+    t.column "STNNBR_PI", :text
+    t.column "TDN", :text
+    t.column "TDN_PI", :text
+    t.column "THETA", :text
+    t.column "THETA_PI", :text
+    t.column "XMISS", :text
+    t.column "XMISS_PI", :text
+    t.column "AOU", :text
+    t.column "AOU_PI", :text
+    t.column "ARAB", :text
+    t.column "ARAB_PI", :text
+    t.column "AZOTE", :text
+    t.column "AZOTE_PI", :text
+    t.column "BRDU", :text
+    t.column "BRDU_PI", :text
+    t.column "CALCIUM", :text
+    t.column "CALCIUM_PI", :text
+    t.column "CU", :text
+    t.column "CU_PI", :text
+    t.column "DCNS", :text
+    t.column "DCNS_PI", :text
+    t.column "DELHE4", :text
+    t.column "DELHE4_PI", :text
+    t.column "DELHER", :text
+    t.column "DELHER_PI", :text
+    t.column "DIC", :text
+    t.column "DIC_PI", :text
+    t.column "FUC", :text
+    t.column "FUC_PI", :text
+    t.column "GAL", :text
+    t.column "GAL_PI", :text
+    t.column "GLU", :text
+    t.column "GLU_PI", :text
+    t.column "HELIER", :text
+    t.column "HELIER_PI", :text
+    t.column "IOD-129", :text
+    t.column "IOD-129_PI", :text
+    t.column "MAN", :text
+    t.column "MAN_PI", :text
+    t.column "MCHFRM", :text
+    t.column "MCHFRM_PI", :text
+    t.column "NEONER", :text
+    t.column "NEONER_PI", :text
+    t.column "NI", :text
+    t.column "NI_PI", :text
+    t.column "NO2", :text
+    t.column "NO2_PI", :text
+    t.column "PEUK", :text
+    t.column "PEUK_PI", :text
+    t.column "PRO", :text
+    t.column "PRO_PI", :text
+    t.column "RHAM", :text
+    t.column "RHAM_PI", :text
+    t.column "SF6", :text
+    t.column "SF6_PI", :text
+    t.column "SYN", :text
+    t.column "SYN_PI", :text
+    t.column "TOC", :text
+    t.column "TOC_PI", :text
+    t.column "TRITER", :text
+    t.column "TRITER_PI", :text
+    t.column "CF12ER", :text
+    t.column "CF12ER_PI", :text
+    t.column "PHPUNC", :text
+    t.column "PHPUNC_PI", :text
+    t.column "SILUNC", :text
+    t.column "SILUNC_PI", :text
+    t.column "NRAUNC", :text
+    t.column "NRAUNC_PI", :text
+    t.column "NRIUNC", :text
+    t.column "NRIUNC_PI", :text
   end
 
   create_table "priorities", :force => true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.column "created_at", :datetime
+    t.column "updated_at", :datetime
   end
 
   create_table "sea_hunts", :force => true do |t|
-    t.string  "cruise_name"
-    t.string  "dates"
-    t.string  "location"
-    t.string  "status"
-    t.string  "contact-1"
-    t.string  "email"
-    t.string  "phone"
-    t.string  "institution"
-    t.string  "institution-2"
-    t.string  "notes"
-    t.string  "country",                                :default => ""
-    t.integer "display_status",                         :default => 2,            :null => false
-    t.string  "duration",                               :default => ""
-    t.string  "frequency",                              :default => ""
-    t.string  "ship",                                   :default => ""
-    t.string  "url",                                    :default => ""
-    t.date    "real_date",                              :default => '1001-01-01', :null => false
-    t.binary  "cruise_track_thumb", :limit => 16777215,                           :null => false
-    t.string  "basin",                                  :default => ""
+    t.column "cruise_name", :string
+    t.column "dates", :string
+    t.column "location", :string
+    t.column "status", :string
+    t.column "contact-1", :string
+    t.column "email", :string
+    t.column "phone", :string
+    t.column "institution", :string
+    t.column "institution-2", :string
+    t.column "notes", :string
+    t.column "country", :string, :default => ""
+    t.column "display_status", :integer, :default => 2, :null => false
+    t.column "duration", :string, :default => ""
+    t.column "frequency", :string, :default => ""
+    t.column "ship", :string, :default => ""
+    t.column "url", :string, :default => ""
+    t.column "real_date", :date, :default => Wed, 01 Jan 1001, :null => false
+    t.column "cruise_track_thumb", :binary, :limit => 16777215, :default => "", :null => false
+    t.column "basin", :string, :default => ""
   end
 
   create_table "seahunts", :force => true do |t|
   end
 
   create_table "sessions", :force => true do |t|
-    t.string   "session_id"
-    t.text     "data"
-    t.datetime "updated_at"
+    t.column "session_id", :string
+    t.column "data", :text
+    t.column "updated_at", :datetime
   end
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "stations", :force => true do |t|
-    t.string "ExpoCode"
-    t.string "FileName"
-    t.string "Basin"
-    t.text   "Track"
-    t.text   "lat"
-    t.text   "long"
-    t.text   "stnnum"
-    t.text   "event_code"
-    t.text   "cor_depth"
-    t.text   "max_press"
+    t.column "ExpoCode", :string
+    t.column "FileName", :string
+    t.column "Basin", :string
+    t.column "Track", :text
+    t.column "lat", :text
+    t.column "long", :text
+    t.column "stnnum", :text
+    t.column "event_code", :text
+    t.column "cor_depth", :text
+    t.column "max_press", :text
   end
 
   create_table "submissions", :force => true do |t|
-    t.text    "name"
-    t.text    "institute"
-    t.text    "Country"
-    t.text    "email"
-    t.text    "public"
-    t.text    "ExpoCode"
-    t.text    "Ship_Name"
-    t.text    "Line"
-    t.date    "cruise_date"
-    t.text    "action"
-    t.text    "notes"
-    t.text    "file"
-    t.boolean "assigned"
-    t.boolean "assimilated"
+    t.column "name", :text
+    t.column "institute", :text
+    t.column "Country", :text
+    t.column "email", :text
+    t.column "public", :text
+    t.column "ExpoCode", :text
+    t.column "Ship_Name", :text
+    t.column "Line", :text
+    t.column "cruise_date", :date
+    t.column "action", :text
+    t.column "notes", :text
+    t.column "file", :text
+    t.column "assigned", :boolean
+    t.column "assimilated", :boolean
   end
 
   create_table "tracks", :force => true do |t|
-    t.string "ExpoCode"
-    t.string "FileName"
-    t.string "Basin"
-    t.text   "Track"
+    t.column "ExpoCode", :string
+    t.column "FileName", :string
+    t.column "Basin", :string
+    t.column "Track", :text
   end
 
   create_table "users", :force => true do |t|
-    t.string "username"
-    t.string "password_salt"
-    t.string "password_hash"
+    t.column "username", :string
+    t.column "password_salt", :string
+    t.column "password_hash", :string
   end
 
 end

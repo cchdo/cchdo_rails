@@ -1,0 +1,2 @@
+module Argo::FilesHelper
+end

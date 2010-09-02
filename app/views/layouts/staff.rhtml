@@ -10,10 +10,6 @@
 <body>
 <div id='centering'>
   <%= render :partial => 'layouts/cchdo_header' %>
-  <br><br>
-	<!-- <div class="boxed"> 
-    <h1>CCHDO Staff Site</h1> -->
-		<div class="box_content">
       <% if session[:user] %>
         <div class="staff_links_table">
           <%= link_to("Staff Home", :controller => "staff") %> |
@@ -38,9 +34,6 @@
         <% end %>
         <%= yield -%>
       </div>
-	  </div>
-  	<div class="box_bottom"></div>
-	</div>
   <%= render :partial => 'layouts/cchdo_footer' -%>
 <!-- </div> -->
 <%= render :partial => 'layouts/google_analytics' -%>

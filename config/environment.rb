@@ -68,5 +68,7 @@ COUNTRIES = {
    'taiwan'  => 'tai', 'china' => 'prc',
 }
 
+ARGO_ROOT = 'public/data/argo'
+
 # Necessary for map_search to work
 require 'ar-extensions'
