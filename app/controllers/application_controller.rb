@@ -26,14 +26,6 @@ class Array
   end
 end
 
-COUNTRIES = {
-  'germany' => 'ger', 'japan'     => 'jpn', 'france'  => 'fra', 'england'    => 'uk',
-  'canada'  => 'can', 'us'        => 'usa', 'india'   => 'ind', 'russia'    => 'rus',
-  'spain'   => 'spn', 'argentina'  => 'arg', 'ukrain'  => 'ukr', 'netherlands'  => 'net',
-  'norway'  => 'nor', 'finland'   => 'fin', 'iceland' => 'ice', 'australia'  => 'aus',
-  'chile'   => 'chi', 'china'     => 'prc', 'taiwan'  => 'tai'
-}
-
 class ApplicationController < ActionController::Base
     layout 'standard'
   
