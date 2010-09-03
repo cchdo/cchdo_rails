@@ -2,35 +2,35 @@
 
 <h1>
   Argo Secure File Repository
-  <div class="session" style="float: right; font-size: 0.75em;"><%= link_to 'Signout', :action => :signout %></div>
+  <%= render :partial => 'session' %>
 </h1>
 
 <div class="box_content">
 
 <% unless @files.blank? -%>
-    <table>
-        <tr>
-            <th>File</th>
-            <th>ExpoCode</th>
-            <th>User</th>
-            <th>Added at</th>
-            <th>Description</th>
-        </tr>
-        <% @files.each do |file| %>
-            <tr>
-                <td><%= link_to(h(file.filename), file.public_filename) %></td>
-                <td><%= h(file.ExpoCode || 'Unknown') %></td>
-                <td><%= h(file.user ? file.user.username : 'Unknown') %></td>
-                <td><%= h(file.created_at.strftime('%Y-%m-%d %H:%M Pacific') || 'Unknown') %></td>
-                <td><pre><%= h(file.description) %></pre></td>
-                <td><%= link_to 'Edit', edit_argo_file_path(file) %></td>
-                <td><%= link_to 'Delete', file, :confirm => 'Are you sure? This will delete the file and its metadata.',
-                                                :method => :delete %></td>
-            </tr>
-        <% end %>
-    </table>
+  <table>
+    <tr>
+      <th>File</th>
+      <th>ExpoCode</th>
+      <th>User</th>
+      <th>Added at</th>
+      <th>Description</th>
+    </tr>
+    <% @files.each do |file| %>
+      <tr>
+        <td><%= link_to(h(file.filename), argo_file_get_path(file)) %></td>
+        <td><%= h(file.ExpoCode || 'Unknown') %></td>
+        <td><%= h(file.user ? file.user.username : 'Unknown') %></td>
+        <td><%= h(file.created_at.strftime('%Y-%m-%d %H:%M Pacific') || 'Unknown') %></td>
+        <td><pre><%= h(file.description) %></pre></td>
+        <td><%= link_to 'Edit', edit_argo_file_path(file) %></td>
+        <td><%= link_to 'Delete', file, :confirm => 'Are you sure? This will delete the file and its metadata.',
+                                        :method => :delete %></td>
+      </tr>
+    <% end %>
+  </table>
 <% else -%>
-    <p>There are no files.</p>
+  <p>There are no files.</p>
 <% end -%>
 
 <p>

@@ -8,6 +8,7 @@ class Argo::File < ActiveRecord::Base
                    :path_prefix => ARGO_ROOT
 
     belongs_to :user
+    has_many :downloads, :class_name => 'Argo::Download'
 end
 
 # Ensure Argo root directory exists

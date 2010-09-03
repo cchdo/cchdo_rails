@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  file_id: 1
+  datetime: 2010-09-03 10:51:54
+  ip: 1
+
+two:
+  file_id: 1
+  datetime: 2010-09-03 10:51:54
+  ip: 1

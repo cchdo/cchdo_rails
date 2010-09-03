@@ -9,14 +9,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100902192845) do
+ActiveRecord::Schema.define(:version => 20100903175154) do
+
+  create_table "argo_downloads", :id => false, :force => true do |t|
+    t.column "argo_file_id", :integer
+    t.column "datetime", :datetime
+    t.column "ip", :integer
+  end
 
   create_table "argo_files", :force => true do |t|
     t.column "user_id", :integer
     t.column "ExpoCode", :string
     t.column "description", :text
     t.column "display", :boolean, :default => false
-    t.column "link", :boolean, :default => false
     t.column "size", :integer
     t.column "filename", :string
     t.column "content_type", :string

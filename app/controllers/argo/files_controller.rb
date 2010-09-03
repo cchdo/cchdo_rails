@@ -79,4 +79,12 @@ class Argo::FilesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  def download
+    file = Argo::File.find(params[:file_id])
+
+    file.downloads << Argo::Download.new(:ip => request.remote_ip)
+
+    send_file file.public_filename, :filename => file.filename
+  end
 end

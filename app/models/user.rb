@@ -1,21 +1,38 @@
 require 'digest/sha2'
 
 class User < ActiveRecord::Base
+    validates_presence_of :username
+    validates_uniqueness_of :username 
 
-   validates_presence_of :username
-   validates_uniqueness_of :username 
-   
-   def password=(pass)
-      salt = [Array.new(6){rand(256).chr}.join].pack("m").chomp
-      self.password_salt, self.password_hash =salt, Digest::SHA256.hexdigest(pass+salt)
-   end
+    validates_presence_of :password
 
-   def self.authenticate(username,password)
-      user = User.find(:first, :conditions=> ["username = '#{username}'"])
-      if user.blank? or Digest::SHA256.hexdigest(password + user.password_salt) != user.password_hash
-        user = nil
-      end
-      user
-   end
+    validates_uniqueness_of :password_salt
+
+    def password=(password)
+        self.password_salt = User.generate_salt
+        self.password_hash = get_hash(password)
+    end
+
+    def self.authenticate(username, password)
+        user = User.find_by_username(username)
+        if user.blank? or user.get_hash(password) != user.password_hash
+            user = nil
+        end
+        user
+    end
+
+    private
+
+    def self.generate_salt
+        # Ensure salt is unique
+        begin
+            salt = [Array.new(6){rand(256).chr}.join].pack("m").chomp
+        end while User.exists?(:password_salt => salt)
+        salt
+    end
+
+    def get_hash(password)
+        Digest::SHA256.hexdigest(password + self.password_salt)
+    end
 
 end

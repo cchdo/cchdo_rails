@@ -1,16 +1,20 @@
+<div class="boxed">
+
+<h1>
+  Argo file
+  <%= render :partial => 'argo/session' %>
+</h1>
+
+<div class="box_content">
+
 <p>
   <b>Expocode:</b>
   <%=h @file.ExpoCode %>
 </p>
 
 <p>
-  <b>Filename:</b>
-  <%=h @file.filename %>
-</p>
-
-<p>
   <b>Description:</b>
-  <%=h @file.description %>
+  <pre><%=h @file.description %></pre>
 </p>
 
 <p>
@@ -19,9 +23,13 @@
 </p>
 
 <p>
-  <%=link_to(@file.filename, h(@file.public_filename))%>
+  <%=link_to(h(@file.filename), argo_file_get_path(@file))%>
 </p>
 
 
 <%= link_to 'Edit', edit_argo_file_path(@file) %> |
 <%= link_to 'Back', argo_files_path %>
+
+</div>
+<div class="box_bottom"></div>
+</div>
