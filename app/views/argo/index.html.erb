@@ -35,6 +35,9 @@
 
 <p>
   <%= link_to('Add file', new_argo_file_path) %>
+  <% if @show_stats %> | 
+  <%= link_to('Statistics', :action => 'stats') %>
+  <% end %>
 </p>
 
 </div>

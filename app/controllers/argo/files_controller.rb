@@ -35,7 +35,15 @@ class Argo::FilesController < ApplicationController
   # POST /argo_files
   # POST /argo_files.xml
   def create
-    @file = Argo::File.new(params[:argo_file])
+    info = params[:argo_file]
+    if info[:ExpoCode].blank?
+        date = Date.civil(info['date(1i)'].to_i, info['date(2i)'].to_i,
+                          info['date(3i)'].to_i)
+        info[:ExpoCode] = "#{date.to_s}_#{info['ship'].gsub(/\W/, '')}"
+    end
+    ['date(1i)', 'date(2i)', 'date(3i)', 'ship'].each {|x| info.delete(x) }
+
+    @file = Argo::File.new(info)
 
     @file.user = User.find(session[:user])
 
