@@ -1,4 +1,8 @@
+<div class="boxed">
+
 <h1>New Argo file</h1>
+
+<div class="box_content">
 
 <% form_for(@file, :html => {:multipart => true}) do |f| %>
   <%= f.error_messages %>
@@ -24,3 +28,7 @@
 <% end %>
 
 <%= link_to 'Back', argo_files_path %>
+
+</div>
+<div class="box_bottom"></div>
+</div>
