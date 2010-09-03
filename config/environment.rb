@@ -72,7 +72,7 @@ COUNTRIES = {
 }
 
 # Relative to Rails.root
-ARGO_ROOT = 'public/data/argo'
+ARGO_ROOT = File.join('public', 'data', 'argo')
 
 # Necessary for map_search to work
 require 'ar-extensions'
