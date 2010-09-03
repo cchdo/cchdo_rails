@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
 
     def signout
         session[:user] = nil
-        redirect_to :controller => 'staff'
+        redirect_to :action => :signin
     end
     
     protected

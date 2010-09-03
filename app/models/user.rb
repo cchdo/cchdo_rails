@@ -21,6 +21,10 @@ class User < ActiveRecord::Base
         user
     end
 
+    def get_hash(password)
+        Digest::SHA256.hexdigest(password + self.password_salt)
+    end
+
     private
 
     def self.generate_salt
@@ -29,10 +33,6 @@ class User < ActiveRecord::Base
             salt = [Array.new(6){rand(256).chr}.join].pack("m").chomp
         end while User.exists?(:password_salt => salt)
         salt
-    end
-
-    def get_hash(password)
-        Digest::SHA256.hexdigest(password + self.password_salt)
     end
 
 end
