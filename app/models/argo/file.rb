@@ -10,6 +10,8 @@ REAL_DIR = File.join(ABS_ARGO_ROOT, FILES_DIR)
 class Argo::File < ActiveRecord::Base
     set_table_name 'argo_files'
 
+    validates_presence_of :filename
+
     has_attachment :storage => :file_system,
                    :partition => false,
                    :path_prefix => ::File.join(ARGO_ROOT, FILES_DIR)
