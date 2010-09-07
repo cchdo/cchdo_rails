@@ -10,7 +10,7 @@
 <% if @files.blank? -%>
     <p>There are no files.</p>
 <% else -%>
-    <p>There <%=pluralize(@files.length, 'is', 'are) %> <%= pluralize(@files.length, 'file') %>.</p>
+    <p>There <%= @files.length == 1 ? 'is' : 'are' %> <%= pluralize(@files.length, 'file') %>.</p>
     <p><%= pluralize(@hidden, 'file is', 'files are') %> hidden.</p>
 
     <table>
