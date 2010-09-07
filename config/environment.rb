@@ -7,6 +7,10 @@
 # Specifies gem version of Rails to use when vendor/rails is not present
 RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
 
+# Initialize this before the models
+# Relative to Rails.root
+ARGO_ROOT = File.join('public', 'data', 'argo')
+
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
@@ -70,9 +74,6 @@ COUNTRIES = {
    'new zealand' => 'new', 'taiwan' => 'tai',
    'china'       => 'prc'
 }
-
-# Relative to Rails.root
-ARGO_ROOT = File.join('public', 'data', 'argo')
 
 # Necessary for map_search to work
 require 'ar-extensions'
