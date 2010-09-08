@@ -1,9 +1,6 @@
 <div class="boxed">
 
-<h1>
-  Argo file
-  <%= render :partial => 'argo/session' %>
-</h1>
+<%= render :partial => 'argo/title', :locals => {:subtitle => ' File Information'} %>
 
 <div class="box_content">
 
@@ -18,17 +15,17 @@
 </p>
 
 <p>
-  <b>Display:</b>
+  <b>Displayed on Repository list:</b>
   <%=h @file.display %>
 </p>
 
 <p>
+  <b>Filename:</b>
   <%=link_to(h(@file.filename), argo_file_get_path(@file))%>
 </p>
 
 
-<%= link_to 'Edit', edit_argo_file_path(@file) %> |
-<%= link_to 'Back', argo_files_path %>
+<%= link_to 'Edit this file', edit_argo_file_path(@file) %>
 
 </div>
 <div class="box_bottom"></div>
