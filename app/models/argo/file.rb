@@ -20,27 +20,35 @@ class Argo::File < ActiveRecord::Base
     belongs_to :user
     has_many :downloads, :class_name => 'Argo::Download'
 
-    after_save :link_expocode_dir
-    after_destroy :unlink_expocode_dir
+    after_create :link_in_expocode_dir
+    after_destroy :unlink_from_expocode_dir
 
     def get_expocode_dir
         ::File.join(ABS_ARGO_ROOT, self.ExpoCode.gsub(/\W/, ''))
     end
 
-    def link_expocode_dir
-        expocode_dir = get_expocode_dir
+    def link_in_expocode_dir
+        expocode_dir = get_expocode_dir()
         FileUtils.mkdir_p(expocode_dir)
         FileUtils.ln_s(::File.join(REAL_DIR, self.filename), ::File.join(expocode_dir, self.filename))
     end
 
-    def unlink_expocode_dir
-        expocode_dir = get_expocode_dir
+    def unlink_from_expocode_dir
+        expocode_dir = get_expocode_dir()
         expocode_file = ::File.join(expocode_dir, self.filename)
         if ::File.symlink?(expocode_file)
             ::File.unlink(expocode_file)
             if (Dir.entries(expocode_dir) - ['.', '..']).empty?
                 Dir.delete(expocode_dir)
             end
+        end
+    end
+
+    def ExpoCode=(expocode)
+        if not self.ExpoCode.blank? and expocode != self.ExpoCode
+            unlink_from_expocode_dir()
+            self[:ExpoCode] = expocode
+            link_in_expocode_dir()
         end
     end
 end
