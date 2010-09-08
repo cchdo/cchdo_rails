@@ -3,11 +3,12 @@
 # The expocode directories contain files that are linked to the real files to
 # provide filesystem "management" for those opposed to web interfaces.
 
-FILES_DIR = 'files'
-ABS_ARGO_ROOT = Rails.root.join(ARGO_ROOT)
-REAL_DIR = File.join(ABS_ARGO_ROOT, FILES_DIR)
 
 class Argo::File < ActiveRecord::Base
+    FILES_DIR = 'files'
+    ABS_ARGO_ROOT = Rails.root.join(ARGO_ROOT)
+    REAL_DIR = File.join(ABS_ARGO_ROOT, FILES_DIR)
+
     set_table_name 'argo_files'
 
     validates_presence_of :filename
@@ -44,5 +45,6 @@ class Argo::File < ActiveRecord::Base
     end
 end
 
+
 # Ensure Argo directories exist
-FileUtils.mkdir_p(REAL_DIR)
+FileUtils.mkdir_p(Argo::File::REAL_DIR)

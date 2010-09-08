@@ -1,2 +1,0 @@
-page.replace_html  'made', :partial => 'iframe'
-page.visual_effect :highlight, 'made'
