@@ -5,7 +5,7 @@
 
 <div id="argo_nav">
   <%= link_to('Repository List', argo_path, :class => ('active' if subtitle == '')) %>
-  <%= link_to('Statistics', {:controller => '/argo', :action => :stats}, :class => ('active' if subtitle == 'Statistics')) %>
+  <%= link_to('Details', {:controller => '/argo', :action => :details}, :class => ('active' if subtitle == 'Details')) %>
   <%= link_to('Add file', new_argo_file_path, :class => ('active' if subtitle == 'New File')) %>
   <%= link_to('Signout', {:controller => '/argo', :action => :signout}) %>
 </div>

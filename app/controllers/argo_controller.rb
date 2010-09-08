@@ -4,7 +4,7 @@
 class ArgoController < ApplicationController
     before_filter :check_authentication, :except => [:signin]
 
-    ALLOWED_TO_SEE_STATS = %w[sdiggs myshen jfields ayshen cberys argo]
+    ALLOWED_TO_SEE_DETAILS = %w[sdiggs myshen jfields ayshen cberys argo]
 
     def index
         @files = Argo::File.find_all_by_display(true)
@@ -15,8 +15,8 @@ class ArgoController < ApplicationController
         end
     end
 
-    def stats
-        unless allowed_to_see_stats()
+    def details
+        unless allowed_to_see_details()
             render :file => 'public/401.html', :status => :unauthorized
         else
             @files = Argo::File.all
@@ -26,7 +26,7 @@ class ArgoController < ApplicationController
 
     private
 
-    def allowed_to_see_stats
-        ALLOWED_TO_SEE_STATS.include?(User.find(session[:user]).username)
+    def allowed_to_see_details
+        ALLOWED_TO_SEE_DETAILS.include?(User.find(session[:user]).username)
     end
 end
