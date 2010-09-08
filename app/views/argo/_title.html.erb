@@ -1,0 +1,13 @@
+<h1>
+  <%= image_tag('logos/argo_logo.png', :alt => 'Argo', :width => 50, :height => 50) %>
+  Secure File Repository <%= subtitle %>
+</h1>
+
+<div id="argo_nav">
+  <%= link_to('Repository List', argo_path, :class => ('active' if subtitle == '')) %>
+  <%= link_to('Statistics', {:controller => '/argo', :action => :stats}, :class => ('active' if subtitle == 'Statistics')) %>
+  <%= link_to('Add file', new_argo_file_path, :class => ('active' if subtitle == 'New File')) %>
+  <%= link_to('Signout', {:controller => '/argo', :action => :signout}) %>
+</div>
+
+<div id="argo_clear"></div>

@@ -1,9 +1,6 @@
 <div class="boxed">
 
-<h1>
-  New Argo file
-  <%= render :partial => 'argo/session' %>
-</h1>
+<%= render :partial => 'argo/title', :locals => {:subtitle => 'New File'} %>
 
 <div class="box_content">
 
@@ -26,21 +23,21 @@
   </table>
   <p>
     <%= f.label :description %><br />
-    <%= f.text_area :description %>
+    <%= f.text_area :description, :cols => 100, :rows => 8 %>
   </p>
   <p>
-    <%= f.label :display %><br />
-    <%= f.check_box :display %>
+    <%= f.label :display, 'Display on Repository list' %>
+    <%= f.check_box :display, :checked => true %>
   </p>
+  <br />
   <p>
+    <%= f.label :uploaded_data, 'File to upload' %>
     <%= f.file_field :uploaded_data %>
   </p>
   <p>
     <%= f.submit 'Create' %>
   </p>
 <% end %>
-
-<%= link_to 'Back', argo_files_path %>
 
 </div>
 <div class="box_bottom"></div>

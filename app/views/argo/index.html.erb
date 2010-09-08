@@ -1,25 +1,24 @@
 <div class="boxed">
 
-<h1>
-  Argo Secure File Repository
-  <%= render :partial => 'session' %>
-</h1>
+<%= render :partial => 'title', :locals => {:subtitle => ''} %>    
 
 <div class="box_content">
 
 <% unless @files.blank? -%>
-  <table>
+  <table class="status_table argo_content">
     <tr>
-      <th>File</th>
       <th>ExpoCode</th>
-      <th>User</th>
+      <th>File</th>
+      <th>Added by</th>
       <th>Added at</th>
       <th>Description</th>
+      <th></th>
+      <th></th>
     </tr>
     <% @files.each do |file| %>
-      <tr>
-        <td><%= link_to(h(file.filename), argo_file_get_path(file)) %></td>
+      <tr<%= cycle(' class="highlighted_cell"', '') %>>
         <td><%= h(file.ExpoCode || 'Unknown') %></td>
+        <td><%= link_to(h(file.filename), argo_file_get_path(file)) %></td>
         <td><%= h(file.user ? file.user.username : 'Unknown') %></td>
         <td><%= h(file.created_at.strftime('%Y-%m-%d %H:%M Pacific') || 'Unknown') %></td>
         <td><pre><%= h(file.description) %></pre></td>
@@ -32,13 +31,6 @@
 <% else -%>
   <p>There are no files.</p>
 <% end -%>
-
-<p>
-  <%= link_to('Add file', new_argo_file_path) %>
-  <% if @show_stats %> | 
-  <%= link_to('Statistics', :action => 'stats') %>
-  <% end %>
-</p>
 
 </div>
 <div class="box_bottom"></div>

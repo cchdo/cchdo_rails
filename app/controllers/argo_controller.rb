@@ -8,7 +8,6 @@ class ArgoController < ApplicationController
 
     def index
         @files = Argo::File.find_all_by_display(true)
-        @show_stats = allowed_to_see_stats
 
         respond_to do |format|
           format.html # index.html.erb
@@ -17,7 +16,7 @@ class ArgoController < ApplicationController
     end
 
     def stats
-        unless allowed_to_see_stats
+        unless allowed_to_see_stats()
             render :file => 'public/401.html', :status => :unauthorized
         else
             @files = Argo::File.all

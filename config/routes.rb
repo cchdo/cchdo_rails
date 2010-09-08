@@ -6,6 +6,7 @@ ActionController::Routing::Routes.draw do |map|
         files.get 'download', :on => :member, :controller => :files, :action => :download
     end
   end
+  map.argo 'argo', :controller => :argo, :action => :index
   
   # Sample of regular route:
   # map.connect 'products/:id', :controller => 'catalog', :action => 'view'
