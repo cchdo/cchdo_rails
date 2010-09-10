@@ -94,7 +94,7 @@ class DataAccessController < ApplicationController
                end # for file in @files
             end # if @files
          end # if (@dir)
-         @queue_files = QueueFile.find(:all, :conditions => ["`ExpoCode` = '#{@expo}'"])
+         @queue_files = QueueFile.find(:all, :conditions => ["`ExpoCode` = '#{@expo}' AND `Merged` = 0"])
          @support_files = SupportFile.find(:all, :conditions => ["`ExpoCode` = '#{@expo}'"])
          if (@expo)
            if(@cur_sort == "LastName")
