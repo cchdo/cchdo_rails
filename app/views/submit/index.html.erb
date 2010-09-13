@@ -1,12 +1,16 @@
+<%content_for :js do%>
+<%= javascript_include_tag 'slidemenu', 'withscript', :defaults -%>
+<script type="text/javascript">window.onload=init;</script>
+<%end-%>
 <div id='content'>
 <div class='boxed'>
 <h1>Submit Data</h1>
 <div class='box_content'>
-<noscript>Your browser does not support JavaScript. Please visit <a href="submit3.html">this page</a> to make your submission.</noscript>
 
-
-
-
+    <noscript>
+        Your browser does not support JavaScript. Please visit
+        <%=link_to('this page', :action => :simple)%> to make your submission.
+    </noscript>
 
 <div class="hidden">
   <% @public = ["Public", "Non Public"] %>
@@ -101,4 +105,3 @@
 </div>
 </div>
 <div class='box_bottom'></div>
-<script type="text/javascript">window.onload=init;</script>

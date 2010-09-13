@@ -1,7 +1,12 @@
 class SubmitController < ApplicationController
+   layout 'standard'
+
    upload_status_for :save_file
-   layout 'submit'
+
    def index
+   end
+
+   def simple
    end
 
    def save_file
