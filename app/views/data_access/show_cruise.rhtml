@@ -24,7 +24,7 @@
     <% end %>
     <br />
     <% unless @queue_files.empty? %>
-      <a href="#updates" style="color:#FF0900;">Preliminary data available below</a>
+      <a href="#updates" style="color:#FF0900;">See additional submitted files below</a>
     <% end %>
 
 <!-- Files -->
@@ -112,10 +112,10 @@
 <% if @queue_files and @queue_files.length > 0 %>
 <div class="data_access_updates" >
   <div class="boxed">
-  <h1><a NAME="updates">Preliminary/Unprocessed</a></h1>
+  <h1><a NAME="updates">Files in 'as received' condition</a></h1>
   <div class="box_content">
     <div class="data_summary_header"><h2> <span class="data_access_updates_note"> 
-  (These files have been submitted, but have not yet been merged into the CCHDO data set.)</span></h2></div>
+  </span></h2></div>
     <table width="100%">
       <% for @file in @queue_files %>
                   <% if @file.Merged == 1 %> <% next %> <% end %>
