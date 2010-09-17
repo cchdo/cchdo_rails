@@ -22,7 +22,9 @@ function preloadImages() { //v3.0
 </script>
 
 
-<% end -%>        
+<% end -%>
+
+        
 	        <div class='boxed'>
 	<h1>Arctic Cruises</h1>
 	<div class='box_content'>
@@ -36,6 +38,10 @@ function preloadImages() { //v3.0
 
 <!-- Rollover Image Map-->
 <map name="m_arctic" id="m_arctic">
+	<area shape="poly" coords="262,406,259,419,296,426,320,420,326,433,290,493,304,511,309,499,307,487,339,434,328,406,298,404,285,390,262,406" href="http://cchdo.ucsd.edu/data_access/show_cruise?ExpoCode=58AA19950217" title="75N" alt="75N" onmouseover="swapImage('arctic','','images/arctic3_f19.gif',1);"  />
+	<area shape="poly" coords="304,404,278,407,258,425,268,441,295,439,277,462,284,470,309,444,304,404" href="http://cchdo.ucsd.edu/data_access/show_cruise?ExpoCode=58AA19970225" title="75N" alt="75N" onmouseover="swapImage('arctic','','images/arctic3_f20.gif',1);"  />
+	<area shape="rect" coords="260,405,327,421" href="http://cchdo.ucsd.edu/data_access/show_cruise?ExpoCode=58GS20060721" title="75N" alt="75N" onmouseover="swapImage('arctic','','images/arctic3_f21.gif',1);"  />
+	<area shape="poly" coords="218,174,249,222,317,204,304,190,301,168,271,150,220,160,218,174" href="http://cchdo.ucsd.edu/data_access/show_cruise?ExpoCode=32PZ20020819" title="CBL" alt="CBL" onmouseover="swapImage('arctic','','images/arctic3_f18.gif',1);"  />
 <area shape="poly" coords="329,396,352,454,349,455,333,416,324,419,323,425,317,423,298,443,343,459,315,535,310,535,337,461,314,455,295,445,286,453,281,447,291,443,284,431,281,425,248,425,249,417,283,421,295,439,313,423,320,419,304,424,290,423,284,421,299,420,320,415,332,411,327,403,320,408,322,412,317,413,315,408,329,396" href="http://cchdo.ucsd.edu/data_access/show_cruise?ExpoCode=58JH19990615" title="75N" alt="75N" onmouseover="swapImage('arctic','','images/arctic3_f17.gif',1);"  />
 <area shape="poly" coords="245,86,252,98,247,134,228,154,241,158,239,180,246,182,247,158,257,160,250,135,255,135,262,164,250,162,249,188,235,184,238,161,227,157,221,170,213,167,213,151,217,151,215,162,218,164,222,156,217,155,218,151,224,153,242,134,249,100,242,92,245,86" href="http://cchdo.ucsd.edu/data_access/show_cruise?ExpoCode=32H120020718" title="HEALY0203" alt="HEALY0203" onmouseover="swapImage('arctic','','images/arctic3_f4.gif',1);"  />
 <area shape="poly" coords="200,168,193,154,228,148,228,153,225,160,230,160,231,164,225,163,225,167,220,163,226,151,218,152,221,158,218,160,213,154,200,156,206,167,200,168" href="http://cchdo.ucsd.edu/data_access/show_cruise?ExpoCode=320620030705" title="SBI" alt="SBI" onmouseover="swapImage('arctic','','images/arctic3_f16.gif',1);"  />
@@ -198,8 +204,18 @@ function preloadImages() { //v3.0
 		      <td></td>
 		      <td>NOR</td>
 		    </tr>
+			<tr valign="top" onmouseover="swapImage('arctic','','images/arctic3_f19.gif',1);">
+			  <td><a href="data_access/show_cruise?ExpoCode=58AA19950217">75N</a></td>
+			  <td>
 
-<tr valign="top" onmouseover="swapImage('arctic','','images/arctic3_f15.gif',1);">
+			              1995-02-17 to 1995-03-18        
+			  </td>
+			  <td>HAAKON MOSBY</td>
+
+			  <td>Johannessen, Skjelvan</td>
+			  <td>NOR</td>
+			</tr>
+<tr valign="top" class="highlighted_cell" onmouseover="swapImage('arctic','','images/arctic3_f15.gif',1);">
 <td><a href="data_access/show_cruise?ExpoCode=06AQ19960712">ARKXII</a></td>
      <td>
                  1996-07-12 to 1996-09-23        
@@ -213,9 +229,31 @@ function preloadImages() { //v3.0
 
      <td>GER</td>
 
-   </tr>		
+   </tr>
+	<tr valign="top" onmouseover="swapImage('arctic','','images/arctic3_f20.gif',1);">
+	  <td><a href="data_access/show_cruise?ExpoCode=58AA19970225">75N</a></td>
+	  <td>
+
+	              1997-02-25 to 1997-03-24        
+	  </td>
+	  <td>HAAKON MOSBY</td>
+
+	  <td>Johanessen</td>
+	  <td>NOR</td>
+	</tr>
+	<tr valign="top" class="highlighted_cell" onmouseover="swapImage('arctic','','images/arctic3.gif',1);">
+	  <td><a href="data_access/show_cruise?ExpoCode=58AA19980308">75N</a></td>
+	  <td>
+
+	              1998-03-08 to 1998-03-24        
+	  </td>
+	  <td>HAAKON MOSBY</td>
+
+	  <td>Simonsen</td>
+	  <td>NOR</td>
+	</tr>		
 <tr valign="top" onmouseover="swapImage('arctic','','images/arctic3_f17.gif',1);">
-<td><a href="data_access?ExpoCode=58JH19990615">75N</a></td>
+<td><a href="data_access/show_cruise?ExpoCode=58JH19990615">75N</a></td>
     <td>
                 1999-06-15 to 1999-07-07        
     </td>
@@ -229,7 +267,7 @@ function preloadImages() { //v3.0
     <td>NOR</td>
 
   </tr>
-	<tr valign="top"  onmouseover="swapImage('arctic','','images/arctic3_f5.gif',1);">
+	<tr valign="top" class="highlighted_cell" onmouseover="swapImage('arctic','','images/arctic3_f5.gif',1);">
 
 	<td><a href="data_access/show_cruise?ExpoCode=77DN20020420">ODEN02</a></td>
      <td>
@@ -243,7 +281,7 @@ function preloadImages() { //v3.0
      <td>SWD</td>
    </tr>
 	
-<tr valign="top" class="highlighted_cell" onmouseover="swapImage('arctic','','images/arctic3_f3.gif',1);">
+<tr valign="top" onmouseover="swapImage('arctic','','images/arctic3_f3.gif',1);">
 
 <td><a href="data_access/show_cruise?ExpoCode=32H120020505">HEALY0201</a></td>
 
@@ -258,7 +296,7 @@ function preloadImages() { //v3.0
 
 </tr>
 
-<tr valign="top"  onmouseover="swapImage('arctic','','images/arctic3_f6.gif',1);">
+<tr valign="top" class="highlighted_cell" onmouseover="swapImage('arctic','','images/arctic3_f6.gif',1);">
 <td><a href="data_access/show_cruise?ExpoCode=316N20020530">NS02</a></td>
 
   <td>
@@ -270,7 +308,7 @@ function preloadImages() { //v3.0
   <td>USA</td>
 
 </tr>
-<tr valign="top" class="highlighted_cell" onmouseover="swapImage('arctic','','images/arctic3_f4.gif',1);">
+<tr valign="top" onmouseover="swapImage('arctic','','images/arctic3_f4.gif',1);">
 <td><a href="data_access/show_cruise?ExpoCode=32H120020718">HEALY0203</a></td>
 <td>
   2002-07-15 to 2002-08-26        
@@ -283,9 +321,21 @@ function preloadImages() { //v3.0
 <td>USA</td>
 
 </tr>
+<tr valign="top" class="highlighted_cell" onmouseover="swapImage('arctic','','images/arctic3_f18.gif',1);">
 
+<td><a href="data_access/show_cruise?ExpoCode=32PZ20020819">CBL</a></td>
+  <td>
+              2002-08-19 to 2002-09-23        
+  </td>
+
+  <td>POLAR STAR</td>
+  <td>Woodgate</td>
+
+  <td>USA</td>
+
+</tr>
 <tr valign="top" onmouseover="swapImage('arctic','','images/arctic3_f16.gif',1);">
-<td><a href="data_access/show_cruise?ExpoCode=32H120020718">SBI</a></td>
+<td><a href="data_access/show_cruise?ExpoCode=320620030705">SBI</a></td>
 <td>
   2003-07-05 to 2003-08-18        
 
@@ -297,8 +347,19 @@ function preloadImages() { //v3.0
 <td>USA</td>
 
 </tr>
+<tr valign="top" class="highlighted_cell" onmouseover="swapImage('arctic','','images/arctic3.gif',1);">
+<td><a href="data_access/show_cruise?ExpoCode=32H120030721">HLY031</a></td>
+<td>
+  2003-07-21 to 2003-08-16        
 
-<tr valign="top" class="highlighted_cell"  onmouseover="swapImage('arctic','','images/arctic3_f7.gif',1);">
+</td>
+
+<td>Healy</td>
+<td>Falkner</td>
+<td>CAN</td>
+
+</tr>
+<tr valign="top" onmouseover="swapImage('arctic','','images/arctic3_f7.gif',1);">
 
 <td><a href="data_access/show_cruise?ExpoCode=77DN20050819">ODEN05</a></td>
   <td>
@@ -311,15 +372,15 @@ function preloadImages() { //v3.0
   <td>SWD</td>
 
 </tr>
-<tr valign="top" onmouseover="swapImage('arctic','','images/arctic3.gif',1);">
-  <td><a href="data_access?ExpoCode=58GS20060721">75N</a></td>
+<tr valign="top" class="highlighted_cell" onmouseover="swapImage('arctic','','images/arctic3_f21.gif',1);">
+  <td><a href="data_access/show_cruise?ExpoCode=58GS20060721">75N</a></td>
   <td>
 
               2006-07-21 to 2006-07-21        
   </td>
   <td>GO SARS</td>
 
-  <td></td>
+  <td>Olsen</td>
   <td>NOR</td>
 </tr>
 			</table>
