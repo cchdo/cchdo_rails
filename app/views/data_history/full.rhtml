@@ -1,0 +1,79 @@
+<table border="0" cellspacing="5" cellpadding="5" width="100%">
+		<% if (@events[0]) %>
+	<tr><th></th></tr>
+	<tr>
+		 <td align="right">
+				<table class="history_info_table">
+					<tr>
+						<td>
+							<strong>Line Number <br>
+								ExpoCode    <br>
+								Cruise Dates<br>
+								Ship Name   <br>
+								Country     <br></strong>
+						</td>
+						<td>
+							<%= @cruise.Line %><br>
+							<%= @events[0].ExpoCode %>   <br>
+							<%= @cruise.Begin_Date %><strong>-</strong><%= @cruise.EndDate %><br>
+							<%= @cruise.Ship_Name %>  <br>
+							<%= @cruise.Country %><br>
+						</td>
+					</tr>
+				</table>
+		</td>	
+	</tr>
+</table>	
+
+<br><br>
+
+	<% for cnt in 0..@events.length()-1 %>
+	   <% if (not @events[cnt].Date_Entered)%> <% @Date_Entered = "&nbsp"  %> <% else %> <% @Date_Entered= @events[cnt].Date_Entered %><% end %>
+	   <% if (not @events[cnt].LastName =~ /\w/)%> <% @LastName = "&nbsp"  %> <% else %> <% @LastName= @events[cnt].LastName %><% end %>
+	   <% if (not @events[cnt].First_Name =~ /\w/)%> <% @FirstName = "&nbsp"  %> <% else %> <% @FirstName= @events[cnt].First_Name %><% end %>
+	   <% if (not @events[cnt].Data_Type=~ /\w/)%> <% @Data_Type = "&nbsp"  %> <% else %> <% @Data_Type= @events[cnt].Data_Type %><% end %>
+	   <% if (not @events[cnt].Action=~ /\w/)%> <% @Action = "&nbsp"  %> <% else %> <% @Action= @events[cnt].Action %><% end %>
+	   <% if (not @events[cnt].Summary =~ /\w/)%> 
+		 <% @Summary= "None" %>
+		 <% if @events[cnt].Note =~/\w/ %>
+		    <% @Sum_Link = "<a href=\"/data_history?ExpoCode=#{@events[cnt].ExpoCode}&Entry=#{@events[cnt].ID}&Sort=#{@cur_sort}&Note=true\">" %>
+			<% @end = "</a>" %>
+		 <% else %>
+		    <% @Sum_Link = " "  %>
+		    <% @end= " " %> 
+		 <% end %>
+	   <% else %> 
+	   	 <% @Summary = @events[cnt].Summary %>
+		 <% @Sum_Link= "<a href=\"/data_history?ExpoCode=#{@events[cnt].ExpoCode}&Entry=#{@events[cnt].ID}&Sort=#{@cur_sort}&Note=true\">"%>
+     	 <% @end = "</a>" %>
+	   <% end %>
+	
+    <% if cnt % 2 == 0 %>
+       <table class="data_history_full" cellspacing="0" width="100%">
+		
+    <% else %>
+    	<table class="data_history_full_hl" cellspacing="0" width="100%">
+    <% end %>		 
+        
+				<tr align="left" valign="top">
+					 <td class="Hist_Cell">Date Entered:&nbsp;<b><%= @Date_Entered %></b></td>
+					 <td class="Hist_Cell">Person:&nbsp;<em><%=@FirstName %>&nbsp;<%= @LastName %> </em>   </td>
+					 <td class="Hist_Cell">Data Type:&nbsp;<%= @Data_Type %>   </td>
+					 <td class="Hist_Cell">Action:&nbsp;<%= @Action %>   </td>
+					 <td class="Hist_Cell">Summary:&nbsp;<%= @Summary %></td>
+				</tr>
+				<tr>	
+					<td colspan="5">
+						<b>Detailed Notes</b><br>
+						<% if @events[cnt].Note =~ /\w/ %>
+						<% @events[cnt].Note.gsub!(/[\n\r\f]/,"<br>") %>
+			            <% @events[cnt].Note.gsub!(/[\t]/,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;") %>
+						<%= @events[cnt].Note %>
+						<% end %>
+					</td>
+				</tr>
+			</table>
+	<% end %>
+	<% else %>
+	<h4>Cruise history not found</h4>
+	<% end %>
