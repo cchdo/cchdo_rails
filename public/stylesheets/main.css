@@ -1185,6 +1185,14 @@ div.tm_auto_complete ul strong.highlight {
 .history_table th{
   border-bottom: 3px solid #006f89 !important;
 }
+.data_history_full {
+	border: 1px solid #999;
+}
+.data_history_full_hl {
+	border: 1px solid #999;
+	background-color: #E0E0E0;
+}
+
 /*****/
 .history_detail_table {
   border: 1px solid #000;
