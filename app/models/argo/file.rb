@@ -55,4 +55,10 @@ end
 
 
 # Ensure Argo directories exist
-FileUtils.mkdir_p(Argo::File::REAL_DIR)
+begin
+	FileUtils.mkdir_p(Argo::File::REAL_DIR)
+rescue => e
+	raise "Unable to create directory structure for Argo File repository.\n" + 
+		  "Please create public/data/argo/files with permissions read-writeable by " +
+		  "the webserver."
+end

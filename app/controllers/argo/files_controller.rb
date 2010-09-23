@@ -1,6 +1,8 @@
 class Argo::FilesController < ApplicationController
   layout 'standard'
 
+  helper :argo
+
   def index
       redirect_to :controller => '../argo'
   end
