@@ -28,6 +28,9 @@ end
 
 class ApplicationController < ActionController::Base
     layout 'standard'
+
+	# Scrub sensitive parameters from your log
+    filter_parameter_logging :password, :password_confirmation
   
     def signin
         if request.post?
