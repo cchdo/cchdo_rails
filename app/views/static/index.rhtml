@@ -184,7 +184,12 @@ recent = recently_edited_cruises.map do |d|
     info[:begin_date] = cruise.Begin_Date
     info[:line] = cruise.Line or 'NON'
     info[:ship] = cruise.Ship_Name
-    info[:map] = Document.find_by_ExpoCode_and_FileType(d.ExpoCode, 'Small Plot').FileName
+	info[:map] = Document.first(:conditions => {:ExpoCode => d.ExpoCode, :FileType => 'Small Plot'})
+    begin
+	    info[:map] = info[:map].FileName
+	rescue
+		info[:map] = ''
+	end
     info
 end
 %>
