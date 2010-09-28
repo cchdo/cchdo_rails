@@ -184,12 +184,12 @@ recent = recently_edited_cruises.map do |d|
     info[:begin_date] = cruise.Begin_Date
     info[:line] = cruise.Line or 'NON'
     info[:ship] = cruise.Ship_Name
-	info[:map] = Document.first(:conditions => {:ExpoCode => d.ExpoCode, :FileType => 'Small Plot'})
+    info[:map] = Document.first(:conditions => {:ExpoCode => d.ExpoCode, :FileType => 'Small Plot'})
     begin
-	    info[:map] = info[:map].FileName
-	rescue
-		info[:map] = ''
-	end
+        info[:map] = info[:map].FileName
+    rescue
+        info[:map] = nil
+    end
     info
 end
 %>
@@ -201,7 +201,7 @@ end
        expo = info[:expocode] %>
       <tr>
         <td>
-          <a href='/search?query=<%= expo %>'><img src="http://cchdo.ucsd.edu<%= info[:map] %>" /></a>
+          <% if info[:map] %><a href='/search?query=<%= expo %>'><img src="http://cchdo.ucsd.edu<%= info[:map] %>" /></a><% end %>
         </td>
         <td>
           <h1><a href='/search?query=<%= expo %>'> <%= info[:line] %></a></h1>
