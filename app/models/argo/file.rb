@@ -11,6 +11,7 @@ class Argo::File < ActiveRecord::Base
 
     set_table_name 'argo_files'
 
+    validates_presence_of :ExpoCode
     validates_presence_of :filename
 
     has_attachment :storage => :file_system,
@@ -24,31 +25,46 @@ class Argo::File < ActiveRecord::Base
     after_destroy :unlink_from_expocode_dir
 
     def get_expocode_dir
-        ::File.join(ABS_ARGO_ROOT, self.ExpoCode.gsub(/\W/, ''))
+        if self.ExpoCode
+            ::File.join(ABS_ARGO_ROOT, self.ExpoCode.gsub(/\W/, ''))
+        else
+            nil
+        end
     end
 
     def link_in_expocode_dir
-        expocode_dir = get_expocode_dir()
-        FileUtils.mkdir_p(expocode_dir)
-        FileUtils.ln_s(::File.join(REAL_DIR, self.filename), ::File.join(expocode_dir, self.filename))
+        if expocode_dir = get_expocode_dir() and self.filename
+            FileUtils.mkdir_p(expocode_dir)
+            link = ::File.join(expocode_dir, self.filename)
+            if ::File.symlink?(link)
+                ::File.unlink(link)
+	    end
+            FileUtils.ln_s(::File.join(REAL_DIR, self.filename), link)
+        end
     end
 
     def unlink_from_expocode_dir
-        expocode_dir = get_expocode_dir()
-        expocode_file = ::File.join(expocode_dir, self.filename)
-        if ::File.symlink?(expocode_file)
-            ::File.unlink(expocode_file)
-            if (Dir.entries(expocode_dir) - ['.', '..']).empty?
-                Dir.delete(expocode_dir)
+        if expocode_dir = get_expocode_dir() and self.filename
+            expocode_file = ::File.join(expocode_dir, self.filename)
+            if ::File.symlink?(expocode_file)
+                ::File.unlink(expocode_file)
+                if (Dir.entries(expocode_dir) - ['.', '..']).empty?
+                    Dir.delete(expocode_dir)
+                end
             end
         end
     end
 
     def ExpoCode=(expocode)
-        if not self.ExpoCode.blank? and expocode != self.ExpoCode
-            unlink_from_expocode_dir()
+    	# Do extra linking and unlinking if editing a file.
+        unless self.ExpoCode.blank? and not self.filename
+            if expocode != self.ExpoCode
+                unlink_from_expocode_dir()
+	    end
             self[:ExpoCode] = expocode
             link_in_expocode_dir()
+	else
+            self[:ExpoCode] = expocode
         end
     end
 end
@@ -56,9 +72,9 @@ end
 
 # Ensure Argo directories exist
 begin
-	FileUtils.mkdir_p(Argo::File::REAL_DIR)
+    FileUtils.mkdir_p(Argo::File::REAL_DIR)
 rescue => e
-	raise "Unable to create directory structure for Argo File repository.\n" + 
-		  "Please create public/data/argo/files with permissions read-writeable by " +
-		  "the webserver."
+    raise "Unable to create directory structure for Argo File repository.\n" + 
+          "Please create public/data/argo/files with permissions read-writeable by " +
+          "the webserver."
 end
