@@ -13,18 +13,19 @@
       <th>Added at</th>
       <th>Description</th>
       <th></th>
-      <th></th>
     </tr>
     <% @files.each do |file| %>
       <tr<%= cycle(' class="highlighted_cell"', '') %>>
         <td><%= h(file.ExpoCode || 'Unknown') %></td>
-        <td><%= link_to(h(file.filename), argo_file_get_path(file)) %></td>
+        <td class="filename"><%= link_to(h(file.filename), argo_file_get_path(file)) %></td>
         <td><%= h(file.user ? file.user.username : 'Unknown') %></td>
         <td><%= h(file.created_at.strftime('%Y-%m-%d %H:%M Pacific') || 'Unknown') %></td>
-        <td><pre><%= h(file.description) %></pre></td>
-        <td><%= link_to 'Edit', edit_argo_file_path(file) %></td>
-        <td><%= link_to 'Delete', file, :confirm => 'Are you sure? This will delete the file and its metadata.',
-                                        :method => :delete %></td>
+        <td class="description"><pre><%= h(file.description) %></pre></td>
+        <td>
+          <p><%= link_to 'Edit', edit_argo_file_path(file) %></p>
+          <p><%= link_to 'Delete', file, :confirm => 'Are you sure? This will delete the file and its metadata.',
+                                         :method => :delete %></p>
+        </td>
       </tr>
     <% end %>
   </table>

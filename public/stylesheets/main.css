@@ -1419,4 +1419,14 @@ td.parameter_order
   top: -1px;
   height: 1.65em;
 }
+.argo_content td {
+  padding: 0.5em;
+}
+.argo_content .description {
+  width: 33em;
+  overflow-x: auto;
+}
+.argo_content pre {
+  width: inherit;
+}
 #argo_clear { clear: both; }
