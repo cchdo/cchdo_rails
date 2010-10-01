@@ -3,7 +3,7 @@
 <%= stylesheet_link_tag 'cupertino/jquery-ui-1.7.2.custom' -%>
 <style type="text/css">
 #tools {
-  margin: 1em 0;
+  margin: 0 0 1em 0;
   width: 20em;
 }
 .calendar-info {
@@ -82,7 +82,7 @@ $(function () {
     eventClick: function (calEvent, jsEvent, view) {
       var dialog = $('<div class="calendar-info"></div>');
       dialog.append("<pre class=\"" + calEvent.className[0] + "\">" + calEvent.description + "</pre>");
-      dialog.dialog({title: calEvent.title, minWidth: 800});
+      dialog.dialog({title: calEvent.title, minWidth: 800, positon: [100, 100]});
       return false;
     },
     header: {left: 'month,basicWeek', center: 'title'}
@@ -98,8 +98,8 @@ $(function () {
 <h1>DB History</h1>
 <div class="box_content">
 
-<div id="calendar"></div>
 <ul id="tools"></ul>
+<div id="calendar"></div>
 
 </div>
 <div class="box_bottom"></div>
