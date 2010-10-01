@@ -1,0 +1,106 @@
+<% content_for :head do -%>
+<%= stylesheet_link_tag 'fullcalendar' %>
+<%= stylesheet_link_tag 'cupertino/jquery-ui-1.7.2.custom' -%>
+<style type="text/css">
+#tools {
+  margin: 1em 0;
+  width: 20em;
+}
+.calendar-info {
+  padding: 0.5em;
+}
+.calendar-info pre {
+  font-size: 0.8em;
+  width: 100%;
+  padding: 0.5em;
+  color: #fff;
+  overflow: auto;
+  max-width: none;
+}
+.docs_w_events,
+.docs_w_events a {
+  background-color: #7ec225;
+}
+.docs_wo_events,
+.docs_wo_events a {
+  background-color: #ad2d2d;
+}
+.events_wo_docs,
+.events_wo_docs a {
+  background-color: #e0c240;
+}
+.map_creations,
+.map_creations a {
+  background-color: #b373b3;
+}
+.submissions,
+.submissions a {
+  background-color: #668cd9;
+}
+</style>
+<% end %>
+<% content_for :js do -%>
+<%= javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js' %>
+<%= javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js' %>
+<%= javascript_include_tag 'fullcalendar/fullcalendar.min.js' %>
+<%= javascript_include_tag 'fullcalendar/gcal.js' %>
+<script type="text/javascript">
+$(function () {
+  var cals = {
+    "docs_w_events": "http://www.google.com/calendar/feeds/74n2plv4nfclljktijj7a42ujo%40group.calendar.google.com/public/basic",
+    "docs_wo_events": "http://www.google.com/calendar/feeds/dhu4ok0kcf13fp0c562ner5514%40group.calendar.google.com/public/basic",
+    "events_wo_docs": "http://www.google.com/calendar/feeds/dhu4ok0kcf13fp0c562ner5514%40group.calendar.google.com/public/basic",
+    "map_creations": "http://www.google.com/calendar/feeds/el92aob7iuo6f24bbi3ffsjvg4%40group.calendar.google.com/public/basic",
+    "submissions": "http://www.google.com/calendar/feeds/i3lkver56mse5putkv74nh4gu0%40group.calendar.google.com/public/basic"
+  };
+
+  for (var x in cals) {
+    cals[x] = $.fullCalendar.gcalFeed(cals[x], {className: x});
+  }
+
+  function toggleFeed() {
+    if ($(this).is(':checked')) {
+      $('#calendar').fullCalendar('addEventSource', $(this).data('feed'));
+    } else {
+      $('#calendar').fullCalendar('removeEventSource', $(this).data('feed'));
+    }
+  }
+
+  for (var x in cals) {
+    var l = $('<label for="' + x + '">' + x + '</label>');
+    var c = $('<input type="checkbox" name="' + x + '" checked="checked" />');
+    var li = $('<li class="' + x + '"></li>');
+    li.append(c);
+    li.append(l);
+    $('#tools').append(li);
+    c.data('feed', cals[x]);
+    c.change(toggleFeed);
+  }
+
+  $('#calendar').fullCalendar({
+    eventSources: [],
+    eventClick: function (calEvent, jsEvent, view) {
+      var dialog = $('<div class="calendar-info"></div>');
+      dialog.append("<pre class=\"" + calEvent.className[0] + "\">" + calEvent.description + "</pre>");
+      dialog.dialog({title: calEvent.title, minWidth: 800});
+      return false;
+    },
+    header: {left: 'month,basicWeek', center: 'title'}
+  });
+
+  $('#tools input').each(function () {
+    toggleFeed.call(this);
+  });
+});
+</script>
+<% end %>
+<div class="boxed">
+<h1>DB History</h1>
+<div class="box_content">
+
+<div id="calendar"></div>
+<ul id="tools"></ul>
+
+</div>
+<div class="box_bottom"></div>
+</div>
