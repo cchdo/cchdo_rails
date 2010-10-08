@@ -74,6 +74,3 @@ COUNTRIES = {
    'new zealand' => 'new', 'taiwan' => 'tai',
    'china'       => 'prc'
 }
-
-# Necessary for map_search to work
-require 'ar-extensions'

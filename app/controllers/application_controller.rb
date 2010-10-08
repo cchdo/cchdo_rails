@@ -29,9 +29,9 @@ end
 class ApplicationController < ActionController::Base
     layout 'standard'
 
-	# Scrub sensitive parameters from your log
+    # Scrub sensitive parameters from your log
     filter_parameter_logging :password, :password_confirmation
-  
+
     def signin
         if request.post?
             if user = User.authenticate(params[:username], params[:password])
@@ -49,9 +49,9 @@ class ApplicationController < ActionController::Base
         session[:user] = nil
         redirect_to :action => :signin
     end
-    
+
     protected
-  
+
     def check_authentication
         unless session[:user]
             session[:intended_action] = action_name
@@ -78,14 +78,14 @@ class ApplicationController < ActionController::Base
         end
       end
     end
-  
+
   def thumbnail_uri(expocode)
       if map = Document.find(:first, :conditions => { :ExpoCode => expocode, :FileType => 'Small Plot'})
         return map.FileName[0..-5]
       end
       return nil
     end
-  
+
   def best_query_type(query)
     best_queries = Hash.new
     param_queries = Array.new
@@ -435,7 +435,7 @@ class ApplicationController < ActionController::Base
      end
      return track_coords
    end
-   
+
    # This function returns a hash of 
    def get_files_from_dir(dir)
      @file_result = Hash.new

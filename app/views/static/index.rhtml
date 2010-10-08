@@ -179,16 +179,17 @@ recent = recently_edited_cruises.map do |d|
     info = {
         :expocode => d.ExpoCode,
         :last_modified => d.LastModified,
+        :begin_date => 'Unknown', 
+        :line => 'NON', 
+        :ship => 'Unknown', 
+        :map => nil
     }
-    cruise = Cruise.find_by_ExpoCode(d.ExpoCode)
-    info[:begin_date] = cruise.Begin_Date
-    info[:line] = cruise.Line or 'NON'
-    info[:ship] = cruise.Ship_Name
-    info[:map] = Document.first(:conditions => {:ExpoCode => d.ExpoCode, :FileType => 'Small Plot'})
-    begin
-        info[:map] = info[:map].FileName
-    rescue
-        info[:map] = nil
+    if cruise = Cruise.find_by_ExpoCode(d.ExpoCode)
+        info[:begin_date] = cruise.Begin_Date if cruise.Begin_Date
+        info[:line] = cruise.Line if cruise.Line
+        info[:ship] = cruise.Ship_Name if cruise.Ship_Name
+        map = Document.first(:conditions => {:ExpoCode => d.ExpoCode, :FileType => 'Small Plot'})
+        info[:map] = map.FileName if map and map.FileName
     end
     info
 end
