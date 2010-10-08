@@ -555,7 +555,9 @@ td.map img {
   padding-top: 3px;
   padding-bottom: 3px;
 }
-#cchdo_menu > ul > li > ul > li:hover, #cchdo_menu > ul > li > ul > li:hover > a, .submenu_hover {
+#cchdo_menu > ul > li > ul > li:hover,
+#cchdo_menu > ul > li > ul > li:hover > a,
+.submenu_hover {
   background-color: #A0A0A0;
   color: white;
 }
