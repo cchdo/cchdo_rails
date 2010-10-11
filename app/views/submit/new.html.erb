@@ -6,15 +6,16 @@
 <div class='boxed'>
 <h1>Submit Data</h1>
 <div class='box_content'>
-    <noscript>
-        Your browser does not have JavaScript enabled. Please visit
-        <%=link_to('this page', :action => :simple)%> to make your submission or
-		send your file to cberysgo@ucsd.edu.
-    </noscript>
+
+<noscript>
+Your browser does not have JavaScript enabled. Please visit
+<%=link_to('this page', :action => :simple)%> to make your submission or
+send your file to cberysgo@ucsd.edu.
+</noscript>
 
 <div class="hidden">
   <% @public = ["Public", "Non Public"] %>
-  <% form_for(:submission , :url =>{:action => 'save_file'},:html =>{:multipart => true}) do |form| %>
+  <% form_for(:submission, :html =>{:multipart => true}) do |form| %>
   <ul id="sf2" class="sf2">
   <li>
     <table id="step_content12" class="step_content12">
@@ -34,7 +35,7 @@
           <td align="left"><%= form.text_field :Country ,:size => 15%></td>
         </tr>
         <tr>
-          <td align="left">E-mail<span class="important"> <%= error_message_on(:submission, :email) %> <sup>*</sup></span></td>
+          <td align="left">Email<span class="important"> <%= error_message_on(:submission, :email) %> <sup>*</sup></span></td>
           <td align="left"><%= form.text_field :email ,:size => 15%></td>
         </tr>
         <tr><td colspan="2" align="left">Public or Non-Public?<%= error_message_on(:submission, :public) %><span class="important"><sup>*</sup></span> <%= form.radio_button :public ,"public", :checked => true %> Public <%= form.radio_button :public, "Non-Public" %> Non-Public</td></tr>
@@ -82,14 +83,9 @@
       <tr><td align="right" valign="top">
       <table class="table_step2">
         <tr><td align="left">  
-          <% if @file_name -%> 
-            <em><%= @file_name %></em>
-            <input type="hidden" name="saved" value="<%= @file_name %>">
-          <% else %>
-            <%= error_message_on(:submission, :file) %> <% if @file %> <%= @file %> <% end %> <%= form.file_field :file %><!--<input type="file" name="file">-->
-          <% end %>              
+          <%= error_message_on(:submission, :file) %> <% if @file %> <%= @file %> <% end %> <%= form.file_field :file %><!--<input type="file" name="file">-->
           </td>
-          <td align="right"><a href="#">Remove this file</a></td>
+          <!--td align="right"><a href="#">Remove this file</a></td-->
         </tr>
         <tr><td colspan="2" align="left"><!--<a href="#">Add another file </a>--><br><hr></td></tr>
         <tr><td colspan="2" align="right">&nbsp;<%= submit_tag "Submit"%></td></tr>

@@ -35,7 +35,7 @@ def title(text)
     content_tag(:h2, "Step #{content_tag(:em, $step_count)}: #{content_tag(:span, text)}")
 end 
 -%>
-<%form_for(:submission, :url => {:action => :save_file}, :html => {:multipart => true}) do |f|%>
+<%form_for(:submission, :html => {:multipart => true}) do |f|%>
 
 <%step do%>
 <%=title('Contact Information')%>
