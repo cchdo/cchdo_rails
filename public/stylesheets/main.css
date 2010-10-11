@@ -741,19 +741,16 @@ table.table_step2 {
   width: 53%;
 }
 
-#data_access_updates {
-  width: 100%;
+.data_access_updates .legend {
+  text-align: right;
+  max-width: 100%;
 }
+.data_access_updates th { border-bottom: 1px solid #5298a9; }
+.data_access_updates .date { width: 13em; }
+.data_access_updates .merged { background-color: #d9eaed; }
+.data_access_updates .notes { width: 70%; }
 
-.data_access_updates_note {
-  font-size: 12px; 
-  font-weight: normal; 
-  color: #000;
-}
-
-.clear {
-  clear: both;
-}
+.clear { clear: both; }
 
 .filetype {
   font-weight: bold;

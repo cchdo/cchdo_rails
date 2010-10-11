@@ -108,29 +108,39 @@
 
 <div class="clear"></div>
 
-<!-- Updates Section -->
-<% if @queue_files and @queue_files.length > 0 %>
-<div class="data_access_updates" >
-  <div class="boxed">
-  <h1><a NAME="updates">Files in 'as received' condition</a></h1>
-  <div class="box_content">
-    <div class="data_summary_header"><h2> <span class="data_access_updates_note"> 
-  </span></h2></div>
-    <table width="100%">
-      <% for @file in @queue_files %>
-                  <% if @file.Merged == 1 %> <% next %> <% end %>
-        <tr><td> <a href="<%= @file.UnprocessedInput%>"><%= @file.Name %></a></td><td width="75%"><% if @file.Notes %> <%= @file.Notes %> <% end %></td></tr>
-      <% end %>
-      </table>
-  </div>
-  <div class="box_bottom"></div>
-  </div>
+<%# Updates Section %>
+<% unless @queue_files.blank? and @merged_queue_files.blank? %>
+<div id="updates" class="data_access_updates boxed">
+<h1>Files in 'as received' condition</h1>
+<div class="box_content">
+  <%#h2 class="data_summary_header data_access_updates_note"></h2%>
+  <table>
+    <tr><th>File</th><th class="date">Date&nbsp;Received</th><th>Notes</th><th></th></tr>
+    <% @queue_files.each do |file| %>
+      <tr>
+        <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput)) %>
+        <td class="date"><%=file.DateRecieved %><%# sic %></td>
+        <td class="notes"><%=file.Notes if file.Notes %></td>
+      </tr>
+    <% end %>
+    <% @merged_queue_files.each do |file| %>
+      <tr class="merged">
+        <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput)) %>
+        <td class="date"><%=file.DateRecieved %><%# sic %></td>
+        <td class="notes"><%=file.Notes if file.Notes %></td>
+        <%=content_tag(:td, image_tag('merged.png', :alt => 'Merged')) %>
+      </tr>
+    <% end %>
+  </table>
+  <% unless @merged_queue_files.blank? %>
+    <p class="legend"><%=image_tag('merged.png', :alt => 'Merged') %> - File(s) merged</p>
+  <% end %>
+</div>
+<div class="box_bottom"></div>
 </div>
 <% end %>
-<!-- End Updates Section -->  
-  
-  <% else # if @cruise %>
-    <h4>Cruise not found.</h4>
-  <% end %>
+<%# End Updates Section %>
 
-
+<% else # if @cruise %>
+  <h4>Cruise not found.</h4>
+<% end %>
