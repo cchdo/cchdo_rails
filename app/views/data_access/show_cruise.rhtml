@@ -111,29 +111,32 @@
 <%# Updates Section %>
 <% unless @queue_files.blank? and @merged_queue_files.blank? %>
 <div id="updates" class="data_access_updates boxed">
-<h1>Files in 'as received' condition</h1>
+<h1>Updates</h1>
 <div class="box_content">
-  <%#h2 class="data_summary_header data_access_updates_note"></h2%>
-  <table>
-    <tr><th>File</th><th class="date">Date&nbsp;Received</th><th>Notes</th><th></th></tr>
-    <% @queue_files.each do |file| %>
-      <tr>
-        <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput)) %>
-        <td class="date"><%=file.DateRecieved %><%# sic %></td>
-        <td class="notes"><%=file.Notes if file.Notes %></td>
-      </tr>
-    <% end %>
-    <% @merged_queue_files.each do |file| %>
-      <tr class="merged">
-        <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput)) %>
-        <td class="date"><%=file.DateRecieved %><%# sic %></td>
-        <td class="notes"><%=file.Notes if file.Notes %></td>
-        <%=content_tag(:td, image_tag('merged.png', :alt => 'Merged')) %>
-      </tr>
-    <% end %>
-  </table>
+  <% unless @queue_files.blank? %>
+    <h2>Files as received</h2>
+    <table>
+      <tr><th>File</th><th class="date">Date&nbsp;Received</th><th>Notes</th><th></th></tr>
+      <% @queue_files.each do |file| %>
+        <tr>
+          <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput)) %>
+          <td class="date"><%=file.DateRecieved %><%# sic %></td>
+          <td class="notes"><%=file.Notes if file.Notes %></td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
   <% unless @merged_queue_files.blank? %>
-    <p class="legend"><%=image_tag('merged.png', :alt => 'Merged') %> - File(s) merged</p>
+    <h2>Merged Files</h2>
+    <table class="merged">
+      <tr><th>File</th><th class="date">Date&nbsp;Merged</th></tr>
+      <% @merged_queue_files.each do |file| %>
+        <tr>
+          <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput)) %>
+          <td class="date"><%=file.DateRecieved %><%# sic %></td>
+        </tr>
+      <% end %>
+    </table>
   <% end %>
 </div>
 <div class="box_bottom"></div>
