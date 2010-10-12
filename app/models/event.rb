@@ -14,8 +14,8 @@ class Event < ActiveRecord::Base
 
     def feed_info
         {
-            :title => "History | #{self.cruise.Line} #{self.ExpoCode} #{self.Data_Type} #{self.Action}: " + 
-                      self.Summary,
+            :title => "History | (#{self.cruise.Line}) #{self.ExpoCode} " + 
+                      "#{self.Data_Type} #{self.Action}: #{self.Summary}",
             :content => [
                 "<pre>", self.Note, "</pre>"].join(''),
             :author => "#{self.LastName}, #{self.First_Name}",

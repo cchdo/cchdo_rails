@@ -5,7 +5,7 @@ if @updates.blank?
     end
 else
     atom_feed do |f|
-        f.title("CCHDO Updates for #{params[:expocodes]}")
+        f.title("CCHDO Updates for #{@header}")
         f.updated(@updates.first.feed_datetime())
     
         for update in @updates

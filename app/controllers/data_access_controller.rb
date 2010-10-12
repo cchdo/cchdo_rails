@@ -26,11 +26,15 @@ class DataAccessController < ApplicationController
         expocodes = params[:expocodes].split(',')
         expocodes = [expocodes] unless expocodes.kind_of?(Array)
 
+        @header = []
         @updates = []
         for expocode in expocodes
             @updates += Document.get_feed_documents_for(expocode)
             @updates += Event.get_feed_events_for(expocode)
+            @header << "(#{@updates.last.cruise.Line}) #{expocode}"
         end
+
+        @header = @header.join(',')
 
         @updates.sort do |a, b|
             a.feed_datetime() <=> b.feed_datetime()

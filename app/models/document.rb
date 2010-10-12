@@ -24,7 +24,8 @@ class Document < ActiveRecord::Base
 
     def feed_info
         {
-            :title => "Document | #{self.cruise.Line} #{self.ExpoCode}: #{self.FileType}",
+            :title => "Document | (#{self.cruise.Line}) #{self.ExpoCode}: " + 
+                      self.FileType,
             :content => [
                 "<a href=\"#{self.FileName}\">", self.FileName,
                 "</a>"].join(''),
