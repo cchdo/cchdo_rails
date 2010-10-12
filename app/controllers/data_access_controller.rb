@@ -1,4 +1,5 @@
 class DataAccessController < ApplicationController
+   layout 'standard', :except => :feed
   
    def index
       @expo=params[:ExpoCode]
@@ -17,32 +18,53 @@ class DataAccessController < ApplicationController
         @date = date
      end
    end
+
+    # GET /feed/:expocodes/as.atom
+    # Params:
+    #   expocodes - comma separated list of expocodes
+    def feed
+        expocodes = params[:expocodes].split(',')
+        expocodes = [expocodes] unless expocodes.kind_of?(Array)
+
+        @updates = []
+        for expocode in expocodes
+            @updates += Document.get_feed_documents_for(expocode)
+            @updates += Event.get_feed_events_for(expocode)
+        end
+
+        @updates.sort do |a, b|
+            a.feed_datetime() <=> b.feed_datetime()
+        end
+ 
+        respond_to do |format|
+            format.atom
+        end
+    end
    
    def show_cruise
      @file_result = Hash.new(0);
      
      @preliminary = ""
      unless params[:commit] =~ /Cruises/ or params[:commit] =~ /Files/
-      @expo=params[:ExpoCode]
+      @expo = params[:ExpoCode] || params[:expocode]
       @cruise = Cruise.find_by_ExpoCode(@expo)
-      @cruise_groups = Array.new
-      @groups = @cruise.Group
-      if @groups
-        @groups = @groups.split(',')
-      end
-      if @groups and @groups.length > 0
-      for group in @groups
-        if group =~ /\w/
-          if @cruise_groups
-            @cruise_groups << Cruise.find(:all,:conditions => ["`Group` regexp '#{group}'"])
-          else
-            @cruise_groups[0] =  Cruise.find(:all,:conditions => ["`Group` regexp '#{group}'"])
+      if(@cruise)
+        @cruise_groups = Array.new
+        if @groups = @cruise.Group
+          @groups = @groups.split(',')
+        end
+        if @groups and @groups.length > 0
+        for group in @groups
+          if group =~ /\w/
+            if @cruise_groups
+              @cruise_groups << Cruise.find(:all,:conditions => ["`Group` regexp '#{group}'"])
+            else
+              @cruise_groups[0] =  Cruise.find(:all,:conditions => ["`Group` regexp '#{group}'"])
+            end
           end
         end
-      end
-      end
-      @pi_names = []
-      if(@cruise)
+        end
+        @pi_names = []
 	    # Regular expression for exctracting multiple names from Chief_Scientist
 	       if @cruise.Chief_Scientist
 	         @pi_names = @cruise.Chief_Scientist.scan( /([a-z]+)\/?\\?([a-z]*):?\/?([a-z]*)\/?\\?([a-z]*)/i)
