@@ -123,7 +123,7 @@
 </tr>
 <tr><td COLSPAN=8><hr size="1"></td></tr>
 <% for row in @parameters%>
-   <% if row.Private == 0 and @tertiary.include?(row.Parameter.strip) %>
+   <% if row.Private == 0 and (@tertiary.include?(row.Parameter.strip) or (!@primary.include?(row.Parameter.strip) and !@secondary.include?(row.Parameter.strip))) %>
     <% if ctr % 2 == 0 %>
         <tr>
     <% else %>

@@ -1,4 +1,4 @@
-# MySQL (default setup).  Versions 4.1 and 5.0 are recommended.
+#MySQL (default setup).  Versions 4.1 and 5.0 are recommended.
 #
 # Install the MySQL driver:
 #   gem install mysql
@@ -37,4 +37,3 @@ test:
   password: ((hd0hydr0d@t@
   host: cchdo.ucsd.edu
   encoding: utf8
-

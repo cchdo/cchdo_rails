@@ -1,0 +1,121 @@
+.timeline {
+	position:relative;
+	top: 0px;
+	width: 1024px;
+	height: 600px;
+	overflow-x:hidden;
+	overflow-y:scroll;
+	font-family: sans-serif;
+}
+.timeline_elements{
+	width:1000px;
+	padding:0px;
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+}
+.day h3{
+	border-bottom: solid;
+	border-color: #d1edec;
+	border-width: 2px;
+	margin: 0px;
+	padding-top: 18px;
+	padding-bottom: 18px;
+	background-color: #afc7c6;
+}
+.month{
+	list-style:none;
+	float:left;
+	position: relative;
+}
+.day {
+	float:left;
+	position: relative;
+	width:140px;
+	height: 250px;
+	padding: 0px;
+	background-color: #efefef;
+}
+.even {
+	background-color: #fff;
+}
+.day h3{
+	padding-left: 1em;
+}
+.item{
+	list-style: none;
+	padding: 0px;
+	position: absolute;
+	overflow-y: auto;
+        overflow-x: hidden;
+	width:140px;
+        height:192px;
+	top: 60px;
+	word-wrap: break-word;
+	}
+.box{
+	margin-bottom: 0.2em;
+	margin-left: 0.2em;
+	margin-right: 0.2em;
+	border-radius: 0.2em;
+	height: 30px;
+	overflow: hidden;
+	position: relative;
+}
+.box p{
+	margin: 10px;
+}
+.box h4{
+	border-top-right-radius: 0.2em;
+	border-top-left-radius: 0.2em;
+	padding: 4px;
+	margin: 0px;
+}
+.doc_with_event{
+	background-color: #ace0bc;
+}
+.doc_with_event h4{
+	background-color: #86c8a1;
+}
+.doc_without_event{
+	background-color: #e89e98;
+}
+.doc_without_event h4{
+	background-color: #d27778;
+}
+.event_no_doc{
+	background-color: #d1dfa1;
+}
+.event_no_doc h4{
+	background-color: #b1c68d;
+}
+.new_map h4{
+	background-color: #d39fda;
+}
+.new_map {
+	background-color: #f6bafe;
+}
+.submission h4 {
+	background-color:#6e94c0;
+}
+.submission {
+	background-color:#7eacde;
+}
+dl dt
+{
+	clear: left;
+	float: left;
+	width: 100px;
+	margin: 0;
+	padding: 5px;
+	font-weight: bold;
+}
+
+dl dd
+{
+	margin-left: 100px;
+	padding: 5px;
+	width: 300px
+	overflow:;
+	overflow: hidden;
+}

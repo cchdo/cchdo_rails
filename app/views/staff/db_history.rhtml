@@ -1,0 +1,119 @@
+<%=stylesheet_link_tag("history_cal")%>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script language="JavaScript" type="text/javascript">
+$.noConflict();
+jQuery(document).ready(function($) {
+// Code that uses jQuery's $ can follow here.
+ $('.box').live('click', function(){
+   var positioning = $(this).css("position");
+   if (positioning == "relative"){
+     $(this).css({"position": "fixed",
+                                       "z-index": "1000",
+                                           "top": "20%",
+                                          "left": "30%",
+                                         "width": "400px",
+                                        "height": "400px"
+                                       });
+     }
+   else {
+     $(this).css({"position": "relative",
+                                   "z-index": "10",
+                                       "top": "0px",
+                                      "left": "0px",
+                                     "width": "140px",
+                                    "height": "30px"})
+     }
+ });
+});
+</script>
+<%ctr = 0%>
+<%today=Date.today%>
+<%month_before=Date.today.-90%>
+<%previous_month = today.month%>
+<%used_expocodes = Array.new%>
+<%def wrap_text(txt, col = 80)%>
+<%txt.gsub(/(.{1,#{col}})( +|$\n?)|(.{1,#{col}})/,"\\1\\3\n") %>
+<%end%>
+Color Key:
+<table>
+<tr><td class='doc_with_event' width=30><h4></h4></td><td width=150>Document with event</td>
+<td class='doc_without_event' width=30><h4></h4></td><td width=150>Document without event</td>
+<td class='event_no_doc' width=30><h4></h4></td><td width=150>Event no document</td>
+<td class='new_map' width=30><h4></h4></td><td width=150>Map</td>
+<td class='submission' width=30><h4></h4></td><td width=150>Submission</td></tr>
+</table>
+
+<div class='timeline'>
+  <ul class='timeline_elements'>
+    <li class='month'><h2><%=today.strftime(fmt='%B')%></h2>
+	<%today.downto(month_before) do |date| %>
+	  <% if not previous_month == date.month %>
+    </li>
+    <li class='month'><h2><%=date.strftime(fmt='%B')%></h2>
+        <%previous_month = date.month%>	
+      <%end%>
+	  <ul class='<%if ctr % 2== 0%>even <% end; ctr += 1 %>day'><h3><%=date.day%></h3>
+		<%if (doc_array=StaffController.doc_from(date, @documents)).length != 0%>
+		<ul class='item'>
+		  <% doc_array.each do |document|%>
+		  <%used_expocodes << document.ExpoCode%>
+
+			<%if (event_array=StaffController.event_from(date, @events, document.ExpoCode)).length != 0%>
+			<li class='box doc_with_event'><h4><%=document.ExpoCode%>:</h4>
+		      <b>FileName:</b> <%=document.FileName%><br><br>
+		    <ul><h5>Event(s)</h5>
+			  <%event_array.each do |event|%>
+			  <li>
+				Who: <%=event.LastName%>, <%=event.First_Name%><br>
+			    Note: <%= event.Note%><br>
+		      </li>
+		      <%end%>
+			</ul>
+			<%else%>
+		       	  <%if document.FileName.include?("trk.jpg")%>
+			<li class='box new_map'><h4>New Map Added</h4>
+                          ExpoCode:<%=document.ExpoCode%>
+                          FileName:<%=document.FileName%>
+		       	  <%elsif document.FileName.include?("trk.gif")%>
+                          <%else%> 
+			<li class='box doc_without_event'><h4><%=document.ExpoCode%>:</h4>
+		      <b>FileName:</b> <%=document.FileName%><br>
+			  <%end%>
+		    <%end%>
+		  </li>
+		  <%end%>
+		  <%if (event_array=StaffController.no_doc_event_from(date, @events, used_expocodes)).length != 0%>
+			<%event_array.each do |event|%>
+		  <li class='box event_no_doc'><h4><%=event.ExpoCode%>:</h4>
+		        <b>Who:</b> <%=event.LastName%>, <%=event.First_Name%><br>
+			    <b>Note:</b> <%=event.Note%><br><br>
+			<%end%>
+		  </li>
+		  <%end%>
+		</ul>
+		<%else%>
+		<ul class='item'>
+		  <%if (event_array=StaffController.no_doc_event_from(date, @events, used_expocodes)).length != 0%>
+			  <%event_array.each do |event|%>
+			<li class='box event_no_doc'><h4><%=event.ExpoCode%>:</h4>
+			     <b>Who:</b> <%=event.LastName%>, <%=event.First_Name%><br>
+			     <b>Note:</b><%=event.Note%><br><br>
+			</li>
+			  <%end%>
+		  <%end%>	
+		  <%if (submission_array=StaffController.submission_from(date, @submissions)).length != 0%>
+			  <%submission_array.each do |submission|%>
+			<li class='box submission'><h4><%=submission.ExpoCode%>:</h4>
+			     <b>Who:</b> <%=submission.name%>, <%=submission.institute%><br>
+                             <b>FileName:</b> <%=submission.file%><br>
+		             <b>Note:</b> <%=submission.notes%><br><br>
+			</li>
+			  <%end%>
+		  <%end%>	
+		</ul>
+		<%end%>
+	  </ul>
+	<%end%>
+	</li>
+  </ul>
+</div>
