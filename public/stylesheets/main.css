@@ -693,23 +693,15 @@ table.table_step2 {
    font-weight: bold;
    text-transform: uppercase;
 }
-.step {
-  color: #06629b;
-}
-.step2 {
-  color: #006f89;
-}
+.step { color: #06629b; }
+.step2 { color: #006f89; }
 
 .step_number, .step_number2 {
  font-size: 24pt;
  vertical-align: text-top;
 }
-.step_number {
-   color: #7f97b9;
-}
-.step_number2 {
-   color: #a0a0a0;
-}
+.step_number { color: #7f97b9; }
+.step_number2 { color: #a0a0a0; }
 
 .hr {
    border-bottom: #808080 1px solid;
@@ -719,9 +711,7 @@ table.table_step2 {
    font-size: 18pt;
 }
 
-.important {
-   color: #06629b;
-}
+.important { color: #06629b; }
 
 .asterisk {
    font-size: smaller;
@@ -1365,14 +1355,7 @@ td.parameter_order
   top: -1px;
   height: 1.65em;
 }
-.argo_content td {
-  padding: 0.5em;
-}
-.argo_content .description {
-  width: 33em;
-  overflow-x: auto;
-}
-.argo_content pre {
-  width: inherit;
-}
-#argo_clear { clear: both; }
+.argo_content td { padding: 0.5em; }
+.argo_content .time { white-space: nowrap; }
+.argo_content .description { width: 33em; overflow-x: auto; }
+.argo_content pre { width: inherit; }

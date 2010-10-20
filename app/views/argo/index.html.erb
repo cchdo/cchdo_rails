@@ -19,7 +19,7 @@
         <td><%= h(file.ExpoCode || 'Unknown') %></td>
         <td class="filename"><%= link_to(h(file.filename), argo_file_get_path(file)) %></td>
         <td><%= h(file.user ? file.user.username : 'Unknown') %></td>
-        <td><%= h(file.created_at.strftime('%Y-%m-%d %H:%M Pacific') || 'Unknown') %></td>
+        <td class="time"><%= h(file.created_at.strftime('%Y-%m-%d %H:%M %Z') || 'Unknown') %></td>
         <td class="description"><pre><%= h(file.description) %></pre></td>
         <td>
           <p><%= link_to 'Edit', edit_argo_file_path(file) %></p>
