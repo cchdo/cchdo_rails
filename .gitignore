@@ -3,4 +3,5 @@
 *.swo
 *.tmproj
 ._*
-tmp
+tmp/**/*
+log/*.log
