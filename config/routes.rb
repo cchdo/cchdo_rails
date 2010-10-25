@@ -18,6 +18,10 @@ ActionController::Routing::Routes.draw do |map|
   map.old_submissions 'old_submissions', :controller => 'old_submissions', :action => 'index'
   map.old_submissions_sort 'old_submissions_sort', :controller => 'old_submissions', :action => 'sort_table'
 
+  map.arctic 'arctic', :controller => :by_ocean, :action => :arctic
+  map.southern 'southern', :controller => :by_ocean, :action => :southern
+  map.indian 'indian', :controller => :by_ocean, :action => :indian
+
   map.root :controller => :pages, :action => :home
 
   # Install the default route as the lowest priority.
