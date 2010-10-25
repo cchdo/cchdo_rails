@@ -7,6 +7,10 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
   map.argo 'argo', :controller => :argo, :action => :index
+
+  map.cruise 'cruise/:expocode', :controller => :data_access, :action => :show_cruise
+
+  map.feed 'feed/:expocodes', :controller => :data_access, :action => :feed, :format => 'atom'
   
   # Sample of regular route:
   # map.connect 'products/:id', :controller => 'catalog', :action => 'view'
