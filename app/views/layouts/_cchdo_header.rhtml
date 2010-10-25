@@ -11,16 +11,16 @@
 <div id='picture'>
   <div id='cchdo_menu'>
     <ul class='nav'> 
-    <li><h1><a href='/'>Home</a></h1></li>
+    <li><h1><%=link_to('Home', root_path)-%></h1></li>
     <li><h1><a href="#">Browse Data</a></h1>
       <ul>
       <li><a href="#">By Ocean &raquo;</a>
         <ul class="ocean">
-        <li><a href="/arctic.html">Arctic Ocean</a></li>
-        <li><a href="/atlantic.html">Atlantic Ocean</a></li>
-        <li><a href="/pacific.html">Pacific Ocean</a></li>
-        <li><a href="/indian.html">Indian Ocean</a></li>
-        <li><a href="/southern.html">Southern Ocean</a></li>
+          <%=content_tag(:li, link_to('Arctic Ocean', arctic_path))-%>
+          <li><a href="/atlantic.html">Atlantic Ocean</a></li>
+          <li><a href="/pacific.html">Pacific Ocean</a></li>
+          <%=content_tag(:li, link_to('Indian Ocean', indian_path))-%>
+          <%=content_tag(:li, link_to('Southern Ocean', southern_path))-%>
         </ul>
       </li>
       <li><a href="#">By Time Series &raquo;</a>
