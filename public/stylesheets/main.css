@@ -1179,70 +1179,6 @@ div.tm_auto_complete ul strong.highlight {
 
 /******************************************************/
 
-/************ Arctic Cruise page ******************************/
-.arctic_map {
-	float: left;
-	width: 59%;
-}
-
-.arctic_cruises {
-	float: right;
-	width: 41%;
-	max-height: 630px;
-	overflow-y: scroll;
-/*	overflow-x: hidden;*/
-}
-
-.arctic_table {
-	font-size: 7.4pt;
-	color: #565656;
-	width: 100%;
-}
-
-.arctic_table th td {
-  width: 20%;
-}
-
-.arctic_tr td{
-	width: inherit;
-	vertical-align: top;
-	height: 50px;
-}
-.arctic_line td{
-	width: 10%;
-}
-.arctic_date td{
-	width: 18%;
-}
-.arctic_ship td{
-	width: 10%;
-}
-.arctic_scientist td{
-	width: 24%;
-}
-.arctic_country td{
-	width: 13%;
-}
-.arctic_table a {
-	text-decoration: none;
-}
-.arctic_table th {
-  background-color:#d1edec;
-  padding-left: 5px;
-  vertical-align: bottom;
-  color: #515151;
-  text-transform: uppercase;
-}
-.not_in_map {
-	background-color: #FFDDDD;
-}
-.small_font {
-	font-size: smaller;
-}
-
-.end_date {
-	border-top: #a0a0a0 1px dashed;
-}
 /* Minutes */
 #minutes_color_key
 {
@@ -2732,4 +2668,69 @@ border: 2px solid #e3ded7;
 .data_sharing li {
 	max-width: 66ex;
 	margin: 0.5em 0;
+}
+
+/************ Arctic Cruise page ******************************/
+.arctic_map {
+	float: left;
+	width: 59%;
+}
+
+.arctic_cruises {
+	float: right;
+	width: 41%;
+	max-height: 630px;
+	overflow-y: scroll;
+/*	overflow-x: hidden;*/
+}
+
+.arctic_table {
+	font-size: 7.4pt;
+	color: #565656;
+	width: 100%;
+}
+
+.arctic_table th td {
+  width: 20%;
+}
+
+.arctic_tr td{
+	width: inherit;
+	vertical-align: top;
+	height: 50px;
+}
+.arctic_line td{
+	width: 10%;
+}
+.arctic_date td{
+	width: 18%;
+}
+.arctic_ship td{
+	width: 10%;
+}
+.arctic_scientist td{
+	width: 24%;
+}
+.arctic_country td{
+	width: 13%;
+}
+.arctic_table a {
+	text-decoration: none;
+}
+.arctic_table th {
+  background-color:#d1edec;
+  padding-left: 5px;
+  vertical-align: bottom;
+  color: #515151;
+  text-transform: uppercase;
+}
+tr.not_in_map {
+	background-color: #FFDDDD;
+}
+.small_font {
+	font-size: smaller;
+}
+
+.end_date {
+	border-top: #a0a0a0 1px dashed;
 }
