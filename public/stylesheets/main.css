@@ -1231,8 +1231,13 @@ pre.minutes_text
 {
 	vertical-align:top;
 	white-space:pre-wrap;
-	width:500px;
+        height:400px;
+        overflow:auto;
 }
+td.minutes_text_column
+{
+}
+
 td.minutes_action_item_column
 {
 	vertical-align:top;
