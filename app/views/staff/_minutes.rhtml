@@ -31,9 +31,10 @@ border-collapse:collapse;
           </td>
     <tr>
     <tr>
-        <td class="minutes_text_column"rowspan="2">
-                <pre class="minutes_text"><%= meeting.Text %></pre>
-        </td>
+        <td  rowspan="2" class="minutes_text_column" >
+                
+<pre class="minutes_text"><%= meeting.Text %></pre>
+      </td>
         <td class="minutes_action_item_column"height="20px">
             <pre>Number of Action Items: <%= meeting.action_items.length %></pre>
         </td>
