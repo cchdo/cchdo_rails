@@ -18,6 +18,23 @@ class Document < ActiveRecord::Base
         documents
     end
 
+    def self.recently_edited_expocodes(num=5)
+      excluded_filetypes = ['directory', 'Small Plot', 'Large Plot']
+      sql_excluded_filetypes = excluded_filetypes.map {|f| "FileType != ?"}
+      Document.all(
+        :select => "DISTINCT ExpoCode",
+        :conditions => [
+          (['ExpoCode IS NOT NULL',
+            "ExpoCode != 'NULL'",
+            "ExpoCode != ''",
+            "ExpoCode != 'no_expocode'",
+           ] + sql_excluded_filetypes
+          ).join(' AND ')] + excluded_filetypes,
+        :order => 'LastModified DESC',
+        :limit => 5
+      ).map {|x| x.ExpoCode}
+    end
+
     def feed_datetime
         self.LastModified
     end
