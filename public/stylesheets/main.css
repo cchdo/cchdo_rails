@@ -1,14 +1,4 @@
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  font-weight: inherit;
-  font-style: inherit;
-  font-size: 100%;
-  font-family: inherit;
-  vertical-align: baseline;
-}
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0; border: 0; outline: 0; font-weight: inherit; font-style: inherit; font-size: 100%; font-family: inherit; vertical-align: baseline; }
 :focus { outline: 0; }
 body { line-height: 1; color: black; background: white; }
 ol, ul { list-style: none; }
@@ -18,56 +8,24 @@ em { font-style: italic; }
 caption, th, td { text-align: left; font-weight: normal; }
 blockquote:before, blockquote:after, q:before, q:after { content: ""; }
 blockquote, q { quotes: "" ""; }
-/* END OF CSS RESET */
+/* end css reset */
 
 /* Globals */
-body {
-  font-family: /*Century Gothic, */Futura, Verdana, Tahoma, sans-serif;
-  font-size: 10pt;
-  padding-top: 0.5em;
-  position:relative;
-}
-p {
-  line-height: 1.5em;
-  max-width: 66ex;
-}
-address {
-  line-height: 1.5em;
-}
-a, .link {
-  color: #405381;
-}
-a:visited, .visited_link {
-  color: #88673E;
-}
-pre {
-  font-family: Andale Mono, Courier New, Courier, Fixed, monospace;
-}
+body { font-family: Futura, Verdana, Tahoma, sans-serif; font-size: 10pt; padding-top: 0.5em; position: relative; }
+p { line-height: 1.5em; max-width: 66ex; }
+address { line-height: 1.5em; }
+a, .link { color: #405381; }
+a:visited, .visited_link { color: #88673E; }
+pre { font-family: Andale Mono, Courier New, Courier, Fixed, monospace; }
 
 /* text fields */
-input[type='text'], input[type='password'], select {
-  border: 1px solid #A0A0A0;
-}
+input[type='text'], input[type='password'], select { border: 1px solid #A0A0A0; }
+input[type='text']:focus, input[type='password']:focus, select:focus { border: 1px solid #1286FE; background-color: #DEFFFF; }
 
-input[type='text']:focus, input[type='password']:focus, select:focus {
-  border: 1px solid #1286FE;
-  background-color: #DEFFFF;
-}
-
-.dev_heading {
-  color: #67a9bb;
-}
-
-.dev_info {
-  color: #18434d;
-}
-.name {
-  font-style: italic;
-}
-.credit {
-  font-style: italic;
-}
-
+.dev_heading { color: #67a9bb; }
+.dev_info { color: #18434d; }
+.name { font-style: italic; }
+.credit { font-style: italic; }
 .errorExplanation h2 { color: #006f89; font-size: 1.1em; }
 .errorExplanation ul { color: #999; font-size: 0.9em; list-style-type: square; margin-left: 2em; }
 
@@ -111,25 +69,20 @@ h3 { margin-top: 1em; margin-bottom: 1em; font-weight: bold; }
 }
 
 /* query */
-
 em.query, em#cart_count {
   color: #1286FE;
   font-weight: bold;
 }
-
-/* Mapimg */
 .mapimg {
   text-align: center;
   margin: 0 auto;
 }
 
 /* SEARCH RESULTS */
-
 .expocode {
   font-weight: bold;
   font-size: large;
 }
-
 .scientist {
   margin-left: 2em;
   width: 33em;
@@ -149,12 +102,12 @@ div.results a {
   text-decoration: none;
   font-weight: normal;
 }
+
 /* recognized query results */
 #recognized_query_result h1 {
   font-size: large;
   padding-bottom: 0.5em;
 }
-
 #search_results a {
   text-decoration: none;
 }
@@ -166,12 +119,10 @@ div.history.note {
    height: 20em;
    overflow: auto;
 }
-
 div.history.note h1 {
    font-size: larger;
    font-weight: bold;
 }
-
 #project_carina_link {
   display: block;
   font-weight: bold;
@@ -442,56 +393,6 @@ td.map img {
   clear: both;
 }
 
-/* home */
-#home_intro img {
-  float: left;
-  display: inline;
-  width: 13em;
-  height: 13em;
-  margin-right: 1em;
-  margin-bottom: 1em;
-}
-#home_intro p {
-  max-width: 66em;
-  margin-bottom: 0.6em;
-}
-#left_column {
-  float: left;
-  width: 70%;
-}
-#right_column {
-  float: right;
-  width: 28%;
-  text-align: left;
-}
-#right_column .boxed { 
-}
-#right_column .boxed .box_content {
-  line-height: 1.5em;
-}
-#right_column h2 {
-  border-bottom: 2px solid #A0A0A0;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  width: 80%;
-}
-#right_column ul {
-  margin-left: 1em;
-}
-
-/* Bottle comparer */
-.params {
-  max-height: 15em;
-  overflow-y: auto;
-}
-.values {
-  height: 25em;
-  overflow-y: auto;
-}
-.data { display: none; }
-.left { text-align: right; }
-.center { text-align: center; }
-
 /* CCHDO Menu *****************************************************************/
 #cchdo_menu {
   /* pin to bottom of picture */
@@ -589,6 +490,43 @@ td.map img {
   color: white;
 }
 
+/* home */
+#home_intro img {
+  float: left;
+  display: inline;
+  width: 13em;
+  height: 13em;
+  margin-right: 1em;
+  margin-bottom: 1em;
+}
+#home_intro p {
+  max-width: 66em;
+  margin-bottom: 0.6em;
+}
+#left_column {
+  float: left;
+  width: 70%;
+}
+#right_column {
+  float: right;
+  width: 28%;
+  text-align: left;
+}
+#right_column .boxed { 
+}
+#right_column .boxed .box_content {
+  line-height: 1.5em;
+}
+#right_column h2 {
+  border-bottom: 2px solid #A0A0A0;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  width: 80%;
+}
+#right_column ul {
+  margin-left: 1em;
+}
+
 /********** Sliding Submit ***********/
 .hidden {
    display: block;
@@ -663,30 +601,14 @@ table.table_step2 {
   text-align: left;
   vertical-align: text-top;
 }
-.step_content1 {
-  background: #fff url('/images/contact.jpg') no-repeat top left;
-}
-.step_content2 {
-  background: #fff url('/images/cruise.jpg') no-repeat top left;
-}
-.step_content3 {
-  background: #fff url('/images/type.jpg') no-repeat top left;
-}
-.step_content4 {
-  background: #fff url('/images/data.jpg') no-repeat top left;
-}
-.step_content12 {
-  background: #fff url('/images/contact2.jpg') no-repeat top left;
-}
-.step_content22 {
-  background: #fff url('/images/cruise2.jpg') no-repeat top left;
-}
-.step_content32 {
-  background: #fff url('/images/type2.jpg') no-repeat top left;
-}
-.step_content42 {
-  background: #fff url('/images/data2.jpg') no-repeat top left;
-}
+.step_content1 { background: #fff url('/images/contact.jpg') no-repeat top left; }
+.step_content2 { background: #fff url('/images/cruise.jpg') no-repeat top left; }
+.step_content3 { background: #fff url('/images/type.jpg') no-repeat top left; }
+.step_content4 { background: #fff url('/images/data.jpg') no-repeat top left; }
+.step_content12 { background: #fff url('/images/contact2.jpg') no-repeat top left; }
+.step_content22 { background: #fff url('/images/cruise2.jpg') no-repeat top left; }
+.step_content32 { background: #fff url('/images/type2.jpg') no-repeat top left; }
+.step_content42 { background: #fff url('/images/data2.jpg') no-repeat top left; }
 
 .step, .step2 {
    font-size: 18pt;
@@ -747,34 +669,13 @@ table.table_step2 {
 .data_access #updates .merged td { background-color: #d9eaed; }
 .data_access #updates .notes { width: 70%; }
 
+.data_summary_history { background: #9ec4cd; }
+.data_summary_history a { color: #fff; }
+#data_summary_and_history { height:700px; }
+#data_summary_table_meta{ margin-top: 0px; height:300px; }
+#data_summary_table_files{ height:500px; }
 
-/* data_summary */
-
-.data_summary_history {
-  background: #9ec4cd;
-}
-
-.data_summary_history a {
-  color: #fff;
-}
-
-#data_summary_and_history {
-   height:700px;
-}
-
-#data_summary_table_meta{
-  margin-top: 0px;
-  height:300px;
-}
-#data_summary_table_files{
-  height:500px;
-}
-
-
-#color_column{
-  /*width:1px;*/
-  background: #006f89;
-}
+#color_column{ background: #006f89; }
 
 .data_table {
   background-color:#d1edec;
@@ -784,9 +685,8 @@ table.table_step2 {
   border-bottom: 3px solid #006f89 !important;
 }
 
-/*  ------ Old Submissions --------- */
-
-#old_submissions_table{
+/* Old Submissions */
+#old_submissions_table {
   border: 2px solid #000;
   width: 100%;
   padding: 15px;
@@ -794,8 +694,7 @@ table.table_step2 {
   font-size: small;
   border-collapse: collapse
 }
-
-#old_submissions_table th{
+#old_submissions_table th {
   font-weight: bold;
   text-align:left;
   background-color: #9ec4cd;;
@@ -803,25 +702,21 @@ table.table_step2 {
   color:#000;
   font-size: medium;
 }
-#old_submissions_table tr{
+#old_submissions_table tr {
   border: 2px solid #000;
   border-bottom: 2px solid #000;
 }
-
-#old_submissions_table td{
+#old_submissions_table td {
   text-align:left;
   padding:6;
 }
-
-#old_submissions_table tr:hover td{
+#old_submissions_table tr:hover td {
   background: #D8D8D8 !important;
 }
-
 div.scroll {overflow: auto; width: 100%; height: 36em;}
 
-/*  ------ Old Submissions --------- */
 
-#new_submissions_table{
+#new_submissions_table {
   border: 2px solid #000;
   width: 100%;
   padding: 15px;
@@ -829,8 +724,7 @@ div.scroll {overflow: auto; width: 100%; height: 36em;}
   font-size: small;
   border-collapse: collapse
 }
-
-#new_submissions_table th{
+#new_submissions_table th {
   font-weight: bold;
   text-align:left;
   background-color:#B7EAF0;
@@ -839,35 +733,20 @@ div.scroll {overflow: auto; width: 100%; height: 36em;}
   font-size: medium;
   height: 3em;
 }
-/*#new_submissions_table tr{
-    border: 2px solid #000;
-    border-bottom: 2px solid #000;
-}*/
-
-#new_submissions_table td{
+#new_submissions_table td {
   text-align:left;
   padding: 6px;
 }
-
-#new_submissions_table tr:hover td{
+#new_submissions_table tr:hover td {
   background: #D8D8D8 !important;
 }
 
+
 /* Staff Pages */
-.staff #menu {
-  background-color: #C0C0C0;
-  color: #A0A0A0;
-  padding: 0.5em;
-  border-bottom: 2px solid #A0A0A0;
-}
+.staff #menu { background: #c0c0c0; color: #A0A0A0; padding: 0.5em; }
 .staff #menu a { color: #333333; text-decoration: none; }
 .staff #menu a:visited { color: #666666; }
-
-.staff #signout {
-  padding: 0.5em;
-  text-align: right;
-}
-
+.staff #signout { background: #c8c8c8; padding: 0.5em; text-align: right; border-bottom: 2px solid #A0A0A0; }
 .staff_header {
   border-bottom: 3px solid #006f89 !important;
   color: #006f89;
@@ -877,35 +756,16 @@ div.scroll {overflow: auto; width: 100%; height: 36em;}
   margin-bottom: 1.5em;
 }
 
-#results {
-  margin: 1em;
-}
+#results { margin: 1em; }
 
-.assimilated_submission_1 {
-  background:#D3864E;
-}
+.assimilated_submission_1 { background:#D3864E; }
+.assimilated_submission_2 { background:#927B72; }
+.incomplete_submission_1 { background:#EDE8C1; }
+.incomplete_submission_2 { background:#C8EBE5; }
 
-.assimilated_submission_2 {
-  background:#927B72;
-}
+#task_color_key { border: 1px solid #FFF; }
 
-.incomplete_submission_1 {
-  background:#EDE8C1;
-}
-
-.incomplete_submission_2 {
-  background:#C8EBE5;
-}
-
-#task_color_key {
-  border: 1px solid #FFF;
-}
-
-div.tm_auto_complete {
-  width: 50px;
-  background: #fff;
-}
-
+div.tm_auto_complete { width: 50px; background: #fff; }
 div.tm_auto_complete ul {
   border:1px solid #888;
   margin:0;
@@ -913,46 +773,16 @@ div.tm_auto_complete ul {
   width:100%;
   list-style-type:none;
 }
+div.tm_auto_complete ul li { margin:0; padding:3px; }
+div.tm_auto_complete ul li.selected { background-color: #ffb; } 
+div.tm_auto_complete ul strong.highlight { color: #800; margin: 0; padding:0; }
 
-div.tm_auto_complete ul li {
-  margin:0;
-  padding:3px;
-}
-
-div.tm_auto_complete ul li.selected {
-  background-color: #ffb; 
-}
-
-div.tm_auto_complete ul strong.highlight {
-  color: #800;
-  margin: 0;
-  padding:0;
-}
-
-.task_manager_action_cell {
-  right:100px;
-}
-
-.assignment_details_cell {
-  background:#D2D2D2;
-}
-
-.assignment_details {
-  background:#D2D2D2;
-}
-
-.assignment_details_key {
-  background:#FFF;
-}  
-
-.assignment_details_value {
-  background:#FFF;
-}
-
-#task_assignment_table {
-  padding: 0;
-  margin: 0;
-}
+.task_manager_action_cell { right:100px; } 
+.assignment_details_cell { background:#D2D2D2; } 
+.assignment_details { background:#D2D2D2; } 
+.assignment_details_key { background:#FFF; }  
+.assignment_details_value { background:#FFF; } 
+#task_assignment_table { padding: 0; margin: 0; }
 
 .tm_cell {
   border-width: 0;
@@ -980,13 +810,11 @@ div.tm_auto_complete ul strong.highlight {
   /*filter:alpha(opacity=80); #please no.*/
 }
 
-.tm_header {
-  background:#EEE7D5;
-}
+.tm_header { background:#EEE7D5; }
 
 .tm_row_priority_1 {
   background:#FF524D;
-   margin: 0px;
+  margin: 0px;
   padding: 0px;
   border-width: 0px;
   border-collapse: collapse;
@@ -1094,363 +922,43 @@ div.tm_auto_complete ul strong.highlight {
   
 }
 
-/******** Data History Tables *********/
-.history_table {
-  width: 100%;
-}
-.history_table th{
-  border-bottom: 3px solid #006f89 !important;
-}
-.data_history_full {
-	border: 1px solid #999;
-}
-.data_history_full_hl {
-	border: 1px solid #999;
-	background-color: #E0E0E0;
-}
+/* /data_history Tables */
+.history_table { width: 100%; }
+.history_table th{ border-bottom: 3px solid #006f89 !important; }
+.data_history_full { border: 1px solid #999; }
+.data_history_full_hl { border: 1px solid #999; background-color: #E0E0E0; }
+.history_detail_table { border: 1px solid #000; border-collapse: collapse; }
+.history_detail_table th{ background-color: #DBDBDB; padding: 5px; }
 
-/*****/
-.history_detail_table {
-  border: 1px solid #000;
-  border-collapse: collapse;
-}
-.history_detail_table th{
-  background-color: #DBDBDB;
-  padding: 5px;
-}
-/*****/
 .history_info_table{
   background-color: #D8D8D8;
   border-collapse: collapse;
   margin: 0 0 15px 0;
 }
-.history_info_table tr td{
 
-}
+/* /contacts */
+.contact_info_label { vertical-align: top; font-weight: bold; }
+#contact_cruises caption { font-weight: bold; }
 
-/* Contacts */
-.contact_info_label {
-  vertical-align: top;
-  font-weight: bold;
-}
+/* /cruise_status page */
+#red_link a{ color: red; }
+#yellow_link a{ color: yellow; }
+#green_link a{ color: green; }
 
-#contact_cruises caption {
-  font-weight: bold;
-}
-
-/******  colors for cruise status page **********/
-#red_link a{
-        color: red;
-}
-#yellow_link a{
-        color: yellow;
-}
-#green_link a{
-        color: green;
-}
-/***********************************************/
-
-/****** Merge Queue **********************/
-.merged_file {
-	
-}
+/* Merge Queue */
 .unmerged_file{background-color:#FFC860}
-
-.formats.sampsum {
-  border: 1px;
-  width: 90%;
-}
-.formats.sampsum th {
-  text-align: left;
-  vertical-align: bottom;
-}
-.formats.sampsum td {
-  vertical-align: top;
-}
-
-/******************************************************/
+.formats.sampsum { border: 1px; width: 90%; }
+.formats.sampsum th { text-align: left; vertical-align: bottom; }
+.formats.sampsum td { vertical-align: top; }
 
 /* Minutes */
-#minutes_color_key
-{
-	margin: 10px;
-}
-.minutes_table
-{
-	border:0px;
-}
-td.date_row
-{
-	background-color:#c9c4bd;
-	color:black;
-}
-pre.minutes_text
-{
-	vertical-align:top;
-	white-space:pre-wrap;
-        height:400px;
-        overflow:auto;
-}
-td.minutes_text_column
-{
-}
-
-td.minutes_action_item_column
-{
-	vertical-align:top;
-	background-color:#e3ded7;
-	width:500px;
-}
-.completed_action_item
-{
-	vertical-align:top;
-	background-color:#e3ded7;
-	border: 2px solid #e3ded7;
-
-}
-.action_item
-{
-	vertical-align:top;
-	background-color:white;
-	border: 2px solid #e3ded7;
-}
-/* Parameter Entry and Descriptions */
-td.parameter_entry
-{
-vertical-align:top;
-}
-td.parameter_order
-{
-	background-color:#7889AB;
-	text-align:center;
-	color:white;
-	font-size:large;
-}
-/* Southern Ocean */
-.southern_map {
-	float: left;
-	width: 59%;
-}
-
-.southern_cruises {
-	float: right;
-	width: 41%;
-	max-height: 600px;
-	overflow: hidden;
-}
-
-.southern_basins {
-	max-height: 580px;
-	overflow-y: scroll;
-	overflow-x: hidden;
-}
-
-.southern_table {
-	font-size: smaller;
-	color:#565656;
-	width: auto;
-}
-
-.southern_table a {
-	text-decoration: none;
-}
-
-.southern_table th {
-  background-color:#d1edec;
-  padding-left: 5px;
-  vertical-align: bottom;
-  color: #515151;
-  text-transform: uppercase;
-}
-
-.southern_table td {
-	vertical-align: top !important;
-	font-size: 8.5pt;
-}
-
-.more {
-	display:none;
-}
-
-.basin_header {
-  border-bottom: 3px solid #006f89 !important;
-}
-
-.view_basin_header {
-  border-bottom: 3px solid #aaa !important;
-}
-
-/*Indian Ocean*/
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  font-weight: inherit;
-  font-style: inherit;
-  font-size: 100%;
-  font-family: inherit;
-  vertical-align: baseline;
-}
-:focus { outline: 0; }
-body { line-height: 1; color: black; background: white; }
-ol, ul { list-style: none; }
-table { border-collapse: separate; border-spacing: 0; }
-strong { font-weight: bold; }
-em { font-style: italic; }
-caption, th, td { text-align: left; font-weight: normal; }
-blockquote:before, blockquote:after, q:before, q:after { content: ""; }
-blockquote, q { quotes: "" ""; }
-/* END OF CSS RESET */
-
-/* Globals */
-html {
-  height: 101%;
-}
-body {
-  font-family: /*Century Gothic, */Futura, Verdana, Tahoma, sans-serif;
-  font-size: 10pt;
-  padding-top: 0.5em;
-  position:relative;
-}
-p {
-  line-height: 1.5em;
-  max-width: 66ex;
-}
-address {
-  line-height: 1.5em;
-}
-a, .link {
-  color: #405381;
-}
-a:visited, .visited_link {
-  color: #88673E;
-}
-pre {
-  font-family: Andale Mono, Courier New, Courier, Fixed, monospace;
-}
-
-/* text fields */
-input[type='text'], input[type='password'], select {
-  border: 1px solid #A0A0A0;
-}
-
-input[type='text']:focus, input[type='password']:focus, select:focus {
-  border: 1px solid #1286FE;
-  background-color: #DEFFFF;
-}
-
-.dev_heading {
-  color: #67a9bb;
-}
-
-.dev_info {
-  color: #18434d;
-}
-.name {
-  font-style: italic;
-}
-.credit {
-  font-style: italic;
-}
-
-h2 {
-  color: #006f89;
-  font-size: medium;
-}
-
-h3 {
-  margin-top: 1em;
-  margin-bottom: 1em;
-  font-weight: bold;
-}
-.copythis {
-  position: absolute;
-  left: -10000px;
-}
-.notice {
-  background-color: #ffaa55 !important;
-  border: 1px solid #A0A0A0;
-  border-bottom: 0;
-  padding: 0.5em !important;
-  font-size: medium !important;
-}
-.warning {
-  color: #FF0000;
-  background-color: #ffff00;
-  padding: 6px;
-  font-weight: bold;
-  margin-left: 245px;
-}
-.button {
-  height: 1.5em;
-}
-
-/* SEARCH BOX */
-.search_box {
-  border: 1px solid #A0A0A0;
-  background-color: #D0D0D0;
-  margin-right: 0.5em;
-  font-size: 1.2em;
-  vertical-align: middle;
-}
-.search_box:focus {
-  background-color: #FFFFFF;
-  border: 1px solid #1286FE;
-}
-.search_button { 
-  height: 2em;
-  vertical-align: middle;
-}
-
-/* query */
-
-em.query, em#cart_count {
-  color: #1286FE;
-  font-weight: bold;
-}
-
-/* Mapimg */
-.mapimg {
-  text-align: center;
-  margin: 0 auto;
-}
-
-/* SEARCH RESULTS */
-
-.expocode {
-  font-weight: bold;
-  font-size: large;
-}
-
-.scientist {
-  margin-left: 2em;
-  width: 33em;
-}
-
-/* RESULTS PAGINATION */
-div.results {
-  background-color: #E0E0E0;
-  text-align: center;
-  padding: 0.5em;
-  border-top: 1px solid #A0A0A0;
-  border-bottom: 1px solid #A0A0A0;
-  margin-bottom: 1em;
-  font-weight: bold;
-}
-div.results a {
-  text-decoration: none;
-  font-weight: normal;
-}
-/* recognized query results */
-#recognized_query_result h1 {
-  font-size: large;
-  padding-bottom: 0.5em;
-}
-
-#search_results a {
-  text-decoration: none;
-}
+#minutes_color_key { margin: 10px; }
+.minutes_table { border:0px; }
+td.date_row { background-color:#c9c4bd; color:black; }
+pre.minutes_text { vertical-align:top; white-space:pre-wrap; height:400px; overflow:auto; }
+td.minutes_action_item_column { vertical-align:top; background-color:#e3ded7; width:500px; }
+.completed_action_item { vertical-align:top; background-color:#e3ded7; border: 2px solid #e3ded7; }
+.action_item { vertical-align:top; background-color:white; border: 2px solid #e3ded7; }
 
 /* Argo */
 #argo_nav {
@@ -1481,996 +989,50 @@ div.results a {
 .argo_content .description { width: 33em; overflow-x: auto; }
 .argo_content pre { width: inherit; }
 
-/* HISTORY */
-div.history.note {
-   border: 1px solid #A0A0A0;
-   padding: 1em;
-   height: 20em;
-   overflow: auto;
-}
-
-div.history.note h1 {
-   font-size: larger;
-   font-weight: bold;
-}
-
-#project_carina_link {
-  display: block;
-  font-weight: bold;
-  margin: 0 0 1em 0;
-}
-
-/* tables */
-table.bordered {
-  border-collapse: collapse;
-}
-table.bordered td {
-  border: 1px solid #ddd;
-}
-tr th {
-  padding-right: 1em;
-  padding-top: 0.5em;
-  font-weight: bold;
-}
-tr td {
-  padding-right: 1em;
-  padding: 0.3em;
-  vertical-align: middle;
-}
-
-table#search_results {
-  clear: both;
-  border-collapse: separate;
-  width: 100%;
-}
-
-tr.hl {
-  background-color: #E0E0E0;
-}
-tr.highlighted_cell {
-  background-color: #efefef;
-}
-tr.parameter_row{
-    background-color:#CED7E9;
-}
-
-td.map {
-  width: 150px;
-}
-td.identity {
-  width: 20em;
-}
-td.identity > p {
-  width: inherit;
-  overflow: auto;
-}
-
-td.data_summary > h1 {
-  font-weight: bold;
-  background-color: inherit;
-  padding-bottom: 0.5em;
-  padding-top: 0.5em;
-}
-td.data_summary > .parameters {
-  font-size: smaller;
-}
-td.file_summary {
-  width: 24em;
-}
-td.file_summary th {
-  font-weight: bold;
-  padding-bottom: 0.5em;
-}
-td.file_summary .files {
-  width: 100%;
-}
-td.file_summary .files td {
-  color: #1286FE;
-}
-td.file_summary .files td p.date {
-  font-size: smaller;
-}
-td.map img {
-  width: 150px;
-}
-.parameter_cell {
-  vertical-align: top;
-  color: #a8a8a8;
-  width: 60%;
-}
-.parameter_cell .parameters {
-  font-size: x-small;
-}
-.param_title {
-  color: #565656 ;
-}
-.status_table {
-  color:#565656;
-  width: 100%;
-}
-.status_table th {
-  background-color:#d1edec;
-  padding-left: 5px;
-  vertical-align: bottom;
-  color: #515151;
-  text-transform: uppercase;
-}
-.status_table a:hover, .hovered_link {
-  color:#a8a8a8;
-  text-decoration:underline !important;
-}
-.status_table td { 
-  padding:5px 0 0;
-
-  vertical-align:top;
-}
-.status_table tr {
-  vertical-align: top;
-}
-.heading_table {
-  color:#515151;
-  text-transform: uppercase;
-}
-.heading_table td {
-}
-
-.cruise_title a, .link2 {
-  font-size:medium;
-  color:#66A7DD;
-}
-
-#heading {
-  background-color:#d1edec;
-}
-
-/* MAIN */
-
-#centering {
-  text-align: center;
-  margin: 0 auto;
-  width: 1024px;
-}
-#content {
-  text-align: left;
-  line-height: 1.5em;
-  position:relative;
-}
-#content > h1 {
-  font-size: large;
-  border-bottom: 1px solid #A0A0A0;
-  background-color: #E0E0E0;
-  position: relative;
-  left: 0;
-  right: 0;
-  top: 0;
-  padding: 0.5em;
-}
-
-/* cchdo_header */
-#cchdo_header {
-  position: relative;
-  top: 0;
-  right: 0;
-  left: 0;
-  text-align: left;
-}
-#cchdo_search {
-  position: absolute;
-  right: 0;
-  bottom: 0.5em;
-}
-#cchdo_logo {
-  height: 3.5em;
-}
-#picture {
-  position: relative;
-  padding-top: 84px; /* Push the menu down */
-  z-index: 100;
-}
-#banner {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100px;
-}
-#cart {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-.cart_prompt {
-  float: right;
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-
-.addcart_button {
-  vertical-align: middle;
-  height: 1.5em;
-}
-#cart_listing {
-  max-height: 600px;
-  overflow: auto;
-}
-
-/* cchdo footer */
-#cchdo_footer {
-  position: relative;
-  bottom: 0;
-  clear: both;
-  margin-bottom: 1em;
-}
-#cchdo_credit {
-  margin-top: 1em;
-  text-align: center;
-  font-size: x-small;
-}
-#cchdo_credit p {
-  max-width: 66em;
-  margin: 0 auto;
-}
-#cchdo_credit p:first-child {
-  font-size: larger;
-}
-#cchdo_logos {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-#cchdo_logos img {
-  height: 40px;
-}
-
-/* shaded boxes */
-
-.boxed { 
-  border: 1px solid #A0A0A0;
-  position: relative;
-  margin-bottom: 1em;
-  z-index: 0;
-}
-.boxed > h1 {
-  font-size: large;
-  border-bottom: 1px solid #A0A0A0;
-  background-color: #E0E0E0;
-  position: relative;
-  left: 0;
-  right: 0;
-  top: 0;
-  padding: 0.5em;
-}
-.boxed > .box_content {
-  padding: 1em;
-  position: relative;
-}
-.box > h1 {
-  font-size: large;
-  background-color: #E0E0E0;
-  padding: 0.5em;
-  border: 1px solid #A0A0A0;
-  margin-bottom: 1em;
-}
-.box_bottom { 
-  font-size: large;
-  border-top: 1px solid #A0A0A0;
-  background-color: #E0E0E0;
-  position: relative;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 0.5em;
-  clear: both;
-}
-
-/* home */
-#home_intro img {
-  float: left;
-  display: inline;
-  width: 13em;
-  height: 13em;
-  margin-right: 1em;
-  margin-bottom: 1em;
-}
-#home_intro p {
-  max-width: 66em;
-  margin-bottom: 0.6em;
-}
-#left_column {
-  float: left;
-  width: 70%;
-}
-#right_column {
-  float: right;
-  width: 28%;
-  text-align: left;
-}
-#right_column .boxed { 
-}
-#right_column .boxed .box_content {
-  line-height: 1.5em;
-}
-#right_column h2 {
-  border-bottom: 2px solid #A0A0A0;
-  margin-top: 1em;
-  margin-bottom: 1em;
-  width: 80%;
-}
-#right_column ul {
-  margin-left: 1em;
-}
-
-/* Bottle comparer */
-.params {
-  max-height: 15em;
-  overflow-y: auto;
-}
-.values {
-  height: 25em;
-  overflow-y: auto;
-}
-.data { display: none; }
-.left { text-align: right; }
-.center { text-align: center; }
-
-/* CCHDO Menu *****************************************************************/
-#cchdo_menu {
-  /* pin to bottom of picture */
-  z-index: 100;
-  position: relative;
-  bottom: 0;
-  /* make a light area in the picture for the menu */
-  background-image: url("http://cchdo.ucsd.edu/images/banners/transparent_menu_bg.png");
-  height: 16px;
-  /* bump to center text in transparency */
-  margin-top: -3px;
-  padding-top: 3px;
-  text-align: center;
-}
-#cchdo_menu a {
-  color: #000000;
-  text-decoration: none;
-}
-#cchdo_menu ul li {
-  height: 1.3em; /* Make boxes a little bigger */
-}
-#cchdo_menu > ul {
-}
-#cchdo_menu > ul > li {
-  padding-left: 2em;
-  padding-right: 2em;
-  padding-bottom: 3px;
-  position: relative;
-  display: inline;
-  text-transform: uppercase;
-  z-index: 100;
-  height: 17px;
-}
-#cchdo_menu > ul > li > h1 { 
-  display: inline;
-  padding: 0;
-  margin: 0;
-  font-size: inherit;
-}
-#cchdo_menu ul li ul {
-  margin-top: 0;
-  display: none;
-}
-#cchdo_menu ul li ul a {
-  height: 1.53em; /* Make the (most of) the entire highlighted area clickable */
-  display: block;
-}
-#cchdo_menu > ul > li > ul {
-  /* inline-table hack */
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 18px; /* bump submenu down below the transparent bar */
-  background-color: #D0D0D0;
-}
-#cchdo_menu > ul > li:hover > ul {
-  display: block;
-}
-#cchdo_menu > ul > li > ul > li {
-  text-transform: none;
-  padding-top: 3px;
-  padding-bottom: 3px;
-}
-#cchdo_menu > ul > li > ul > li:hover, #cchdo_menu > ul > li > ul > li:hover > a, .submenu_hover {
-  background-color: #A0A0A0;
-  color: white;
-}
-#cchdo_menu ul li ul li ul {
-  position: absolute;
-  left: 100%;
-  background-color: #A0A0A0;
-  white-space: nowrap;
-  width: 130px;
-}
-#cchdo_menu ul li ul li ul.ocean {
-  top: 0;
-}
-#cchdo_menu ul li ul li ul.time_series {
-  top: 1.75em;
-}
-#cchdo_menu ul li ul li ul.contributions_projects {
-  top: 3.5em;
-}
-#cchdo_menu ul li ul li:hover ul {
-  display: block;
-}
-#cchdo_menu ul li ul li ul li {
-  padding: 3px;
-  margin-top: 0px;
-}
-#cchdo_menu ul li ul li ul li:hover, .submenu2_hover, #cchdo_menu ul li ul li ul li:hover a {
-  background-color: #3C3C3C;
-  color: white;
-}
-
-/********** Sliding Submit ***********/
-.hidden {
-   display: block;
-}
-
-noscript {
-   font-size: large;
-   font-weight: bold;
-   text-align: center;
-}
-
-table.table_step {
-   background-color: #fff;
-   border: 0px;
-   padding-top: 0px;
-   vertical-align: top;
-   width: 685px;
-}
-
-
-table.table_step2 {
-   background-color: #fff;
-   border: 0px;
-   padding-top: 0px;
-   vertical-align: top;
-   width: 800px;
-}
-
-
-.sf {
-/*   border: #808080 5px double; */ 
-   display:block;
-   height:261px;
-   list-style:none;
-   margin-left: 0px;
-   overflow: hidden;
-   padding-left: 0px;
-   text-align: center;
-   width: 772px;
-}
-
-.sf2 {
-   display:block;
-   height:261px;
-   list-style:none;
-   margin-left: 0px;
-   overflow: hidden;
-   padding-left: 0px;
-   text-align: center;
-   width: 1000px;
-}
-
-.sf li, .sf2 li {
-   background-color: #ffffff;
-   display:inline;
-   float: left; 
-   height: 261px;
-   overflow: hidden;
-   width: 20px;
-}
-
-.sf li a:link, .sf2 li a:link {
-   color: #06629b;
-   font-size: small;
-   text-decoration: underline;
-}
-
-.step_content1, .step_content2, .step_content3, .step_content4,
-.step_content12, .step_content22, .step_content32, .step_content42 {
-  height: 261px;
-  padding-left: 36px;
-  text-align: left;
-  vertical-align: text-top;
-}
-.step_content1 {
-  background: #fff url('/images/contact.jpg') no-repeat top left;
-}
-.step_content2 {
-  background: #fff url('/images/cruise.jpg') no-repeat top left;
-}
-.step_content3 {
-  background: #fff url('/images/type.jpg') no-repeat top left;
-}
-.step_content4 {
-  background: #fff url('/images/data.jpg') no-repeat top left;
-}
-.step_content12 {
-  background: #fff url('/images/contact2.jpg') no-repeat top left;
-}
-.step_content22 {
-  background: #fff url('/images/cruise2.jpg') no-repeat top left;
-}
-.step_content32 {
-  background: #fff url('/images/type2.jpg') no-repeat top left;
-}
-.step_content42 {
-  background: #fff url('/images/data2.jpg') no-repeat top left;
-}
-
-.step, .step2 {
-   font-size: 18pt;
-   font-weight: bold;
-   text-transform: uppercase;
-}
-.step {
-  color: #06629b;
-}
-.step2 {
-  color: #006f89;
-}
-
-.step_number, .step_number2 {
- font-size: 24pt;
- vertical-align: text-top;
-}
-.step_number {
-   color: #7f97b9;
-}
-.step_number2 {
-   color: #a0a0a0;
-}
-
-.hr {
-   border-bottom: #808080 1px solid;
-}
-.step_title {
-   color: #000;
-   font-size: 18pt;
-}
-
-.important {
-   color: #06629b;
-}
-
-.asterisk {
-   font-size: smaller;
-   text-align: right;
-}
-
-/* Data Access Results */
-#data_access_left_column {
-  float: left;
-  width: 45%;
-  clear: both;
-}
-
-#data_access_right_column {
-  float: right;
-  text-align: left;
-  width: 53%;
-}
-
-#data_access_updates {
-  width: 100%;
-}
-
-.data_access_updates_note {
-  font-size: 12px; 
-  font-weight: normal; 
-  color: #000;
-}
-
-.clear {
-  clear: both;
-}
-
-.filetype {
-  font-weight: bold;
-  font-style: italic;
-}
-
-#data_access_right_column .boxed .box_content, #data_access_left_column .boxed .box_content {
-  min-height: 450px;
-}
-
-.note_display {
-  text-align: justify;
-}
-
-.note_display .note {
-}
-
-#data_access_history {
-  height: 375px;
-  width: inherit;
-  overflow-x: hidden; 
-  overflow-y: scroll;
-}
-
-#data_access_history table {
-  width: 100%;
-}
-
-#data_access_history table .header {
-  border-bottom: 3px solid #006f89 !important;
-}
-
-.data_access_map_thumb {  
-  position: relative;
-  top: -116px;
-  left: 352px;
-  margin-bottom: -90px;
-}
-
-#data_summary_and_history {
-   height:700px;
-}
-#data_summary_table td {
-
-}
-
-#data_summary_table_meta{
-  margin-top: 0px;
-  height:300px;
-}
-#data_summary_table_meta td {
-
-}
-
-#data_summary_table_files{
-  height:500px;
-}
-#data_summary_table_files td {
-
-}
-
-#data_summary_table_history{
-  width: 100%;
-  max-height: 785px;
-  margin-top: 0px;
-}
-#data_summary_table_history td {
-  vertical-align:top !important;
-}
-.data_summary_header, .data_files {
-  border-bottom: 3px solid #006f89 !important;
-}
-
-.data_summary_history {
-  background: #9ec4cd;
-}
-
-.data_summary_history a:link, .data_summary_history a:visited, .data_summary_history a:hover, .data_summary_history a:active {
-  color: #fff;
-}
-#data_access_master{
-  /*border-bottom: 3px solid #006f89 !important;*/
-}
-#color_column{
-  /*width:1px;*/
-  background: #006f89;
-}
-
-.data_table {
-  background-color:#d1edec;
-  color:#515151;
-  text-transform: uppercase;
-  vertical-align: top;
-  border-bottom: 3px solid #006f89 !important;
-}
-
-/*  ------ Old Submissions --------- */
-
-#old_submissions_table{
-  border: 2px solid #000;
-  width: 100%;
-  padding: 15px;
-  padding-top: 10px;
-  font-size: small;
-  border-collapse: collapse
-}
-
-#old_submissions_table th{
-  font-weight: bold;
-  text-align:left;
-  background-color: #9ec4cd;;
-  padding: 5px 10px 5px 10px;
-  color:#000;
-  font-size: medium;
-}
-#old_submissions_table tr{
-  border: 2px solid #000;
-  border-bottom: 2px solid #000;
-}
-
-#old_submissions_table td{
-  text-align:left;
-  padding:6;
-}
-
-#old_submissions_table tr:hover td{
-  background: #D8D8D8 !important;
-}
-
-div.scroll {overflow: auto; width: 100%; height: 36em;}
-
-/*  ------ Old Submissions --------- */
-
-#new_submissions_table{
-  border: 2px solid #000;
-  width: 100%;
-  padding: 15px;
-  padding-top: 10px;
-  font-size: small;
-  border-collapse: collapse
-}
-
-#new_submissions_table th{
-  font-weight: bold;
-  text-align:left;
-  background-color:#B7EAF0;
-  padding:6;
-  color:#000;
-  font-size: medium;
-  height: 3em;
-}
-/*#new_submissions_table tr{
-    border: 2px solid #000;
-    border-bottom: 2px solid #000;
-}*/
-
-#new_submissions_table td{
-  text-align:left;
-  padding: 6px;
-}
-
-#new_submissions_table tr:hover td{
-  background: #D8D8D8 !important;
-}
-
-/******** Data History Tables *********/
-.history_table {
-  width: 100%;
-}
-.history_table th{
-  border-bottom: 3px solid #006f89 !important;
-}
-/*****/
-.history_detail_table {
-  border: 1px solid #000;
-  border-collapse: collapse;
-}
-.history_detail_table th{
-  background-color: #DBDBDB;
-  padding: 5px;
-}
-/*****/
-.history_info_table{
-  background-color: #D8D8D8;
-  border-collapse: collapse;
-  margin: 0 0 15px 0;
-}
-.history_info_table tr td{
-
-}
-
-/* Contacts */
-.contact_info_label {
-  vertical-align: top;
-  font-weight: bold;
-}
-
-#contact_cruises caption {
-  font-weight: bold;
-}
-
-/******  colors for cruise status page **********/
-#red_link a{
-        color: red;
-}
-#yellow_link a{
-        color: yellow;
-}
-#green_link a{
-        color: green;
-}
-/***********************************************/
-
-/****** Merge Queue **********************/
-.merged_file {
-    
-}
-.unmerged_file{background-color:#FFC860}
-
-.formats.sampsum {
-  border: 1px;
-  width: 90%;
-}
-.formats.sampsum th {
-  text-align: left;
-  vertical-align: bottom;
-}
-.formats.sampsum td {
-  vertical-align: top;
-}
-
-/******************************************************/
-
-
-/*****************************************************************/
-
-/*** Minutes ***/
-#minutes_color_key
-{
-margin: 10px;
-}
-.minutes_table
-{
-border:0px;
-}
-td.date_row
-{
-background-color:#c9c4bd;
-color:black;
-}
-pre.minutes_text
-{
-vertical-align:top;
-white-space:pre-wrap;
-width:500px;
-}
-td.minutes_action_item_column
-{
-vertical-align:top;
-background-color:#e3ded7;
-width:500px;
-}
-.completed_action_item
-{
-vertical-align:top;
-background-color:#e3ded7;
-border: 2px solid #e3ded7;
-
-}
-.action_item
-{
-vertical-align:top;
-background-color:white;
-border: 2px solid #e3ded7;
-
-}
-/***************** Minutes   ****************************/
-
-/************ Indian Cruise page ******************************/
-.indian_map {
-    float: left;
-    width: 59%;
-}
-
-.indian_cruises {
-    float: right;
-    width: 41%;
-    max-height: 570px;
-    overflow: hidden;
-}
-
-.indian_basins {
-    max-height: 520px;
-    overflow-y: scroll;
-	overflow-x: hidden;
-}
-
-.indian_table {
-    font-size: smaller;
-    color:#565656;
-    width: 100%;
-}
-
-.indian_table a {
-    text-decoration: none;
-}
-
-.indian_table th {
-  	background-color:#d1edec;
-  	padding-left: 5px;
-  	vertical-align: bottom;
-  	color: #515151;
-  	text-transform: uppercase;
-	line-break: strict;
-}
-
-.indian_table td {
-    vertical-align: top !important;
-	font-size: 8pt;
-	line-break: strict;
-}
+/* Parameter Entry and Descriptions */
+td.parameter_entry { vertical-align:top; }
+td.parameter_order { background-color:#7889AB; text-align:center; color:white; font-size:large; }
 
 /* Data sharing */
-.data_sharing h1 {
-	font-weight: bold;
-}
-.data_sharing p {
-	margin: 0.5em 0;
-}
-.data_sharing ol {
-	list-style: decimal;
-}
-.data_sharing li {
-	max-width: 66ex;
-	margin: 0.5em 0;
-}
+.data_sharing h1 { font-weight: bold; }
+.data_sharing p { margin: 0.5em 0; }
+.data_sharing ol { list-style: decimal; }
+.data_sharing li { max-width: 66ex; margin: 0.5em 0; }
 
-/************ Arctic Cruise page ******************************/
-.arctic_map {
-	float: left;
-	width: 59%;
-}
+/* Southern Ocean */
+.southern_map { float: left; width: 59%; }
+.southern_cruises { float: right; width: 41%; max-height: 600px; overflow: hidden; }
+.southern_basins { max-height: 580px; overflow-y: scroll; overflow-x: hidden; }
+.southern_table { font-size: smaller; color:#565656; width: auto; }
+.southern_table a { text-decoration: none; }
+.southern_table th { background-color:#d1edec; padding-left: 5px; vertical-align: bottom; color: #515151; text-transform: uppercase; }
+.southern_table td { vertical-align: top !important; font-size: 8.5pt; } 
+.more { display:none; }
+.basin_header { border-bottom: 3px solid #006f89 !important; }
+.view_basin_header { border-bottom: 3px solid #aaa !important; }
 
-.arctic_cruises {
-	float: right;
-	width: 41%;
-	max-height: 630px;
-	overflow-y: scroll;
-/*	overflow-x: hidden;*/
-}
+/* Indian Ocean */
+.indian_map { float: left; width: 59%; }
+.indian_cruises { float: right; width: 41%; max-height: 570px; overflow: hidden; }
+.indian_basins { max-height: 520px; overflow-y: scroll; overflow-x: hidden; }
+.indian_table { font-size: smaller; color:#565656; width: 100%; }
+.indian_table a { text-decoration: none; }
+.indian_table th { background-color:#d1edec; padding-left: 5px; vertical-align: bottom; color: #515151; text-transform: uppercase; line-break: strict; }
+.indian_table td { vertical-align: top !important; font-size: 8pt; line-break: strict; }
 
-.arctic_table {
-	font-size: 7.4pt;
-	color: #565656;
-	width: 100%;
-}
-
-.arctic_table th td {
-  width: 20%;
-}
-
-.arctic_tr td{
-	width: inherit;
-	vertical-align: top;
-	height: 50px;
-}
-.arctic_line td{
-	width: 10%;
-}
-.arctic_date td{
-	width: 18%;
-}
-.arctic_ship td{
-	width: 10%;
-}
-.arctic_scientist td{
-	width: 24%;
-}
-.arctic_country td{
-	width: 13%;
-}
-.arctic_table a {
-	text-decoration: none;
-}
-.arctic_table th {
-  background-color:#d1edec;
-  padding-left: 5px;
-  vertical-align: bottom;
-  color: #515151;
-  text-transform: uppercase;
-}
-tr.not_in_map {
-	background-color: #FFDDDD;
-}
-.small_font {
-	font-size: smaller;
-}
-
-.end_date {
-	border-top: #a0a0a0 1px dashed;
-}
+/* Arctic Cruise page */
+.arctic_map { float: left; width: 59%; }
+.arctic_cruises { float: right; width: 41%; max-height: 630px; overflow-y: scroll; }
+.arctic_table { font-size: 7.4pt; color: #565656; width: 100%; }
+.arctic_table th td { width: 20%; }
+.arctic_tr td{ width: inherit; vertical-align: top; height: 50px; }
+.arctic_line td{ width: 10%; }
+.arctic_date td{ width: 18%; }
+.arctic_ship td{ width: 10%; }
+.arctic_scientist td{ width: 24%; }
+.arctic_country td{ width: 13%; }
+.arctic_table a { text-decoration: none; }
+.arctic_table th { background-color:#d1edec; padding-left: 5px; vertical-align: bottom; color: #515151; text-transform: uppercase; }
+tr.not_in_map { background-color: #FFDDDD; }
+.small_font { font-size: smaller; }
+.end_date { border-top: #a0a0a0 1px dashed; }
