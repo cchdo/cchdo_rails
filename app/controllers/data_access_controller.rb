@@ -82,8 +82,8 @@ class DataAccessController < ApplicationController
 		          end
 	         end # for group in @pi_names
          end # if @cruise.Chief_Scientist
-         @dir = Document.find(:first ,:conditions => ["ExpoCode = '#{@expo}' and FileType='Directory'"])
-         @cruise_files = Document.find(:all, :conditions => ["ExpoCode = '#{@expo}'"])
+         @dir = Document.find_by_ExpoCode(@cruise.ExpoCode, :conditions => {:FileType => 'Directory'})
+         @cruise_files = Document.find_all_by_ExpoCode(@expo)
          for cruise_file in @cruise_files
            if cruise_file.Preliminary == 1
              @preliminary = "These data are preliminary (See <a href=\"http://cchdo.ucsd.edu/data_history?ExpoCode=#{@expo}\">Data History</a>)"
@@ -91,7 +91,7 @@ class DataAccessController < ApplicationController
          end
          @file_result = Hash.new(0);
          #@file_result = Hash.new{|@file_result,key| @file_result[key]={}}
-         if(@dir)
+         if @dir
             @files = @dir.Files.split(/\s/)
             trash,path = @dir.FileName.split(/data/)
             if @files
