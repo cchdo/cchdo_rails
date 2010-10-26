@@ -8,34 +8,34 @@
 <meta name="google-site-verification" content="xBVm_AfJYEdA-tbww41dajF9RuGbZHAjpOBhwWwqbcM" />
 </head>
 <body>
-<div id='centering'>
+<div id='centering' class="staff">
   <%= render :partial => 'layouts/cchdo_header' %>
-      <% if session[:user] %>
-        <div class="staff_links_table">
-          <%= link_to("Staff Home", :controller => "staff") %> |
-          <%= link_to("Assignments", :controller => "task_manager") %> |
-          <%= link_to("Data Entry", :controller => "data_entry") %> |
-          <%= link_to("Recent Submissions", :controller => "staff", :action => "submitted_files") %> |
-          <%= link_to("Cruise Information", :controller => "cruise_status") %> |
-          <%= link_to_remote("Documentation",:update => "staff_div",:url=>{:controller=>'staff',:action =>'documentation'})%> |
-          <%= link_to("Recent Updates", :controller => "staff", :action => "recent_updates") %> |
-          <%= link_to_remote("Software", :update => "staff_div",:url=>{:controller=>'staff',:action =>'software'})%> |
-          <%= link_to("Minutes", :controller=>'staff',:action =>'minutes_archive') %> |
-          <%= link_to("Queue Files", :controller=>'staff',:action =>'queue_files') %> |
-          <%= link_to("Tasks(Dave)", :controller=>'arctic_tasks') %>
-        </div>
-			  <div class="staff_sign_out">
-          <%= link_to("Sign out [#{session[:username]}]", :controller => "staff", :action => "signout") %>
-			  </div>
-      <% end %>
-      <div id='content'>
-        <% if flash[:notice] %>
-          <h1 class='notice'><%= flash[:notice] %></h1>
-        <% end %>
-        <%= yield -%>
-      </div>
+  <% if session[:user] %>
+    <div id="menu">
+      <%= link_to("Staff Home", :controller => "staff") %> |
+      <%= link_to("Assignments", :controller => "task_manager") %> |
+      <%= link_to("Data Entry", :controller => "data_entry") %> |
+      <%= link_to("Recent Submissions", :controller => "staff", :action => "submitted_files") %> |
+      <%= link_to("Cruise Information", :controller => "cruise_status") %> |
+      <%= link_to_remote("Documentation",:update => "staff_div",:url=>{:controller=>'staff',:action =>'documentation'})%> |
+      <%= link_to("Recent Updates", :controller => "staff", :action => "recent_updates") %> |
+      <%= link_to_remote("Software", :update => "staff_div",:url=>{:controller=>'staff',:action =>'software'})%> |
+      <%= link_to("Minutes", :controller=>'staff',:action =>'minutes_archive') %> |
+      <%= link_to("Queue Files", :controller=>'staff',:action =>'queue_files') %> |
+      <%= link_to("Tasks(Dave)", :controller=>'arctic_tasks') %>
+    </div>
+    <div id="signout">
+      <%= link_to("Sign out [#{session[:username]}]", :controller => "staff", :action => "signout") %>
+    </div>
+  <% end %>
+  <div id='content'>
+    <% if flash[:notice] %>
+      <h1 class='notice'><%= flash[:notice] %></h1>
+    <% end %>
+    <%= yield -%>
+  </div>
   <%= render :partial => 'layouts/cchdo_footer' -%>
-<!-- </div> -->
+</div>
 <%= render :partial => 'layouts/google_analytics' -%>
 <%= javascript_include_tag 'img_rotate', 'sortable/sortable', :defaults -%>
 </body>
