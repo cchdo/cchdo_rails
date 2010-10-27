@@ -53,9 +53,21 @@ The CCHDO webserver
     msg['From'] = 'cchdo+webserver@ucsd.edu'
     msg['To'] = ', '.join(techstaff)
 
-    s = smtplib.SMTP()
-    s.sendmail(msg['From'], techstaff, msg.as_string())
-    s.quit()
+    try:
+        s = smtplib.SMTP('cchdo.ucsd.edu')
+        s.set_debuglevel(1)
+        s.sendmail(msg['From'], techstaff, msg.as_string())
+        s.quit()
+    except:
+        # Try to use sendmail
+        SENDMAIL = '/usr/bin/env sendmail'
+        s = subprocess.Popen('%s -t' % SENDMAIL, stdin=subprocess.PIPE, shell=True)
+        s.communicate('\n'.join([
+            'To: %s' % msg['To'], 
+            'From: %s' % msg['From'],
+            'Subject: %s' % msg['Subject'],
+            '\n',
+            message]))
 
     return 0
 
