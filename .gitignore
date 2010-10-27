@@ -6,3 +6,4 @@
 doc/**/*
 tmp/**/*
 log/*.log
+vendor/rails
