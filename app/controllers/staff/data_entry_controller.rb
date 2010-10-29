@@ -23,9 +23,10 @@ NUMSTATUS = {
   '2' => 'Reformatted'
 }
 
-class DataEntryController < ApplicationController
+class Staff::DataEntryController < ApplicationController
   layout 'staff'
   before_filter :check_authentication
+  auto_complete_for :cruise, :ExpoCode
 
   def index
      @user = User.find(session[:user]).username

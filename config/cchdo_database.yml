@@ -21,10 +21,10 @@ production:
 
 development:
   adapter: mysql
-  database: cchdo
-  username: jfields
-  password: c@keandc00kies
-  host: localhost
+  database: cchdo_development
+  username: cchdo_web
+  password: ((hd0hydr0d@t@
+  host: cchdo.ucsd.edu
   encoding: utf8
 
 # Warning: The database defined as 'test' will be erased and

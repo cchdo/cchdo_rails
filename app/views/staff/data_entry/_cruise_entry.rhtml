@@ -5,9 +5,9 @@
 		Create<input type="radio" name="entry_type" <%= @create_radio %> value="Create"  >
 		&nbsp;Update<input type="radio" name="entry_type" <%= @update_radio %> value="Update">
 	</td></tr>
-	<tr><td>ExpoCode:<%= error_message_on(:cruise, :ExpoCode) %></td><td> <%= form.text_field :ExpoCode %>
+	<tr><td>ExpoCode:<%= error_message_on(:cruise, :ExpoCode) %></td><td> <%= text_field_with_auto_complete :cruise, :ExpoCode %>
 		<div class="auto_complete" id="expocode_auto_complete"></div>
-     <%= javascript_tag("new Autocompleter.Local('cruise_ExpoCode','expocode_auto_complete',expocodes,{fullSearch: true, frequency: 0, minChars:1});")%>
+  <!--   <%= javascript_tag("new Autocompleter.Local('cruise_ExpoCode','expocode_auto_complete',expocodes,{fullSearch: true, frequency: 0, minChars:1});")%> -->
 		                  </td>
 	<td rowspan = 120 valign="top">
 		<div id="param_div">

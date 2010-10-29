@@ -9,6 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   map.argo 'argo', :controller => :argo, :action => :index
 
   map.cruise 'cruise/:expocode', :controller => :data_access, :action => :show_cruise
+  #map.resources :cruise
 
   map.feed 'feed/:expocodes', :controller => :data_access, :action => :feed, :format => 'atom'
   
