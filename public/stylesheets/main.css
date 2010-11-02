@@ -936,6 +936,36 @@ div.tm_auto_complete ul strong.highlight { color: #800; margin: 0; padding:0; }
   margin: 0 0 15px 0;
 }
 
+/********************** DATA ENTRY ********************/
+
+#contact_entry {width:30%;float:left;}
+#contact_results {width:70%;float:right;}
+.data_entry_form  ul,.data_entry_form   li,
+  .data_entry_form   fieldset,.data_entry_form  textarea { margin: 0; padding: 0; }
+  .data_entry_form label,.data_entry_form  input,.data_entry_form  select,
+.data_entry_form textarea { width:18em; }
+.data_entry_form input {height:2em;}
+.data_entry_form li span { display: block; }
+ .data_entry_form  ul {width:24em;}
+ .data_entry_form li { list-style-type: none; }
+ .data_entry_form li { clear: both; height: 1%; overflow: auto;}
+  .data_entry_form    fieldset { border: 0; }
+.data_entry_form label, .data_entry_form form li span { float: left; width: 9em; padding-right: 0em; }
+ .data_entry_form select, .data_entry_form textarea { float: left; margin-left: 0em; }
+.data_entry_form fieldset label, .data_entry_form fieldset input { float: left; }
+.data_entry_form fieldset label { clear: left; width: 4.25em; padding-right: .75em; }
+.data_entry_form fieldset input { margin-left: 0em; margin-right: 1.5em; }
+.data_entry_form_two_wide ul {width:24em;}
+.data_entry_form_two_wide li {width:24em;}
+.data_entry_form_two_wide textarea { width:18em; height:5em; }
+     /****** contact table   *********/
+     .contact_table table {}
+     .contact_table tr{}
+     .contact_table td {background-color: #BBBFC9;}
+
+
+/*********************** \DATA ENTRY ******************/
+
 /* /contacts */
 .contact_info_label { vertical-align: top; font-weight: bold; }
 #contact_cruises caption { font-weight: bold; }

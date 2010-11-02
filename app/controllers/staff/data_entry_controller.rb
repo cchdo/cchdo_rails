@@ -27,6 +27,7 @@ class Staff::DataEntryController < ApplicationController
   layout 'staff'
   before_filter :check_authentication
   auto_complete_for :cruise, :ExpoCode
+  auto_complete_for :contact, :LastName
 
   def index
      @user = User.find(session[:user]).username
@@ -129,7 +130,7 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def contact_entry
-    render :partial => "contact_entry"
+    #render :partial => "contact_entry"
   end
   
   def parameter_entry
@@ -408,7 +409,7 @@ class Staff::DataEntryController < ApplicationController
     if params[:LastName]
       @contact = Contact.first(:conditions => {:LastName => params[:LastName]})
     end
-    render :partial => "contact_entry"
+    render :partial => "contact"
   end
   
   def create_contact

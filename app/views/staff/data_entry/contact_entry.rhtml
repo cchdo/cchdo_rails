@@ -1,0 +1,47 @@
+<div id="contact_entry">
+
+ <%= render :partial => 'layouts/data_entry' %>
+<% form_remote_for :contact,  :url => { :action => :create_contact},:autocomplete => "off",:update => "entry", :html => {:class =>"data_entry_form"} do |form| %>
+<%= error_messages_for(:contact)%>
+	<fieldset><legend><span>Enter Contact</span></legend></fieldset>
+	<ul class="data_entry_form">
+		<li>
+			<label for="contact_LastName"> Last Name:</label><%= text_field_with_auto_complete :contact, :LastName %>
+		<!--	<%= link_to_remote "Edit previous entry",:url => {:action => :find_contact_entry, :LastName => "$('contact_LastName').value"},:update => "entry" %> -->
+	    </li>
+	    <li>
+			<label for="contact_FirstName">First Name:</label><%= form.text_field :FirstName %>
+		</li>
+		<li>
+		  <label for="contact_Institute">Institute:</label><%= form.text_field :Institute %>
+		</li>
+		<li>
+			<label for="contact_telephone">Phone:</label><%= form.text_field :telephone %>
+		</li>
+		<li>
+			<label for="contact_fax">Fax:</label><%= form.text_field :fax %>
+		</li>
+		<li>
+			<label for="contact_email">Email:</label><%= form.text_field :email %>
+		</li>
+	</ul>
+	<ul class="data_entry_form_two_wide">
+		<li>
+			<label for="contact_Address">Address:</label><%= form.text_area :Address %>
+	    </li>
+	    <li>
+			<%= submit_tag %>
+		</li>
+	</ul>
+
+<%=  observe_field :contact_LastName,
+                   :update => "contact_results",
+                   :on => 'blur',
+                   :url => { :action => 'find_contact_entry'},
+                   :with => "'LastName=' + encodeURIComponent(value)"
+ %>
+<% end %>
+</div>
+<div id="contact_results">
+	
+</div>
