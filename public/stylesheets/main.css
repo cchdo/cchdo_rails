@@ -400,7 +400,7 @@ td.map img {
   position: relative;
   bottom: 0;
   /* make a light area in the picture for the menu */
-  background-image: url("http://stevesbox.ucsd.edu:3001/images/banners/transparent_menu_bg.png");
+  background-image: url("/images/banners/transparent_menu_bg.png");
   height: 16px;
   /* bump to center text in transparency */
   margin-top: -3px;
