@@ -130,6 +130,12 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def contact_entry
+    if @contact_id = params[:contactID]
+      @contact = Contact.first(:conditions => {:id => @contact_id})
+    else
+      @contact = Contact.new
+    end
+    @contacts = Contact.all
     #render :partial => "contact_entry"
   end
   
@@ -408,8 +414,25 @@ class Staff::DataEntryController < ApplicationController
   def find_contact_entry
     if params[:LastName]
       @contact = Contact.first(:conditions => {:LastName => params[:LastName]})
+      @contacts = Contact.all#first(:conditions => {:LastName => params[:LastName]})
     end
-    render :partial => "contact"
+    render :partial => "contact_entry"
+  end
+  
+  def add_contact_cruise
+    @contact = Contact.new
+    @params_returned = params
+    if params[:NewExpoCode] 
+      if params[:contact][:id]
+        if @contact = Contact.find(params[:contact][:id])
+          if @cruise = Cruise.first(:conditions =>{:ExpoCode => params[:NewExpoCode]})
+            @contact.cruises << @cruise
+          end
+        end
+      end
+    end
+    render :partial => "contact_entry"
+    
   end
   
   def create_contact

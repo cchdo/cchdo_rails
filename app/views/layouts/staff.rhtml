@@ -7,7 +7,25 @@
 <%= render :partial => 'layouts/ie_compatibility' %>
 <meta name="google-site-verification" content="xBVm_AfJYEdA-tbww41dajF9RuGbZHAjpOBhwWwqbcM" />
 <%= javascript_include_tag 'img_rotate', 'sortable/sortable', :defaults -%>
+<script type="text/javascript">
+   function ChangeColor(tableRow, highLight)
+   {
+tableRow.style.backgroundColor = '#ffffff';
+   if (highLight)
+   {
+     tableRow.style.backgroundColor = '#dcfac9';
+   }
+   else
+   {
+     tableRow.style.backgroundColor = 'white';
+   }
+ }
 
+ function DoNav(theUrl)
+ {
+ document.location.href = theUrl;
+ }
+ </script>
 </head>
 <body>
 <div id='centering' class="staff">
