@@ -33,7 +33,7 @@
 
 
 <%=  observe_field :contact_LastName,
-                   :update => "contact_results",
+                   :update => "contact_entry",
                    :on => 'blur',
                    :url => { :action => 'find_contact_entry'},
                    :with => "'LastName=' + encodeURIComponent(value)"
