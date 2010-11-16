@@ -36,26 +36,20 @@ class Staff::DataEntryController < ApplicationController
      #render :action => 'cruise_entry'
   end
 
+############ CRUISE ENTRY ###########################################################
   def cruise_entry
      @update_radio = " "
      @create_radio = "checked"
      @parameter_codes = Code.all(:order => 'Code').map {|u| [u.Code, u.Status]}
      render :partial => "cruise_entry"
   end
+########## CRUISE ENTRY #############################################################
 
+
+############# CRUISE GROUP ENTRY ###################################################
   def group_entry
      @groups = CruiseGroup.all
      render :partial => "group_entry"
-  end
-  
-  def event_entry
-    if user = STAFF[User.find(session[:user]).username]
-      (first, last) = user.split(' ')
-    else
-      first, last = 'Unknown', 'user'
-    end
-    @event = Event.new
-    render :partial => "event_entry"
   end
   
   # Updates the group_contents div
@@ -115,6 +109,50 @@ class Staff::DataEntryController < ApplicationController
     end
     @groups = CruiseGroup.all
     render :partial => "show_lines_for_group"
+  end  
+############# CRUISE GROUP ENTRY ###################################################
+
+
+
+############# DATA HISTORIES #######################################################
+  def event_entry
+    if user = STAFF[User.find(session[:user]).username]
+      (first, last) = user.split(' ')
+    else
+      first, last = 'Unknown', 'user'
+    end
+    @event = Event.new
+    render :partial => "event_entry"
+  end
+  
+  def create_event
+    if params[:event]
+      @event = Event.new(params[:event])
+      #@event.Date_Entered = Time.now.strftime("%Y-%m-%d")
+      @event.save
+      if @expo = @event.ExpoCode
+        @events = Event.all(:conditions => {:ExpoCode => @expo}, :order => 'Date_Entered DESC')
+        @cruise = Cruise.first(:conditions => {:ExpoCode => @expo})
+      end
+      render :partial => "display_events"
+    end
+  end
+  
+  def display_events
+    cur_sort = (['LastName', 'Data_Type'].include? params[:Sort]) ? params[:Sort] : 'Date_Entered DESC'
+    if @expo = params[:ExpoCode]
+      @events = Event.all(:conditions => {:ExpoCode => @expo}, :order => cur_sort)
+      @cruise = Cruise.first(:conditions => {:ExpoCode => @expo})
+    end
+    if @note
+      @note_entry = Event.first(:conditions => {:ID => @entry})
+    end
+    render :partial => "display_events"
+  end
+  
+  def note
+    @note_entry = Event.first(:conditions => {:ID => params[:Entry]})
+    render :partial => "note"
   end
   
   def find_name
@@ -128,17 +166,76 @@ class Staff::DataEntryController < ApplicationController
     end
     render :partial => "event_names"
   end
+############# DATA HISTORIES #######################################################
   
+
+############# CONTACTS  ############################################################
   def contact_entry
     if @contact_id = params[:contactID]
       @contact = Contact.first(:conditions => {:id => @contact_id})
     else
       @contact = Contact.new
     end
-    @contacts = Contact.all
+    @contacts = Contact.all(:order => 'LastName')
     #render :partial => "contact_entry"
   end
   
+  def find_contact_entry
+    # Auto complete the form if the last name can be found
+    if params[:LastName]
+      if @contact = Contact.first(:conditions => {:LastName => params[:LastName]})
+        @contacts = Contact.all#first(:conditions => {:LastName => params[:LastName]})
+      else
+        @contact = Contact.new
+        @contact[:LastName] = params[:LastName]
+      end
+    end
+    render :partial => "contact_entry"
+  end
+  
+  def add_contact_cruise
+    @contact = Contact.new
+    @params_returned = params
+    if params[:NewExpoCode] 
+      if params[:contact][:id]
+        if @contact = Contact.find(params[:contact][:id])
+          if @cruise = Cruise.first(:conditions =>{:ExpoCode => params[:NewExpoCode]})
+            @contact.cruises << @cruise
+            #@contact_cruises_entry = ContactCruises.create :contact => @contact, :cruise => @cruise
+          end
+        end
+      end
+    end
+    render :partial => "contact_entry"
+    
+  end
+  
+  def create_contact
+    if params[:contact]
+     # @contact = params[:contact]
+      if params[:contact][:id] and params[:contact][:id] =~ /\d/
+        @contact = Contact.find(params[:contact][:id])
+        @contact.LastName = params[:contact][:LastName]
+        @contact.FirstName = params[:contact][:FirstName]
+        @contact.Institute = params[:contact][:Institute]
+        @contact.Address = params[:contact][:Address]
+        @contact.telephone = params[:contact][:telephone]
+        @contact.fax = params[:contact][:fax]
+        @contact.email = params[:contact][:email]
+        @contact.title = params[:contact][:title]    
+        @contact.save
+      else
+        @contact = Contact.new(params[:contact])
+        @contact.save
+      end
+        
+    end
+    render :partial => "contact_entry"
+  end  
+
+#^^^^^^^^^^^^^^ CONTACTS  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+############### PARAMETERS #########################################################
   def parameter_entry
     @p_list = []
     @other_column_names = []
@@ -193,6 +290,16 @@ class Staff::DataEntryController < ApplicationController
   end
   
   
+
+  
+  def update_parameters
+  end
+  
+#^^^^^^^^^^^^^^ PARAMETERS  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  
+  
+############### CRUISES #########################################################
+
   # create_cruise takes the information from the _cruise_entry.rhtml partial and processes it.
   #If the cruise entry is valid, it's created and saved.  If it's not valid, error messages are
   #passed back to the _cruise_entry.rhtml page.
@@ -380,65 +487,8 @@ class Staff::DataEntryController < ApplicationController
         render :partial => "cruise_entry"
      end
   end
+#^^^^^^^^^^^^^^ CRUISES  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
-  def create_event
-    if params[:event]
-      @event = Event.new(params[:event])
-      #@event.Date_Entered = Time.now.strftime("%Y-%m-%d")
-      @event.save
-      if @expo = @event.ExpoCode
-        @events = Event.all(:conditions => {:ExpoCode => @expo}, :order => 'Date_Entered DESC')
-        @cruise = Cruise.first(:conditions => {:ExpoCode => @expo})
-      end
-      render :partial => "display_events"
-    end
-  end
+
   
-  def display_events
-    cur_sort = (['LastName', 'Data_Type'].include? params[:Sort]) ? params[:Sort] : 'Date_Entered DESC'
-    if @expo = params[:ExpoCode]
-      @events = Event.all(:conditions => {:ExpoCode => @expo}, :order => cur_sort)
-      @cruise = Cruise.first(:conditions => {:ExpoCode => @expo})
-    end
-    if @note
-      @note_entry = Event.first(:conditions => {:ID => @entry})
-    end
-    render :partial => "display_events"
-  end
-  
-  def note
-    @note_entry = Event.first(:conditions => {:ID => params[:Entry]})
-    render :partial => "note"
-  end
-  
-  def find_contact_entry
-    if params[:LastName]
-      @contact = Contact.first(:conditions => {:LastName => params[:LastName]})
-      @contacts = Contact.all#first(:conditions => {:LastName => params[:LastName]})
-    end
-    render :partial => "contact_entry"
-  end
-  
-  def add_contact_cruise
-    @contact = Contact.new
-    @params_returned = params
-    if params[:NewExpoCode] 
-      if params[:contact][:id]
-        if @contact = Contact.find(params[:contact][:id])
-          if @cruise = Cruise.first(:conditions =>{:ExpoCode => params[:NewExpoCode]})
-            @contact.cruises << @cruise
-          end
-        end
-      end
-    end
-    render :partial => "contact_entry"
-    
-  end
-  
-  def create_contact
-    render :partial => "contact_entry"
-  end
-  
-  def update_parameters
-  end
 end

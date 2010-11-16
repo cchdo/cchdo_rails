@@ -21,7 +21,7 @@ production:
 
 development:
   adapter: mysql
-  database: cchdo
+  database: cchdo_test
   username: jfields
   password: c@keandc00kies
   host: localhost
