@@ -293,14 +293,21 @@ td.map img {
 }
 #picture {
   position: relative;
-  padding-top: 84px; /* Push the menu down */
-  z-index: 100;
+  /*padding-top: 84px; /* Push the menu down */
+  height: 125px;
+  z-index: 1;
+}
+#bannerA, #bannerB {
+  position: absolute;
+  left: 0;
+  width: 100%;
   background: url('/images/banners/banner.jpg');
+  height: 125px;
 }
 #banner {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   width: 100%;
   height: 100px;
 }
@@ -397,7 +404,9 @@ td.map img {
 #cchdo_menu {
   /* pin to bottom of picture */
   z-index: 100;
-  position: relative;
+  position: absolute;
+  width: 100%;
+  left: 0;
   bottom: 0;
   /* make a light area in the picture for the menu */
   background-image: url("/images/banners/transparent_menu_bg.png");
