@@ -184,12 +184,13 @@ class Staff::DataEntryController < ApplicationController
     # Auto complete the form if the last name can be found
     if params[:LastName]
       if @contact = Contact.first(:conditions => {:LastName => params[:LastName]})
-        @contacts = Contact.all#first(:conditions => {:LastName => params[:LastName]})
+       # @contacts = Contact.all#first(:conditions => {:LastName => params[:LastName]})
       else
         @contact = Contact.new
         @contact[:LastName] = params[:LastName]
       end
     end
+    @contacts = Contact.all(:order => 'LastName')
     render :partial => "contact_entry"
   end
   
@@ -206,7 +207,9 @@ class Staff::DataEntryController < ApplicationController
         end
       end
     end
+    @contacts = Contact.all(:order => 'LastName')
     render :partial => "contact_entry"
+    
     
   end
   
@@ -230,6 +233,7 @@ class Staff::DataEntryController < ApplicationController
       end
         
     end
+    @contacts = Contact.all(:order => 'LastName')
     render :partial => "contact_entry"
   end  
 
