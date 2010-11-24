@@ -40,6 +40,17 @@
 
 </table>
 <% end %>
+<div id="contact_cruises_entry">
+<% if @cruise.collections %>
+  <ul>
+  <% for collection in @cruise.collections %>
+    <li>
+      <%= collection.Name %>
+    </li>
+  <% end %>
+  </ul>
+<% end %>
+</div>
 <% if @db_result_message %>
 <%= @db_result_message %>
 <% end %>
