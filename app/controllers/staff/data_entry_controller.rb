@@ -33,6 +33,11 @@ class Staff::DataEntryController < ApplicationController
      @user = User.find(session[:user]).username
      @update_radio = " "
      @create_radio = "checked"
+     @cruises = Cruise.all(:order => 'Line')
+      if params[:cruiseID]
+        @cruise = Cruise.find(params[:cruiseID])
+      end
+      @collections = Collection.all(:order => 'Name')
      #render :action => 'cruise_entry'
   end
 
