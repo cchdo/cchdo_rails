@@ -1,6 +1,7 @@
 class Cruise < ActiveRecord::Base
     #set_primary_key :Entry
     has_and_belongs_to_many :contacts
+    has_and_belongs_to_many :collections
     has_many :documents, :primary_key => 'ExpoCode', :foreign_key => 'ExpoCode'
 
     validates_presence_of :ExpoCode

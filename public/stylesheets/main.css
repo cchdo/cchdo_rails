@@ -975,6 +975,17 @@ div.tm_auto_complete ul strong.highlight { color: #800; margin: 0; padding:0; }
      #fax_column {width: 7em;}
      .contact_table_row_height {height:1.5em; overflow:hidden;}
      
+     /************ cruise table *****************/
+     #staff_cruise_entry {width:22em;float:left;}
+     	#cruise_results {width:40em;float:left;}
+		 .staff_cruise_table table {table-layout:fixed; width:40em; font: 2em "Lucida Grande", "Trebuchet MS", Verdana, sans-serif; }
+     .staff_cruise_table th { background-color: #747474;}
+     .staff_cruise_table tr{ }/*border: 1px solid #999; background-color: #BBBFC9; }
+     .contact_hilight tr {background-color:#285199;}*/
+     .staff_cruise_table td { max-width: 10em; height:2em;}
+     #staff_cruise_groups{width:14em;float:right;}
+     .staff_groups_table {table-layout:fixed; width:14em; font: 2em "Lucida Grande", "Trebuchet MS", Verdana, sans-serif; }
+     
 
 
 /*********************** \DATA ENTRY ******************/

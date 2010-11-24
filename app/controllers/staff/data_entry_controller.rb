@@ -41,8 +41,50 @@ class Staff::DataEntryController < ApplicationController
      @update_radio = " "
      @create_radio = "checked"
      @parameter_codes = Code.all(:order => 'Code').map {|u| [u.Code, u.Status]}
-     render :partial => "cruise_entry"
+     #render :partial => "cruise_entry"
+     @cruises = Cruise.all(:order => 'Line')
+     if params[:cruiseID]
+       @cruise = Cruise.find(params[:cruiseID])
+     end
+     @collections = Collection.all(:order => 'Name')
   end
+  
+  def cruise_group_entry
+     if params[:groupID]
+       @collection = Collection.find(params[:groupID])
+       @cruises = @collection.cruises
+     else
+       @cruises = Cruise.all
+     end
+     @collections = Collection.all(:order => 'Name')
+     render 'cruise_entry'
+  end
+  
+  def find_cruise
+    @cruises = Cruise.all(:order => 'Line')
+    if params[:ExpoCode]
+      @cruise = Cruise.first(:conditions => [:ExpoCode => params[:ExpoCode]])
+    elsif params[:cruiseID]
+      @cruise = Cruise.find(params[:cruiseID])
+    end
+    @collections = Collection.all(:order => 'Name')
+  end
+  
+  
+  def put_cruise
+    @db_result_message="Didn't put anything"
+    if params[:cruise]
+      @cruise = Cruise.new(params[:cruise])
+      @cruise.save!
+    else
+      @db_result_message = "Couldn't save submission"
+    end
+    @cruises = Cruise.all(:order => 'Line')
+    @collections = Collection.all(:order => 'Name')
+    render :partial => 'cruise_entry'
+  end
+  
+  
 ########## CRUISE ENTRY #############################################################
 
 
@@ -209,8 +251,6 @@ class Staff::DataEntryController < ApplicationController
     end
     @contacts = Contact.all(:order => 'LastName')
     render :partial => "contact_entry"
-    
-    
   end
   
   def create_contact
@@ -307,7 +347,7 @@ class Staff::DataEntryController < ApplicationController
   # create_cruise takes the information from the _cruise_entry.rhtml partial and processes it.
   #If the cruise entry is valid, it's created and saved.  If it's not valid, error messages are
   #passed back to the _cruise_entry.rhtml page.
-  def create_cruise
+  def being_removed_____create_cruise
     @parameter_codes = Code.find(:all,:order => "Code").map {|u| [u.Code, u.Status]}
     @param_list = []
     @message = ""

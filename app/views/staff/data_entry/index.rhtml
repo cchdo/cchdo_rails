@@ -1,11 +1,8 @@
-<div id="entry_menu">
-<%= link_to_remote "Cruises", :update => "entry", :url => { :action => "cruise_entry" } %><br>
-<%= link_to_remote "Events", :update => "entry", :url => { :action => "event_entry" } %><br>
-<%= link_to "Contacts", :action => "contact_entry"  %><br>
-<%= link_to_remote "Parameters", :update => "entry", :url => { :action => "parameter_entry" } %><br>
-<%= link_to_remote "Groups", :update => "entry", :url => { :action => "group_entry" } %><br>
-</div>
-<hr>
 <div id="entry">
-	<%= render :partial => "event_entry", :update => "entry" %>
+	
+<%= render :partial => 'layouts/data_entry' %>
+<div id="cruise_entry">
+	<%= render :partial => "cruise_entry", :update => "cruise_entry" %>
+</div>
+
 </div>
