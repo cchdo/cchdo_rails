@@ -40,6 +40,7 @@
 
 </table>
 <% end %>
+<% if @cruise %>
 <div id="contact_cruises_entry">
 <% if @cruise.collections %>
   <ul>
@@ -51,6 +52,7 @@
   </ul>
 <% end %>
 </div>
+<% end %>
 <% if @db_result_message %>
 <%= @db_result_message %>
 <% end %>
