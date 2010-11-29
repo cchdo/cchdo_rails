@@ -10,7 +10,7 @@ class Submission < ActiveRecord::Base
     $naming_lockfile = File.join($submission_root, '.naming.lck')
 
     validates_format_of :name,
-                        :with => /^\w[-\w\,\s\.]+$/,
+                        :with => /^\w+.*$/,
                         :message => "Name is required"
  
     validates_format_of :institute,
@@ -36,6 +36,7 @@ class Submission < ActiveRecord::Base
         # Figure out actions that were selected by client. Don't trust client
         # sent actions.
         actions = []
+        hash = {} if hash.blank?
         $allowed_actions.each_pair do |number, action|
             if hash[number] == action
                 actions << action
@@ -49,19 +50,19 @@ class Submission < ActiveRecord::Base
     end
 
     def institute=(x)
-        self[:institute] = x.strip()
+        self[:institute] = x.strip() unless x.blank?
     end
 
     def Country=(x)
-        self[:Country] = x.strip()
+        self[:Country] = x.strip() unless x.blank?
     end
 
     def clean_name
-        return clean(self.name)
+        return clean(self.name) || ''
     end
 
     def clean_filename
-        return clean(self.file.original_filename) if self.file
+        return clean(self.file.original_filename) || '' if self.file
         return ''
     end
 
@@ -108,6 +109,7 @@ class Submission < ActiveRecord::Base
     end
 
     def clean(x)
+        return x if x.blank?
         return x.gsub(/[^\w\.\-]/, '_')
     end
 
@@ -166,6 +168,9 @@ class Submission < ActiveRecord::Base
 end
 
 # Ensure the submission root is writeable
+unless File.directory?($submission_root)
+    raise "The submission root directory (#{$submission_root}) doesn't exist."
+end
 unless File.stat($submission_root).writable?
     raise "The submission root directory (#{$submission_root}) needs to be " + 
           "writeable by the server."
