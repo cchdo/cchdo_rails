@@ -3,10 +3,27 @@
 ActionController::Routing::Routes.draw do |map|
   map.namespace(:argo) do |argo|
     argo.resources :files do |files|
-        files.get 'download', :on => :member, :controller => :files, :action => :download
+        files.get 'download', :on => :member, :controller => :files,
+                              :action => :download
     end
   end
   map.argo 'argo', :controller => :argo, :action => :index
+
+  map.new_submission '/submit', :controller => :submit, :action => :new,
+                                :conditions => {:method => :get}
+  map.new_simple_submission '/submit/simple', :controller => :submit,
+                                              :action => :simple,
+                                              :conditions => {:method => :get}
+  map.connect '/submit', :controller => :submit, :action => :create,
+                         :conditions => {:method => :post}
+
+  # Sample of regular route:
+  # map.connect 'products/:id', :controller => 'catalog', :action => 'view'
+  # Keep in mind you can assign values other than :controller and :action
+
+  # Sample of named route:
+  # map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
+  # This route can be invoked with purchase_url(:id => product.id)
 
   map.cruise 'cruise/:expocode', :controller => :data_access, :action => :show_cruise
 

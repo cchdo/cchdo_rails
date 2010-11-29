@@ -5,7 +5,7 @@
   </tr>
   <tr><td></td><td></td></tr>
   <tr>
-    <td>File:</td><td align="left"><%= @file_name %></td>
+    <td>File:</td><td align="left"><%= @submission.name  %></td>
   </tr>
   <tr>
     <td>Status:</td><td align="left"><%= params[:submission][:public] %></td>
@@ -20,7 +20,7 @@
     <td>Line:</td><td align="left"><%= params[:submission][:Line] %></td>
   </tr>
   <tr>
-    <td>Cruise Date:</td><td align="left"><%= @date %></td>
+    <td>Cruise Date:</td><td align="left"><%= @submission.cruise_date %></td>
   </tr>
   <tr>
     <td>Name:</td><td align="left"><%= params[:submission][:name] %></td>
