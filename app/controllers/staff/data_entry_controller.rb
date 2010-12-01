@@ -28,6 +28,7 @@ class Staff::DataEntryController < ApplicationController
   before_filter :check_authentication
   auto_complete_for :cruise, :ExpoCode
   auto_complete_for :contact, :LastName
+  auto_complete_for :collection, :Name
 
   def index
      @user = User.find(session[:user]).username
@@ -51,12 +52,22 @@ class Staff::DataEntryController < ApplicationController
      if params[:cruiseID]
        @cruise = Cruise.find(params[:cruiseID])
      end
+     if params[:groupID]
+        @collection = Collection.find(params[:groupID])
+        @cruises = @collection.cruises
+      elsif params[:collection][:Name]
+        @collection = Collection.find_by_Name(params[:collection][:Name], :limit => 1)
+        @cruises = @collection.cruises
+      end
      @collections = Collection.all(:order => 'Name')
   end
   
   def cruise_group_entry
      if params[:groupID]
        @collection = Collection.find(params[:groupID])
+       @cruises = @collection.cruises
+     elsif params[:collection][:Name]
+       @collection = Collection.find_by_Name(params[:collection][:Name], :limit => 1)
        @cruises = @collection.cruises
      else
        @cruises = Cruise.all

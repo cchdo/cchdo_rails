@@ -46,7 +46,7 @@
   <ul>
   <% for collection in @cruise.collections %>
     <li>
-      <%= collection.Name %>
+      <a href="cruise_group_entry?groupID=<%= collection.id %>"><%= collection.Name %></a>
     </li>
   <% end %>
   </ul>
@@ -57,6 +57,10 @@
 <%= @db_result_message %>
 <% end %>
 </div>
+<!-- End of Cruise Form -->
+
+
+<!-- Cruise List -->
 <div id="cruise_results" style="height:40em; overflow-y:scroll;">
 	<table border="0"class="staff_cruise_table">
 		<tr>
@@ -69,7 +73,11 @@
 	<% if @cruises %>
 
 	  <% for @cruise in @cruises %>
-		<tr onclick="DoNav('/staff/data_entry/cruise_entry?cruiseID=<%= @cruise.id %>');"
+	    <% @extraparams = "" %>
+	    <% if @collection %>
+		   <% @extraparams = "&groupID=#{@collection.id}" %>
+		<% end %>
+		<tr onclick="DoNav('/staff/data_entry/cruise_entry?cruiseID=<%= @cruise.id %><%= @extraparams %>');"
 	 onmouseover="ChangeColor(this, true);" onmouseout="ChangeColor(this, false);">           <!--"this.className='contact_hilight;"	    > <ChangeColor(this,false);"> -->
 			<td><div class="contact_table_row_height"><%= @cruise.Line %></div></td>
 			<td><div class="contact_table_row_height"><%= @cruise.ExpoCode %></div></td>
@@ -81,7 +89,19 @@
 	<% end %>
 	</table>
 </div>
+
+<!-- Groups List -->
 <div id="staff_cruise_groups" style="height:40em; overflow-y:scroll;">
+	<% form_for :collection,  :url => { :action => :cruise_group_entry } do |form| %>
+	<%= text_field_with_auto_complete :collection, :Name %>
+	<%= # observe_field :collection_Name,
+	    #               :on => 'blur',
+	    #              #:update => "cruise_entry",
+	    #               :url => {:action => 'cruise_group_entry'},
+	    #               :with => "'groupName=' + encodeURIComponent(value)"
+	 %>
+
+	<% end %>
 	<table border="0"class="staff_cruise_table">
 		<tr>
 			<th>Group</th>
