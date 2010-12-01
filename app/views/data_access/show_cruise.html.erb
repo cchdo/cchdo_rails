@@ -139,7 +139,7 @@ file_sections = [
       <% @merged_queue_files.each do |file| -%>
         <tr>
           <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput)) -%>
-          <td class="date"><%=file.DateRecieved -%><%# sic %></td>
+          <td class="date"><%=file.DateMerged -%><%# sic %></td>
         </tr>
       <% end %>
     </table>
