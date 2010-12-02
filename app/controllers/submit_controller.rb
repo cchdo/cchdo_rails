@@ -48,10 +48,14 @@ class SubmitController < ApplicationController
             return
         end
 
-        SUBMITLOG.info("DONE.")
-
         if ENV['RAILS_ENV'] == 'production'
-            FileSubmittedMailer.confirm(@submission).deliver
+            begin
+                FileSubmittedMailer.confirm(@submission).deliver
+            rescue Exception => msg
+                SUBMITLOG.warn("Unable to send confirmation email: #{msg}")
+            end
         end
+
+        SUBMITLOG.info("DONE.")
     end
 end
