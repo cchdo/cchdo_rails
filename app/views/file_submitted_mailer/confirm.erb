@@ -1,0 +1,13 @@
+<% if @submission %>
+  File: <%= @submission.file ? File.basename(@submission.file) : 'No file' %> Type: Status: <%= @submission.public %>
+  Location: <%= @submission.file %>
+  Name: <%= @submission.name %>
+  Institute: <%= @submission.institute %>
+  Country: <%= @submission.Country %>
+  Expo: <%= @submission.ExpoCode %> Line: <%= @submission.Line %>
+  Date: <%= @submission.cruise_date %> 
+  Action: <%= @submission.action %>
+  Notes: <%= @submission.notes %>
+<% else %>
+  A blank submission was somehow submitted.
+<% end %>
