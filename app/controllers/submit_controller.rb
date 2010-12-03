@@ -33,11 +33,13 @@ class SubmitController < ApplicationController
             SUBMITLOG.info("FAILED: Unable to create submission record: #{msg}")
             flash.now[:notice] = $MSGS[:sorry]
             render :action => :new, :status => 500
+            return
         end
         if @submission.blank?
             SUBMITLOG.info("FAILED: No submission record created.")
             flash.now[:notice] = $MSGS[:sorry]
             render :action => :new, :status => 500
+            return
         end
         @submission.action = params[:actions]
 
