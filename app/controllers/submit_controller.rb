@@ -29,12 +29,17 @@ class SubmitController < ApplicationController
         # Create database record
         begin
             @submission = Submission.new(params[:submission])
-            @submission.action = params[:actions]
         rescue Exception => msg
             SUBMITLOG.info("FAILED: Unable to create submission record: #{msg}")
             flash.now[:notice] = $MSGS[:sorry]
             render :action => :new, :status => 500
         end
+        if @submission.blank?
+            SUBMITLOG.info("FAILED: No submission record created.")
+            flash.now[:notice] = $MSGS[:sorry]
+            render :action => :new, :status => 500
+        end
+        @submission.action = params[:actions]
 
         SUBMITLOG.info("Saving record: #{@submission.inspect}")
  
