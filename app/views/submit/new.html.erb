@@ -172,6 +172,6 @@
     files.parent().append(addButton);
   });
 </script>
-<%= javascript_include_tag 'slidemenu', 'withscript', :defaults -%>
-<script type="text/javascript">window.onload=init;</script>
+<%= javascript_include_tag 'slidemenu', :defaults -%>
+<script type="text/javascript">window.onload=function () { CCHDO.initSlideMenu(); jQuery('#sf2').animate({'height': 261}, 'fast'); };</script>
 <% end -%>

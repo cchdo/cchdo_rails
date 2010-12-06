@@ -1,4 +1,4 @@
-var slideMenu=function(){
+var slideMenu = function () {
 	var sp,st,t,m,sa,l,w,sw,ot;
 	return{
 		build:function(sm,sw,mt,s,sl,h){
@@ -26,7 +26,8 @@ var slideMenu=function(){
 	};
 }();
 
-function init() {
+var CCHDO = CCHDO ? CCHDO : {};
+CCHDO.initSlideMenu = function () {
   slideMenu.build('sf2',900,10,1,1);
   // Get focus changes so the form slides when tabbed through.
   document.forms[1].addEventListener('focus', function(e) {
