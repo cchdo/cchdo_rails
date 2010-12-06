@@ -1,3 +1,5 @@
+require 'zip/zip'
+
 class Submission < ActiveRecord::Base
     $submission_root = Rails.root.join('public', 'submissions')
     $allowed_actions = {
@@ -8,6 +10,7 @@ class Submission < ActiveRecord::Base
                  "rapid-delivery)"
     }
     $naming_lockfile = File.join($submission_root, '.naming.lck')
+    $multi_upload_file_name_base = 'multiple_files'
 
     validates_format_of :name,
                         :with => /^\w+.*$/,
@@ -27,11 +30,11 @@ class Submission < ActiveRecord::Base
  
     validates_each :file do |model, attr, value|
         model.errors.add(attr, "Please select a file that has data to " + 
-                               "submit.") unless model.is_file_object_okay(value)
+                               "submit.") unless model.file_object_okay?(value)
     end
 
     before_save :fill_in_default_values, :save_file
- 
+
     def action=(hash)
         # Figure out actions that were selected by client. Don't trust client
         # sent actions.
@@ -49,6 +52,51 @@ class Submission < ActiveRecord::Base
         self[:action] = actions.join(', ')
     end
 
+    class GeneratedTempfile < Tempfile
+        attr_accessor :original_filename
+        include ActionController::UploadedFile
+        def initialize(filename)
+          super(filename)
+          @original_filename = filename
+        end
+        # XXX HACK allow reopening tempfiles. When able to write zip files to
+        # IO stream, remove this.
+        def reopen(path)
+          @tmpname = path
+          @data = [@tmpname]
+          open()
+        end
+    end
+
+    def files=(x)
+        if x.is_a?(Hash)
+            files = x.values()
+            file_name = "#{$multi_upload_file_name_base}.#{Time.now.to_i}.zip"
+            tempfile = GeneratedTempfile.new(file_name)
+            path = tempfile.path
+            tempfile.unlink()
+            Zip::ZipFile.open(path, Zip::ZipFile::CREATE) do |zf|
+                for file in files
+                    unless file_object_okay?(file)
+                        tempfile.close()
+                        zf.close()
+                        raise "Non-files submitted in file field"
+                    end
+                    zf.get_output_stream(file.original_filename) do |o|
+                      o.puts(file.read())
+                    end
+                    file.close()
+                end
+            end
+            tempfile.reopen(path)
+            self.file = tempfile
+        elsif file_object_okay?(x)
+            self.file = x
+        else
+            raise "Non-file submitted in file field"
+        end
+    end
+
     def institute=(x)
         self[:institute] = x.strip() unless x.blank?
     end
@@ -62,8 +110,9 @@ class Submission < ActiveRecord::Base
     end
 
     def clean_filename
-        return clean(self.file.original_filename) || '' if self.file
-        return ''
+        default_name = 'default_clean_name'
+        return clean(self.file.original_filename) || default_name if self.file
+        return default_name''
     end
 
     def unsave_file
@@ -81,7 +130,7 @@ class Submission < ActiveRecord::Base
         end
     end
 
-    def is_file_object_okay(file)
+    def file_object_okay?(file)
         return false if file.blank?
         return true if file.kind_of?(StringIO)
         return true if file.kind_of?(Tempfile)
@@ -94,12 +143,17 @@ class Submission < ActiveRecord::Base
         dir, filename, path = get_path_and_name()
 
         file = self.file
+        unless file_object_okay?(file)
+            SUBMITLOG.info("File to save is not of proper upload type. Maybe it was set directly?")
+            raise
+        end
         self.file = path
 
         begin
             File.open(path, 'wb') do |f|
                 f.write(file.read())
             end
+            file.close()
         rescue Exception => msg
             SUBMITLOG.info("Error while writing file: #{msg}")
             raise

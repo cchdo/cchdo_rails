@@ -55,7 +55,7 @@ class SubmitController < ApplicationController
             return
         rescue Exception => msg
             @submission.unsave_file()
-            SUBMITLOG.info("FAILED: ERROR: #{msg}")
+            SUBMITLOG.info("FAILED: ERROR: #{msg}\n\n#{msg.backtrace}")
             flash.now[:notice] = $MSGS[:sorry]
             render :action => :new, :status => 500
             return
