@@ -1,40 +1,41 @@
-<% if @submission %>
-<table class="conf_table">
-  <tr class="table_header">
-    <td align="center"><b class="submit_bold"> File Submitted </b></td><td></td>
-  </tr>
-  <tr><td></td><td></td></tr>
-  <tr>
-    <td>File:</td><td align="left"><%= @submission.name  %></td>
-  </tr>
-  <tr>
-    <td>Status:</td><td align="left"><%= params[:submission][:public] %></td>
-  </tr>
-  <tr>
-    <td>Action:</td><td align="left"> <% if @submission %>  <% if @submission.action %> <%= @submission.action %> <% end %> <% end %></td>
-  </tr>
-  <tr>
-    <td>ExpoCode:</td><td align="left"><%= params[:submission][:ExpoCode] %></td>
-  </tr>
-  <tr>
-    <td>Line:</td><td align="left"><%= params[:submission][:Line] %></td>
-  </tr>
-  <tr>
-    <td>Cruise Date:</td><td align="left"><%= @submission.cruise_date %></td>
-  </tr>
-  <tr>
-    <td>Name:</td><td align="left"><%= params[:submission][:name] %></td>
-  </tr>
-  <tr>  
-    <td>Institution:</td><td align="left"><%= params[:submission][:institute] %></td>
-  </tr>
-  <tr>
-    <td>Country:</td><td align="left"><%= params[:submission][:Country] %></td>
-  </tr>
-  <tr>
-    <td colspan="2">Response sent to:<br><%= params[:submission][:email] %></td>
-  </tr>
-</table>
-<% else %>
-<p>There was an error with your submission.  Please contact the administrator: fieldsjustin@gmail.com</p>
+<% content_for :head do %>
+  <style>
+    dt { font-weight: bold; margin-top: 0.5em; }
+    dd { margin-left: 12em; margin-top: -1.5em; }
+  </style>
 <% end %>
+<div class="boxed">
+  <% if @submission %>
+    <h1>File submission by <%= h(@submission.name) %></h1>
+  <% else %>
+    <h1>File submission error</h1>
+  <% end %>
+  <div class="box_content">
+    <% if @submission %>
+      <dl>
+        <dt>File:</dt>
+          <dd><%= h(File.basename(@submission.file)) %></dd>
+        <dt>Status:</dt>
+          <dd><%= h(@submission.public) %></dd>
+        <dt>Action:</dt>
+          <dd><%= (! @submission.action.blank?) ? h(@submission.action) : '&nbsp;' %></dd>
+        <dt>Expocode:</dt>
+          <dd><%= h(@submission.ExpoCode) %></dd>
+        <dt>Line:</dt>
+          <dd><%= h(@submission.Line) %></dd>
+        <dt>Cruise Date:</dt>
+          <dd><%= h(@submission.cruise_date) %></dd>
+        <dt>Institution:</dt>
+          <dd><%= h(@submission.institute) %></dd>
+        <dt>Country:</dt>
+          <dd><%= h(@submission.Country) %></dd>
+        <dt>Confirmation sent to:</dt>
+          <dd><%= h(@submission.email) %></dd>
+      </dl>
+    <% else %>
+      <p>There was an error with your submission.</p>
+      <p>Please contact the administrator: <a>fieldsjustin@gmail.com</a></p>
+    <% end %>
+  </div>
+  <div class="box_bottom"></div>
+</div>
