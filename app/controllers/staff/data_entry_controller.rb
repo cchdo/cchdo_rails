@@ -55,7 +55,7 @@ class Staff::DataEntryController < ApplicationController
      if params[:groupID]
         @collection = Collection.find(params[:groupID])
         @cruises = @collection.cruises
-      elsif params[:collection][:Name]
+      elsif params[:collection] and params[:collection][:Name]
         @collection = Collection.find_by_Name(params[:collection][:Name], :limit => 1)
         @cruises = @collection.cruises
       end
@@ -90,8 +90,18 @@ class Staff::DataEntryController < ApplicationController
   def put_cruise
     @db_result_message="Didn't put anything"
     if params[:cruise]
-      @cruise = Cruise.new(params[:cruise])
+      params[:cruise][:Ship_Name] = "unknown" unless params[:cruise][:Ship_Name] =~ /\w/
+      params[:cruise][:Chief_Scientist] = "unknown" unless params[:cruise][:Chief_Scientist] =~ /\w/
+      if params[:cruise][:id] and params[:cruise][:id] =~ /\d/
+        cruise_update = {params[:cruise][:id] => params[:cruise]}
+        Cruise.update(params[:cruise][:id],params[:cruise])
+        @cruise = Cruise.find(params[:cruise][:id])
+        
+      else
+        @cruise = Cruise.new(params[:cruise])
+      end
       @cruise.save!
+      @db_result_message = "Saved!"
     else
       @db_result_message = "Couldn't save submission"
     end
@@ -100,6 +110,23 @@ class Staff::DataEntryController < ApplicationController
     render :partial => 'cruise_entry'
   end
   
+  def add_cruise_group
+      @group = Collection.new
+      @params_returned = params
+      if params[:NewGroup] 
+        if params[:cruise][:id]
+          if @cruise = Cruise.find(params[:cruise][:id])
+            if @group = Collection.first(:conditions =>{:Name => params[:NewGroup]})
+              @cruise.collections << @group
+              #@contact_cruises_entry = ContactCruises.create :contact => @contact, :cruise => @cruise
+            end
+          end
+        end
+      end
+      @cruises = Cruise.all(:order => 'Line')
+      @collections = Collection.all(:order => 'Name')
+      render :partial => "cruise_entry"
+  end
   
 ########## CRUISE ENTRY #############################################################
 

@@ -35,7 +35,11 @@
 	<tr valign="top"><td colspan="2">
 	</td>
 	</tr>
-	<tr><td><%= submit_tag value="Update"%></td><td></td></tr>
+	<tr><td>
+		<%= form.hidden_field :id %>
+	     <%= submit_tag value="Update"%>
+	    </td><td></td></tr>
+
 
 
 </table>
@@ -53,6 +57,13 @@
 <% end %>
 </div>
 <% end %>
+
+<% form_remote_tag :url => {:action => "add_cruise_group"}, :update => 'cruise_entry' do %>
+<%= text_field_tag 'NewGroup' %>
+<%= hidden_field :cruise, :id %>
+<%= submit_tag "Add Group" %>
+<% end -%>
+
 <% if @db_result_message %>
 <%= @db_result_message %>
 <% end %>
@@ -93,7 +104,7 @@
 <!-- Groups List -->
 <div id="staff_cruise_groups" style="height:40em; overflow-y:scroll;">
 	<% form_for :collection,  :url => { :action => :cruise_group_entry } do |form| %>
-	<%= text_field_with_auto_complete :collection, :Name %>
+	<%= text_field_with_auto_complete :collection, :Name, :size =>'12' %>
 	<%= # observe_field :collection_Name,
 	    #               :on => 'blur',
 	    #              #:update => "cruise_entry",
