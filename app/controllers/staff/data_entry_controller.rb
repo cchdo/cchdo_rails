@@ -111,14 +111,18 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def add_cruise_group
-      @group = Collection.new
       @params_returned = params
       if params[:NewGroup] 
-        if params[:cruise][:id]
+        if params[:cruise][:id] and params[:cruise][:id] =~ /\d/
           if @cruise = Cruise.find(params[:cruise][:id])
             if @group = Collection.first(:conditions =>{:Name => params[:NewGroup]})
               @cruise.collections << @group
               #@contact_cruises_entry = ContactCruises.create :contact => @contact, :cruise => @cruise
+            else
+              @group = Collection.new
+              @group.Name = params[:NewGroup]
+              @group.save!
+              @cruise.collections << @group
             end
           end
         end
