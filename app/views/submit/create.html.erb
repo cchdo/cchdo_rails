@@ -13,8 +13,9 @@
   <div class="box_content">
     <% if @submission %>
       <dl>
-        <dt>File:</dt>
-          <dd><%= h(File.basename(@submission.file)) %></dd>
+        <% submitted_files = submitted_file_names(@submission.file) %>
+        <dt><%= 'File'.smart_pluralize(submitted_files.length) %>:</dt>
+          <dd><%= h(submitted_files.join(', ')) %></dd>
         <dt>Status:</dt>
           <dd><%= h(@submission.public) %></dd>
         <dt>Action:</dt>

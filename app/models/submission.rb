@@ -10,7 +10,7 @@ class Submission < ActiveRecord::Base
                  "rapid-delivery)"
     }
     $naming_lockfile = File.join($submission_root, '.naming.lck')
-    $multi_upload_file_name_base = 'multiple_files'
+    MULTI_UPLOAD_FILE_NAME_BASE = 'multiple_files'
 
     validates_format_of :name,
                         :with => /^\w+.*$/,
@@ -71,7 +71,7 @@ class Submission < ActiveRecord::Base
     def files=(x)
         if x.is_a?(Hash)
             files = x.values()
-            file_name = "#{$multi_upload_file_name_base}.#{Time.now.to_i}.zip"
+            file_name = "#{MULTI_UPLOAD_FILE_NAME_BASE}.#{Time.now.to_i}.zip"
             tempfile = GeneratedTempfile.new(file_name)
             path = tempfile.path
             tempfile.unlink()
