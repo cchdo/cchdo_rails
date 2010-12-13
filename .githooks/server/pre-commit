@@ -9,7 +9,7 @@ def main():
         message and making a commit. 
     """
     print "[POLICY] No commits should be done on the production server."
-    return 0
+    return 1
 
 
 if __name__ == "__main__":

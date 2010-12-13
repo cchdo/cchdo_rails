@@ -1,0 +1,76 @@
+#!/usr/bin/env python
+
+import datetime
+from email.mime.text import MIMEText
+import getpass
+import sys
+import subprocess
+import smtplib
+
+
+def main():
+    """ post-merge hook for git.
+        Not executed if the merge failed due to conflicts.
+        Arg:
+            status - whether merge was a squash merge
+    """
+    print "Reloading webserver..."
+    subprocess.Popen('sudo apachectl graceful', shell=True)
+
+    print "Gathering change information..."
+    orig_head = open('.git/ORIG_HEAD', 'r').read().strip()
+    args = ['git log --stat --graph HEAD...%s' % orig_head]
+    log = subprocess.Popen(args,
+                           stdout=subprocess.PIPE, shell=True).communicate()[0]
+
+    now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+    message = """\
+Hello CCHDO technical staff,
+
+This is an automated message.
+
+The CCHDO production webserver has been modified:
+%(user)s
+%(dtime)s
+
+Relevant commits:
+%(log)s
+
+The CCHDO webserver
+""" % {'dtime': now,
+       'user': getpass.getuser(),
+       'log': log}
+
+    techstaff = [
+        'jfields@ucsd.edu',
+        'sdiggs@ucsd.edu',
+        'carolina@ucsd.edu',
+        'myshen@ucsd.edu',
+    ]
+
+    msg = MIMEText(message, 'text')
+    msg['Subject'] = '[CCHDO][production] Webserver modified %s' % now
+    msg['From'] = 'cchdo+webserver@ucsd.edu'
+    msg['To'] = ', '.join(techstaff)
+
+    try:
+        s = smtplib.SMTP('cchdo.ucsd.edu')
+        s.set_debuglevel(1)
+        s.sendmail(msg['From'], techstaff, msg.as_string())
+        s.quit()
+    except:
+        # Try to use sendmail
+        SENDMAIL = '/usr/bin/env sendmail'
+        s = subprocess.Popen('%s -t' % SENDMAIL, stdin=subprocess.PIPE, shell=True)
+        s.communicate('\n'.join([
+            'To: %s' % msg['To'], 
+            'From: %s' % msg['From'],
+            'Subject: %s' % msg['Subject'],
+            '\n',
+            message]))
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

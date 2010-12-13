@@ -32,6 +32,8 @@ class ApplicationController < ActionController::Base
     # Scrub sensitive parameters from your log
     filter_parameter_logging :password, :password_confirmation
 
+    protect_from_forgery
+
     def signin
         if request.post?
             if user = User.authenticate(params[:username], params[:password])

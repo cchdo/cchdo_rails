@@ -82,7 +82,11 @@ $(function () {
     eventClick: function (calEvent, jsEvent, view) {
       var dialog = $('<div class="calendar-info"></div>');
       dialog.append("<pre class=\"" + calEvent.className[0] + "\">" + calEvent.description + "</pre>");
-      dialog.dialog({title: calEvent.title, minWidth: 800, positon: [100, 100]});
+      dialog.dialog({title: calEvent.title, minWidth: 800, position: 'center'});
+      // XXX HACK: move the dialog box to the horizontal center. Shouldn't have
+      //to do this. 
+      dialog.parent('.ui-dialog').css('left',
+        $(window).width() / 2 - dialog.width() / 2);
       return false;
     },
     header: {left: 'month,basicWeek', center: 'title'}
