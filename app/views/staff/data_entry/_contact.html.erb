@@ -1,0 +1,31 @@
+
+<table border="0"class="contact_table">
+	<colgroup id="first_name_column"></colgroup>
+	<colgroup id="last_name_column"></colgroup>
+	<colgroup id="email_column"></colgroup>
+	<colgroup id="institute_column"></colgroup>
+	<colgroup id="phone_column"></colgroup>
+	<colgroup id="fax_column"></colgroup>
+	<colgroup id="address_column"></colgroup>
+	
+	<tr>
+		<th>First</th>
+		<th>Last</th>
+		<th>Email</th>
+		<th>Institute</th>
+		<th>Phone</th>
+	</tr>
+<% if @contacts %>
+
+  <% for @contact in @contacts %>
+	<tr onclick="DoNav('/staff/data_entry/contact_entry?contactID=<%= @contact.id %>');"
+ onmouseover="ChangeColor(this, true);" onmouseout="ChangeColor(this, false);">           <!--"this.className='contact_hilight;"	    > <ChangeColor(this,false);"> -->
+		<td><div class="contact_table_row_height"><%= @contact.FirstName %></div></td>
+		<td><div class="contact_table_row_height"><%= @contact.LastName %></div></td>
+		<td><div class="contact_table_row_height"><%= @contact.email %></div></td>
+		<td><div class="contact_table_row_height"><%= @contact.Institute %></div></td>
+		<td><div class="contact_table_row_height"><%= @contact.telephone %></div></td>
+	</tr>
+	<% end %>
+<% end %>
+</table>

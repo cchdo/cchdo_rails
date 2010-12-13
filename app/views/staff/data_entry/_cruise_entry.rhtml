@@ -1,0 +1,116 @@
+<div id="staff_cruise_entry">
+<%= @message %>
+<% form_remote_for :cruise,  :url => { :action => :put_cruise},:update => "cruise_entry" do |form| %>
+<table>
+	<tr><td>ExpoCode:<%= error_message_on(:cruise, :ExpoCode) %></td><td> <%= form.text_field  :ExpoCode %>  </td>
+	  <td rowspan = 120 valign="top">
+	  </td>
+	</tr>
+	<tr valign="top">
+		<td>Line:<%= error_message_on(:cruise, :Line) %></td><td> <%= form.text_field :Line %></td>
+	</tr>
+	<tr valign="top">
+		<td>Country:<%= error_message_on(:cruise, :Country) %></td><td> <%= form.text_field :Country %></td>
+	</tr>
+	<tr valign="top">
+		<td>Chief Scientist:<%= error_message_on(:cruise, :Chief_Scientist) %></td><td> <%= form.text_field :Chief_Scientist %></td>
+    </tr>
+	<tr valign="top">
+		<td>Ship Name:<%= error_message_on(:cruise, :Ship_Name) %></td><td> <%= form.text_field :Ship_Name %></td>
+	</tr>
+	<tr valign="top">
+		<td>Begin Date:<%= error_message_on(:cruise, :Begin_Date) %></td><td> <%= form.date_select :Begin_Date, :start_year => 1965, :end_year => Time.now.year+10 %></td>
+	</tr>
+	<tr valign="top">
+		<td>End Date:<%= error_message_on(:cruise, :EndDate) %></td><td> <%= form.date_select :EndDate,:start_year => 1965, :end_year => Time.now.year+10 %></td>
+	</tr>
+	<tr valign="top"><td>Alias:<%= error_message_on(:cruise, :Alias) %></td><td> <%= form.text_field :Alias %></td></tr>
+	<tr valign="top"><td>Group:<%= error_message_on(:cruise, :Group) %></td><td> <%= form.text_field :Group %></td></tr>
+	<tr valign="top"><td colspan="2">
+	</td>
+	</tr>
+	<tr><td>
+		<%= form.hidden_field :id %>
+	     <%= submit_tag value="Update"%>
+	    </td><td></td>
+	</tr>
+</table>
+<% end %> <!-- End of cruise form -->
+
+<% if @cruise %>
+<div id="contact_cruises_entry">
+<% if @cruise.collections %>
+  <ul>
+  <% for collection in @cruise.collections %>
+    <li>
+      <a href="cruise_group_entry?groupID=<%= collection.id %>"><%= collection.Name %></a>
+    </li>
+  <% end %>
+  </ul>
+<% end %>
+</div>
+<% end %>
+
+<% form_remote_tag :url => {:action => "add_cruise_group"}, :update => 'cruise_entry' do %>
+<%= text_field_tag 'NewGroup' %>
+<%= hidden_field :cruise, :id %>
+<%= submit_tag "Add Group" %>
+<% end -%>
+
+<% if @db_result_message %>
+<%= @db_result_message %>
+<% end %>
+</div>
+<!-- End of Code for adding a group to a cruise -->
+
+
+<!-- Cruise List -->
+<div id="cruise_results" style="height:40em; overflow-y:scroll;">
+	<table border="0"class="staff_cruise_table">
+		<tr>
+			<th>Line</th>
+			<th>ExpoCode</th>
+			<th>Date</th>
+			<th>Chief Scientist</th>
+			<th>Ship</th>
+		</tr>
+	<% if @cruises %>
+
+	  <% for @cruise in @cruises %>
+	    <% @extraparams = "" %>
+	    <% if @collection %>
+		   <% @extraparams = "&groupID=#{@collection.id}" %>
+		<% end %>
+		<tr onclick="DoNav('/staff/data_entry/cruise_entry?cruiseID=<%= @cruise.id %><%= @extraparams %>');"
+	 onmouseover="ChangeColor(this, true);" onmouseout="ChangeColor(this, false);">           <!--"this.className='contact_hilight;"	    > <ChangeColor(this,false);"> -->
+			<td><div class="contact_table_row_height"><%= @cruise.Line %></div></td>
+			<td><div class="contact_table_row_height"><%= @cruise.ExpoCode %></div></td>
+			<td><div class="contact_table_row_height"><%= @cruise.Begin_Date %></div></td>
+			<td><div class="contact_table_row_height"><%= @cruise.Chief_Scientist %></div></td>
+			<td><div class="contact_table_row_height"><%= @cruise.Ship_Name %></div></td>
+		</tr>
+		<% end %>
+	<% end %>
+	</table>
+</div>
+
+<!-- Groups List -->
+<div id="staff_cruise_groups" style="height:40em; overflow-y:scroll;">
+	<% form_for :collection,  :url => { :action => :cruise_group_entry } do |form| %>
+      <%= text_field_with_auto_complete :collection, :Name, :size =>'12' %>
+	<% end %>
+	<table border="0"class="staff_cruise_table">
+		<tr>
+			<th>Group</th>
+		</tr>
+	<% if @collections %>
+
+	  <% for @collection in @collections %>
+		<tr onclick="DoNav('/staff/data_entry/cruise_group_entry?groupID=<%= @collection.id %>');"
+	 onmouseover="ChangeColor(this, true);" onmouseout="ChangeColor(this, false);">   
+			<td><div class="contact_table_row_height"><%= @collection.Name %></div></td>
+		</tr>
+		<% end %>
+	<% end %>
+	</table>
+</div>

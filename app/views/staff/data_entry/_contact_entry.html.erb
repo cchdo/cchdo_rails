@@ -1,0 +1,97 @@
+<div id="contact_entry">
+<% form_remote_for @contact,  :url => { :action => :create_contact},:autocomplete => "off",:update => "contact_entry_and_list", :html => {:class =>"data_entry_form"} do |form| %>
+<%= error_messages_for(:contact)%>
+	<fieldset><legend><span>Enter Contact</span></legend></fieldset>
+	<ul class="data_entry_form">
+		<li>
+			<label for="contact_LastName"> Last Name:</label><%= text_field_with_auto_complete :contact, :LastName %>
+		<!--	<%= link_to_remote "Edit previous entry",:url => {:action => :find_contact_entry, :LastName => "$('contact_LastName').value"},:update => "entry" %> -->
+	    </li>
+	    <li>
+			<label for="contact_FirstName">First Name:</label><%= form.text_field :FirstName %>
+		</li>
+		<li>
+		  <label for="contact_Institute">Institute:</label><%= form.text_field :Institute %>
+		</li>
+		<li>
+			<label for="contact_telephone">Phone:</label><%= form.text_field :telephone %>
+		</li>
+		<li>
+			<label for="contact_fax">Fax:</label><%= form.text_field :fax %>
+		</li>
+		<li>
+			<label for="contact_email">Email:</label><%= form.text_field :email %>
+		</li>
+	</ul>
+	<ul class="data_entry_form_two_wide">
+		<li>
+			<label for="contact_Address">Address:</label><%= form.text_area :Address %>
+			<%= form.hidden_field :id %>
+	    </li>
+	    <li>
+			<%= submit_tag %>
+		</li>
+	</ul>
+
+
+<%=  observe_field :contact_LastName,
+                   :update => "contact_entry_and_list",
+                   :on => 'blur',
+                   :url => { :action => 'find_contact_entry'},
+                   :with => "'LastName=' + encodeURIComponent(value)"
+ %>
+<% end %>
+
+<div id="contact_cruises_entry">
+<% if @contact.cruises %>
+  <ul>
+  <% for cruise in @contact.cruises %>
+    <li>
+      <a href="/data_access?ExpoCode=<%= cruise.ExpoCode %>"><%= cruise.ExpoCode %>
+      <%= cruise.Line %></a>
+    </li>
+  <% end %>
+  </ul>
+<% end %>
+
+<% form_remote_tag :url => {:action => "add_contact_cruise"}, :update => 'contact_entry_and_list' do %>
+<%= text_field_tag 'NewExpoCode' %>
+<%= hidden_field :contact, :id %>
+<%= submit_tag "Add Cruise" %>
+<% end -%>
+
+
+</div>
+</div>
+<div id="contact_results" style="height:40em; overflow-y:scroll;">
+	<table border="0"class="contact_table">
+		<colgroup id="first_name_column"></colgroup>
+		<colgroup id="last_name_column"></colgroup>
+		<colgroup id="email_column"></colgroup>
+		<colgroup id="institute_column"></colgroup>
+		<colgroup id="phone_column"></colgroup>
+		<colgroup id="fax_column"></colgroup>
+		<colgroup id="address_column"></colgroup>
+
+		<tr>
+			<th>First</th>
+			<th>Last</th>
+			<th>Email</th>
+			<th>Institute</th>
+			<th>Phone</th>
+		</tr>
+	<% if @contacts %>
+
+	  <% for @contact in @contacts %>
+		<tr onclick="DoNav('/staff/data_entry/contact_entry?contactID=<%= @contact.id %>');"
+	 onmouseover="ChangeColor(this, true);" onmouseout="ChangeColor(this, false);">           <!--"this.className='contact_hilight;"	    > <ChangeColor(this,false);"> -->
+			<td><div class="contact_table_row_height"><%= @contact.FirstName %></div></td>
+			<td><div class="contact_table_row_height"><%= @contact.LastName %></div></td>
+			<td><div class="contact_table_row_height"><%= @contact.email %></div></td>
+			<td><div class="contact_table_row_height"><%= @contact.Institute %></div></td>
+			<td><div class="contact_table_row_height"><%= @contact.telephone %></div></td>
+		</tr>
+		<% end %>
+	<% end %>
+	</table>
+</div>
