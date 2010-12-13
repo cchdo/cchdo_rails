@@ -2,34 +2,28 @@
 <%= @message %>
 <% form_remote_for :cruise,  :url => { :action => :put_cruise},:update => "cruise_entry" do |form| %>
 <table>
-<!-- 	<tr><td colspan="2">
-		Create<input type="radio" name="entry_type" <%= @create_radio %> value="Create"  >
-		&nbsp;Update<input type="radio" name="entry_type" <%= @update_radio %> value="Update">
-	</td></tr> -->	
-	<tr><td>ExpoCode:<%= error_message_on(:cruise, :ExpoCode) %></td><td> <%= text_field_with_auto_complete :cruise, :ExpoCode %>
-	<!-- 		<div class="auto_complete" id="expocode_auto_complete"></div>
-    <%= javascript_tag("new Autocompleter.Local('cruise_ExpoCode','expocode_auto_complete',expocodes,{fullSearch: true, frequency: 0, minChars:1});")%> -->
-		                  </td>
-	<td rowspan = 120 valign="top">
-	</td></tr>
-	<tr valign="top"><td>Line:<%= error_message_on(:cruise, :Line) %></td><td> <%= form.text_field :Line %></td></tr>
-	<tr valign="top"><td>Country:<%= error_message_on(:cruise, :Country) %></td><td> <%= form.text_field :Country %>
-		<div class="auto_complete" id="Country_auto_complete"></div>
-     <%= javascript_tag("new Autocompleter.Local('cruise_Country','Country_auto_complete',countries,{fullSearch: true, frequency: 0, minChars:1});")%>
-	</td></tr>
-	
-	<tr valign="top"><td>Chief Scientist:<%= error_message_on(:cruise, :Chief_Scientist) %></td><td> <%= form.text_field :Chief_Scientist %>
-		<div class="auto_complete" id="Chief_Scientist_auto_complete"></div>
-        <%= javascript_tag("new Autocompleter.Local('cruise_Chief_Scientist','Chief_Scientist_auto_complete',pis,{fullSearch: true, frequency: 0, minChars:1});")%>
-   </td></tr>
-	
-	<tr valign="top"><td>Ship Name:<%= error_message_on(:cruise, :Ship_Name) %></td><td> <%= form.text_field :Ship_Name %>
-			<div class="auto_complete" id="Ship_Name_auto_complete"></div>
-	        <%= javascript_tag("new Autocompleter.Local('cruise_Ship_Name','Ship_Name_auto_complete',ships,{fullSearch: true, frequency: 0, minChars:1});")%>
-	</td></tr>
-	
-	<tr valign="top"><td>Begin Date:<%= error_message_on(:cruise, :Begin_Date) %></td><td> <%= form.date_select :Begin_Date, :start_year => 1965, :end_year => Time.now.year+10 %></td></tr>
-	<tr valign="top"><td>End Date:<%= error_message_on(:cruise, :EndDate) %></td><td> <%= form.date_select :EndDate,:start_year => 1965, :end_year => Time.now.year+10 %></td></tr>
+	<tr><td>ExpoCode:<%= error_message_on(:cruise, :ExpoCode) %></td><td> <%= form.text_field  :ExpoCode %>  </td>
+	  <td rowspan = 120 valign="top">
+	  </td>
+	</tr>
+	<tr valign="top">
+		<td>Line:<%= error_message_on(:cruise, :Line) %></td><td> <%= form.text_field :Line %></td>
+	</tr>
+	<tr valign="top">
+		<td>Country:<%= error_message_on(:cruise, :Country) %></td><td> <%= form.text_field :Country %></td>
+	</tr>
+	<tr valign="top">
+		<td>Chief Scientist:<%= error_message_on(:cruise, :Chief_Scientist) %></td><td> <%= form.text_field :Chief_Scientist %></td>
+    </tr>
+	<tr valign="top">
+		<td>Ship Name:<%= error_message_on(:cruise, :Ship_Name) %></td><td> <%= form.text_field :Ship_Name %></td>
+	</tr>
+	<tr valign="top">
+		<td>Begin Date:<%= error_message_on(:cruise, :Begin_Date) %></td><td> <%= form.date_select :Begin_Date, :start_year => 1965, :end_year => Time.now.year+10 %></td>
+	</tr>
+	<tr valign="top">
+		<td>End Date:<%= error_message_on(:cruise, :EndDate) %></td><td> <%= form.date_select :EndDate,:start_year => 1965, :end_year => Time.now.year+10 %></td>
+	</tr>
 	<tr valign="top"><td>Alias:<%= error_message_on(:cruise, :Alias) %></td><td> <%= form.text_field :Alias %></td></tr>
 	<tr valign="top"><td>Group:<%= error_message_on(:cruise, :Group) %></td><td> <%= form.text_field :Group %></td></tr>
 	<tr valign="top"><td colspan="2">
@@ -38,12 +32,11 @@
 	<tr><td>
 		<%= form.hidden_field :id %>
 	     <%= submit_tag value="Update"%>
-	    </td><td></td></tr>
-
-
-
+	    </td><td></td>
+	</tr>
 </table>
-<% end %>
+<% end %> <!-- End of cruise form -->
+
 <% if @cruise %>
 <div id="contact_cruises_entry">
 <% if @cruise.collections %>
@@ -68,7 +61,7 @@
 <%= @db_result_message %>
 <% end %>
 </div>
-<!-- End of Cruise Form -->
+<!-- End of Code for adding a group to a cruise -->
 
 
 <!-- Cruise List -->
@@ -104,14 +97,7 @@
 <!-- Groups List -->
 <div id="staff_cruise_groups" style="height:40em; overflow-y:scroll;">
 	<% form_for :collection,  :url => { :action => :cruise_group_entry } do |form| %>
-	<%= text_field_with_auto_complete :collection, :Name, :size =>'12' %>
-	<%= # observe_field :collection_Name,
-	    #               :on => 'blur',
-	    #              #:update => "cruise_entry",
-	    #               :url => {:action => 'cruise_group_entry'},
-	    #               :with => "'groupName=' + encodeURIComponent(value)"
-	 %>
-
+      <%= text_field_with_auto_complete :collection, :Name, :size =>'12' %>
 	<% end %>
 	<table border="0"class="staff_cruise_table">
 		<tr>
@@ -121,7 +107,7 @@
 
 	  <% for @collection in @collections %>
 		<tr onclick="DoNav('/staff/data_entry/cruise_group_entry?groupID=<%= @collection.id %>');"
-	 onmouseover="ChangeColor(this, true);" onmouseout="ChangeColor(this, false);">           <!--"this.className='contact_hilight;"	    > <ChangeColor(this,false);"> -->
+	 onmouseover="ChangeColor(this, true);" onmouseout="ChangeColor(this, false);">   
 			<td><div class="contact_table_row_height"><%= @collection.Name %></div></td>
 		</tr>
 		<% end %>
