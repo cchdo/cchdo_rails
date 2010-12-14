@@ -39,8 +39,8 @@ class ApplicationController < ActionController::Base
             if user = User.authenticate(params[:username], params[:password])
                 session[:user] = user.id
                 session[:username] = params[:username]
-                redirect_to :controller => session[:intended_controller],
-                            :action => session[:intended_action]
+                redirect_to :controller => 'staff',
+                            :action => 'index'
             else
                 flash[:notice] = "Invalid user name or password"
             end
@@ -58,7 +58,7 @@ class ApplicationController < ActionController::Base
         unless session[:user]
             session[:intended_action] = action_name
             session[:intended_controller] = controller_name
-            redirect_to :action => :signin
+            redirect_to :controller => :staff, :action => :signin
         else
             user = User.find(session[:user])
             if user.username =~ /guest/

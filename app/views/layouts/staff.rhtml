@@ -46,7 +46,7 @@ tableRow.style.backgroundColor = '#ffffff';
        <%= link_to("File Calendar",:controller => '/staff/cal') %>
     </div>
     <div id="signout">
-      <%= link_to("Sign out [#{session[:username]}]", :controller => "staff", :action => "signout") %>
+      <%= link_to("Sign out [#{session[:username]}]", :controller => "/staff", :action => "signout") %>
     </div>
   <% end %>
   <div id='content'>

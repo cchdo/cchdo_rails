@@ -16,7 +16,7 @@ production:
   database: cchdo
   username: jfields
   password: c@keandc00kies
-  host: cchdo.ucsd.edu
+  host: localhost
   encoding: utf8
 
 development:
