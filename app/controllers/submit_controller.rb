@@ -29,6 +29,9 @@ class SubmitController < ApplicationController
         # Create database record
         begin
             @submission = Submission.new(params[:submission])
+            @submission.action = params[:actions]
+            @submission.ip = request.env['REMOTE_ADDR']
+            @submission.user_agent = request.user_agent()
         rescue Exception => msg
             SUBMITLOG.info("FAILED: Unable to create submission record: #{msg}")
             flash.now[:notice] = $MSGS[:sorry]
