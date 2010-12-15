@@ -1,12 +1,10 @@
 
-<% form_remote_for :contact,  :url => { :action => :create_contact},:autocomplete => "off",:update => "entry" do |form| %>
+<% form_remote_for :contact,  :url => { :action => :create_contact},:autocomplete => "off",:update => "entry", :html => {:class =>"data_entry_form"} do |form| %>
 <%= error_messages_for(:contact)%>
 <table>
 
 
-	<tr><td>Last Name:</td><td> <%= form.text_field :LastName %>   <%= link_to_remote "Edit previous entry",:url => {:action => :find_contact_entry, :LastName => "$('contact_LastName').value"},:update => "entry" %>
-   		<div class="auto_complete" id="LastName_auto_complete"></div>
-     <%= javascript_tag("new Autocompleter.Local('contact_LastName','LastName_auto_complete',contacts,{fullSearch: true, frequency: 0, minChars:1});")%>
+	<tr><td><label for="contact_LastName"> Last Name:</label></td><td> <%= text_field_with_auto_complete :contact, :LastName %>   <%= link_to_remote "Edit previous entry",:url => {:action => :find_contact_entry, :LastName => "$('contact_LastName').value"},:update => "entry" %>
     </td></tr>
 	<tr><td>First Name:</td><td> <%= form.text_field :FirstName %>
    </td></tr>

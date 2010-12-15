@@ -29,11 +29,11 @@ end
 
 # Static pages
 def software
-  render :partial => "software"
+  #render :partial => "software"
 end
 
 def documentation 
-  render :partial => "documentation"
+  #render :partial => "documentation"
 end
 
 
