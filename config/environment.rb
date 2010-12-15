@@ -74,3 +74,19 @@ COUNTRIES = {
    'new zealand' => 'new', 'taiwan' => 'tai',
    'china'       => 'prc'
 }
+
+# Initialize the PassengerUploadBufferDir
+passengeruploadbufferdir = Rails.root.join('tmp', 'passengeruploadbuffer')
+require 'fileutils'
+begin
+  FileUtils.mkdir_p(passengeruploadbufferdir)
+  FileUtils.chmod(0775, passengeruploadbufferdir)
+rescue
+  Rails.logger.error("#{passengeruploadbufferdir} could not be created. " + 
+                     "Needed for file uploading.")
+  raise
+end
+begin
+  FileUtils.chown(nil, '_www', passengeruploadbufferdir)
+rescue Errno::EPERM
+end
