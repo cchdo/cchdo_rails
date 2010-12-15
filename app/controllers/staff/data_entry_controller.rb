@@ -32,6 +32,9 @@ class Staff::DataEntryController < ApplicationController
 
   def index
      @user = User.find(session[:user]).username
+     unless @user.eql?('cchdo_admin')
+      redirect_to :controller => '/staff', :action => 'index'
+     end
      @update_radio = " "
      @create_radio = "checked"
      @cruises = Cruise.all(:order => 'Line')
@@ -44,6 +47,9 @@ class Staff::DataEntryController < ApplicationController
 
 ############ CRUISE ENTRY ###########################################################
   def cruise_entry
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
      @update_radio = " "
      @create_radio = "checked"
      @parameter_codes = Code.all(:order => 'Code').map {|u| [u.Code, u.Status]}
@@ -63,6 +69,9 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def cruise_group_entry
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
      if params[:groupID]
        @collection = Collection.find(params[:groupID])
        @cruises = @collection.cruises
@@ -77,6 +86,9 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def find_cruise
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     @cruises = Cruise.all(:order => 'Line')
     if params[:ExpoCode]
       @cruise = Cruise.first(:conditions => [:ExpoCode => params[:ExpoCode]])
@@ -88,6 +100,9 @@ class Staff::DataEntryController < ApplicationController
   
   
   def put_cruise
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     @db_result_message="Didn't put anything"
     if params[:cruise]
       params[:cruise][:Ship_Name] = "unknown" unless params[:cruise][:Ship_Name] =~ /\w/
@@ -111,6 +126,9 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def add_cruise_group
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
       @params_returned = params
       if params[:NewGroup] 
         if params[:cruise][:id] and params[:cruise][:id] =~ /\d/
@@ -137,12 +155,18 @@ class Staff::DataEntryController < ApplicationController
 
 ############# CRUISE GROUP ENTRY ###################################################
   def group_entry
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
      @groups = CruiseGroup.all
      render :partial => "group_entry"
   end
   
   # Updates the group_contents div
   def show_group
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     if @group = params[:group] and @group =~ /\w/
       @cruise_group = CruiseGroup.first(:conditions => {:Group => @group})
 
@@ -159,6 +183,9 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def remove_group
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     if params[:remove]
       @cruise_objects = []
   
@@ -176,6 +203,9 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def create_group
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     if params[:cruise_group] and group = params[:cruise_group][:Group]
         @new_cruise_group = CruiseGroup.new
         @new_cruise_group.Group = group
@@ -189,6 +219,9 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def show_lines_for_group
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     if line = params[:cruise][:Line]
       @lines = Cruise.all(:conditions => {:Line => line})
       if @group = params[:cruise][:Group] and @group =~ /\w/
@@ -205,6 +238,9 @@ class Staff::DataEntryController < ApplicationController
 
 ############# DATA HISTORIES #######################################################
   def event_entry
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     if user = STAFF[User.find(session[:user]).username]
       (first, last) = user.split(' ')
     else
@@ -215,6 +251,9 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def create_event
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     if params[:event]
       @event = Event.new(params[:event])
       #@event.Date_Entered = Time.now.strftime("%Y-%m-%d")
@@ -228,6 +267,9 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def display_events
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     cur_sort = (['LastName', 'Data_Type'].include? params[:Sort]) ? params[:Sort] : 'Date_Entered DESC'
     if @expo = params[:ExpoCode]
       @events = Event.all(:conditions => {:ExpoCode => @expo}, :order => cur_sort)
@@ -240,11 +282,17 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def note
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     @note_entry = Event.first(:conditions => {:ID => params[:Entry]})
     render :partial => "note"
   end
   
   def find_name
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     if @last_name = params[:LastName]
       if @tmp_event = Contact.first(:conditions => {:LastName => @last_name})
         @first_name = @tmp_event.FirstName
@@ -260,6 +308,9 @@ class Staff::DataEntryController < ApplicationController
 
 ############# CONTACTS  ############################################################
   def contact_entry
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     if @contact_id = params[:contactID]
       @contact = Contact.first(:conditions => {:id => @contact_id})
     else
@@ -270,6 +321,9 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def find_contact_entry
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     # Auto complete the form if the last name can be found
     if params[:LastName]
       if @contact = Contact.first(:conditions => {:LastName => params[:LastName]})
@@ -284,6 +338,9 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def add_contact_cruise
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     @contact = Contact.new
     @params_returned = params
     if params[:NewExpoCode] 
@@ -301,6 +358,9 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def create_contact
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     if params[:contact]
      # @contact = params[:contact]
       if params[:contact][:id] and params[:contact][:id] =~ /\d/
@@ -328,6 +388,9 @@ class Staff::DataEntryController < ApplicationController
 
 ############### PARAMETERS #########################################################
   def parameter_entry
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     @p_list = []
     @other_column_names = []
     @groups = ParameterGroup.find_by_sql("select distinct `group`,`parameters` from parameter_groups")
@@ -346,6 +409,9 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def submit_parameter
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     @p_list = []
     @other_column_names = []
     @groups = ParameterGroup.find_by_sql("select distinct `group`,`parameters` from parameter_groups")
@@ -384,6 +450,9 @@ class Staff::DataEntryController < ApplicationController
 
   
   def update_parameters
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
   end
   
 #^^^^^^^^^^^^^^ PARAMETERS  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -395,6 +464,9 @@ class Staff::DataEntryController < ApplicationController
   #If the cruise entry is valid, it's created and saved.  If it's not valid, error messages are
   #passed back to the _cruise_entry.rhtml page.
   def being_removed_____create_cruise
+    unless @user.eql?('cchdo_admin')
+     redirect_to :controller => '/staff', :action => 'index'
+    end
     @parameter_codes = Code.find(:all,:order => "Code").map {|u| [u.Code, u.Status]}
     @param_list = []
     @message = ""

@@ -66,6 +66,11 @@
 
 <!-- Cruise List -->
 <div id="cruise_results" style="height:40em; overflow-y:scroll;">
+	<% if @collection %>
+	<ul><li>Cruises in <%= @collection.Name %></li></ul>
+	<% else %>
+	<ul><li>All Cruises</li></ul>
+	<% end %>
 	<table border="0"class="staff_cruise_table">
 		<tr>
 			<th>Line</th>
