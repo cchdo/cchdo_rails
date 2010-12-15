@@ -14,23 +14,23 @@
     <% if @submission %>
       <dl>
         <dt>File:</dt>
-          <dd><%= h(File.basename(@submission.file)) %></dd>
+          <dd><%= h(File.basename(@submission.file)) || '&nbsp;' %></dd>
         <dt>Status:</dt>
-          <dd><%= h(@submission.public) %></dd>
+          <dd><%= h(@submission.public) || '&nbsp;' %></dd>
         <dt>Action:</dt>
           <dd><%= (! @submission.action.blank?) ? h(@submission.action) : '&nbsp;' %></dd>
         <dt>Expocode:</dt>
-          <dd><%= h(@submission.ExpoCode) %></dd>
+          <dd><%= h(@submission.ExpoCode) || '&nbsp;' %></dd>
         <dt>Line:</dt>
-          <dd><%= h(@submission.Line) %></dd>
+          <dd><%= h(@submission.Line) || '&nbsp;' %></dd>
         <dt>Cruise Date:</dt>
-          <dd><%= h(@submission.cruise_date) %></dd>
+          <dd><%= h(@submission.cruise_date) || '&nbsp;' %></dd>
         <dt>Institution:</dt>
-          <dd><%= h(@submission.institute) %></dd>
+          <dd><%= h(@submission.institute) || '&nbsp;' %></dd>
         <dt>Country:</dt>
-          <dd><%= h(@submission.Country) %></dd>
+          <dd><%= h(@submission.Country) || '&nbsp;' %></dd>
         <dt>Confirmation sent to:</dt>
-          <dd><%= h(@submission.email) %></dd>
+          <dd><%= h(@submission.email) || '&nbsp;' %></dd>
       </dl>
     <% else %>
       <p>There was an error with your submission.</p>

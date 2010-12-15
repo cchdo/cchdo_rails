@@ -1,103 +1,177 @@
-<%content_for :js do%>
-<%= javascript_include_tag 'slidemenu', 'withscript', :defaults -%>
-<script type="text/javascript">window.onload=init;</script>
-<%end-%>
-<div id='content'>
-<div class='boxed'>
+<%content_for :head do%>
+<style type='text/css'>
+p { padding: 0.5em; }
+sup { vertical-align: top; color: red; }
+input[type="text"]:focus { background-color: #ffa; }
+#step1 input[type="text"] { width: 25ex; }
+#step2 input[type="text"] { width: 30ex; }
+h2 { margin-top: 0.5em; text-transform: uppercase; font-size: 1.5em; font-weight: bold; }
+h2 em { color: #a0a0a0; font-size: 1.2em; vertical-align: text-top; margin-left: -0.2em; }
+h2 span { color: #000; font-size: 0.8em; text-transform: none; font-weight: normal; }
+</style>
+<% end -%>
+
+<div class="boxed">
 <h1>Submit Data</h1>
-<div class='box_content'>
 
-<noscript>
-Your browser does not have JavaScript enabled. Please visit
-<%=link_to('this page', :action => :simple)%> to make your submission or
-send your file to cberysgo@ucsd.edu.
-</noscript>
+<div class="box_content">
 
-<div class="hidden">
-  <% @public = ["Public", "Non Public"] %>
-  <% form_for(:submission, :html =>{:multipart => true}) do |form| %>
-  <ul id="sf2" class="sf2">
-  <li>
-    <table id="step_content12" class="step_content12">
-      <tr><td colspan="4" valign="top"><span class="step2">Step<span class="step_number2">1</span>:</span> <span class="step_title">Contact Information</span></td></tr>
-      <tr><td valign="top">
-      <table class="table_step2">
-        <tr>
-          <td align="left">Name (Last, First)<span class="important"> <%= error_message_on(:submission, :name) %> <sup>*</sup></span></td>
-          <td align="left"><%= form.text_field :name ,:size => 15%></td>
-        </tr>
-        <tr>
-          <td align="left">Institution<span class="important"> <%= error_message_on(:submission, :institute) %> <sup>*</sup></span></td>
-          <td align="left"><%= form.text_field :institute,:size => 15%></td>
-        </tr>
-        <tr>
-          <td align="left">Country<span class="important"><%= error_message_on(:submission, :Country) %> <sup>*</sup></span></td>
-          <td align="left"><%= form.text_field :Country ,:size => 15%></td>
-        </tr>
-        <tr>
-          <td align="left">Email<span class="important"> <%= error_message_on(:submission, :email) %> <sup>*</sup></span></td>
-          <td align="left"><%= form.text_field :email ,:size => 15%></td>
-        </tr>
-        <tr><td colspan="2" align="left">Public or Non-Public?<%= error_message_on(:submission, :public) %><span class="important"><sup>*</sup></span> <%= form.radio_button :public ,"public", :checked => true %> Public <%= form.radio_button :public, "Non-Public" %> Non-Public</td></tr>
-      </table></td></tr>
-    </table>
-  </li>
-  <li>
-    <table id="step_content22" class="step_content22">
-      <tr><td valign="top"><span class="step2">Step<span class="step_number2">2</span>:</span> <span class="step_title">Cruise Information</span></td></tr>
-      <tr><td valign="top">
-        <table class="table_step2">
-        <tr><td align="left">ExpoCode Or Cruise Name</td><td><%= form.text_field :ExpoCode %></td></tr>
-        <tr><td align="left">WOCE Line (If Known)</td><td><%= form.text_field :Line %></td></tr>
-        <tr><td align="left">Ship Name</td><td><%= form.text_field :Ship_Name %></td></tr>
-        <tr><td align="left">Cruise Date</td><td><%=form.date_select :cruise_date ,:start_year=> 1970,:include_blank => true%></td></tr>
-        </table>
-      </td></tr>
-    </table>
-  </li>
-  <li>
-    <table id="step_content32" class="step_content32">
-      <tr><td valign="top"><span class="step2">Step<span class="step_number2">3</span>:</span> <span class="step_title">Type of Submission</span></td></tr>
-      <tr><td valign="top">
-      <table class="table_step2">
-        <tr>
-          <td><%= check_box "actions","one",{},"Merge Data" %></td>                  
-          <td align="left">Merge Data</td>
-          <td><%= check_box "actions","two",{},"Place Online" %></td>
-          <td align="left">Place Data Online</td>
-        </tr>
-        <tr>
-          <td valign="top"><%= check_box "actions","three",{},"Updated Parameters" %></td>
-          <td align="left">Update Parameters</td>
-          <td valign="top"><%= check_box "actions","four",{},"Non-public data for Argo calibration (proprietary, rapid-delivery)" %></td>
-          <td align="left">Non-public data for Argo calibration (proprietary, rapid-delivery)</td>
-        </tr>
-        <tr><td align="left" colspan="4">Notes</td></tr>
-        <tr><td align="left" colspan="4"><%= form.text_area :notes ,:rows => "5", :cols =>"35"%> </td></tr>
-      </table></td></tr>
-    </table>  
-  </li>
-  <li>
-    <table id="step_content42" class="step_content42">
-      <tr><td valign="top"><span class="step2">Step<span class="step_number2">4</span>:</span> <span class="step_title">Data/Documentation Files</span></td></tr>
-      <tr><td align="right" valign="top">
-      <table class="table_step2">
-        <tr><td align="left">  
-          <%= error_message_on(:submission, :file) %> <% if @file %> <%= @file %> <% end %> <%= form.file_field :file %><!--<input type="file" name="file">-->
-          </td>
-          <!--td align="right"><a href="#">Remove this file</a></td-->
-        </tr>
-        <tr><td colspan="2" align="left"><!--<a href="#">Add another file </a>--><br><hr></td></tr>
-        <tr><td colspan="2" align="right">&nbsp;<%= submit_tag "Submit"%></td></tr>
-      </table></td></tr>
-    </table>
-  </li>
-</ul>
-<% end %>
+<p><sup>*</sup> Indicates a required field</p>
 
-<table width="100%"><tr><td align="left"><a href="http://cchdo.ucsd.edu/CCHDO_DataSubmitGuide.pdf">Submission Guide</a> | <a href="http://cchdo.ucsd.edu/argo_submission_info.html">Argo Submission Guide</a></td><td>&nbsp;</td><td align="right">
-<span class="asterisk"><sup><span class="important">*</span></sup> Indicates a required field</span></td></tr></table>
-<p style="max-width: inherit;">Please fill out pertinent form fields in Steps 1 through 4 and click on "Submit" in Step 4. To advance or go back a step, click on the appropriate step number's tab.</p>
+<%
+$required = content_tag(:sup, '*')
+def required_label(f, method, label)
+    f.label(method, "#{label} #{$required}")
+end
+def unsized_text(f, method)
+    f.text_field(method, :size => nil)
+end
+$step_count = 0
+def step(&block)
+    $step_count += 1
+    content_tag(:div, :id => "step#{$step_count}", &block)
+end
+def title(text)
+    content_tag(:h2, "Step #{content_tag(:em, $step_count)}: #{content_tag(:span, text)}")
+end 
+-%>
+<%form_for(:submission, :url => submission_path, :html => {:multipart => true}) do |f|%>
+
+<%step do%>
+<%=title('Contact Information')%>
+<table>
+  <tr>
+    <td><%=required_label(f, :name, 'Name (Last, First)')%></td> 
+    <td><%=unsized_text(f, :name)%></td>
+    <%=content_tag(:td, f.error_message_on(:name))%>
+  </tr>
+
+  <tr>
+    <td><%=required_label(f, :institute, 'Institution')%></td>
+    <td><%=unsized_text(f, :institute)%></td>
+    <%=content_tag(:td, f.error_message_on(:institute))%>
+  </tr>
+
+  <tr>
+    <td><%=required_label(f, :Country, 'Country')%></td>
+    <td><%=unsized_text(f, :Country)%></td>
+    <%=content_tag(:td, f.error_message_on(:Country))%>
+  </tr>
+
+  <tr>
+    <td><%=required_label(f, :email, 'Email')%></td>
+    <td><%=unsized_text(f, :email)%></td>
+    <%=content_tag(:td, f.error_message_on(:Email))%>
+  </tr>
+  </tr>
+
+  <tr>
+    <td colspan="2">
+      <%=f.radio_button :public, :public, :checked => true%>
+      <%=f.label :public_public, :Public%>
+      <%=f.radio_button :public, :nonpublic%>
+      <%=f.label :public_nonpublic, 'Non-Public'%>
+    </td>
+    <%=content_tag(:td, f.error_message_on(:public))%>
+  </tr>
+</table>
+<%end-%>
+
+<%step do%>
+<%=title('Cruise Information')%>
+<table>
+  <tr>
+    <td><%=f.label :ExpoCode, 'ExpoCode or Cruise Name'%></td>
+    <td><%=unsized_text(f, :ExpoCode)%></td>
+    <%=content_tag(:td, f.error_message_on(:ExpoCode))%>
+  </tr>
+
+  <tr>
+    <td><%=f.label :Line, 'WOCE Line (if known)'%></td>
+    <td><%=unsized_text(f, :Line)%></td>
+    <%=content_tag(:td, f.error_message_on(:Line))%>
+  </tr>
+
+  <tr>
+    <td><%=f.label :Ship_Name%></td>
+    <td><%=unsized_text(f, :Ship_Name)%></td>
+    <%=content_tag(:td, f.error_message_on(:Ship_Name))%>
+  </tr>
+
+  <tr>
+    <td><%=f.label :cruise_date_1i, 'Cruise Date'%></td>
+    <td><%=f.date_select :cruise_date, :start_year => 1970, :include_blank => true%></td>
+    <%=content_tag(:td, f.error_message_on(:cruise_date))%>
+  </tr>
+</table>
+<%end-%>
+
+<%step do%>
+<%=title('Type of Submission')%>
+<table>
+  <tr>
+    <td>
+      <%=check_box :actions, :one, {}, 'Merge Data'%>
+      <%=label :actions, :one, 'Merge Data'%>
+      <%=content_tag(:span, error_message_on(:actions, :one))%>
+    </td>
+
+    <td>
+      <%=check_box :actions, :two, {}, 'Place Online'%>
+      <%=label :actions, :two, 'Place Data Online'%>
+      <%=content_tag(:span, error_message_on(:actions, :two))%>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <%=check_box :actions, :three, {}, 'Updated Parameters'%>
+      <%=label :actions, :three, 'Update Parameters'%>
+      <%=content_tag(:span, error_message_on(:actions, :three))%>
+    </td>
+
+    <td>
+      <%argo = 'Non-public data for Argo calibration (proprietary, rapid-delivery)'%>
+      <%=check_box :actions, :four, {}, argo%>
+      <%=label :actions, :four, argo%>
+      <%=content_tag(:span, error_message_on(:actions, :four))%>
+    </td>
+
+  </tr>
+</table>
+
+<h3><%=f.label :notes%></h3>
+<%=f.text_area :notes, :rows => 5, :cols => 35%>
+<%end-%>
+
+<%step do%>
+<%=title('Data/Documentation Files')%>
+<table>
+  <tr>
+    <td><%=f.file_field :file%></td>
+    <%#<td align="right"><a href="#">Remove this file</a></td>-%>
+  </tr>
+
+  <%#
+  <tr>
+    <td colspan="2">
+      <a href="#">Add another file </a><br>
+    </td>
+  </tr>
+  -%>
+</table>
+<%end-%>
+<%=submit_tag(:Submit)%>
+<%end-%>
+
+
+<div id="guide">
+<p>
+  <a href="/CCHDO_DataSubmitGuide.pdf">Submission Guide</a> |
+  <a href="/argo_submission_info.html">Argo Submission Guide</a>
+</p>
 </div>
+
 </div>
-<div class='box_bottom'></div>
+<div class="box_bottom"></div>
+</div>

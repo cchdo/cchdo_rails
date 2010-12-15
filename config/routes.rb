@@ -14,8 +14,8 @@ ActionController::Routing::Routes.draw do |map|
   map.new_simple_submission '/submit/simple', :controller => :submit,
                                               :action => :simple,
                                               :conditions => {:method => :get}
-  map.connect '/submit', :controller => :submit, :action => :create,
-                         :conditions => {:method => :post}
+  map.submission '/submit', :controller => :submit, :action => :create,
+                        :conditions => {:method => :post}
 
   # Sample of regular route:
   # map.connect 'products/:id', :controller => 'catalog', :action => 'view'
