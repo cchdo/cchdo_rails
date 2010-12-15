@@ -26,6 +26,7 @@ ActionController::Routing::Routes.draw do |map|
   # This route can be invoked with purchase_url(:id => product.id)
 
   map.cruise 'cruise/:expocode', :controller => :data_access, :action => :show_cruise
+  #map.resources :cruise
 
   map.feed 'feed/:expocodes', :controller => :data_access, :action => :feed, :format => 'atom'
   

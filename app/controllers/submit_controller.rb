@@ -27,8 +27,14 @@ class SubmitController < ApplicationController
         SUBMITLOG.info(params.inspect)
  
         # Create database record
-        @submission = Submission.new(params[:submission])
-        @submission.action = params[:actions]
+        begin
+            @submission = Submission.new(params[:submission])
+            @submission.action = params[:actions]
+        rescue Exception => msg
+            SUBMITLOG.info("FAILED: Unable to create submission record: #{msg}")
+            flash.now[:notice] = $MSGS[:sorry]
+            render :action => :new, :status => 500
+        end
 
         SUBMITLOG.info("Saving record: #{@submission.inspect}")
  
@@ -50,7 +56,7 @@ class SubmitController < ApplicationController
 
         if ENV['RAILS_ENV'] == 'production'
             begin
-                FileSubmittedMailer.confirm(@submission).deliver
+                FileSubmittedMailer.deliver_confirm(@submission)
             rescue Exception => msg
                 SUBMITLOG.warn("Unable to send confirmation email: #{msg}")
             end

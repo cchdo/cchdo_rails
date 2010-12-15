@@ -1,6 +1,7 @@
 class Cruise < ActiveRecord::Base
     #set_primary_key :Entry
     has_and_belongs_to_many :contacts
+    has_and_belongs_to_many :collections
     has_many :documents, :primary_key => 'ExpoCode', :foreign_key => 'ExpoCode'
 
     validates_presence_of :ExpoCode
@@ -12,7 +13,7 @@ class Cruise < ActiveRecord::Base
                         :message => "is missing or invalid"
 
     validates_format_of :Chief_Scientist,
-                        :with => /^[\w:\/\\\s\'\(\)]+$/,
+                        :with => /^[\w\.:\/\\\s\'\(\)]+$/,
                         :message => "is missing or invalid"
 
     validates_format_of :Ship_Name,

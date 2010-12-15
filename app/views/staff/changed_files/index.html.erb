@@ -1,0 +1,11 @@
+<% if @files %>
+<ul>
+	<% for file in @files %>
+	<li><%= File.basename(file.name) %>:<%= file.status %> 
+		<% if file.expocode =~ /\w/ %>
+		 (<%= file.expocode %>)
+		<% end %>
+	</li>
+	<% end %>
+</ul>
+<% end %>
