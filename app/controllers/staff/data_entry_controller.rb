@@ -29,7 +29,7 @@ class Staff::DataEntryController < ApplicationController
   auto_complete_for :cruise, :ExpoCode
   auto_complete_for :contact, :LastName
   auto_complete_for :collection, :Name
-
+  
   def index
      @user = User.find(session[:user]).username
      unless @user.eql?('cchdo_admin')
@@ -47,6 +47,7 @@ class Staff::DataEntryController < ApplicationController
 
 ############ CRUISE ENTRY ###########################################################
   def cruise_entry
+    @user = User.find(session[:user]).username
     unless @user.eql?('cchdo_admin')
      redirect_to :controller => '/staff', :action => 'index'
     end
@@ -66,9 +67,17 @@ class Staff::DataEntryController < ApplicationController
         @cruises = @collection.cruises
       end
      @collections = Collection.all(:order => 'Name')
+     
+     if @contact_id = params[:contactID]
+       @contact = Contact.first(:conditions => {:id => @contact_id})
+     else
+       @contact = Contact.new
+     end
+     
   end
   
   def cruise_group_entry
+    @user = User.find(session[:user]).username
     unless @user.eql?('cchdo_admin')
      redirect_to :controller => '/staff', :action => 'index'
     end
@@ -82,10 +91,18 @@ class Staff::DataEntryController < ApplicationController
        @cruises = Cruise.all
      end
      @collections = Collection.all(:order => 'Name')
+     
+     if @contact_id = params[:contactID]
+       @contact = Contact.first(:conditions => {:id => @contact_id})
+     else
+       @contact = Contact.new
+     end
+     
      render 'cruise_entry'
   end
   
   def find_cruise
+    @user = User.find(session[:user]).username
     unless @user.eql?('cchdo_admin')
      redirect_to :controller => '/staff', :action => 'index'
     end
@@ -96,10 +113,18 @@ class Staff::DataEntryController < ApplicationController
       @cruise = Cruise.find(params[:cruiseID])
     end
     @collections = Collection.all(:order => 'Name')
+    
+    if @contact_id = params[:contactID]
+      @contact = Contact.first(:conditions => {:id => @contact_id})
+    else
+      @contact = Contact.new
+    end
+    
   end
   
   
   def put_cruise
+    @user = User.find(session[:user]).username
     unless @user.eql?('cchdo_admin')
      redirect_to :controller => '/staff', :action => 'index'
     end
@@ -122,10 +147,52 @@ class Staff::DataEntryController < ApplicationController
     end
     @cruises = Cruise.all(:order => 'Line')
     @collections = Collection.all(:order => 'Name')
+    
+    if @contact_id = params[:contactID]
+      @contact = Contact.first(:conditions => {:id => @contact_id})
+    else
+      @contact = Contact.new
+    end
+    
     render :partial => 'cruise_entry'
   end
   
+  def add_cruise_contact
+     @user = User.find(session[:user]).username
+      unless @user.eql?('cchdo_admin')
+       redirect_to :controller => '/staff', :action => 'index'
+      end
+        @params_returned = params
+        if params[:NewContact] 
+          if params[:cruise][:id] and params[:cruise][:id] =~ /\d/
+            if @cruise = Cruise.find(params[:cruise][:id])
+              if @contact = Contact.find(:conditions =>{:Name => params[:NewGroup]})
+                @cruise.contacts << @contact
+                #@contact_cruises_entry = ContactCruises.create :contact => @contact, :cruise => @cruise
+              else
+                @db_result = "No contact with last name:#{params[:NewContact]}"
+                #@group = Collection.new
+                #@group.Name = params[:NewGroup]
+                #@group.save!
+                #@cruise.collections << @group
+              end
+            end
+          end
+        end
+        @cruises = Cruise.all(:order => 'Line')
+        @collections = Collection.all(:order => 'Name')
+        
+        if @contact_id = params[:contactID]
+          @contact = Contact.first(:conditions => {:id => @contact_id})
+        else
+          @contact = Contact.new
+        end
+        
+        render :partial => "cruise_entry"
+  end
+  
   def add_cruise_group
+    @user = User.find(session[:user]).username
     unless @user.eql?('cchdo_admin')
      redirect_to :controller => '/staff', :action => 'index'
     end
@@ -147,6 +214,13 @@ class Staff::DataEntryController < ApplicationController
       end
       @cruises = Cruise.all(:order => 'Line')
       @collections = Collection.all(:order => 'Name')
+      
+      if @contact_id = params[:contactID]
+        @contact = Contact.first(:conditions => {:id => @contact_id})
+      else
+        @contact = Contact.new
+      end
+      
       render :partial => "cruise_entry"
   end
   
@@ -308,6 +382,7 @@ class Staff::DataEntryController < ApplicationController
 
 ############# CONTACTS  ############################################################
   def contact_entry
+    @user = User.find(session[:user]).username
     unless @user.eql?('cchdo_admin')
      redirect_to :controller => '/staff', :action => 'index'
     end
@@ -321,6 +396,7 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def find_contact_entry
+    @user = User.find(session[:user]).username
     unless @user.eql?('cchdo_admin')
      redirect_to :controller => '/staff', :action => 'index'
     end
@@ -338,6 +414,7 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def add_contact_cruise
+    @user = User.find(session[:user]).username
     unless @user.eql?('cchdo_admin')
      redirect_to :controller => '/staff', :action => 'index'
     end
@@ -358,6 +435,7 @@ class Staff::DataEntryController < ApplicationController
   end
   
   def create_contact
+    @user = User.find(session[:user]).username
     unless @user.eql?('cchdo_admin')
      redirect_to :controller => '/staff', :action => 'index'
     end

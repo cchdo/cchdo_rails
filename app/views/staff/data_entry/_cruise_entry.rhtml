@@ -56,12 +56,33 @@
 <%= hidden_field :cruise, :id %>
 <%= submit_tag "Add Group" %>
 <% end -%>
+<!-- End of Code for adding a group to a cruise -->
+
+<% if @cruise %>
+<div id="contact_cruises_entry">
+<% if @cruise.contacts %>
+  <ul>
+  <% for contact in @cruise.contacts %>
+    <li>
+      <a href="/staff/data_entry/contact_entry?contactID=<%= contact.id %>"> <%= contact.FirstName %> <%= contact.LastName %></a>
+    </li>
+  <% end %>
+  </ul>
+<% end %>
+</div>
+<% end %>
+
+<% form_remote_tag :url => {:action => "add_cruise_contact"}, :update => 'cruise_entry' do %>
+<%= text_field_with_auto_complete :contact, :LastName  %>
+<%= hidden_field :cruise, :id %>
+<%= submit_tag "Add Contact" %>
+<% end -%>
+<!-- End of Code for adding a group to a cruise -->
 
 <% if @db_result_message %>
 <%= @db_result_message %>
 <% end %>
 </div>
-<!-- End of Code for adding a group to a cruise -->
 
 
 <!-- Cruise List -->
