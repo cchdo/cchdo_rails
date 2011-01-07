@@ -30,11 +30,21 @@ class SubmitController < ApplicationController
         begin
             @submission = Submission.new(params[:submission])
             @submission.action = params[:actions]
+            @submission.ip = request.env['REMOTE_ADDR']
+            @submission.user_agent = request.user_agent()
         rescue Exception => msg
             SUBMITLOG.info("FAILED: Unable to create submission record: #{msg}")
             flash.now[:notice] = $MSGS[:sorry]
             render :action => :new, :status => 500
+            return
         end
+        if @submission.blank?
+            SUBMITLOG.info("FAILED: No submission record created.")
+            flash.now[:notice] = $MSGS[:sorry]
+            render :action => :new, :status => 500
+            return
+        end
+        @submission.action = params[:actions]
 
         SUBMITLOG.info("Saving record: #{@submission.inspect}")
  
@@ -48,7 +58,7 @@ class SubmitController < ApplicationController
             return
         rescue Exception => msg
             @submission.unsave_file()
-            SUBMITLOG.info("FAILED: ERROR: #{msg}")
+            SUBMITLOG.info("FAILED: ERROR: #{msg}\n\n#{msg.backtrace}")
             flash.now[:notice] = $MSGS[:sorry]
             render :action => :new, :status => 500
             return

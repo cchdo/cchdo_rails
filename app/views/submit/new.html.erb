@@ -1,6 +1,5 @@
 <%content_for :head do%>
 <style type='text/css'>
-p { padding: 0.5em; }
 sup { vertical-align: top; color: red; }
 input[type="text"]:focus { background-color: #ffa; }
 #step1 input[type="text"] { width: 25ex; }
@@ -150,20 +149,17 @@ end
 
 <%step do%>
 <%=title('Data/Documentation Files')%>
-<table>
-  <tr>
-    <td><%=f.file_field :file%></td>
-    <%#<td align="right"><a href="#">Remove this file</a></td>-%>
-  </tr>
-
-  <%#
-  <tr>
-    <td colspan="2">
-      <a href="#">Add another file </a><br>
-    </td>
-  </tr>
-  -%>
-</table>
+<% unless error_messages_for(:submission).blank? %>
+  <p class="notice" style="font-size: 0.75em !important; max-width: none !important; border-bottom: 1px solid #a0a0a0;">For your
+  protection, the files you selected previously cannot be
+  automatically reselected from your computer (prevents
+  malicious pages from uploading arbitrary files from your
+  computer). Please reselect the files. We apologize for the
+  inconvenience.</p>
+<% end %>
+<div id="files">
+  <p index="0"><%= f.file_field 'files[0]' %></p>
+</div>
 <%end-%>
 <%=submit_tag(:Submit)%>
 <%end-%>
@@ -179,3 +175,42 @@ end
 </div>
 <div class="box_bottom"></div>
 </div>
+<% content_for :js do %>
+<%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.js" %>
+<script type="text/javascript">
+  jQuery.noConflict();
+  jQuery(document).ready(function ($) {
+    var files = $('#files');
+    files.height(100).css('overflow-y', 'auto');
+    files.find('a[title=Remove]').live('click', function () {
+      $(this).parent().hide('fast', function () { $(this).remove() });
+      if (files.find('p:has(:file)').length <= 1) {
+        files.find('p:has(:file) a[title=Remove]').hide('fast');
+      }
+    });
+    files.change(function () {
+      $('#step_content42').find('.notice').hide('fast');
+    });
+    var remove_button = $('<a title="Remove" href="#">Remove</a>').hide();
+    var sample_file_selector = files.find('p[index=0]').append(remove_button);
+    var addButton = $('<a title="Add file" href="#">Add file</a>').click(function () {
+      var i;
+      for (i = 1; i < files.find('p:has(:file)').length + 1; i += 1) {
+        if (files.find('p[index=' + i + ']').length < 1) {
+          break;
+        }
+      }
+      var clone = sample_file_selector.clone(true).attr('index', i).hide();
+      clone.find('input')
+        .attr('id', sample_file_selector.find('input').attr('id').replace('files[0]', 'files[' + i + ']'))
+        .attr('name', sample_file_selector.find('input').attr('name').replace('files[0]', 'files[' + i + ']'));
+      clone.appendTo(files).show('fast');
+      files.trigger('change').find('p[index!=0] a[title=Remove]').show('fast');
+      return false;
+    });
+    files.parent().append(addButton);
+  });
+</script>
+<%#= javascript_include_tag 'slidemenu', :defaults ->
+<script type="text/javascript">window.onload=function () { CCHDO.initSlideMenu(); jQuery('#sf2').animate({'height': 261}, 'fast'); };</script%>
+<% end -%>
