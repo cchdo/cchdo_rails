@@ -163,14 +163,14 @@ class Staff::DataEntryController < ApplicationController
        redirect_to :controller => '/staff', :action => 'index'
       end
         @params_returned = params
-        if params[:NewContact] 
+        if params[:contact][:LastName] 
           if params[:cruise][:id] and params[:cruise][:id] =~ /\d/
             if @cruise = Cruise.find(params[:cruise][:id])
-              if @contact = Contact.find(:conditions =>{:Name => params[:NewGroup]})
+              if @contact = Contact.first(:conditions =>{:LastName => params[:contact][:LastName] })
                 @cruise.contacts << @contact
                 #@contact_cruises_entry = ContactCruises.create :contact => @contact, :cruise => @cruise
               else
-                @db_result = "No contact with last name:#{params[:NewContact]}"
+                @db_result_message = "No contact with last name: #{params[:contact][:LastName] }.</br> Enter it <a href=/staff/data_entry/contact_entry>here</a>."
                 #@group = Collection.new
                 #@group.Name = params[:NewGroup]
                 #@group.save!
