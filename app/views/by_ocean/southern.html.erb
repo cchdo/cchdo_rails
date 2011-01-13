@@ -121,8 +121,8 @@ document.getElementById(v).style.display = "none";
       <!--single row-->
       <% if (@southern_basin[index+1] == nil or !@southern_basin[index].Line.downcase.eql?(@southern_basin[index+1].Line.downcase)) and  !@southern_basin[index-1].Line.downcase.eql?(@southern_basin[index].Line.downcase) %>
       <tr valign="top" <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%>  onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td><a href="/groups?id=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
-        <td><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
+        <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
+        <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=cruise.Chief_Scientist%></td> 
         <td><%=cruise.Country%></td>
@@ -130,7 +130,7 @@ document.getElementById(v).style.display = "none";
       <!--bottom-->  
       <% elsif (@southern_basin[index+1] == nil or !@southern_basin[index].Line.downcase.eql?(@southern_basin[index+1].Line.downcase)) and  @southern_basin[index-1].Line.downcase.eql?(@southern_basin[index].Line.downcase)%>
       <tr  <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td width="90"><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
+        <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
         <td width="160"><%=cruise.Chief_Scientist%></td> 
         <td width="120"><%=cruise.Country %></td>
@@ -146,8 +146,8 @@ document.getElementById(v).style.display = "none";
       <% elsif @southern_basin[index].Line.downcase.eql?(@southern_basin[index+1].Line.downcase) and  !@southern_basin[index-1].Line.downcase.eql?(@southern_basin[index].Line.downcase)%>
       <%saved=ctr%>
       <tr valign="top" <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%>  onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td rowspan="2"><a href="/groups?id=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
-        <td><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
+        <td rowspan="2"><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
+        <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=cruise.Chief_Scientist%></td> 
         <td><%=cruise.Country%></td>
@@ -162,7 +162,7 @@ document.getElementById(v).style.display = "none";
       <!--middle-->
       <% elsif @southern_basin[index-1].Line.downcase.eql?(@southern_basin[index+1].Line.downcase)%>
       <tr <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td width="90"><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
+        <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
         <td width="160"><%=cruise.Chief_Scientist%></td> 
         <td width="120"><%=cruise.Country %></td>
@@ -170,8 +170,8 @@ document.getElementById(v).style.display = "none";
       <!--Everything else-->
       <% else %>
       <tr valign="top" <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td><a href="/groups?id=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
-        <td><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
+        <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
+        <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=cruise.Chief_Scientist%></td> 
         <td><%=cruise.Country%></td>
@@ -207,8 +207,8 @@ document.getElementById(v).style.display = "none";
       <!--single row-->
       <% if (@atlantic_basin[index+1] == nil or !@atlantic_basin[index].Line.downcase.eql?(@atlantic_basin[index+1].Line.downcase)) and  !@atlantic_basin[index-1].Line.downcase.eql?(@atlantic_basin[index].Line.downcase) %>
       <tr valign="top" <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%>  onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td><a href="/groups?id=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
-        <td><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
+        <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
+        <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=cruise.Chief_Scientist%></td> 
         <td><%=cruise.Country%></td>
@@ -216,7 +216,7 @@ document.getElementById(v).style.display = "none";
       <!--bottom-->  
       <% elsif (@atlantic_basin[index+1] == nil or !@atlantic_basin[index].Line.downcase.eql?(@atlantic_basin[index+1].Line.downcase)) and  @atlantic_basin[index-1].Line.downcase.eql?(@atlantic_basin[index].Line.downcase)%>
       <tr  <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td width="90"><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
+        <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
         <td width="160"><%=cruise.Chief_Scientist%></td> 
         <td width="120"><%=cruise.Country %></td>
@@ -232,8 +232,8 @@ document.getElementById(v).style.display = "none";
       <% elsif @atlantic_basin[index].Line.downcase.eql?(@atlantic_basin[index+1].Line.downcase) and  !@atlantic_basin[index-1].Line.downcase.eql?(@atlantic_basin[index].Line.downcase)%>
       <%saved=ctr%>
       <tr valign="top" <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%>  onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td rowspan="2"><a href="/groups?id=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
-        <td><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
+        <td rowspan="2"><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
+        <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=cruise.Chief_Scientist%></td> 
         <td><%=cruise.Country%></td>
@@ -248,7 +248,7 @@ document.getElementById(v).style.display = "none";
       <!--middle-->
       <% elsif @atlantic_basin[index-1].Line.downcase.eql?(@atlantic_basin[index+1].Line.downcase)%>
       <tr <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td width="90"><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
+        <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
         <td width="160"><%=cruise.Chief_Scientist%></td> 
         <td width="120"><%=cruise.Country %></td>
@@ -256,8 +256,8 @@ document.getElementById(v).style.display = "none";
       <!--Everything else-->
       <% else %>
       <tr valign="top" <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%>  onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td><a href="/groups?id=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
-        <td><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
+        <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
+        <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=cruise.Chief_Scientist%></td> 
         <td><%=cruise.Country%></td>
@@ -294,8 +294,8 @@ document.getElementById(v).style.display = "none";
       <!--single row-->
       <% if (@indian_basin[index+1] == nil or !@indian_basin[index].Line.downcase.eql?(@indian_basin[index+1].Line.downcase)) and  !@indian_basin[index-1].Line.downcase.eql?(@indian_basin[index].Line.downcase) %>
       <tr valign="top" <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%>  onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td><a href="/groups?id=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
-        <td><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
+        <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
+        <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=cruise.Chief_Scientist%></td> 
         <td><%=cruise.Country%></td>
@@ -303,7 +303,7 @@ document.getElementById(v).style.display = "none";
       <!--bottom-->  
       <% elsif (@indian_basin[index+1] == nil or !@indian_basin[index].Line.downcase.eql?(@indian_basin[index+1].Line.downcase)) and  @indian_basin[index-1].Line.downcase.eql?(@indian_basin[index].Line.downcase)%>
       <tr  <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td width="90"><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
+        <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
         <td width="160"><%=cruise.Chief_Scientist%></td> 
         <td width="120"><%=cruise.Country %></td>
@@ -319,8 +319,8 @@ document.getElementById(v).style.display = "none";
       <% elsif @indian_basin[index].Line.downcase.eql?(@indian_basin[index+1].Line.downcase) and  !@indian_basin[index-1].Line.downcase.eql?(@indian_basin[index].Line.downcase)%>
       <%saved=ctr%>
       <tr valign="top" <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%>  onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td rowspan="2"><a href="/groups?id=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
-        <td><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
+        <td rowspan="2"><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
+        <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=cruise.Chief_Scientist%></td> 
         <td><%=cruise.Country%></td>
@@ -335,7 +335,7 @@ document.getElementById(v).style.display = "none";
       <!--middle-->
       <% elsif @indian_basin[index-1].Line.downcase.eql?(@indian_basin[index+1].Line.downcase)%>
       <tr <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td width="90"><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
+        <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
         <td width="160"><%=cruise.Chief_Scientist%></td> 
         <td width="120"><%=cruise.Country %></td>
@@ -343,8 +343,8 @@ document.getElementById(v).style.display = "none";
       <!--Everything else-->
       <% else %>
       <tr valign="top" <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%>  onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td><a href="/groups?id=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
-        <td><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
+        <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
+        <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=cruise.Chief_Scientist%></td> 
         <td><%=cruise.Country%></td>
@@ -379,8 +379,8 @@ document.getElementById(v).style.display = "none";
       <!--single row-->
       <% if (@pacific_basin[index+1] == nil or !@pacific_basin[index].Line.downcase.eql?(@pacific_basin[index+1].Line.downcase)) and  !@pacific_basin[index-1].Line.downcase.eql?(@pacific_basin[index].Line.downcase) %>
       <tr valign="top" <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%>  onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td><a href="/groups?id=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
-        <td><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
+        <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
+        <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=cruise.Chief_Scientist%></td> 
         <td><%=cruise.Country%></td>
@@ -388,7 +388,7 @@ document.getElementById(v).style.display = "none";
       <!--bottom-->  
       <% elsif (@pacific_basin[index+1] == nil or !@pacific_basin[index].Line.downcase.eql?(@pacific_basin[index+1].Line.downcase)) and  @pacific_basin[index-1].Line.downcase.eql?(@pacific_basin[index].Line.downcase)%>
       <tr <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td width="90"><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
+        <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
         <td width="160"><%=cruise.Chief_Scientist%></td> 
         <td width="120"><%=cruise.Country %></td>
@@ -404,8 +404,8 @@ document.getElementById(v).style.display = "none";
       <% elsif @pacific_basin[index].Line.downcase.eql?(@pacific_basin[index+1].Line.downcase) and  !@pacific_basin[index-1].Line.downcase.eql?(@pacific_basin[index].Line.downcase)%>
       <%saved=ctr%>
       <tr valign="top" <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%>  onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td rowspan="2"><a href="/groups?id=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
-        <td><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
+        <td rowspan="2"><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
+        <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=cruise.Chief_Scientist%></td> 
         <td><%=cruise.Country%></td>
@@ -420,7 +420,7 @@ document.getElementById(v).style.display = "none";
       <!--middle-->
       <% elsif @pacific_basin[index-1].Line.downcase.eql?(@pacific_basin[index+1].Line.downcase)%>
       <tr <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td width="90"><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
+        <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
         <td width="160"><%=cruise.Chief_Scientist%></td> 
         <td width="120"><%=cruise.Country %></td>
@@ -428,8 +428,8 @@ document.getElementById(v).style.display = "none";
       <!--Everything else-->
       <% else %>
       <tr valign="top" <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%>  onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
-        <td><a href="/groups?id=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
-        <td><a href="/data_access?ExpoCode=<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
+        <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
+        <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=cruise.Chief_Scientist%></td> 
         <td><%=cruise.Country%></td>
