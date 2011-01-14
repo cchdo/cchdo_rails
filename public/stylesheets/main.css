@@ -1087,7 +1087,7 @@ td.parameter_order { background-color:#7889AB; text-align:center; color:white; f
 .arctic_map { float: left; width: 59%; }
 .arctic_cruises { float: right; width: 41%; max-height: 630px; overflow-y: scroll; }
 .arctic_table { font-size: 7.4pt; color: #565656; width: 100%; }
-.arctic_table th td { width: 20%; }
+.arctic_table th td { width: 20%; line-break: strict; }
 .arctic_tr td{ width: inherit; vertical-align: top; height: 50px; }
 .arctic_line td{ width: 10%; }
 .arctic_date td{ width: 18%; }
