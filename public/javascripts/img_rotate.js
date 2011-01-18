@@ -3,23 +3,28 @@ new (function () {
   var styleA = null,
       styleB = null,
       isA = true,
-      delay = 1000 * 6;
+      delay = 1000 * 6,
+      animateTime = 1000 * 3,
+      zs = [99, 100];
 
   var offset = 0,
       height = 125,
-      minoffset = -height * 14;
+      minoffset = -height * 1;
 
-  var animateTime = 1000 * 3;
-
-  function _(domobjA, domobjB) {
+  function _(domobjA, domobjB, num_banners) {
     if (delay <= animateTime) {
       console.log("Don't do that!");
       return;
     }
     styleA = domobjA.style;
     styleB = domobjB.style;
+    minoffset = -height * num_banners;
     setOpacity(0, styleB);
     start();
+
+    var bgSize = ['100% ', num_banners * 100, '%'].join('');
+    styleA.backgroundSize = bgSize;
+    styleB.backgroundSize = bgSize;
   };  
 
   function nextOffset() {
@@ -64,12 +69,12 @@ new (function () {
       } else {
         if (isA) {
           isA = false;
-          styleB.zIndex = 100;
-          styleA.zIndex = 99;
+          styleB.zIndex = zs[1];
+          styleA.zIndex = zs[0];
         } else {
           isA = true;
-          styleA.zIndex = 100;
-          styleB.zIndex = 99;
+          styleA.zIndex = zs[1];
+          styleB.zIndex = zs[0];
         }
         offset = next;
         if (offset <= minoffset) {
@@ -92,4 +97,4 @@ new (function () {
   }
 
   return _;
-})()(document.getElementById('bannerA'), document.getElementById('bannerB'));
+})()(document.getElementById('bannerA'), document.getElementById('bannerB'), 14);
