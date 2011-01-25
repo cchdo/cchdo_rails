@@ -1,13 +1,23 @@
-<% if @submission %>
-  File: <%= @submission.file ? File.basename(@submission.file) : 'No file' %> Type: Status: <%= @submission.public %>
-  Location: <%= @submission.file %>
-  Name: <%= @submission.name %>
-  Institute: <%= @submission.institute %>
-  Country: <%= @submission.Country %>
-  Expo: <%= @submission.ExpoCode %> Line: <%= @submission.Line %>
-  Date: <%= @submission.cruise_date %> 
-  Action: <%= @submission.action %>
-  Notes: <%= @submission.notes %>
-<% else %>
-  A blank submission was somehow submitted.
-<% end %>
+Dear <%= @submission.name %>:
+
+Thank you for your submission to the CCHDO.
+
+This is an automated confirmation. However, replying to the sender will reach all senior CCHDO staff.
+
+<% submitted_files = submitted_file_names(@submission.file) -%>
+Your submitted <%= 'file'.smart_pluralize(submitted_files.length) %>:
+<%= submitted_files.join("\n") %>
+
+will be <%= @submission.public %>.
+
+The following actions were specified:
+<%= @submission.action %>
+
+Further information collected with your submission:
+Institute: <%= @submission.institute %>
+Country: <%= @submission.Country %>
+ExpoCode: <%= @submission.ExpoCode %> Line: <%= @submission.Line %>
+Date: <%= @submission.cruise_date %> 
+Notes: <%= @submission.notes %>
+
+Thank you again for your submission.

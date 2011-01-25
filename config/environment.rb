@@ -5,7 +5,7 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
+#RAILS_GEM_VERSION = '2.3.4' unless defined? RAILS_GEM_VERSION
 
 # Initialize this before the models
 # Relative to Rails.root
@@ -85,7 +85,6 @@ begin
 rescue
   Rails.logger.error("#{passengeruploadbufferdir} could not be created. " + 
                      "Needed for file uploading.")
-  raise
 end
 begin
   FileUtils.chown(nil, '_www', passengeruploadbufferdir)

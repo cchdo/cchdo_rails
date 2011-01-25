@@ -66,7 +66,9 @@ class SubmitController < ApplicationController
 
         if ENV['RAILS_ENV'] == 'production'
             begin
+                raise "Blank submission" unless @submission
                 FileSubmittedMailer.deliver_confirm(@submission)
+                SUBMITLOG.info('Confirmed')
             rescue Exception => msg
                 SUBMITLOG.warn("Unable to send confirmation email: #{msg}")
             end
