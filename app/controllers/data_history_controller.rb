@@ -30,8 +30,10 @@ class DataHistoryController < ApplicationController
       end
       if (@note)
          @note_entry = Event.find(:first,:conditions=>["ID=#{@entry}"])
-         @note_entry[:Note].gsub!(/[\n\r\f]/,"<br>")
-         @note_entry[:Note].gsub!(/[\t]/,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+         if @note_entry[:Note] and @note_entry[:Note] =~ /\w/
+           @note_entry[:Note].gsub!(/[\n\r\f]/,"<br>")
+           @note_entry[:Note].gsub!(/[\t]/,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+         end
       end      
    end
    
