@@ -7,3 +7,4 @@ doc/**/*
 tmp/**/*
 log/*.log
 vendor/rails
+config/database.yml
