@@ -1,3 +1,4 @@
 class Contact < ActiveRecord::Base
-  has_and_belongs_to_many :cruises
+  has_many :contact_cruises
+  has_many :cruises, :through => :contact_cruises
 end
