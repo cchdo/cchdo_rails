@@ -443,7 +443,7 @@ td.map img {
 }
 #cchdo_menu ul li ul {
   margin-top: 0;
-  display: none;
+  visibility: hidden;
 }
 #cchdo_menu ul li ul a {
   height: 1.53em; /* Make the (most of) the entire highlighted area clickable */
@@ -458,15 +458,15 @@ td.map img {
   background-color: #D0D0D0;
 }
 #cchdo_menu > ul > li:hover > ul {
-  display: block;
+  visibility: visible;
 }
 #cchdo_menu > ul > li > ul > li {
   text-transform: none;
   padding-top: 3px;
   padding-bottom: 3px;
 }
-#cchdo_menu > ul > li > ul > li:hover,
-#cchdo_menu > ul > li > ul > li:hover > a,
+#cchdo_menu ul li ul li:hover,
+#cchdo_menu ul li ul li:hover > a,
 .submenu_hover {
   background-color: #A0A0A0;
   color: white;
@@ -476,7 +476,7 @@ td.map img {
   left: 100%;
   background-color: #A0A0A0;
   white-space: nowrap;
-  width: 130px;
+  width: 130px !important;
 }
 #cchdo_menu ul li ul li ul.ocean {
   top: 0;
@@ -488,7 +488,7 @@ td.map img {
   top: 3.5em;
 }
 #cchdo_menu ul li ul li:hover ul {
-  display: block;
+  visibility: visible;
 }
 #cchdo_menu ul li ul li ul li {
   padding: 3px;
