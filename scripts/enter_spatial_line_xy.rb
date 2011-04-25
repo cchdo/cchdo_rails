@@ -1,13 +1,13 @@
+#!/usr/bin/env ruby
 RAILS_ENV = 'production'
 require File.dirname(__FILE__) + '/../config/environment'
   
 require '/usr/local/cchdo/cchdo_hydro_lib.rb'
-#require 'find'
 
 
 unless ARGV[0] 
   puts "Please enter a file with coordinates in csv: Lon,Lat/\n."
-  coord_file = gets()
+  coord_file = gets().strip()
 else
   coord_file = ARGV[0] or raise "Please include a file with coordinates"
 end
