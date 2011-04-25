@@ -1,6 +1,8 @@
 require 'fileutils'
-require 'json'
 require 'date'
+
+require 'rubygems'
+require 'json'
 
 desc "Import Timeseries (such as BATS or HOT) directories"
 task :import_timeseries_dirs => :environment do
@@ -64,15 +66,15 @@ task :import_timeseries_dirs => :environment do
 
   TIMESERIES_INFOS = {
     'HOT' => {
-      #'root' => '/data/co2clivar/pacific/hot/prs2',
-      'root' => '/Users/myshen/Documents/timeseries/testroot/hot',
+      'root' => '/data/co2clivar/pacific/hot/prs2',
+      #'root' => '/Users/myshen/Documents/timeseries/testroot/hot',
       'line' => 'PRS02',
       'country' => 'USA',
       'groups' => ['Timeseries', 'Pacific', 'Repeat', 'HOT']
     },
     'BATS' => {
-      #'root' => '/data/co2clivar/atlantic/bats/ars01',
-      'root' => '/Users/myshen/Documents/timeseries/testroot/bats',
+      'root' => '/data/co2clivar/atlantic/bats/ars01',
+      #'root' => '/Users/myshen/Documents/timeseries/testroot/bats',
       'line' => 'ARS01',
       'country' => 'BM',
       'groups' => ['Timeseries', 'Atlantic', 'Repeat', 'BATS']
@@ -155,14 +157,14 @@ task :import_timeseries_dirs => :environment do
       $stderr.puts "There is already something in the timeseries root " + 
                    "#{ts_root} called #{cruise_dir}."
       $stderr.puts "Not copying."
+      return false
     else
       FileUtils.cp_r(cruise_path, ts_root, :preserve => true)
+
+      # 2. Ensure permissions for directory (and subdirs) are okay.
+      FileUtils.chmod(0664, Dir.glob(File.join(ts_root, cruise_dir, '*')) - [File.join(ts_root, cruise_dir, 'original')])
+      FileUtils.chmod(0775, File.join(ts_root, cruise_dir))
     end
-
-    # 2. Ensure permissions for directory (and subdirs) are okay.
-
-    FileUtils.chmod(0664, Dir.glob(File.join(ts_root, cruise_dir, '*')) - [File.join(ts_root, cruise_dir, 'original')])
-    FileUtils.chmod(0775, File.join(ts_root, cruise_dir))
 
     # 3. Make Cruise entry in cruises
 
@@ -192,9 +194,8 @@ task :import_timeseries_dirs => :environment do
     cruise.collections = get_groups(timeseries_info['groups'])
     cruise.contacts = contacts
 
-    event = Event.find_or_create_by_Action('Data Acquired/Converted')
+    event = Event.find_or_create_by_Action_and_ExpoCode('Data Acquired/Converted', expocode)
     event.attributes = {
-      :ExpoCode => expocode,
       :First_Name => 'Matthew',
       :LastName => 'Shen',
       :Data_Type => 'CTD',

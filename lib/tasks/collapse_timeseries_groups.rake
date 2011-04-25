@@ -14,7 +14,11 @@ task :collapse_timeseries_groups => :environment do
     x.Group == correct_group
   end
 
-  correct_collections = Cruise.find_by_Group(correct_group).collections
+  begin
+    correct_collections = Cruise.find_by_Group(correct_group).collections
+  rescue
+    correct_collections = []
+  end
 
   cruises.each do |x|
     x.Line = 'PRS02'
@@ -30,7 +34,11 @@ task :collapse_timeseries_groups => :environment do
     x.Group == correct_group
   end
 
-  correct_collections = Cruise.find_by_Group(correct_group).collections
+  begin
+    correct_collections = Cruise.find_by_Group(correct_group).collections
+  rescue
+    correct_collections = []
+  end
 
   cruises.each do |x|
     x.Line = 'ARS01'

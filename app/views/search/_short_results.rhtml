@@ -29,7 +29,7 @@
       <td>
         <% @cruises[index].contacts.each_with_index do |contact,cnt| %>
           <% if cnt > 0 %>, <% end %>
-          <a href="/contact?id=<%= contact.contact_id %>"><%= contact.FirstName %>&nbsp;<%= contact.LastName %> </a> 
+          <a href="/contact?id=<%= contact.id %>"><%= contact.FirstName %>&nbsp;<%= contact.LastName %> </a> 
         <% end %>
       </td>
       <td><%= cruise.Country %></td>
