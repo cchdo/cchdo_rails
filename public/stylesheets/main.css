@@ -344,7 +344,8 @@ td.map img {
   font-size: x-small;
 }
 #cchdo_credit p {
-  max-width: 66em;
+  max-width: none;
+  width: 57em;
   margin: 0 auto;
 }
 #cchdo_credit p:first-child {
