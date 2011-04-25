@@ -14,17 +14,21 @@ class Cruise < ActiveRecord::Base
 
     validates_format_of :Chief_Scientist,
                         :with => /^[\w\s\.:\/\'\(\)-\\]+$/,
-                        :message => "is missing or invalid"
+                        :message => "is missing or invalid",
+                        :allow_nil => true
 
     validates_format_of :Ship_Name,
-                        :with => /^[\w\'\.\s\(\)-]+$/,
-                        :message => "is missing or invalid"
+                        :with => /^[\w\'\/\.\s\(\)-]+$/,
+                        :message => "is missing or invalid",
+                        :allow_nil => true
 
     validates_format_of :Line,
                         :with => /^[\w\/-]+$/,
-                        :message => "is missing or invalid"
+                        :message => "is missing or invalid",
+                        :allow_nil => true
 
     validates_format_of :Country,
                         :with => /^[\w-]+$/,
-                        :message => "is missing or invalid"
+                        :message => "is missing or invalid",
+                        :allow_nil => true
 end
