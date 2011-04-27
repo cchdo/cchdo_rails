@@ -10,6 +10,7 @@ class CreateCruises < ActiveRecord::Migration
       t.column :Ship_Name,       :text
       t.column :Alias,           :text
       t.column :Group,           :text 
+      t.column :link, :string
     end
   end
 
