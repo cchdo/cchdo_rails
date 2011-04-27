@@ -5,6 +5,7 @@ from email.mime.text import MIMEText
 import getpass
 import sys
 import subprocess
+import os
 import smtplib
 
 
@@ -20,7 +21,7 @@ def main(argv):
     """
     if not DEBUG:
         print "Reloading webserver..."
-        subprocess.Popen('sudo apachectl graceful', shell=True)
+        os.utime('/srv/cchdo/tmp/restart.txt', None)
 
     print "Gathering change information..."
     new_head = argv[1]

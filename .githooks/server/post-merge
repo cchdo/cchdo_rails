@@ -5,6 +5,7 @@ from email.mime.text import MIMEText
 import getpass
 import sys
 import subprocess
+import os
 import smtplib
 
 
@@ -15,7 +16,7 @@ def main():
             status - whether merge was a squash merge
     """
     print "Reloading webserver..."
-    subprocess.Popen('sudo apachectl graceful', shell=True)
+    os.utime('/srv/cchdo/tmp/restart.txt', None)
 
     print "Gathering change information..."
     orig_head = open('.git/ORIG_HEAD', 'r').read().strip()
