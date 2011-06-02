@@ -195,14 +195,19 @@ task :import_timeseries_dirs => :environment do
     cruise.contacts = contacts
 
     event = Event.find_or_create_by_Action_and_ExpoCode('Data Acquired/Converted', expocode)
+
+    note = "Translated HOT sumfiles to WOCE sumfiles. Zipped WOCE CTDs. " + 
+               "Converted to Exchange and NetCDF BOT and CTDs. Plotted navs and cut thumbnails."
+    if ts == 'BATS':
+      note = "Converted to Exchange and NetCDF CTDs. Plotted navs and cut thumbnails."
+
     event.attributes = {
       :First_Name => 'Matthew',
       :LastName => 'Shen',
       :Data_Type => 'CTD',
       :Date_Entered => Date.today,
       :Summary => 'Data acquired/converted',
-      :Note => "Translated HOT sumfiles to WOCE sumfiles. Zipped WOCE CTDs. " + 
-               "Created Exchange and NetCDF BOT and CTDs. Plotted navs and cut thumbnails."
+      :Note => note
     }
 
     ActiveRecord::Base.transaction do
