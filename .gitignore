@@ -9,3 +9,4 @@ log/*.log
 vendor/rails
 config/database.yml
 .idea
+.rvm
