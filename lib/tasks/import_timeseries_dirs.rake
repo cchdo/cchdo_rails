@@ -198,8 +198,9 @@ task :import_timeseries_dirs => :environment do
 
     note = "Translated HOT sumfiles to WOCE sumfiles. Zipped WOCE CTDs. " + 
                "Converted to Exchange and NetCDF BOT and CTDs. Plotted navs and cut thumbnails."
-    if ts == 'BATS':
+    if ts == 'BATS'
       note = "Converted to Exchange and NetCDF CTDs. Plotted navs and cut thumbnails."
+    end
 
     event.attributes = {
       :First_Name => 'Matthew',

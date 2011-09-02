@@ -37,7 +37,7 @@ class GroupsController < ApplicationController
         @dir = Document.first(:conditions => {:ExpoCode => cruise.ExpoCode, :FileType => 'Directory'})
         if cruise.Country =~ /\w/ 
           if COUNTRIES.values.include?(cruise.Country.downcase.strip)
-            cruise.Country = COUNTRIES.invert[cruise.Country.downcase].capitalize
+            cruise.Country = (COUNTRIES.invert[cruise.Country.downcase] || '').capitalize
             if cruise.Country =~ /\s/
               cruise.Country = cruise.Country.split.map {|e| e.capitalize}.join(' ')
             end

@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+
 RAILS_ENV = 'production'
 require File.dirname(__FILE__) + '/../config/environment'
   
