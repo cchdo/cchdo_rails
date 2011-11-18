@@ -3,9 +3,6 @@
 RAILS_ENV = 'production'
 require File.dirname(__FILE__) + '/../config/environment'
   
-require '/usr/local/cchdo/cchdo_hydro_lib.rb'
-
-
 unless ARGV[0] 
   puts "Please enter a file with coordinates in csv: Lon,Lat/\n."
   coord_file = gets().strip()

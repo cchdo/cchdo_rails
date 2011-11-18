@@ -678,6 +678,13 @@ CM.info = new CM.Info();
 
 /*=============================================================================
  * Entry Info results */
+function parseYYYYmmdd(s) {
+  try {
+    return new Date(Number(s.slice(0, 4)), Number(s.slice(5, 7)), Number(s.slice(8, 10)));
+  } catch (e) {
+    return null;
+  }
+}
 CM.results = {
   lit: -1,
   info_entry: {},
@@ -694,12 +701,8 @@ CM.results = {
           var info = response;
           if (info) {
             info.expocode = '<a href="http://cchdo.ucsd.edu/data_access?ExpoCode='+expocode+'">'+expocode+'</a>';
-            var date_begin = new Date();
-            date_begin.setTime(Date.parse(info.date_begin));
-            info.date_begin = date_begin;
-            var date_end = new Date();
-            date_end.setTime(Date.parse(info.date_end));
-            info.date_end = date_end;
+            info.date_begin = parseYYYYmmdd(info.date_begin);
+            info.date_end = parseYYYYmmdd(info.date_end);
           } else {
             info = {'expocode': '<a href="http://cchdo.ucsd.edu/data_access?ExpoCode='+expocode+'">'+expocode+'</a>',
                     'line': null, 'ship': null, 'country': null, 'pi': null, 'date_begin': null};

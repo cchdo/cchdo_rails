@@ -2,13 +2,13 @@
 # Likewise, all the methods added will be available for all controllers.
 def getGAPIkey(host)
   return case host
-    #when 'cchdo.ucsd.edu':        'ABQIAAAAZICfw-7ifUWoyrSbSFaNixTec8MiBufSHvQnWG6NDHYU8J6t-xTRqsJkl7OBlM2_ox3MeNhe_0-jXA'
-    when 'cchdo.ucsd.edu':        'ABQIAAAATXJifusyeTqIXK5-oRfMqRTec8MiBufSHvQnWG6NDHYU8J6t-xQu6FK5KGtXjapXKCGo-If8o-ibsQ'
-    #when 'whpo.ucsd.edu':         'ABQIAAAATXJifusyeTqIXK5-oRfMqRRrtQtAbE2ICKyeJmE150l9FUtvWRQ_qb0gC6W0P4gBV_W3RstdZXEcOw'
-    #when 'watershed.ucsd.edu':    'ABQIAAAATXJifusyeTqIXK5-oRfMqRRkZzjLi0nUJ4TwOC8xt4Ov2IJhKBQTGSNz9nt4_eT3w1Wv_O1VSaMyBA'
-    #when 'ushydro.ucsd.edu':      'ABQIAAAATXJifusyeTqIXK5-oRfMqRRtY8Vb6BVQ_NYWg4_c_l3k0L4OIhQFByUZ1IXeNowVep-DwxF7cwWzVg'
-    #when 'ushydro.ucsd.edu:3000': 'ABQIAAAATXJifusyeTqIXK5-oRfMqRQE8zGWDTi-uP6FZiwQgVhVR-BtSxRIgqf0aU_WJtUPpTZNUXmvRubneQ'
-    #when 'ghdc.ucsd.edu':         'ABQIAAAAZICfw-7ifUWoyrSbSFaNixRCPOjKkl_WpOSxLSW5BpFmpsf_3BSArp5f0mTCYw9o7efmB5J3NGXrXg'
+    #when 'cchdo.ucsd.edu' then 'ABQIAAAAZICfw-7ifUWoyrSbSFaNixTec8MiBufSHvQnWG6NDHYU8J6t-xTRqsJkl7OBlM2_ox3MeNhe_0-jXA'
+    when 'cchdo.ucsd.edu' then 'ABQIAAAATXJifusyeTqIXK5-oRfMqRTec8MiBufSHvQnWG6NDHYU8J6t-xQu6FK5KGtXjapXKCGo-If8o-ibsQ'
+    #when 'whpo.ucsd.edu' then 'ABQIAAAATXJifusyeTqIXK5-oRfMqRRrtQtAbE2ICKyeJmE150l9FUtvWRQ_qb0gC6W0P4gBV_W3RstdZXEcOw'
+    #when 'watershed.ucsd.edu' then 'ABQIAAAATXJifusyeTqIXK5-oRfMqRRkZzjLi0nUJ4TwOC8xt4Ov2IJhKBQTGSNz9nt4_eT3w1Wv_O1VSaMyBA'
+    #when 'ushydro.ucsd.edu' then 'ABQIAAAATXJifusyeTqIXK5-oRfMqRRtY8Vb6BVQ_NYWg4_c_l3k0L4OIhQFByUZ1IXeNowVep-DwxF7cwWzVg'
+    #when 'ushydro.ucsd.edu:3000' then 'ABQIAAAATXJifusyeTqIXK5-oRfMqRQE8zGWDTi-uP6FZiwQgVhVR-BtSxRIgqf0aU_WJtUPpTZNUXmvRubneQ'
+    #when 'ghdc.ucsd.edu' then 'ABQIAAAAZICfw-7ifUWoyrSbSFaNixRCPOjKkl_WpOSxLSW5BpFmpsf_3BSArp5f0mTCYw9o7efmB5J3NGXrXg'
   end
 end
 
@@ -39,8 +39,10 @@ class ApplicationController < ActionController::Base
             if user = User.authenticate(params[:username], params[:password])
                 session[:user] = user.id
                 session[:username] = params[:username]
-                redirect_to :controller => 'staff',
-                            :action => 'index'
+                intended_action = session[:intended_action] or 'index'
+                intended_controller = session[:intended_controller] or 'staff'
+                redirect_to :controller => intended_controller,
+                            :action => intended_action
             else
                 flash[:notice] = "Invalid user name or password"
             end

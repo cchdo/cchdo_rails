@@ -5,8 +5,11 @@
 ._*
 doc/**/*
 tmp/**/*
+tmp/*
 log/*.log
 vendor/rails
 config/database.yml
+public/javascripts/cache/*
+public/stylesheets/cache/*
 .idea
 .rvm
