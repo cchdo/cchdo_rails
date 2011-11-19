@@ -1100,3 +1100,26 @@ td.parameter_order { background-color:#7889AB; text-align:center; color:white; f
 tr.not_in_map { background-color: #FFDDDD; }
 .small_font { font-size: smaller; }
 .end_date { border-top: #a0a0a0 1px dashed; }
+
+/* atlantic.html */
+.atlantic_cruise .map {
+  width: 420px;
+  position: relative;
+  float: left;
+  margin-right: 15px;
+}
+.atlantic_cruise .map img {
+  width: 100%;
+}
+.atlantic_cruise .table {
+  margin-bottom: 1em;
+}
+.atlantic_cruise h3 {
+  font-size: 1.1em;
+  margin-top: 1em;
+  margin-bottom: 0;
+}
+.atlantic_cruise h4 a {
+  color: #006f89;
+  font-style: italic;
+}
