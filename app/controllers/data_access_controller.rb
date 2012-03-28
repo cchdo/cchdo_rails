@@ -107,7 +107,7 @@ class DataAccessController < ApplicationController
                         when /lv_hy1.csv/  then @file_result['exchange_large_volume'] = "/data#{path}/#{file}"
                         when /lv.txt/  then @file_result['large_volume'] = "/data#{path}/#{file}"
                         when /lvs.txt/  then @file_result['large_volume'] = "/data#{path}/#{file}"
-                        when /^(?!.*lv_).*hy1.csv/ then @file_result['exchange_bot'] = "/data#{path}/#{file}"
+                        when /^(?!.*(lv|tm)_).*hy1.csv/ then @file_result['exchange_bot'] = "/data#{path}/#{file}"
                         when /ct1.zip/ then @file_result['exchange_ctd'] = "/data#{path}/#{file}"
                         when /ctd.zip/ then @file_result['netcdf_ctd'] = "/data#{path}/#{file}"
                         when /hyd.zip/ then @file_result['netcdf_bot'] = "/data#{path}/#{file}"
@@ -115,6 +115,7 @@ class DataAccessController < ApplicationController
                         when /do.pdf/  then @file_result['pdf_doc'] = "/data#{path}/#{file}"
                         when /.gif/    then @file_result['big_pic'] = "/data#{path}/#{file}"
                         when /.jpg/    then @file_result['small_pic'] = "/data#{path}/#{file}"
+                        when /tm_hy1.csv/    then @file_result['trace_metal'] = "/data#{path}/#{file}"
                      end # case file
                   end # if file
                   @lfile = file
