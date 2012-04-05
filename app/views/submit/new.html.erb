@@ -68,15 +68,6 @@ end
   </tr>
   </tr>
 
-  <tr>
-    <td colspan="2">
-      <%=f.radio_button :public, :public, :checked => true%>
-      <%=f.label :public_public, :Public%>
-      <%=f.radio_button :public, :nonpublic%>
-      <%=f.label :public_nonpublic, 'Non-Public'%>
-    </td>
-    <%=content_tag(:td, f.error_message_on(:public))%>
-  </tr>
 </table>
 <%end-%>
 
@@ -113,6 +104,27 @@ end
 <%=title('Type of Submission')%>
 <table>
   <tr>
+    <td colspan="2">
+      <h3>Status</h3>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <%=f.radio_button :public, :public, :checked => true%>
+      <%=f.label :public_public, :Public%>
+      <%=f.radio_button :public, :nonpublic%>
+      <%=f.label :public_nonpublic, 'Non-Public'%>
+      <%=f.radio_button :public, :argo%>
+      <%=f.label :public_argo, 'Non-Public for Argo calibration'%>
+    </td>
+    <%=content_tag(:td, f.error_message_on(:public))%>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <h3>Action</h3>
+    </td>
+  </tr>
+  <tr>
     <td>
       <%=check_box :actions, :one, {}, 'Merge Data'%>
       <%=label :actions, :one, 'Merge Data'%>
@@ -133,13 +145,13 @@ end
       <%=content_tag(:span, error_message_on(:actions, :three))%>
     </td>
 
-    <td>
+<!--    <td>
       <%argo = 'Non-public data for Argo calibration (proprietary, rapid-delivery)'%>
       <%=check_box :actions, :four, {}, argo%>
       <%=label :actions, :four, argo%>
       <%=content_tag(:span, error_message_on(:actions, :four))%>
     </td>
-
+-->
   </tr>
 </table>
 
