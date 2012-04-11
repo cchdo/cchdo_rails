@@ -8,7 +8,12 @@ This is an automated confirmation. However, replying to the sender will reach al
 Your submitted <%= 'file'.smart_pluralize(submitted_files.length) %>:
 <%= submitted_files.join("\n") %>
 
-will be <%= @submission.public %>.
+will be 
+<% if @submission.public && @submission.public =~ /argo/ %> 
+  available for use exclusively by the Argo program.
+<% else %>
+  <%= @submission.public %>.
+<% end %>
 
 The following actions were specified:
 <%= @submission.action %>

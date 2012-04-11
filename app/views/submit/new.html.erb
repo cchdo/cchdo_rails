@@ -44,7 +44,7 @@ end
 <%=title('Contact Information')%>
 <table>
   <tr>
-    <td><%=required_label(f, :name, 'Name (Last, First)')%></td> 
+    <td><%=required_label(f, :name, 'Name')%></td> 
     <td><%=unsized_text(f, :name)%></td>
     <%=content_tag(:td, f.error_message_on(:name))%>
   </tr>
