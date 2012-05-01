@@ -32,6 +32,53 @@ input[type='text']:focus, input[type='password']:focus, select:focus { border: 1
 h2 { color: #006f89; font-size: medium; }
 h3 { margin-top: 1em; margin-bottom: 1em; font-weight: bold; }
 
+.globalBanner {
+  margin: -1em 0 1em 0;
+  background: #FFEECC;
+  border-bottom: 1px solid #AAAAAA;
+  padding: 1em 10%;
+}
+.globalBanner p {
+  max-width: none;
+}
+.globalBanner #survey_button_container {
+  text-align: center;
+}
+.globalBanner #survey_button {
+  display: block;
+  margin: auto;
+  background: #F8FFF8;
+  padding: 0.2em 0.5em 0.4em 0.5em;
+  width: 8em;
+  border: 1px solid #AAAAAA;
+  font-size: 1.2em;
+  text-decoration: none;
+  font-weight: normal;
+}
+.globalBanner #survey_button:hover {
+  background: #EEFFEE;
+}
+.globalBanner #survey_button:hover:active {
+  border: 1px solid #88CC88;
+}
+.globalBanner #survey_button:active {
+  border: 1px solid #CC8888;
+}
+
+.globalBanner a.close {
+  color: #555555;
+  background: #EEEEEE;
+}
+.globalBanner a.close:hover {
+  background: #EEFFEE;
+}
+.globalBanner a.close:hover:active {
+  border: 1px solid #88CC88;
+}
+.globalBanner a.close:active {
+  border: 1px solid #CC8888;
+}
+
 .copythis { position: absolute; left: -10000px; }
 .notice {
   background-color: #ffaa55 !important;

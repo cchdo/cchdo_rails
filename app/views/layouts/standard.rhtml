@@ -9,6 +9,67 @@
 <meta name="google-site-verification" content="xBVm_AfJYEdA-tbww41dajF9RuGbZHAjpOBhwWwqbcM" />
 </head>
 <body>
+
+<div id="ec_survey" class="globalBanner">
+  <p>
+    <a href="http://earthcube.ning.com">EarthCube</a> is a bold, new, NSF
+    initiative to create an integrated data and knowledge management system
+    that extends across the geosciences.
+  </p>
+  <p>
+    Please answer this survey to help. 
+  </p>
+  <p id="survey_button_container">
+    <a id="survey_button" rel="nofollow" href="http://www.surveygizmo.com/s3/900461/EarthCube-Stakeholder-Consent">Take the survey</a>
+  </p>
+</div>
+<script>
+(function () {
+  var gb = document.getElementById('ec_survey');
+  var button = document.getElementById('survey_button');
+  var close = document.createElement('A');
+  close.className = 'close';
+  close.href = 'javascript:void(0);';
+  close.style.display = 'block';
+  close.style.position = 'absolute';
+  close.style.fontSize = '2em';
+  close.style.top = '0.5em';
+  close.style.right = '0.5em';
+  close.style.border = '1px solid black';
+  close.style.verticalAlign = 'top';
+  close.style.lineHeight = '0.3em';
+  close.style.height = '0.6em';
+  close.innerHTML = 'x';
+  gb.appendChild(close);
+
+  var key = 'earthcubesurvey';
+
+  function isTaken() {
+    return document.cookie.indexOf(key + '=') > -1;
+  }
+
+  function markTaken() {
+    if (!isTaken()) {
+      var seconds = 60 * 60 * 24 * 7;
+      document.cookie = key + '=1;max-age=' + seconds;
+    }
+    return true;
+  }
+
+  function closeGlobalBanner() {
+    gb.parentNode.removeChild(gb);
+  }
+
+  close.onclick = closeGlobalBanner;
+  button.onclick = markTaken;
+
+  if (isTaken()) {
+    closeGlobalBanner();
+  }
+
+})();
+</script>
+
 <div id='centering'>
   <%= render :partial => 'layouts/cchdo_header' -%>
   <div id='content'>
