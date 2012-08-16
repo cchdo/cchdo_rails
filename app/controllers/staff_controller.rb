@@ -96,7 +96,7 @@ def queue_search
 if  @query = params[:queue_file][:query] 
   for column in QueueFile.columns
       @names << column.human_name
-      @results = QueueFile.find(:all ,:conditions => ["`#{column.name}` regexp '#{@query}'"],:order => "Merged")
+      @results = QueueFile.find(:all ,:conditions => ["`#{column.name}` regexp ?", @query], :order => "Merged")
       if @results.length > @cur_max
           @cur_max = @results.length
           @best_result = @results
@@ -193,10 +193,13 @@ def submission_search
   @names = []
   @submissions = []
   @results = []
-  if  @query = params[:submission][:query] 
+  if @query = params[:submission][:query] 
     for column in Submission.columns
         @names << column.human_name
-        @results = Submission.find(:all ,:conditions => ["`#{column.name}` regexp '#{@query}'"])
+        @results = Submission.find(
+            :all,
+            :conditions => ["`#{column.name}` regexp ?", @query],
+            :order => "submission_date DESC")
         if @results.length > @cur_max
             @cur_max = @results.length
             @best_result = @results
