@@ -10,11 +10,11 @@ class QueueFile < ActiveRecord::Base
         begin
             data_dir = cruise.data_dir()
         rescue
-            data_dir = nil
+            raise 'No data directory'
         end
         if not File.directory?(data_dir)
             Rails.logger.warn('Attempted to attach a submission to cruise with non-existant data directory')
-            raise 'No data directory'
+            raise 'Data directory non-existant'
         end
 
         submission_public_path = Submission.public_file_path(submission)
@@ -69,15 +69,16 @@ class QueueFile < ActiveRecord::Base
         end
 
         Rails.logger.debug("Creating queue entry for each file copied/extracted.")
+        Rails.logger.debug("opts: #{opts.inspect}")
 
         # Create queue entry for each file
         notes = opts['notes'] || ''
         parameters = opts['parameters'] || ''
-        documentation = opts['documentation'] || false
+        documentation = opts['documentation'] == 'on'
         queue_files = []
         Dir.foreach(queue_path) do |filename|
-            if queue_path == '.' or queue_path == '..'
-                continue
+            if filename == '.' or filename == '..'
+                next
             end
             qf = QueueFile.new(
                 :Name => filename,
@@ -95,23 +96,21 @@ class QueueFile < ActiveRecord::Base
                 :documentation => documentation
                 )
             qf.save
+            Rails.logger.debug("qf #{qf.inspect}")
             queue_files << qf
         end
 
         Rails.logger.debug("Creating history note for cruise")
 
         # Create history note
-        event_subject = [
-            cruise.ExpoCode,
-            "data history: file in queue - #{parameters}"].join(' ')
-
         event_note = "The following files are now available online under "
-            "'Files as received', unprocessed by the CCHDO.\n\n"
-        event_note += queue_files.each {|qf| qf.Name}.join('\n')
+        event_note += "'Files as received', unprocessed by the CCHDO.\n\n"
+        event_note += queue_files.map {|qf| qf.Name}.join("\n")
         history = Event.new(
             :ExpoCode => cruise.ExpoCode,
             :First_Name => 'CCHDO',
             :LastName => 'Staff',
+            :Date_Entered => Time.now,
             :Data_Type => parameters,
             :Action => 'Website Update',
             :Summary => "Available under 'Files as received'",

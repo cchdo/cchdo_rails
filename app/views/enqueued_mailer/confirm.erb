@@ -1,9 +1,11 @@
-Date: <%= @event.Date_Entered %>
+Dear CCHDO,
 
-Data type: <%= @event.Data_Type %>
+This is an automated message.
 
-Action: <%= @event.Action %>
+The cruise page for http://cchdo.ucsd.edu/cruise/<%= @event.ExpoCode %> was updated on <%= @event.Date_Entered.strftime('%Y-%m-%d') %>.
 
-Summary: <%= @event.Summary %>
+<%= @event.Note %>
 
-Details: <%= @event.Note %>
+<% if @event.Data_Type -%>
+The following types of data were updated: <%= @event.Data_Type %>
+<% end -%>

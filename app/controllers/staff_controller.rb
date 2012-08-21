@@ -91,16 +91,38 @@ def queue_files
 end
 
 def enqueue
+    return_uri = '/staff/submitted_files'
+    expocode = params['enqueue_attach_to_expocode']
+    submission_id = params['enqueue_submission']
+
     user = User.find(session[:user])
-    cruise = Cruise.find_by_ExpoCode(params['enqueue_attach_to_expocode'])
-    submission = Submission.find(params['enqueue_submission'])
+
+    cruise = Cruise.find_by_ExpoCode(expocode)
+    if cruise.nil?
+        flash[:notice] = "Could not enqueue #{submission_id}: Could not find cruise #{expocode} to attach to"
+        redirect_to return_uri
+        return
+    end
+    submission = Submission.find(submission_id)
+    if submission.nil?
+        flash[:notice] = "Could not enqueue #{submission_id}: Could not find submission"
+        redirect_to return_uri
+        return
+    end
+    opts = {
+        'notes' => params['enqueue_notes'],
+        'parameters' => params['enqueue_parameters'],
+        'documentation' => params['enqueue_documentation']
+    }
     begin
-        event = QueueFile.enqueue(user, submission, cruise)
+        event = QueueFile.enqueue(user, submission, cruise, opts)
         EnqueuedMailer.deliver_confirm(event)
-        redirect_to '/staff/submitted_files'
+        flash[:notice] = "Enqueued Submission #{submission_id}"
+        redirect_to return_uri
     rescue => e
         Rails.logger.warn(e)
-        redirect_to '/staff/submitted_files', :status => 400
+        flash[:notice] = "Could not enqueue #{submission_id}: #{e}"
+        redirect_to return_uri
     end
 end
 
