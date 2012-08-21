@@ -11,5 +11,6 @@ vendor/rails
 config/database.yml
 public/javascripts/cache/*
 public/stylesheets/cache/*
+public/submissions
 .idea
 .rvm

@@ -1,16 +1,5 @@
+
 <%= link_to_remote("Go to Old Submissions", :update => "submissions",:url=>{:controller=>'staff',:action =>'old_submissions'})%>
-<table id="submission_color_key">
-	<tr>
-		<td colspan="3" align="center"><strong>Submission Color Key</strong></td>
-	</tr>
-	<tr>
-		<td class="assimilated_submission_1" width="20" align="center"></td><td class="assimilated_submission_2" width="20" align="center"></td><td align="center">Assimilated</td>
-	</tr>
-	<tr><td colspan="3" align="center"><hr></td></tr>
-	<tr>
-		<td class="incomplete_submission_1" width="20" align="center"></td><td class="incomplete_submission_2" width="20" align="center"></td><td align="center">Untouched</td>
-	</tr>
-</table>
 
 <% if @submissions %>
   <% @columns = ["name","institute","Country","email","Line","ExpoCode","Ship_Name", "cruise_date","submission_date"] %>
@@ -52,8 +41,15 @@
           <td><% if submission.public == 'public' %>&#x2713;<% else %><%= submission.public %><% end %></td>
         </tr>
         <tr class="<%= trclass %>">
-          <% base,filename = File.split(submission.file) %>
-          <td><a href="/submissions/<%= File.basename(base)%>/<%= filename %>"><%= filename %></a></td>
+          <td><a href="<%= Submission.public_file_path(submission) %>"><%= File.basename(submission.file) %></a>
+            <% if File.basename(submission.file) =~ /^multiple_files\.\d+\.zip/ %>
+              <ul>
+              <% for fn in multiple_files_names(Submission.private_file_path(submission)) %>
+                <li><%= fn %></li>
+              <% end %>
+              </ul>
+            <% end %>
+          </td>
           <td><%= submission.Line %></td>
           <td><%= submission.email %></td>
           <td><%= submission.Ship_Name %></td>
@@ -75,10 +71,33 @@
             <% end %>
           </td>
         </tr>
-		    <% if ctr % 2 == 0 %>
+        <% if not submission.assimilated %>
           <tr class="<%= trclass %>">
-            <td colspan="4">
-              <div id="assign_submission_<%= submission.id %>"></div>
+            <td colspan="4" id="enqueue_<%= submission.id %>" class="enqueuer">
+              <form id="enqueue_<%= submission.id %>" action="/staff/enqueue">
+                <input type="hidden" name="enqueue_submission" value="<%= submission.id %>">
+                <table style="width: 95%">
+                  <tr>
+                    <th style="width: 10em; text-align: right;"><label for="enqueue_attach_to_expocode">Attach to cruise</label></th>
+                    <td>
+                      <input name="enqueue_attach_to_expocode" type="text" value="<%= submission.ExpoCode %>">
+                      <%= submit_tag "Enqueue", :confirm => 'Are you sure?' %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th style="width: 10em; text-align: right;"><label for="enqueue_notes">Notes</label></th>
+                    <td><textarea name="enqueue_notes" style="width: 100%; height: 2em;"></textarea></td>
+                  </tr>
+                  <tr>
+                    <th style="width: 10em; text-align: right;"><label for="enqueue_parmaeters">Parameters</label></th>
+                    <td><input name="enqueue_parameters" type="text" style="width: 100%"></td>
+                  </tr>
+                  <tr>
+                    <th style="width: 10em; text-align: right;"><label for="enqueue_documentation">Is documentation</label></th>
+                    <td><input name="enqueue_documentation" type="checkbox"></td>
+                  </tr>
+                </table>
+              </form>
             </td>
           </tr>
         <% end %>

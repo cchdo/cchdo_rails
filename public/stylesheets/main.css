@@ -916,11 +916,9 @@ div.tm_auto_complete ul strong.highlight { color: #800; margin: 0; padding:0; }
 
 #submission_color_key {
   background-color: #9ec4cd;
-  position: relative;
-  top: -98px;
-  left: 812px;
-  margin-bottom: -80px;
-  z-index: 100;
+  padding: 0.5em;
+  float: right;
+  margin-bottom: 1em;
 }
 
 .queue_cruise_row {

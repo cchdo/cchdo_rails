@@ -1,17 +1,31 @@
-<div class="staff_header">Submitted Files</div>
-<% if @user !~ /guest/ %>
-<form id="radio_form">
-All<%= radio_button_tag 'submission_list' ,'all',{:checked => true}%>
-Unassigned<%= radio_button_tag 'submission_list', 'unassigned'%>
-<!-- Unassimilated<%= radio_button_tag 'submission_list',"unassimilated"%> -->
-</form>
-<%= observe_form 'radio_form',:update =>'submissions',:url => {:action =>'submission_list'} %>
-<% form_remote_tag :update =>'submissions', :url => {:action => 'submission_search'} do -%>
-  Search: <%= text_field :submission, :query %>
-  <%= submit_tag "search" %>
-<% end %>
-<div id="submissions">
-   <%= render :partial => '/staff/submitted_files/submission_list' %>
+<h1>Submitted Files</h1>
+<div id="submission_color_key">
+  <h1>Submission Color Key</h1>
+  <table>
+    <tr>
+      <td class="assimilated_submission_1" width="20"></td>
+      <td class="assimilated_submission_2" width="20"></td>
+      <td>Assimilated</td>
+    </tr>
+    <tr>
+      <td class="incomplete_submission_1" width="20"></td>
+      <td class="incomplete_submission_2" width="20"></td>
+      <td>Untouched</td>
+    </tr>
+  </table>
 </div>
-<hr>
+<% if @user !~ /guest/ %>
+  <form id="radio_form">
+    <%= label :submission_list, :all, 'All' %> <%= radio_button_tag :submission_list, :all, {:checked => true} %>
+    <%= label :submission_list, :unassigned, 'Unassigned' %> <%= radio_button_tag :submission_list, :unassigned %>
+    <!-- <%= label :submission_list, :unassimilated, 'Unassimilated' %><%= radio_button_tag :submission_list, :unassimilated %> -->
+  </form>
+  <%= observe_form 'radio_form', :update =>'submissions', :url => {:action => 'submission_list'} %>
+  <% form_remote_tag :update =>'submissions', :url => {:action => 'submission_search'} do -%>
+    <%= label :submission, "Search" %> <%= text_field :submission, :query %>
+    <%= submit_tag "search" %>
+  <% end %>
+  <div id="submissions">
+    <%= render :partial => '/staff/submitted_files/submission_list' %>
+  </div>
 <% end %>

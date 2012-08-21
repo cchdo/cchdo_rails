@@ -31,4 +31,9 @@ class Cruise < ActiveRecord::Base
                         :with => /^[\w-]+$/,
                         :message => "is missing or invalid",
                         :allow_nil => true
+
+    def data_dir
+        dirdoc = Document.find_by_ExpoCode_and_FileType(self.ExpoCode, 'Directory')
+        return dirdoc.FileName
+    end
 end

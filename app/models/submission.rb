@@ -1,7 +1,8 @@
 require 'zip/zip'
 
+$submission_root = Rails.root.join('public', 'submissions')
+
 class Submission < ActiveRecord::Base
-    $submission_root = Rails.root.join('public', 'submissions')
     $allowed_actions = {
         :one => "Merge Data",
         :two => "Place Online",
@@ -29,11 +30,26 @@ class Submission < ActiveRecord::Base
                         :message => "Email address is not formatted correctly"
  
     validates_each :file do |model, attr, value|
+        Rails.logger.info("Checking file #{value.inspect}")
         model.errors.add(attr, "Please select a file that has data to " + 
                                "submit.") unless model.file_object_okay?(value)
     end
 
     before_save :fill_in_default_values, :save_file
+
+    def self.public_file_path(submission)
+        # Return the publicly accessible filepath for this submission's file
+        basename, filename = File.split(submission.file)
+        basebase = File.basename(basename)
+        return "/submissions/#{basebase}/#{filename}"
+    end
+
+    def self.private_file_path(submission)
+        # Return the publicly accessible filepath for this submission's file
+        basename, filename = File.split(submission.file)
+        basebase = File.basename(basename)
+        return $submission_root.join(basebase, filename)
+    end
 
     def action=(hash)
         # Figure out actions that were selected by client. Don't trust client
@@ -134,7 +150,17 @@ class Submission < ActiveRecord::Base
         return false if file.blank?
         return true if file.kind_of?(StringIO)
         return true if file.kind_of?(Tempfile)
+        # If the file is already saved, the attribute is a string.
+        return true if file.kind_of?(String)
         return false
+    end
+
+    def get_clean_directory_name(time=nil)
+        if time.nil?
+            time = Time.now
+        end
+        # Generate clean directory name to store file (date_submitter_name)
+        return "#{time.strftime("%Y%m%d_%I_%M")}_#{clean_name()}"
     end
 
     private 
@@ -147,6 +173,10 @@ class Submission < ActiveRecord::Base
             SUBMITLOG.info("File to save is not of proper upload type. Maybe it was set directly?")
             raise
         end
+        if file.kind_of?(String)
+            return
+        end
+
         self.file = path
 
         begin
@@ -165,11 +195,6 @@ class Submission < ActiveRecord::Base
     def clean(x)
         return x if x.blank?
         return x.gsub(/[^\w\.\-]/, '_')
-    end
-
-    def get_clean_directory_name
-        # Generate clean directory name to store file (date_submitter_name)
-        return "#{Time.now.strftime("%Y%m%d_%I_%M")}_#{clean_name()}"
     end
 
     def generate_unique_submission_directory
@@ -215,9 +240,15 @@ class Submission < ActiveRecord::Base
     end
 
     def fill_in_default_values
-        self.assigned = false
-        self.assimilated = false
-        self.submission_date = Time.now
+        if self.assigned.nil?
+            self.assigned = false
+        end
+        if self.assimilated.nil?
+            self.assimilated = false
+        end
+        if self.submission_date.nil?
+            self.submission_date = Time.now
+        end
     end
 end
 

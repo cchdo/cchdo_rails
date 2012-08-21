@@ -1,145 +1,163 @@
 class Minute < ActiveRecord::Base
-  has_many :action_items
+    has_many :action_items
 end
 
 class ActionItem < ActiveRecord::Base
-  belongs_to :minute
+    belongs_to :minute
 end
 
-class Document < ActiveRecord::Base
-end
-
-class Event < ActiveRecord::Base
-end
-
-class Submission < ActiveRecord::Base
-end
-
+require 'models/document'
+require 'models/event'
+require 'models/submission'
 require 'csv'
+
 class StaffController < ApplicationController
-layout "staff", :except => [:pis_for_lookup, :ships_for_lookup, :countries_for_lookup, :parameters_for_lookup, :expocodes_for_lookup, :contacts_for_lookup, :lines_for_lookup]
-before_filter :check_authentication, :except => [:signin, :images, :pis_for_lookup, :ships_for_lookup, :countries_for_lookup,:parameters_for_lookup, :expocodes_for_lookup, :contacts_for_lookup, :lines_for_lookup]
+    layout "staff", :except => [:pis_for_lookup, :ships_for_lookup,
+                                :countries_for_lookup, :parameters_for_lookup,
+                                :expocodes_for_lookup, :contacts_for_lookup,
+                                :lines_for_lookup]
+    before_filter :check_authentication, :except => [:signin, :images, :pis_for_lookup,
+                                       :ships_for_lookup,
+                                       :countries_for_lookup,:parameters_for_lookup,
+                                       :expocodes_for_lookup,
+                                       :contacts_for_lookup, :lines_for_lookup]
 #cache_sweeper :task_tracker
 
 def index
-   @user = User.find(session[:user])
-   @user = @user.username
-   params[:query] = @user
+    @user = User.find(session[:user])
+    @user = @user.username
+    params[:query] = @user
 end
 
 # Static pages
 def software
-  #render :partial => "software"
+    #render :partial => "software"
 end
 
 def documentation 
-  #render :partial => "documentation"
+    #render :partial => "documentation"
 end
 
 
 # Minutes Code------------------------------------------------------------------
 
 def minutes_archive
-   @minutes = Minute.find(:all,:order => "Date DESC")
+    @minutes = Minute.find(:all,:order => "Date DESC")
 end
 
 def enter_minutes
-   @minute = Minute.new
-   15.times { @minute.action_items.build }
-   render :partial => 'enter_minutes'
+    @minute = Minute.new
+    15.times { @minute.action_items.build }
+    render :partial => 'enter_minutes'
 end
 
 def create_minutes
-  if params[:minutes]
-     @minutes = Minute.new(params[:minutes])
-     params[:action_items].each_value do |action_item|
-     @minutes.action_items.build(action_item) unless action_item.values.all?(&:blank?)
-   end
-  end
-   @minutes.save 
-   @minutes = Minute.all(:order => "Date DESC")
-   render :partial => "minutes"
+    if params[:minutes]
+        @minutes = Minute.new(params[:minutes])
+        params[:action_items].each_value do |action_item|
+            @minutes.action_items.build(action_item) unless action_item.values.all?(&:blank?)
+        end
+    end
+    @minutes.save 
+    @minutes = Minute.all(:order => "Date DESC")
+    render :partial => "minutes"
 end
 
 def update_action_items
-  action_item = ActionItem.find(params[:item_id])
-  action_item.done = params[:done]
-  action_item.save
-  
-   @minutes = Minute.all(:order => "Date DESC")
-   render :partial => "minutes"
+    action_item = ActionItem.find(params[:item_id])
+    action_item.done = params[:done]
+    action_item.save
+
+    @minutes = Minute.all(:order => "Date DESC")
+    render :partial => "minutes"
 end
+
 #-------------------------------------------------------------------------
 # queue files
 
 def queue_files
-    @user = User.find(session[:user])
-  @user = @user.username
+   @user = User.find(session[:user])
+   @user = @user.username
    @files = QueueFile.find(:all,:order => "Merged")
-       @cruises = Array.new
-  for file in @files
-    cruise = Cruise.find(:first,:conditions => ["ExpoCode = ?",file.ExpoCode])
-    if cruise
-      @cruises << cruise
+   @cruises = Array.new
+   for file in @files
+       cruise = Cruise.find(:first,:conditions => ["ExpoCode = ?",file.ExpoCode])
+       if cruise
+           @cruises << cruise
+       end
+   end
+   @cruises.uniq!
+   render :file => "/staff/queue_files/queue_files", :layout => true
+end
+
+def enqueue
+    user = User.find(session[:user])
+    cruise = Cruise.find_by_ExpoCode(params['enqueue_attach_to_expocode'])
+    submission = Submission.find(params['enqueue_submission'])
+    begin
+        event = QueueFile.enqueue(user, submission, cruise)
+        EnqueuedMailer.deliver_confirm(event)
+        redirect_to '/staff/submitted_files'
+    rescue => e
+        Rails.logger.warn(e)
+        redirect_to '/staff/submitted_files', :status => 400
     end
-  end
-  @cruises.uniq!
-  render :file => "/staff/queue_files/queue_files", :layout => true
 end
 
 def queue_search
-   @best_result = []
-@cur_max = 0
-@names = []
-@cruises = []
-@results = []
-if  @query = params[:queue_file][:query] 
-  for column in QueueFile.columns
-      @names << column.human_name
-      @results = QueueFile.find(:all ,:conditions => ["`#{column.name}` regexp ?", @query], :order => "Merged")
-      if @results.length > @cur_max
-          @cur_max = @results.length
-          @best_result = @results
-          @results=[]
-      end
-  end
-end
-@files = @best_result
-  for file in @files
-    cruise = Cruise.find(:first,:conditions => ["ExpoCode = ?",file.ExpoCode])
-    if cruise
-      @cruises << cruise
+    @best_result = []
+    @cur_max = 0
+    @names = []
+    @cruises = []
+    @results = []
+    if  @query = params[:queue_file][:query] 
+        for column in QueueFile.columns
+            @names << column.human_name
+            @results = QueueFile.find(:all ,:conditions => ["`#{column.name}` regexp ?", @query], :order => "Merged")
+            if @results.length > @cur_max
+                @cur_max = @results.length
+                @best_result = @results
+                @results=[]
+            end
+        end
     end
-  end  
-  @cruises.uniq!
-  render :partial => "/staff/queue_files/queue_box"
+    @files = @best_result
+    for file in @files
+        cruise = Cruise.find(:first,:conditions => ["ExpoCode = ?",file.ExpoCode])
+        if cruise
+            @cruises << cruise
+        end
+    end  
+    @cruises.uniq!
+    render :partial => "/staff/queue_files/queue_box"
 end
 
 def show_all
-  @files = QueueFile.find(:all,:order => "Merged")
-  @cruises = Array.new
-  for file in @files
-    cruise = Cruise.find(:first,:conditions => ["ExpoCode = ?",file.ExpoCode])
-    if cruise
-      @cruises << cruise
+    @files = QueueFile.find(:all,:order => "Merged")
+    @cruises = Array.new
+    for file in @files
+        cruise = Cruise.find(:first,:conditions => ["ExpoCode = ?",file.ExpoCode])
+        if cruise
+            @cruises << cruise
+        end
     end
-  end
-  @cruises.uniq!
-  render :partial => '/staff/queue_files/queue_box'
+    @cruises.uniq!
+    render :partial => '/staff/queue_files/queue_box'
 end
 
 def cruise_queue
-  expo = params[:cruise]
-  @columns = ["Name", "Contact", "Original","DateRecieved", "Merged"]
-  @cruise = Cruise.find(:first, :conditions => ["ExpoCode = ?",expo])
-  @queue = QueueFile.find(:all, :conditions => ["ExpoCode = ?",expo],:order => "Merged")
-  @events = Event.find(:all,:conditions=>["ExpoCode= ?",expo],:order=>['Date_Entered DESC'])
-  render :partial => '/staff/queue_files/cruise_queue'
+    expo = params[:cruise]
+    @columns = ["Name", "Contact", "Original","DateRecieved", "Merged"]
+    @cruise = Cruise.find(:first, :conditions => ["ExpoCode = ?",expo])
+    @queue = QueueFile.find(:all, :conditions => ["ExpoCode = ?",expo],:order => "Merged")
+    @events = Event.find(:all,:conditions=>["ExpoCode= ?",expo],:order=>['Date_Entered DESC'])
+    render :partial => '/staff/queue_files/cruise_queue'
 end
-  def note
-  @entry = params[:Entry]
-  @note_entry = Event.find(:first,:conditions=>["ID=#{@entry}"])
-  render :partial => "/staff/queue_files/note"
+
+def note
+    @entry = params[:Entry]
+    @note_entry = Event.find(:first,:conditions=>["ID=#{@entry}"])
+    render :partial => "/staff/queue_files/note"
 end
 
 
@@ -148,82 +166,78 @@ end
 
 def submitted_files
     @user = User.find(session[:user])
-  @user = @user.username
-   @submissions = Submission.find(:all,:order => "submission_date DESC")
-   render :file => "/staff/submitted_files/submitted_files", :layout => true
+    @user = @user.username
+    @submissions = Submission.find(:all,:order => "submission_date DESC")
+    render :file => "/staff/submitted_files/submitted_files", :layout => true
 end
 
 def submission_list
-   
-   condition = params[:submission_list]
-   @parameters = params
-   if params[:Sort]
-     sort_condition = params[:Sort]
-   else
-     sort_condition = "submission_date"
-   end
-   if condition == 'all'
-      @submissions = Submission.find(:all,:order => "#{sort_condition}")
-   elsif condition == 'unassigned'
-      @submissions = Submission.find(:all, :conditions => ["assigned = '0'"],:order => "#{sort_condition}")
-   elsif condition == 'unassimilated'
-      @submissions = Submission.find(:all, :conditions => ["assimilated = '0'"],:order => "#{sort_condition}")
-   end
-   render :partial => "/staff/submitted_files/submission_list"
+    condition = params[:submission_list]
+    @parameters = params
+    if params[:Sort]
+        sort_condition = params[:Sort]
+    else
+        sort_condition = "submission_date"
+    end
+    if condition == 'all'
+        @submissions = Submission.find(:all,:order => "#{sort_condition}")
+    elsif condition == 'unassigned'
+        @submissions = Submission.find(:all, :conditions => ["assigned = '0'"],:order => "#{sort_condition}")
+    elsif condition == 'unassimilated'
+        @submissions = Submission.find(:all, :conditions => ["assimilated = '0'"],:order => "#{sort_condition}")
+    end
+    render :partial => "/staff/submitted_files/submission_list"
 end
 
-
 def show_note
-  @note_id = params[:sub_id]
-  @submission_note = Submission.find(@note_id)
-  @submission_note[:notes].gsub!(/[\n]/,"<br>")
-  @submission_note[:notes].gsub!(/[\t]/,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-  render :partial => "/staff/submitted_files/show_note"
+    @note_id = params[:sub_id]
+    @submission_note = Submission.find(@note_id)
+    @submission_note[:notes].gsub!(/[\n]/,"<br>")
+    @submission_note[:notes].gsub!(/[\t]/,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+    render :partial => "/staff/submitted_files/show_note"
 end
 
 def hide_note
-  @note_id = params[:sub_id]
-  @submission = Submission.find(@note_id)
-  render :partial => "/staff/submitted_files/hide_note"
+    @note_id = params[:sub_id]
+    @submission = Submission.find(@note_id)
+    render :partial => "/staff/submitted_files/hide_note"
 end
 
 def submission_search
-  @best_result = []
-  @cur_max = 0
-  @names = []
-  @submissions = []
-  @results = []
-  if @query = params[:submission][:query] 
-    for column in Submission.columns
-        @names << column.human_name
-        @results = Submission.find(
-            :all,
-            :conditions => ["`#{column.name}` regexp ?", @query],
-            :order => "submission_date DESC")
-        if @results.length > @cur_max
-            @cur_max = @results.length
-            @best_result = @results
-            @results=[]
+    @best_result = []
+    @cur_max = 0
+    @names = []
+    @submissions = []
+    @results = []
+    if @query = params[:submission][:query] 
+        for column in Submission.columns
+            @names << column.human_name
+            @results = Submission.find(
+                :all,
+                :conditions => ["`#{column.name}` regexp ?", @query],
+                :order => "submission_date DESC")
+                if @results.length > @cur_max
+                    @cur_max = @results.length
+                    @best_result = @results
+                    @results=[]
+                end
         end
     end
-  end
-  @submissions = @best_result
-  render :partial => "/staff/submitted_files/submission_list"
+    @submissions = @best_result
+    render :partial => "/staff/submitted_files/submission_list"
 end
-
-
 
 def old_submissions
     @old_submissions = OldSubmission.find(:all)
     @cruisesTEST = Cruise.find(:all)
     render :partial => "/staff/submitted_files/old_submission_list"
 end
+
 #########################################################################
 # Code for smart forms
 
 def pis_for_lookup
-	@pis = Cruise.find(:all,
-			:select => ["DISTINCT Chief_Scientist"])
+	@pis = Cruise.find(:all, :select => ["DISTINCT Chief_Scientist"])
 	response.headers['Content-Type'] = 'text/javascript'
 	
 	# make things easier for the browser
@@ -236,8 +250,7 @@ def pis_for_lookup
 end
 
 def contacts_for_lookup
-	@contacts = Contact.find(:all,
-			:select => ["DISTINCT LastName"])
+	@contacts = Contact.find(:all, :select => ["DISTINCT LastName"])
 	response.headers['Content-Type'] = 'text/javascript'
 	
 	# make things easier for the browser
@@ -250,8 +263,7 @@ def contacts_for_lookup
 end
 
 def expocodes_for_lookup
-	@expocodes = Cruise.find(:all,
-			:select => ["DISTINCT ExpoCode"])
+	@expocodes = Cruise.find(:all, :select => ["DISTINCT ExpoCode"])
 	response.headers['Content-Type'] = 'text/javascript'
 	
 	# make things easier for the browser
@@ -264,8 +276,7 @@ def expocodes_for_lookup
 end
 
 def ships_for_lookup
-	@ships = Cruise.find(:all,
-			:select => ["DISTINCT Ship_Name"])
+	@ships = Cruise.find(:all, :select => ["DISTINCT Ship_Name"])
 	response.headers['Content-Type'] = 'text/javascript'
 	
 	# make things easier for the browser
@@ -278,8 +289,7 @@ def ships_for_lookup
 end
 
 def countries_for_lookup
-	@countries = Cruise.find(:all,
-			:select => ["DISTINCT Country"])
+	@countries = Cruise.find(:all, :select => ["DISTINCT Country"])
 	response.headers['Content-Type'] = 'text/javascript'
 	
 	# make things easier for the browser
@@ -307,64 +317,64 @@ def parameters_for_lookup
 end
 
 def lines_for_lookup
-  @lines = Cruise.find(:all, :select => ["DISTINCT Line"])
-  response.headers['Content-Type'] = 'text/javascript'
+    @lines = Cruise.find(:all, :select => ["DISTINCT Line"])
+    response.headers['Content-Type'] = 'text/javascript'
 
-  	# make things easier for the browser
-	str = "var lines = ["
-	@lines.each do |line|
-		str += "\"#{line.Line}\","
-	end
-	str = str[0..-2] + "];"
-	render :text => "#{str}"
+    # make things easier for the browser
+    str = "var lines = ["
+    @lines.each do |line|
+        str += "\"#{line.Line}\","
+    end
+    str = str[0..-2] + "];"
+    render :text => "#{str}"
 end
 #--------------------Db-History----------------------------------
 def db_history
-  @documents = Document.find_by_sql("select * from cchdo.documents where DATE_SUB(CURDATE(),interval 2 month) <= LastModified order by LastModified DESC")  #find documents that are most recently changed 
-  @events = Event.find_by_sql("select * from cchdo.events where DATE_SUB(CURDATE(),interval 2 month) <= Date_Entered order by Date_Entered DESC") #find events that have the most recent date on the notes
-  @submissions = Submission.find_by_sql("select * from cchdo.submissions where DATE_SUB(CURDATE(),interval 2 month) <= submission_date order by submission_date DESC")  #find documents that are most recently changed 
+    @documents = Document.find_by_sql("select * from cchdo.documents where DATE_SUB(CURDATE(),interval 2 month) <= LastModified order by LastModified DESC")  #find documents that are most recently changed 
+    @events = Event.find_by_sql("select * from cchdo.events where DATE_SUB(CURDATE(),interval 2 month) <= Date_Entered order by Date_Entered DESC") #find events that have the most recent date on the notes
+    @submissions = Submission.find_by_sql("select * from cchdo.submissions where DATE_SUB(CURDATE(),interval 2 month) <= submission_date order by submission_date DESC")  #find documents that are most recently changed 
 end
 
 def StaffController.doc_from(date, documents)
-  doc_array = Array.new
-  documents.each do |document| 
-    if document.LastModified.strftime(fmt='%Y-%m-%d') == date.to_s
-      doc_array << document
+    doc_array = Array.new
+    documents.each do |document| 
+        if document.LastModified.strftime(fmt='%Y-%m-%d') == date.to_s
+            doc_array << document
+        end
     end
-  end
-  return doc_array
+    return doc_array
 end
 
 def StaffController.event_from(date, events, expocode)
-  event_array = Array.new
-  if expocode == "NULL"
-    return event_array
-  end
-  events.each do |event|
-    if event.Date_Entered.to_s == date.to_s and event.ExpoCode == expocode
-      event_array << event
+    event_array = Array.new
+    if expocode == "NULL"
+        return event_array
     end
-  end
-  return event_array
+    events.each do |event|
+        if event.Date_Entered.to_s == date.to_s and event.ExpoCode == expocode
+            event_array << event
+        end
+    end
+    return event_array
 end
 
 def StaffController.no_doc_event_from(date, events, used_expocodes)
-  event_array = Array.new
-  events.each do |event|
-    if event.Date_Entered.to_s == date.to_s and !used_expocodes.include?(event.ExpoCode)
-      event_array << event
+    event_array = Array.new
+    events.each do |event|
+        if event.Date_Entered.to_s == date.to_s and !used_expocodes.include?(event.ExpoCode)
+            event_array << event
+        end
     end
-  end
-  return event_array
+    return event_array
 end
 
 def StaffController.submission_from(date, submissions)
-  submission_array = Array.new
-  submissions.each do |submission|
-    if submission.submission_date.to_s == date.to_s 
-      submission_array << submission
+    submission_array = Array.new
+    submissions.each do |submission|
+        if submission.submission_date.to_s == date.to_s 
+            submission_array << submission
+        end
     end
-  end
-  return submission_array
+    return submission_array
 end
 end
