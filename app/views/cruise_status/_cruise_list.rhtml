@@ -1,28 +1,26 @@
-<dl>
-	<% if @cruises %>
-	<% for group in @cruises.keys %>
-	<dt><b><%= group %></b></dt>
-	<dd>
-	<ul>
-	<% for cruise in @cruises[group] %>
-	<li>
-		<% if @no_files_cruises.include? cruise.ExpoCode %>
-		<div id="red_link">
-		<%= link_to_remote("#{cruise.Line} #{cruise.ExpoCode}",:update => "all_cruise_meta",:url=>{:controller=>'cruise_status',:action =>'all_cruise_meta',:expo => "#{cruise.ExpoCode}"})%>
-       </div>
-		<% elsif @some_files_cruises.include? cruise.ExpoCode%>
-		<div id="yellow_link">
-		<%= link_to_remote("#{cruise.Line} #{cruise.ExpoCode}",:update => "all_cruise_meta",:url=>{:controller=>'cruise_status',:action =>'all_cruise_meta',:expo => "#{cruise.ExpoCode}"})%>
-		</div>
-		<% else %>
-		<div id="green_link">
-		   <%= link_to_remote("#{cruise.Line} #{cruise.ExpoCode}",:update => "all_cruise_meta",:url=>{:controller=>'cruise_status',:action =>'all_cruise_meta',:expo => "#{cruise.ExpoCode}"})%>
-	    </div>
-		<% end %>
-	</li>
+<% if @cruises %>
+  <% for group in @cruises.keys %>
+    <h1><%= group %></h1>
+    <ul>
+      <% for cruise in @cruises[group] %>
+        <% link_class = "green_link" %>
+        <% if @no_files_cruises.include? cruise.ExpoCode %>
+          <% link_class = "red_link" %>
+        <% elsif @some_files_cruises.include?(cruise.ExpoCode) %>
+          <% link_class = "yellow_link" %>
+        <% end %>
+        <li id="<%= link_class %>">
+          <%= link_to_remote("#{cruise.Line} #{cruise.ExpoCode}",
+            :update => "all_cruise_meta",
+            :url => {
+              :controller=>'cruise_status',
+              :action =>'all_cruise_meta',
+              :expo => cruise.ExpoCode
+            }) %>
+        </li>
+      <% end %>
+    </ul>
 	<% end %>
-	</ul>
-	</dd>
-	<% end %>
-	<% end %>
-</dl>
+<% else %>
+  No cruises
+<% end %>

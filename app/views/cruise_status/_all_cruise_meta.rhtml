@@ -1,28 +1,14 @@
-<table border="1">
-	<tr>
-<td valign="top">
- <div id="cruise_meta"  style="height:290px; width:300px;">
-  <%= render :partial  => "cruise_meta", :update =>"cruise_meta" %>	
-</div>
-</td>
-<td rowspan= "3" valign="top">
-   <div id="cruise_history" style="height:700px; width:400px; overflow:auto">
-     <%= render :partial => "cruise_history", :update => "cruise_history" %>
-   </div>
-</td>
-</tr>
-<tr>
-<td valign="top">
-  <div id="status_meta">
-     <%= render :partial => "status_meta",:update => "status_meta" %>
+<div class="cruise_meta left">
+  <div id="cruise_meta">
+    <%= render :partial => "cruise_meta", :update => "cruise_meta" %>	
   </div>
-</td>
-</tr>
-<tr>
- <td valign="top">
-   <div id="doc_meta">
-      <%= render :partial => "doc_meta", :update => "doc_meta" %>
-   </div>
- </td>
-</tr>
-</table>
+  <div id="status_meta">
+    <%= render :partial => "status_meta", :update => "status_meta" %>
+  </div>
+  <div id="doc_meta">
+    <%= render :partial => "doc_meta", :update => "doc_meta" %>
+  </div>
+</div>
+<div id="cruise_history" class="cruise_meta right">
+  <%= render :partial => "cruise_history", :update => "cruise_history" %>
+</div>

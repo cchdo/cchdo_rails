@@ -1,29 +1,28 @@
 <% form_for :cruise, @cruise, :url => { :action => "cruise_information" } do |f| %>
-<table class="cruise_meta_staff">
-  <tr>
-	<td>Line Name:</td><td><%= f.text_field :Line,:size => "9" %></td>
-	<td>Ship:</td><td><%= f.text_field :Ship_Name,:size => "15" %></td>
-  </tr>
-  <tr>  
-    <td>ExpoCode:</td><td> <%= f.text_field :ExpoCode,:size => "12" %> </td>
-    <td>Cruise Date:</td><td><%= f.text_field :Begin_Date,:size => "10" %>-<%= f.text_field :EndDate,:size => "10" %></td>
-  </tr>
-  <tr>
-	<td>Chief Scientist:</td><td><%= f.text_field :Chief_Scientist,:size => "16" %></td>
-    <td>Country:</td><td><%= f.text_field :Country,:size => "8" %></td>
-  </tr>
-  <tr textalign="top">
-    <td>Aliases:</td><td><%= f.text_field :Alias,:size => "16" %></td>
-    <td></td><td></td>
-  </tr>
-  <tr>
-    <td>Groups:</td><td></td>
-  </tr>
-  <tr>
-	<td colspan="2"><br><%= f.text_area :Group,:size => "20" %></td>
-  </tr>
-</table>	
+  <table class="cruise_meta_staff">
+    <tr>
+      <td>Line Name:</td><td><%= f.text_field :Line, :size => "9" %></td>
+      <td>Ship:</td><td><%= f.text_field :Ship_Name, :size => "15" %></td>
+    </tr>
+    <tr>  
+      <td>ExpoCode:</td><td><%= f.text_field :ExpoCode, :size => "12" %> </td>
+    </tr>
+    <tr>  
+      <td>Cruise Date:</td><td colspan="3"><%= f.text_field :Begin_Date, :size => "10" %>-<%= f.text_field :EndDate,:size => "10" %></td>
+    </tr>
+    <tr>
+      <td>Chief Scientist:</td><td><%= f.text_field :Chief_Scientist, :size => "16" %></td>
+      <td>Country:</td><td><%= f.text_field :Country, :size => "8" %></td>
+    </tr>
+    <tr textalign="top">
+      <td>Aliases:</td><td><%= f.text_field :Alias, :size => "16" %></td>
+    </tr>
+    <tr>
+      <td>Groups:</td>
+      <td colspan="3"><%= f.text_area :Group,:size => "20" %></td>
+    </tr>
+  </table>	
 <% end %>
 <% if @cruise %>
-<a href="/data_access?ExpoCode=<%= @cruise.ExpoCode %>">Data Page</a>
+  <a href="/cruise/<%= @cruise.ExpoCode %>">Cruise data page</a>
 <% end %>

@@ -1002,10 +1002,24 @@ div.tm_auto_complete ul strong.highlight { color: #800; margin: 0; padding:0; }
 .contact_info_label { vertical-align: top; font-weight: bold; }
 #contact_cruises caption { font-weight: bold; }
 
-/* /cruise_status page */
+/* cruise_status page */
 #red_link a{ color: red; }
-#yellow_link a{ color: yellow; }
+#yellow_link a{ color: orange; }
 #green_link a{ color: green; }
+
+#cruise_list, #all_cruise_meta { height: 800px; overflow-y: auto; }
+#cruise_list { width: 200px; float: left; }
+#all_cruise_meta { width: 824px; margin-left: 200px; }
+
+.cruise_meta { overflow-y: auto; height: 100%; }
+.cruise_meta.left { width: 430px; float: left; }
+.cruise_meta.right { width: 394px; margin-left: 430px; }
+
+#cruise_meta { background: #eeeeff; }
+#status_meta h1 { font-size: 1.2em; }
+#status_meta ul.missing li { color: #FF0000; }
+#status_meta ul span { float: right; }
+#doc_meta { background: #eeeeff; }
 
 /* Merge Queue */
 .unmerged_file{background-color:#FFC860}
