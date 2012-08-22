@@ -12,5 +12,8 @@ config/database.yml
 public/javascripts/cache/*
 public/stylesheets/cache/*
 public/submissions
+public/argo_submissions
+public/data
+submissions
 .idea
 .rvm
