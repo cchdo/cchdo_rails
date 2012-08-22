@@ -17,3 +17,6 @@ public/data
 submissions
 .idea
 .rvm
+.ruby-version
+config/setup_load_paths.rb
+public/500.html
