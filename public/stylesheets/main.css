@@ -1018,7 +1018,8 @@ div.tm_auto_complete ul strong.highlight { color: #800; margin: 0; padding:0; }
 #cruise_meta { background: #eeeeff; }
 #status_meta h1 { font-size: 1.2em; }
 #status_meta ul.missing li { color: #FF0000; }
-#status_meta ul span { float: right; }
+#status_meta ul .permissions { color: #FF0000; }
+#status_meta ul .stamp { float: right; }
 #doc_meta { background: #eeeeff; }
 
 /* Merge Queue */

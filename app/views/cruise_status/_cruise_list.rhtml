@@ -10,7 +10,7 @@
           <% link_class = "yellow_link" %>
         <% end %>
         <li id="<%= link_class %>">
-          <%= link_to_remote("#{cruise.Line} #{cruise.ExpoCode}",
+          <%= link_to_remote("#{cruise.ExpoCode} #{cruise.Line}",
             :update => "all_cruise_meta",
             :url => {
               :controller=>'cruise_status',
