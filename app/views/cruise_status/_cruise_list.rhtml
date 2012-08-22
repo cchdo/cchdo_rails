@@ -3,11 +3,12 @@
     <h1><%= group %></h1>
     <ul>
       <% for cruise in @cruises[group] %>
-        <% link_class = "green_link" %>
-        <% if @no_files_cruises.include? cruise.ExpoCode %>
+        <% if @no_files_cruises.include?(cruise.ExpoCode) %>
           <% link_class = "red_link" %>
         <% elsif @some_files_cruises.include?(cruise.ExpoCode) %>
           <% link_class = "yellow_link" %>
+        <% else %>
+          <% link_class = "green_link" %>
         <% end %>
         <li id="<%= link_class %>">
           <%= link_to_remote("#{cruise.ExpoCode} #{cruise.Line}",

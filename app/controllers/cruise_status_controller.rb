@@ -30,6 +30,8 @@ class CruiseStatusController < ApplicationController
         'pdf_doc' => 'PDF Documentation'
     }
 
+    $file_short_types = $type_to_long_type.keys() + ['big_pic', 'small_pic']
+
     $allowed_event_sorts = ['LastName', 'Data_Type']
 
     def index
@@ -40,7 +42,7 @@ class CruiseStatusController < ApplicationController
     def cruise_information
         cruises = Cruise.find(:all)
         @cruises = _organize_cruises(cruises)
-        (@no_files_cruises, @some_files_cruises) = _flag_cruises(cruises)
+        (@no_files_cruises, @some_files_cruises, file_results) = _flag_cruises(cruises)
         _get_cruise_meta()
     end
 
@@ -53,6 +55,33 @@ class CruiseStatusController < ApplicationController
         @entry = params[:Entry]
         @note_entry = Event.find_by_ID(@entry)
         render :partial => "note"
+    end
+
+    def sheet
+        cruises = Cruise.find(:all)
+        (_0, _1, file_results) = _flag_cruises(cruises)
+
+        response = ''
+        for cruise in cruises
+            cruise_responses = []
+            cruise_responses << cruise.ExpoCode
+
+            fr = file_results[cruise.ExpoCode]
+            for key in $file_short_types
+                doc = fr[key]
+                if doc
+                    if doc.respond_to?('FileType')
+                        cruise_responses << doc.FileType
+                    else
+                        cruise_responses << doc
+                    end
+                end
+            end
+
+            response += cruise_responses.join(',') + "\n"
+        end
+
+        render :text => response
     end
 
     def _expo_dirs(expocode=nil)
@@ -85,7 +114,7 @@ class CruiseStatusController < ApplicationController
 
     def _count_missing(file_result)
         num_files = 0
-        for type in $type_to_long_type.keys()
+        for type in $file_short_types
             if file_result[type]
                 num_files += 1
             end
@@ -95,7 +124,7 @@ class CruiseStatusController < ApplicationController
 
     def _flag_cruises(cruises)
         @cruise_list = cruises
-        file_result = {}
+        file_results = {}
         missing_all_cruises = []
         missing_some_cruises = []
 
@@ -103,16 +132,17 @@ class CruiseStatusController < ApplicationController
         expo_docs = _expo_docs()
         for cruise in cruises
             expocode = cruise.ExpoCode
-            file_result = _gather_file_result(expo_dirs, expo_docs, expocode)
+            file_results[expocode] = _gather_file_result(
+                expo_dirs, expo_docs, expocode)
 
-            num_files = _count_missing(file_result)
+            num_files = _count_missing(file_results[expocode])
             if num_files == 0
                 missing_all_cruises << cruise.ExpoCode
             elsif num_files < 11
                 missing_some_cruises << cruise.ExpoCode
             end
         end
-        return missing_all_cruises, missing_some_cruises
+        return missing_all_cruises, missing_some_cruises, file_results
     end
 
     def _organize_cruises(cruises)
@@ -136,7 +166,7 @@ class CruiseStatusController < ApplicationController
 
     def _gather_file_result(doc_dirs, expo_docs, expocode)
         file_result = {}
-        $type_to_long_type.keys().each {|k| file_result[k] = nil}
+        $file_short_types.each {|k| file_result[k] = nil}
         file_result['big_pic'] = nil
         file_result['small_pic'] = nil
 
