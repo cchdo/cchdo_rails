@@ -1,6 +1,7 @@
 class CruiseStatusController < ApplicationController
     layout "staff"
-    before_filter :check_authentication, :except => [:signin]
+
+    before_filter :check_authentication
 
     $file_types = [ 
         ['exchange_bot', 'Exchange Bottle'],
@@ -31,41 +32,37 @@ class CruiseStatusController < ApplicationController
 
     $allowed_event_sorts = ['LastName', 'Data_Type']
 
-    def check_authentication
-        unless session[:user]
-            session[:intended_action] = action_name
-            session[:intended_controller] = controller_name
-            redirect_to :action => "signin"
-        end
-    end
-
-    def signin
-        if request.post?   
-            #session[:user] = User.authenticate(params[:username],params[:password]).id
-            user = User.authenticate(params[:username],params[:password])
-            if user
-                session[:user] = user.id
-                redirect_to :action => session[:intended_action],:controller => session[:intended_controller]
-            else
-                flash[:notice] = "Invalid user name or password"
-            end
-        end
-    end
-
-    def signout
-        session[:user] = nil
-        redirect_to "/"
-    end
-
     def index
-        @user = User.find(session[:user]).username
         cruise_information()
         render :action => 'cruise_information'
     end
 
-    def _expo_dirs
-        docdirs = Document.find(:all, :conditions => {:FileType => 'Directory'})
-        expo_dirs = docdirs.reduce({}) {|h, dir| h[dir.ExpoCode] = dir; h }
+    def cruise_information
+        cruises = Cruise.find(:all)
+        @cruises = _organize_cruises(cruises)
+        (@no_files_cruises, @some_files_cruises) = _flag_cruises(cruises)
+        _get_cruise_meta()
+    end
+
+    def all_cruise_meta
+        _get_cruise_meta()
+        render :partial => "all_cruise_meta"
+    end
+
+    def note
+        @entry = params[:Entry]
+        @note_entry = Event.find_by_ID(@entry)
+        render :partial => "note"
+    end
+
+    def _expo_dirs(expocode=nil)
+        if expocode
+            docs = Document.find_all_by_FileType_and_ExpoCode(
+                'Directory', expocode)
+        else
+            docs = Document.find_all_by_FileType('Directory')
+        end
+        expo_dirs = docs.reduce({}) {|h, dir| h[dir.ExpoCode] = dir; h }
         return expo_dirs
     end
 
@@ -86,6 +83,16 @@ class CruiseStatusController < ApplicationController
         return expo_docs
     end
 
+    def _count_missing(file_result)
+        num_files = 0
+        for type in $type_to_long_type.keys()
+            if file_result[type]
+                num_files += 1
+            end
+        end
+        return num_files
+    end
+
     def _flag_cruises(cruises)
         @cruise_list = cruises
         file_result = {}
@@ -94,21 +101,14 @@ class CruiseStatusController < ApplicationController
 
         expo_dirs = _expo_dirs()
         expo_docs = _expo_docs()
-        for cruise in @cruise_list
+        for cruise in cruises
             expocode = cruise.ExpoCode
-            file_result = _gather_file_result(
-                expo_dirs[expocode], expo_docs, expocode)
-            missing = nil
-            file_ctr = 0
-            for key in file_result.keys
-                if file_result[key]
-                    file_ctr= file_ctr + 1
-                end
-            end
-            if file_ctr == 0
+            file_result = _gather_file_result(expo_dirs, expo_docs, expocode)
+
+            num_files = _count_missing(file_result)
+            if num_files == 0
                 missing_all_cruises << cruise.ExpoCode
-            end
-            if file_ctr < 11 and file_ctr != 0
+            elsif num_files < 11
                 missing_some_cruises << cruise.ExpoCode
             end
         end
@@ -134,25 +134,13 @@ class CruiseStatusController < ApplicationController
         return @cruises_by_group
     end
 
-    def cruise_information
-        cruises = Cruise.find(:all)
-        @cruises = _organize_cruises(cruises)
-        (@no_files_cruises, @some_files_cruises) = _flag_cruises(cruises)
-        get_cruise_meta()
-    end
-
-    def note
-        @entry = params[:Entry]
-        @note_entry = Event.find(:first, :conditions=>["ID = ?", @entry])
-        render :partial => "note"
-    end
-
-    def _gather_file_result(doc_dir, expo_docs, expocode)
+    def _gather_file_result(doc_dirs, expo_docs, expocode)
         file_result = {}
         $type_to_long_type.keys().each {|k| file_result[k] = nil}
         file_result['big_pic'] = nil
         file_result['small_pic'] = nil
 
+        doc_dir = doc_dirs[expocode]
         if doc_dir
             type_docs = expo_docs[expocode]
 
@@ -193,9 +181,8 @@ class CruiseStatusController < ApplicationController
         return file_result
     end
 
-    def get_cruise_meta()
+    def _get_cruise_meta()
         expocode = params[:expo]
-        expo_dirs = _expo_dirs()
         if expocode
             @cruise = Cruise.find_by_ExpoCode(expocode)
 
@@ -222,12 +209,6 @@ class CruiseStatusController < ApplicationController
 
         expocode = @cruise.ExpoCode
         @file_result = _gather_file_result(
-            expo_dirs[expocode], _expo_docs(expocode), expocode)
+            _expo_dirs(expocode), _expo_docs(expocode), expocode)
     end
-
-    def all_cruise_meta
-        get_cruise_meta()
-        render :partial => "all_cruise_meta"
-    end
-
 end
