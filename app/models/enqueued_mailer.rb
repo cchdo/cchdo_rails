@@ -6,10 +6,9 @@ class EnqueuedMailer < ActionMailer::Base
         subject ["Enqueued #{event.ExpoCode} data", event.Data_Type].reject {|x| x.nil?}.join(' - ')
         from 'cchdo@ucsd.edu'
         if Rails.env.production?
-            recipients ['jkappa@ucsd.edu']
-            cc ['cchdo@googlegroups.com']
+            recipients ['cchdo@googlegroups.com']
         else
-            recipients ['synmantics+test@gmail.com']
+            recipients ['myshen+test@ucsd.edu']
         end
         sent_on Time.now()
         body :event => event
