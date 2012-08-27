@@ -921,13 +921,56 @@ div.tm_auto_complete ul strong.highlight { color: #800; margin: 0; padding:0; }
   margin-bottom: 1em;
 }
 
-.queue_cruise_row {
-  background-color: #9ec4cd;
+.queue h2 {
+  margin-top: 1em;
+}
+.queue .cruise {
+}
+.queue .cruise a {
+  margin-left: 1em;
+  font-size: 0.8em;
+}
+.queue .files {
+  margin-left: 1em;
+  text-align: left;
+  width: 90%;
+  border-left: 1px solid #eeeeee;
+}
+.queue .files .file td {
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+}
+.queue .files .link {
+  background-color: #eeeeee;
+  width: 15em;
+}
+.queue .files .contact {
+  width: 10em;
+}
+.queue .files .date_received {
+  width: 6em;
+}
+.queue .files .id {
+  width: 3em;
+}
+.queue .files .parameters.ctd {
+  background-color: #AAFFAA;
+}
+.queue .files .parameters {
+}
+.queue .files .farright {
+  text-align: right;
+}
+.queue .files .notebutton {
+  white-space: nowrap;
+}
+
+.queue .editor textarea {
+  width: 100%;
 }
 
 .conf_table{
   border:1px solid #888;
-  
 }
 
 /* /data_history Tables */

@@ -57,6 +57,8 @@ tableRow.style.backgroundColor = '#ffffff';
   </div>
   <%= render :partial => 'layouts/cchdo_footer' -%>
 </div>
+<%= javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js' %>
+<%= yield :js %>
 <%= render :partial => 'layouts/google_analytics' -%>
 </body>
 </html>

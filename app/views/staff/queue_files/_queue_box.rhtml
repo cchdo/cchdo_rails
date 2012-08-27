@@ -1,43 +1,80 @@
-
-<table>
-	<% for cruise in @cruises %>
-	<tr class="queue_cruise_row">
-		<td><%= link_to_remote "#{cruise.Line} #{cruise.ExpoCode}", :update =>"queue_box",:url => { :action => "cruise_queue", :cruise => "#{cruise.ExpoCode}"} %></td><td>Status</td><td>Contact</td><td>Recieved</td><td>Merged</td><td>Responsible</td>
-	</tr>
-
-    <% for file in @files %>
-    <% if file.ExpoCode == cruise.ExpoCode %>
-    <% if file.Merged == 1 %>
-	<tr class="merged_file">
-    <% else %>
-    <tr class="unmerged_file">
-	<% end %>
-		<td>
-            <%= file.Name %>
-        </td>
-        <td >
-	        <% if file.Merged == 1 %>
-		   
-	         Merged
-	       <% else %>
-	         Pending
-	       <% end %>
-	    </td>
-	    <td>
-		  <%= file.Contact %>
-		</td>
-		<td>
-		  <%= file.DateRecieved %>	
-		</td>
-                <td>
-		  <%= file.DateMerged %>	
-                </td>
-		<td>
-			<%= file.CCHDOContact %>
-		</td>
-    </tr>
+<div class="queue">
+  <% for date in @eudates %>
+    <% for expo in @cruises_by_earliest_unmerged_date[date] %>
+      <h2 class="cruise"><span class="date_received"><%= date %></span> <%= link_to(expo, "/cruise/#{expo}") %></h2>
+      <table class="files">
+      <% for file in @files_by_cruise[expo] %>
+        <tr class="file">
+          <td class="link">
+            <%= link_to(limit_str_len(file.Name, 27), file.UnprocessedInput, :title => file.Name) %>
+          </td>
+          <td class="contact">
+            <%= file.Contact %>
+          </td>
+          <td class="date_received">
+            <%= file.DateRecieved %>	
+          </td>
+          <td class="id"><%= file.id %></td>
+          <% param_class = 'parameters' %>
+          <% if file.Parameters =~ /\bctd\b/i %>
+            <% param_class += ' ctd' %>
+          <% end %>
+          <td class="<%= param_class %>">
+            <%= file.Parameters %>
+          </td>
+        </tr>
+        <tr>
+          <td class="notes" colspan="4"><%= file.Notes %></td>
+        </tr>
+        <tr class="editor">
+          <td colspan="4">
+            <div>
+              <%= form_tag("/queue/#{file.id}/edit") %>
+                <textarea name="merge_notes"><%= file.merge_notes %></textarea>
+                <div class="farright">
+                  <%= submit_tag 'Save note' %>
+                  <%= submit_tag 'Mark merged' %>
+                </div>
+              </form>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+      </table>
     <% end %>
-    <% end %>
+  <% end %>
+</div>
+<% content_for :js do %>
+<script>
+  jQuery.noConflict();
+  jQuery(document).ready(function($) {
+    $('.notes').each(function () {
+      var notebox = $(this);
+      var notehtml = notebox.html();
+      var note = $('<p>').html(notehtml);
+      var button = $('<button>Show note</button>');
 
-    <% end %>
-</table>
+      var line = notebox.parent().prev();
+      var tdbutton = $('<td class="notebutton farright">');
+      line.append(tdbutton);
+
+      if (notehtml != '') {
+        tdbutton.append(button)
+      } else {
+        return;
+      }
+
+      notebox.html('');
+      button.click(function () {
+        if (button.html() == 'Show note') {
+          notebox.append(note);
+          button.html('Hide note');
+        } else {
+          note.detach();
+          button.html('Show note');
+        }
+      });
+    });
+  });
+</script>
+<% end %>

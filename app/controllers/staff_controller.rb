@@ -6,10 +6,11 @@ class ActionItem < ActiveRecord::Base
     belongs_to :minute
 end
 
+require 'csv'
+
 require 'models/document'
 require 'models/event'
 require 'models/submission'
-require 'csv'
 
 class StaffController < ApplicationController
     layout "staff", :except => [:pis_for_lookup, :ships_for_lookup,
@@ -76,54 +77,73 @@ end
 # queue files
 
 def queue_files
-   @user = User.find(session[:user])
-   @user = @user.username
-   @files = QueueFile.find(:all,:order => "Merged")
-   @cruises = Array.new
-   for file in @files
-       cruise = Cruise.find(:first,:conditions => ["ExpoCode = ?",file.ExpoCode])
-       if cruise
-           @cruises << cruise
-       end
-   end
-   @cruises.uniq!
-   render :file => "/staff/queue_files/queue_files", :layout => true
+    @user = User.find(session[:user]).username
+
+    @documentation = 0
+    if params[:docs]
+        @documentation = 1
+    end
+
+    merge_status = 0
+    # 0 - not merged
+
+    # group by date of first unmerged file for cruise
+    #   group by cruise
+
+    files = QueueFile.find_all_by_Merged_and_documentation(
+        merge_status, @documentation, :order => :DateRecieved)
+
+    files_by_cruise = Hash.new {|h, k| h[k] = []}
+    for file in files
+        files_by_cruise[file.ExpoCode] << file
+    end
+
+    cruises_by_earliest_unmerged_date = Hash.new {|h, k| h[k] = []}
+    for cruise in files_by_cruise.keys()
+        files = files_by_cruise[cruise]
+        date = nil
+        for file in files
+            if date.nil?
+                date = file.DateRecieved
+                next
+            end
+            if file.DateRecieved < date
+                date = file.DateRecieved
+            end
+        end
+        cruises_by_earliest_unmerged_date[date] << cruise
+    end
+
+    @files_by_cruise = files_by_cruise
+    @cruises_by_earliest_unmerged_date = cruises_by_earliest_unmerged_date
+
+    eudates = @cruises_by_earliest_unmerged_date.keys().reject {|x| x.nil?}
+    eudates.sort!
+    eudates.reverse!
+    @eudates = eudates
+    render :file => "/staff/queue_files/queue_files", :layout => true
 end
 
-def enqueue
-    return_uri = '/staff/submitted_files'
-    expocode = params['enqueue_attach_to_expocode']
-    submission_id = params['enqueue_submission']
+def queue_edit
+    @user = User.find(session[:user]).username
 
-    user = User.find(session[:user])
+    queue = QueueFile.find(params[:id])
+    unless queue
+        flash[:notice] = "That is not a valid queue file"
+        redirect_to "/queue" && return
+    end
 
-    cruise = Cruise.find_by_ExpoCode(expocode)
-    if cruise.nil?
-        flash[:notice] = "Could not enqueue #{submission_id}: Could not find cruise #{expocode} to attach to"
-        redirect_to return_uri
-        return
+    if params[:commit] == 'Save note'
+        queue.merge_notes = params[:merge_notes]
+        queue.save
+        flash[:notice] = "Saved note for queue file #{queue.id}"
+    elsif params[:commit] == 'Mark merged'
+        queue.DateMerged = Time.now
+        queue.Merged = 1
+        queue.save
+        flash[:notice] = "Marked queue file #{queue.id} as merged"
     end
-    submission = Submission.find(submission_id)
-    if submission.nil?
-        flash[:notice] = "Could not enqueue #{submission_id}: Could not find submission"
-        redirect_to return_uri
-        return
-    end
-    opts = {
-        'notes' => params['enqueue_notes'],
-        'parameters' => params['enqueue_parameters'],
-        'documentation' => params['enqueue_documentation']
-    }
-    begin
-        event = QueueFile.enqueue(user, submission, cruise, opts)
-        EnqueuedMailer.deliver_confirm(event)
-        flash[:notice] = "Enqueued Submission #{submission_id}"
-        redirect_to return_uri
-    rescue => e
-        Rails.logger.warn(e)
-        flash[:notice] = "Could not enqueue #{submission_id}: #{e}"
-        redirect_to return_uri
-    end
+    redirect_to "/queue"
 end
 
 def queue_search
@@ -202,13 +222,49 @@ def submission_list
         sort_condition = "submission_date"
     end
     if condition == 'all'
-        @submissions = Submission.find(:all,:order => "#{sort_condition}")
+        @submissions = Submission.find(:all,:order => sort_condition)
     elsif condition == 'unassigned'
-        @submissions = Submission.find(:all, :conditions => ["assigned = '0'"],:order => "#{sort_condition}")
+        @submissions = Submission.find(:all, :conditions => ["assigned = '0'"], :order => sort_condition)
     elsif condition == 'unassimilated'
-        @submissions = Submission.find(:all, :conditions => ["assimilated = '0'"],:order => "#{sort_condition}")
+        @submissions = Submission.find(:all, :conditions => ["assimilated = '0'"], :order => sort_condition)
     end
     render :partial => "/staff/submitted_files/submission_list"
+end
+
+def enqueue
+    return_uri = '/staff/submitted_files'
+    expocode = params['enqueue_attach_to_expocode']
+    submission_id = params['enqueue_submission']
+
+    user = User.find(session[:user])
+
+    cruise = Cruise.find_by_ExpoCode(expocode)
+    if cruise.nil?
+        flash[:notice] = "Could not enqueue #{submission_id}: Could not find cruise #{expocode} to attach to"
+        redirect_to return_uri
+        return
+    end
+    submission = Submission.find(submission_id)
+    if submission.nil?
+        flash[:notice] = "Could not enqueue #{submission_id}: Could not find submission"
+        redirect_to return_uri
+        return
+    end
+    opts = {
+        'notes' => params['enqueue_notes'],
+        'parameters' => params['enqueue_parameters'],
+        'documentation' => params['enqueue_documentation']
+    }
+    begin
+        event = QueueFile.enqueue(user, submission, cruise, opts)
+        EnqueuedMailer.deliver_confirm(event)
+        flash[:notice] = "Enqueued Submission #{submission_id}"
+        redirect_to return_uri
+    rescue => e
+        Rails.logger.warn(e)
+        flash[:notice] = "Could not enqueue #{submission_id}: #{e}"
+        redirect_to return_uri
+    end
 end
 
 def show_note

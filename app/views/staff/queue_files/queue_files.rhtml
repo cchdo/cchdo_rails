@@ -1,12 +1,9 @@
-<div class="staff_header">Merge Queue</div>
-<div id="results">
-<% form_remote_tag :update =>'queue_box', :url => {:action => 'queue_search'} do -%>
-  Search: <%= text_field :queue_file, :query %>
-  <%= submit_tag %>
+<h1>Merge Queue</h1>
+<% if @documentation == 1 %>
+  <p>Showing unmerged documentation.</p>
+  <%= link_to('Unmerged data', '/queue') %>
+<% else %>
+  <p>Showing unmerged data.</p>
+  <%= link_to('Unmerged documentation', '/queue?docs=y') %>
 <% end %>
-<%= link_to_remote "Show All", :update =>"queue_box",:url => { :action => "show_all"} %>
-	<div>
-   <%= render :partial => '/staff/queue_files/queue_box' %>
-	</div>
-</div>
-<hr>
+<%= render :partial => '/staff/queue_files/queue_box' %>
