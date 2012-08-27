@@ -38,6 +38,13 @@ module ApplicationHelper
       #'ABQIAAAAnfs7bKE82qgb3Zc2YyS-oBT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSySz_REpPq-4WZA27OwgbtyR3VcA'
     end
   end
+
+    def limit_str_len(s, limit, trailer='...')
+        if s.length > limit
+            return s.slice(0..limit - trailer.length) + trailer
+        end
+        return s
+    end
 end
 
 class String

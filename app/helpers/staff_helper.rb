@@ -10,11 +10,4 @@ module StaffHelper
         end
         return names
     end
-
-    def limit_str_len(s, limit, trailer='...')
-        if s.length > limit
-            return s.slice(0..limit - trailer.length) + trailer
-        end
-        return s
-    end
 end

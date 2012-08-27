@@ -127,10 +127,10 @@ file_sections = [
   <% unless @queue_files.blank? -%>
     <h2>Files as received</h2>
     <table>
-      <tr><th>File</th><th class="date">Date&nbsp;Received</th><th>Notes</th><th></th></tr>
+      <tr><th class="file">File</th><th class="date">Date Received</th><th class="notes">Notes</th><th class="date"></th></tr>
       <% @queue_files.each do |file| -%>
         <tr>
-          <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput)) -%>
+          <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput, :title => file.Name), :class => 'file') -%>
           <td class="date"><%=file.DateRecieved -%><%# sic %></td>
           <td class="notes"><%=file.Notes if file.Notes -%></td>
         </tr>
@@ -140,11 +140,13 @@ file_sections = [
   <% unless @merged_queue_files.blank? -%>
     <h2>Merged Files</h2>
     <table class="merged">
-      <tr><th>File</th><th class="date">Date&nbsp;Merged</th></tr>
+      <tr><th class="file">File</th><th class="date">Date Received</th><th class="notes">Notes</th><th class="date">Date Merged</th></tr>
       <% @merged_queue_files.each do |file| -%>
         <tr>
-          <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput)) -%>
-          <td class="date"><%=file.DateMerged -%><%# sic %></td>
+          <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput, :title => file.Name), :class => 'file') -%>
+          <td class="date"><%=file.DateRecieved -%><%# sic %></td>
+          <td class="notes"><%=file.Notes -%></td>
+          <td class="date"><%=file.DateMerged -%></td>
         </tr>
       <% end %>
     </table>

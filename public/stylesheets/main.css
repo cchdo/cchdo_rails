@@ -675,9 +675,10 @@ table.table_step2 {
 .data_access .note .close a { text-decoration: none; }
 .data_access #updates table { width: 100%; }
 .data_access #updates th { border-bottom: 1px solid #ddd; }
-.data_access #updates .date { width: 13em; }
+.data_access #updates .file { width: 25em; }
+.data_access #updates .date { width: 8em; white-space: nowrap; }
 .data_access #updates .merged td { background-color: #d9eaed; }
-.data_access #updates .notes { width: 70%; }
+/*.data_access #updates .notes { width: 70%; }*/
 
 .data_summary_history { background: #9ec4cd; }
 .data_summary_history a { color: #fff; }
