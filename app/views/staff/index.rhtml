@@ -1,38 +1,10 @@
-<%
-type_rails = 'rails test server'
-
-list_of_servers = [
-    ['CCHDO', 'http://cchdo.ucsd.edu:80', 'CCHDO'],
-    ['USHYDRO', 'http://ushydro.ucsd.edu:80', 'USHYDRO'],
-    ['Seahunt', 'http://seahunt.ucsd.edu:80', 'BLANK!'],
-    ['goship Seahunt', 'http://goship.ucsd.edu', 'current goship'],
-    ['JOA', 'http://joa.ucsd.edu', 'virtual named host on goship'],
-    ['DPO', 'http://seahunt.ucsd.edu:8080', 'DPO'],
-    ['Web tools', 'http://goship.ucsd.edu:3000', type_rails],
-    ["Andrew's sandbox", 'http://goship.ucsd.edu:3001', type_rails],
-    ['repositories', 'git@cchdo.ucsd.edu', 'repositories'],
-]
-%>
 <div class="boxed">
-<h1>Sites</h1>
+<h1>Staff home</h1>
 <div class="box_content">
-
-<table>
-  <tr>
-    <td>
-      <div id="staff_div">
-        <h1>List of servers that CCHDO is maintaining</h1>
-        <p>The order is by importance</p>
-        <ol>
-        <% list_of_servers.each do |info| -%>
-          <li><%= link_to(info[0], info[1]) -%> <%=info[1]%> (<%=info[2]%>)</li>
-        <% end -%>
-        </ol>
-      </div>
-    </td>
-  </tr>
-</table>
-
+  <div id="staff_div">
+    <h2><%= link_to('CCHDO Operations Manual', 'https://bitbucket.org/ghdc/cchdo/wiki/Home') %></h2>
+    <h2><%= link_to('Websites maintained by the CCHDO', 'https://bitbucket.org/ghdc/cchdo/wiki/www_maintained') %></h2>
+  </div>
 </div>
 <div class="box_bottom"></div>
 </div>
