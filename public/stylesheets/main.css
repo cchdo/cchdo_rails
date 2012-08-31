@@ -769,10 +769,12 @@ div.scroll {overflow: auto; width: 100%; height: 36em;}
 
 #results { margin: 1em; }
 
-.assimilated_submission_1 { background:#D3864E; }
-.assimilated_submission_2 { background:#927B72; }
-.incomplete_submission_1 { background:#EDE8C1; }
-.incomplete_submission_2 { background:#C8EBE5; }
+.assimilated_submission_1 { background: #9b9b9b; }
+.assimilated_submission_2 { background: #ababab; }
+.incomplete_submission_1 {  background: #eeeecc; }
+.incomplete_submission_2 {  background: #cfdfff; }
+
+#submitted_files .corrected { text-decoration: line-through; }
 
 #task_color_key { border: 1px solid #FFF; }
 
@@ -950,6 +952,9 @@ div.tm_auto_complete ul strong.highlight { color: #800; margin: 0; padding:0; }
 }
 .queue .files .date_received {
   width: 6em;
+}
+.queue .files .submission {
+  width: 9em;
 }
 .queue .files .id {
   width: 3em;

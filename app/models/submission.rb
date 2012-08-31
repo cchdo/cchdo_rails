@@ -23,11 +23,13 @@ class Submission < ActiveRecord::Base
  
     validates_format_of :public,
                         :with => /^\w[a-zA-Z\s-]+$/,
-                        :message => "*"
+                        :message => "*",
+                        :allow_nil => true
  
     validates_format_of :email,
                         :with => /^\w[\w\-\.]+\@[\w\-\.]+$/,
-                        :message => "Email address is not formatted correctly"
+                        :message => "Email address is not formatted correctly",
+                        :allow_nil => true
  
     validates_each :file do |model, attr, value|
         Rails.logger.info("Checking file #{value.inspect}")

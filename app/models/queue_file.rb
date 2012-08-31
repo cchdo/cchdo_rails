@@ -5,6 +5,8 @@ require 'submission'
 class QueueFile < ActiveRecord::Base
     set_table_name "queue_files"
 
+    belongs_to :submission
+
     def self.enqueue(user, submission, cruise, opts={})
         Rails.logger.info("enqueueing #{submission.inspect} #{cruise.inspect}")
         begin
@@ -93,7 +95,8 @@ class QueueFile < ActiveRecord::Base
                 :Notes => notes,
                 :Parameters => parameters,
                 :hidden => 0,
-                :documentation => documentation
+                :documentation => documentation,
+                :submission_id => submission.id
                 )
             qf.save
             Rails.logger.debug("qf #{qf.inspect}")

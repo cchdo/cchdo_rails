@@ -4,7 +4,7 @@
       <h2 class="cruise"><span class="date_received"><%= date %></span> <%= link_to(expo, "/cruise/#{expo}") %></h2>
       <table class="files">
       <% for file in @files_by_cruise[expo] %>
-        <tr class="file">
+        <tr id="queue_<%= file.id %>" class="file">
           <td class="link">
             <%= link_to(limit_str_len(file.Name, 27), file.UnprocessedInput, :title => file.Name) %>
           </td>
@@ -13,6 +13,11 @@
           </td>
           <td class="date_received">
             <%= file.DateRecieved %>	
+          </td>
+          <td class="submission">
+            <% if file.submission_id != 0 %>
+              <%= link_to("Submission #{file.submission_id}", "/submissions#sub_#{file.submission_id}") %> &rarr;
+            <% end %>
           </td>
           <td class="id"><%= file.id %></td>
           <% param_class = 'parameters' %>
@@ -24,10 +29,10 @@
           </td>
         </tr>
         <tr>
-          <td class="notes" colspan="4"><%= file.Notes %></td>
+          <td class="notes" colspan="5"><%= file.Notes %></td>
         </tr>
         <tr class="editor">
-          <td colspan="4">
+          <td colspan="5">
             <div>
               <%= form_tag("/queue/#{file.id}/edit") %>
                 <textarea name="merge_notes"><%= file.merge_notes %></textarea>

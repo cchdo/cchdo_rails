@@ -209,7 +209,13 @@ end
 def submitted_files
     @user = User.find(session[:user])
     @user = @user.username
-    @submissions = Submission.find(:all,:order => "submission_date DESC")
+    @submissions = Submission.find(:all, :order => "submission_date DESC")
+    @queue_submissions = Hash.new {|h, k| h[k] = []}
+    for qf in QueueFile.all()
+        if qf.submission_id != 0
+            @queue_submissions[qf.submission_id] << qf
+        end
+    end
     render :file => "/staff/submitted_files/submitted_files", :layout => true
 end
 
@@ -238,31 +244,50 @@ def enqueue
 
     user = User.find(session[:user])
 
+    sub_link = "<a href=\"#sub_#{submission_id}\">#{submission_id}</a>"
+    couldnot = "Could not enqueue #{sub_link}: "
+
     cruise = Cruise.find_by_ExpoCode(expocode)
     if cruise.nil?
-        flash[:notice] = "Could not enqueue #{submission_id}: Could not find cruise #{expocode} to attach to"
+        flash[:notice] = "#{couldnot}Could not find cruise #{expocode} to attach to"
         redirect_to return_uri
         return
     end
     submission = Submission.find(submission_id)
     if submission.nil?
-        flash[:notice] = "Could not enqueue #{submission_id}: Could not find submission"
+        flash[:notice] = "#{couldnot}Could not find submission"
         redirect_to return_uri
         return
     end
     opts = {
         'notes' => params['enqueue_notes'],
         'parameters' => params['enqueue_parameters'],
-        'documentation' => params['enqueue_documentation']
+        'documentation' => params['enqueue_documentation'] == 'on'
     }
+    if opts['notes'].nil?
+        flash[:notice] = "#{couldnot}Missing notes"
+        redirect_to return_uri
+        return
+    end
+    if opts['parameters'].nil?
+        flash[:notice] = "#{couldnot}Missing data type"
+        redirect_to return_uri
+        return
+    end
+    if opts['documentation'].nil?
+        flash[:notice] = "#{couldnot}Missing documentation flag"
+        redirect_to return_uri
+        return
+    end
+
     begin
         event = QueueFile.enqueue(user, submission, cruise, opts)
         EnqueuedMailer.deliver_confirm(event)
-        flash[:notice] = "Enqueued Submission #{submission_id}"
+        flash[:notice] = "Enqueued Submission #{sub_link}"
         redirect_to return_uri
     rescue => e
         Rails.logger.warn(e)
-        flash[:notice] = "Could not enqueue #{submission_id}: #{e}"
+        flash[:notice] = "#{couldnot}#{e}"
         redirect_to return_uri
     end
 end

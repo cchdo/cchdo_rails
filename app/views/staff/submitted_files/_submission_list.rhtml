@@ -1,14 +1,13 @@
-
 <%= link_to_remote("Go to Old Submissions", :update => "submissions",:url=>{:controller=>'staff',:action =>'old_submissions'})%>
 
 <% if @submissions %>
-  <% @columns = ["name","institute","Country","email","Line","ExpoCode","Ship_Name", "cruise_date","submission_date"] %>
+  <% columns = ["name","institute","Country","email","Line","ExpoCode","Ship_Name", "cruise_date","submission_date"] %>
   <table style="width: 100%">
 		<tr class="tm_header">
 			<td width="158px"><strong>Sort by:</strong></td>
-		  <% for column in @columns %>
+		  <% for column in columns %>
 		    <td width="158px">
-		      <%= link_to_remote "#{column}", :update => "submissions",:url => { :action => "submission_list", :query => @query, :Sort => "#{column}",:submission_list => "all" } %>
+		      <%= link_to_remote column, :update => "submissions", :url => { :action => "submission_list", :query => @query, :Sort => "#{column}",:submission_list => "all" } %>
 		    </td>
       <% end %>
     </tr>
@@ -34,9 +33,22 @@
         <% else %>
           <% trclass += '2' %>
         <% end %>
-        <tr class="<%= trclass %>">
-          <td><%= submission.id %></td>
-          <td><%= link_to(submission.ExpoCode, "/cruise/#{submission.ExpoCode}") %></td>
+        <tr id="sub_<%= submission.id %>" class="<%= trclass %>">
+          <% correct_expo = nil %>
+          <% qfs = @queue_submissions[submission.id] %>
+          <td><%= submission.id %>
+            <% unless qfs.empty? %>
+              <% correct_expo = qfs[0].ExpoCode %>
+              &rarr; QueueFiles [<%= qfs.map {|qf| link_to(qf.id.to_s, "/queue#queue_#{qf.id}") }.join(', ') %>]
+            <% end %>
+          <td>
+            <% if not correct_expo.nil? and correct_expo != submission.ExpoCode %>
+              <%= link_to(submission.ExpoCode, "/cruise/#{submission.ExpoCode}", :class => "corrected") %>
+              <%= link_to(correct_expo, "/cruise/#{correct_expo}") %>
+            <% else %>
+              <%= link_to(submission.ExpoCode, "/cruise/#{submission.ExpoCode}") %>
+            <% end %>
+          </td>
           <td><%= submission.name %></td>
           <td><% if submission.public == 'public' %>&#x2713;<% else %><%= submission.public %><% end %></td>
         </tr>
@@ -81,7 +93,6 @@
                     <th style="width: 10em; text-align: right;"><label for="enqueue_attach_to_expocode">Attach to cruise</label></th>
                     <td>
                       <input name="enqueue_attach_to_expocode" type="text" value="<%= submission.ExpoCode %>">
-                      <%= submit_tag "Enqueue", :confirm => 'Are you sure?' %>
                     </td>
                   </tr>
                   <tr>
@@ -89,12 +100,18 @@
                     <td><textarea name="enqueue_notes" style="width: 100%; height: 2em;"></textarea></td>
                   </tr>
                   <tr>
-                    <th style="width: 10em; text-align: right;"><label for="enqueue_parmaeters">Parameters</label></th>
+                    <th style="width: 10em; text-align: right;"><label for="enqueue_parmaeters">Data type</label></th>
                     <td><input name="enqueue_parameters" type="text" style="width: 100%"></td>
                   </tr>
                   <tr>
                     <th style="width: 10em; text-align: right;"><label for="enqueue_documentation">Is documentation</label></th>
                     <td><input name="enqueue_documentation" type="checkbox"></td>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <td>
+                      <%= submit_tag "Enqueue", :confirm => 'Are you sure?' %>
+                    </td>
                   </tr>
                 </table>
               </form>
