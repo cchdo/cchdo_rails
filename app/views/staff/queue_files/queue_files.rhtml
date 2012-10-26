@@ -1,9 +1,9 @@
 <h1>Merge Queue</h1>
 <% if @documentation == 1 %>
-  <p>Showing unmerged documentation.</p>
+  <p>Showing unmerged documentation. <%= link_to('Download as CSV', '/queue.csv?docs=y') %></p>
   <%= link_to('Unmerged data', '/queue') %>
 <% else %>
-  <p>Showing unmerged data.</p>
+  <p>Showing unmerged data. <%= link_to('Download as CSV', '/queue.csv') %></p>
   <%= link_to('Unmerged documentation', '/queue?docs=y') %>
 <% end %>
 <%= render :partial => '/staff/queue_files/queue_box' %>

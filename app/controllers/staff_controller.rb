@@ -6,8 +6,6 @@ class ActionItem < ActiveRecord::Base
     belongs_to :minute
 end
 
-require 'csv'
-
 require 'models/document'
 require 'models/event'
 require 'models/submission'
@@ -121,7 +119,39 @@ def queue_files
     eudates.sort!
     eudates.reverse!
     @eudates = eudates
-    render :file => "/staff/queue_files/queue_files", :layout => true
+    respond_to do |format|
+      format.html {
+        render :file => "/staff/queue_files/queue_files", :layout => true
+      }
+      format.csv {
+        csv_string = FasterCSV.generate do |csv| 
+          csv << [
+            'date', 'expocode', 'filepath', 'contact', 'date_received', 
+            'submission_id', 'parameters', 'notes', 'merge_notes'] 
+          for date in @eudates
+            for expo in @cruises_by_earliest_unmerged_date[date]
+              for file in @files_by_cruise[expo]
+                if file.submission_id != 0
+                  csv << [
+                    date, expo, file.UnprocessedInput, file.Contact,
+                    file.DateRecieved, file.submission_id, file.Parameters,
+                    file.Notes, file.merge_notes
+                  ]
+                end
+              end
+            end
+          end
+        end 
+        if @documentation
+          data_docs = 'unmerged_docs'
+        else
+          data_docs = 'unmerged_data'
+        end
+        send_data csv_string, 
+          :type => 'text/csv; charset=utf-8; header=present', 
+          :disposition => "inline; filename=queue_#{data_docs}_#{DateTime.now.strftime('%FT%T')}.csv" 
+      }
+    end
 end
 
 def queue_edit
