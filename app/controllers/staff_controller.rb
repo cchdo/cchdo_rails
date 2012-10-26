@@ -126,14 +126,26 @@ def queue_files
       format.csv {
         csv_string = FasterCSV.generate do |csv| 
           csv << [
-            'date', 'expocode', 'filepath', 'contact', 'date_received', 
-            'submission_id', 'parameters', 'notes', 'merge_notes'] 
+            'date', 'woce_line', 'expocode', 'filepath', 'contact',
+            'date_received', 'submission_id', 'parameters', 'notes',
+            'merge_notes'] 
+          cruises = Cruise.find_all_by_ExpoCode(@files_by_cruise.keys())
+          cruises_by_expo = Hash.new {|h, k| h[k] = []}
+          for cruise in cruises
+            cruises_by_expo[cruise.ExpoCode] << cruise
+          end
           for date in @eudates
             for expo in @cruises_by_earliest_unmerged_date[date]
               for file in @files_by_cruise[expo]
                 if file.submission_id != 0
+                  begin
+                    cruise = cruises_by_expo[expo][0]
+                    line = cruise.Line
+                  rescue
+                    line = nil
+                  end
                   csv << [
-                    date, expo, file.UnprocessedInput, file.Contact,
+                    date, line, expo, file.UnprocessedInput, file.Contact,
                     file.DateRecieved, file.submission_id, file.Parameters,
                     file.Notes, file.merge_notes
                   ]
