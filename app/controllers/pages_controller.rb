@@ -2,7 +2,9 @@ class PagesController < ApplicationController
 
   def home
     @recent = Document.recently_edited_expocodes().map do |expocode|
-      d = Document.find_by_ExpoCode(expocode, :select => 'ExpoCode,LastModified', :order => 'LastModified DESC')
+      d = Document.find_by_ExpoCode(
+        expocode, :select => 'ExpoCode,LastModified',
+        :order => 'LastModified DESC')
       info = {
         :expocode => d.ExpoCode,
         :last_modified => d.LastModified,

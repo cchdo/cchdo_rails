@@ -1,6 +1,6 @@
 require 'builder'
 task :dump_all_tracks => :environment do
-  # rake --silent dump_all_tracks RAILS_ENV=production > cchdo_all_na.txt
+  # rake --silent dump_all_tracks RAILS_ENV=production > cchdo_all_tracks.txt
 
   class Cruise < ActiveRecord::Base
     has_one :track_line, :primary_key => 'ExpoCode', :foreign_key => 'ExpoCode'
