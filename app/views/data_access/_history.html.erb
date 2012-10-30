@@ -1,36 +1,56 @@
 <% if @events.blank? %>
   <h4>No cruise history.</h4>
 <% else %>
-<div id="data_access_history">
-  <table>
-    <tr><th>Date</th><th>Data Type</th><th>Action</th><th>Summary</th></tr>
-    <% @events.each do |event|
-       date_Entered = event.Date_Entered || ''
-       lastName = event.LastName || ''
-       firstName = event.First_Name || ''
-       data_Type = event.Data_Type || ''
-       action = event.Action || ''
-       summary = event.Summary || 'None'
-       cycle_class = cycle '', ' class="hl"'
-    -%>
-    
-     <tr<%= cycle_class -%>>
-       <td class="date"><%= date_Entered -%></td>
-       <td><%= data_Type -%></td>
-       <td><%= action -%></td>
-       <td>
-         <%= link_to_remote(summary,
-           :update => "note_#{event.ID}",
-           :loaded => "$('note_#{event.ID}').show();",
-           :url => {:controller => 'data_access',
-                    :action => 'note',
-                    :Entry => event.ID}) -%>
-       </td>
-     </tr>
-     <tr<%= cycle_class -%>>
-       <td id="note_<%= event.ID -%>" colspan="4"></td>
-     </tr>
-    <% end # for events -%>
-  </table>
-</div>
+  <div id="data_access_history">
+    <table>
+      <tr><th>Date</th><th>Data Type</th><th>Action</th><th>Summary</th></tr>
+      <% @events.each do |event|
+         date_entered = event.Date_Entered || ''
+         lastName = event.LastName || ''
+         firstName = event.First_Name || ''
+         data_Type = event.Data_Type || ''
+         action = event.Action || ''
+         summary = event.Summary || 'full note'
+         cycle_class = cycle '', ' class="hl"'
+         if summary.blank?
+           summary = 'full note'
+         end
+      -%>
+        <%- noteid = "note_#{event.ID}" %>
+        <tr<%= cycle_class -%>>
+          <td class="date"><%= date_entered -%></td>
+          <td><%= data_Type -%></td>
+          <td><%= action -%></td>
+          <td>
+            <%= link_to(summary, 'javascript:void(0);', :onclick => "toggleNote(#{noteid})") %>
+          </td>
+        </tr>
+        <tr<%= cycle_class -%>>
+          <td id="<%= noteid %>" class="note" colspan="4">
+            <p><b>Detailed Notes</b> - <em><%= event.LastName -%>, <%= event.First_Name -%></em></p>
+            <pre><%= event.Note -%></pre>
+          </td>
+        </tr>
+      <% end # for events -%>
+    </table>
+  </div>
+  <script>
+    function toggleNote(noteid) {
+      if (!window._history_showing) {
+        window._history_showing = {};
+      }
+      noteid = noteid.id
+      var n = $(noteid);
+      if (window._history_showing[noteid] === undefined) {
+        n.hide();
+        window._history_showing[noteid] = false;
+      } else if (window._history_showing[noteid]) {
+        n.hide();
+        window._history_showing[noteid] = false;
+      } else {
+        n.show();
+        window._history_showing[noteid] = true;
+      }
+    }
+  </script>
 <% end -%>

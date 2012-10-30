@@ -1,0 +1,41 @@
+<div id="updates" class="boxed right">
+  <h1>Updates</h1>
+  <div class="box_content upper">
+    <% unless @queue_files.blank? -%>
+      <h2>Files as received</h2>
+      <table>
+        <tr><th class="file">File</th><th class="date">Date Received</th></tr>
+        <% @queue_files.each do |file| -%>
+          <tr>
+            <%= content_tag(:td, link_to(file.Name, file.UnprocessedInput, :title => file.Name), :class => 'file') -%>
+            <td class="date"><%=file.DateRecieved -%><%# sic %></td>
+          </tr>
+          <tr>
+            <td class="notes" colspan="2"><%=file.Notes if file.Notes -%></td>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
+    <% unless @merged_queue_files.blank? -%>
+      <h2>Merged Files</h2>
+      <table class="merged">
+        <tr><th class="file">File</th><th class="date">Date Received</th><th class="date">Date Merged</th></tr>
+        <% @merged_queue_files.each do |file| -%>
+          <%- odd = cycle('', 'odd') %>
+          <tr class="<%= odd %>">
+            <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput, :title => file.Name), :class => 'file', :colspan => 3) -%>
+          </tr>
+          <tr class="<%= odd %>">
+            <td></td>
+            <td class="date"><%=file.DateRecieved -%><%# sic %></td>
+            <td class="date"><%=file.DateMerged -%></td>
+          </tr>
+          <tr class="<%= odd %>">
+            <td class="notes" colspan="3"><%=file.Notes -%></td>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
+  </div>
+  <div class="box_bottom"></div>
+</div>

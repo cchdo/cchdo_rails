@@ -1,0 +1,8 @@
+<div id="history" class="boxed">
+  <h1>Data Histories and Notes</h1>
+  <div class="box_content">
+    <%= content_tag(:h2, link_to('Data Histories', "/data_history?ExpoCode=#{@cruise.ExpoCode}"))-%>
+    <%= render :partial => 'history' -%>
+  </div>
+  <div class="box_bottom"></div>
+</div>

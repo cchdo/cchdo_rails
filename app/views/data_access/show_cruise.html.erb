@@ -11,9 +11,9 @@
 <% else -%>
 
 <div class="data_access">
-
+<%- updates_available = !(@queue_files.blank? and @merged_queue_files.blank?) %>
 <%# General Information and Files column %>
-<div id="left" class="boxed">
+<div id="general" class="boxed<%- if updates_available %> left<%- end %>">
 <h1>General Information and Files</h1>
 <div class="box_content">
 
@@ -104,59 +104,11 @@ file_sections = [
 </div>
 <%# End Data Info and Files column -%>
 
-<%# Data Histories and Notes column -%>
-<div id="right" class="boxed">
-<h1>Data Histories and Notes</h1>
-<div class="box_content">
-
-<%=content_tag(:h2, link_to('Data Histories', "/data_history?ExpoCode=#{@cruise.ExpoCode}"))-%>
-<%= render :partial => 'history' -%>
-
-</div>
-<div class="box_bottom"></div>
-</div>
-<%# End Data Histories and Notes column -%>
-
+<%- if updates_available %>
+  <%= render :partial => 'cruise_data_updates' %>
+<%- end %>
 <div class="clear"></div>
-
-<%# Updates Section -%>
-<% unless @queue_files.blank? and @merged_queue_files.blank? -%>
-<div id="updates" class="boxed">
-<h1>Updates</h1>
-<div class="box_content">
-  <% unless @queue_files.blank? -%>
-    <h2>Files as received</h2>
-    <table>
-      <tr><th class="file">File</th><th class="date">Date Received</th><th class="notes">Notes</th><th class="date"></th></tr>
-      <% @queue_files.each do |file| -%>
-        <tr>
-          <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput, :title => file.Name), :class => 'file') -%>
-          <td class="date"><%=file.DateRecieved -%><%# sic %></td>
-          <td class="notes"><%=file.Notes if file.Notes -%></td>
-        </tr>
-      <% end %>
-    </table>
-  <% end %>
-  <% unless @merged_queue_files.blank? -%>
-    <h2>Merged Files</h2>
-    <table class="merged">
-      <tr><th class="file">File</th><th class="date">Date Received</th><th class="notes">Notes</th><th class="date">Date Merged</th></tr>
-      <% @merged_queue_files.each do |file| -%>
-        <tr>
-          <%=content_tag(:td, link_to(file.Name, file.UnprocessedInput, :title => file.Name), :class => 'file') -%>
-          <td class="date"><%=file.DateRecieved -%><%# sic %></td>
-          <td class="notes"><%=file.Notes -%></td>
-          <td class="date"><%=file.DateMerged -%></td>
-        </tr>
-      <% end %>
-    </table>
-  <% end %>
-</div>
-<div class="box_bottom"></div>
-</div>
-<% end %>
-<%# End Updates Section -%>
-
+<%= render :partial => 'cruise_data_history' %>
 </div>
 
 <% end -%>
