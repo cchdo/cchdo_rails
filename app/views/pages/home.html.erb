@@ -62,7 +62,6 @@ window.onload = init;
     <h1>Welcome to the CCHDO</h1>
     <div class='box_content'>
       <%=image_tag('home/ctd_recovery.png', :alt => "Recovering a CTD.", :title => "Recovering a CTD.")-%>
-      <h2>About the CCHDO</h2>
       <p>
         The CCHDO's primary mission is to deliver the highest possible quality
         global CTD and hydrographic data to users. These data are a product of
@@ -74,7 +73,6 @@ window.onload = init;
         submissions to the CCHDO), <a href='/format.html'>WOCE</a>, and
         <a href='/format.html'>netCDF</a>.
       </p>
-      <br />
       <p>
         The CCHDO also manages public and non-public CTD data to be used for the
         global Argo and OceanSITES programs.
@@ -164,19 +162,18 @@ window.onload = init;
 
 <div id='right_column'>
   <div class='boxed'>
-    <h1>Recent Developments</h1>
+    <h1>Recent Updates</h1>
     <div class='box_content'>
       <% unless @recent.blank? -%>
-        <h2>Updated Data Files</h2>
         <table>   
         <% @recent.each do |info|
            expo = info[:expocode] -%>
           <tr>
             <td>
-              <% if info[:map] -%><a href='/search?query=<%= expo -%>'><img src="http://cchdo.ucsd.edu<%= info[:map] -%>" /></a><% end %>
+              <% if info[:map] -%><a href='/cruise/<%= expo -%>'><img src="http://cchdo.ucsd.edu<%= info[:map] -%>" /></a><% end %>
             </td>
             <td>
-              <h1><a href='/search?query=<%= expo -%>'> <%= info[:line] -%></a></h1>
+              <h1><a href='/cruise/<%= expo -%>'> <%= info[:line] -%></a> <a href="/cruise/<%= expo -%>"><%= info[:expocode] -%></a></h1>
               <p><%= info[:ship] if info[:ship] -%></p>
               <h2>Cruise Date:</h2><%= info[:begin_date] if info[:begin_date] -%><br />
               <h2>Updated:</h2><%= info[:last_modified].strftime('%Y-%m-%d') if info[:last_modified] -%><br />

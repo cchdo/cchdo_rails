@@ -21,6 +21,8 @@ class Document < ActiveRecord::Base
     def self.recently_edited_expocodes(num=5)
       excluded_filetypes = ['directory', 'Small Plot', 'Large Plot']
       sql_excluded_filetypes = excluded_filetypes.map {|f| "FileType != ?"}
+      today = Date.today
+      last_month = Date.new(today.year, today.mon - 1, today.day).to_s
       Document.all(
         :select => "DISTINCT ExpoCode",
         :conditions => [
@@ -28,10 +30,11 @@ class Document < ActiveRecord::Base
             "ExpoCode != 'NULL'",
             "ExpoCode != ''",
             "ExpoCode != 'no_expocode'",
+            "LastModified > ?",
            ] + sql_excluded_filetypes
-          ).join(' AND ')] + excluded_filetypes,
+          ).join(' AND ')] + [last_month] + excluded_filetypes,
         :order => 'LastModified DESC',
-        :limit => 5
+        :limit => 100
       ).map {|x| x.ExpoCode}
     end
 
