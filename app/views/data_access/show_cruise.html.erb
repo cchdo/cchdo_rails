@@ -12,12 +12,12 @@
 
 <div class="data_access">
 <%- updates_available = !(@queue_files.blank? and @merged_queue_files.blank?) %>
-<%# General Information and Files column %>
-<div id="general" class="boxed<%- if updates_available %> left<%- end %>">
-<h1>General Information and Files</h1>
-<div class="box_content">
+<div class="information left">
 
-<h2>General Information</h2>
+<%# General Information and Files column %>
+<div id="general" class="boxed">
+<h1>Cruise Information</h1>
+<div class="box_content">
 
 <% if big = @file_result['big_pic'] and big != 0 and
       small = @file_result['small_pic'] and small != 0 %>
@@ -44,16 +44,16 @@
 <p><strong>Chief Scientists:</strong> <%=self_or_empty(@cruise.Chief_Scientist)%></p>
 <p><strong>Cruise Dates:</strong> <%=date_or_empty(@cruise.Begin_Date)%> <b>-</b> <%=date_or_empty(@cruise.EndDate)%></p>
 <% if @cruise.link %>
-  <p><strong>Expedition Link: </strong> <%= link_to(@cruise.link, @cruise.link) %></p>
+  <p><strong>Expedition Link:</strong> <%= link_to(@cruise.link, @cruise.link) %></p>
 <% end %>
 
-<% unless @queue_files.empty? -%>
-  <p><a href="#updates" class="important">See additional submitted files below</a></p>
-<% end -%>
+</div>
+<div class="box_bottom"></div>
+</div>
 
-<div class="clear"></div>
-
-<h2>Data Files</h2>
+<div id="data" class="boxed">
+<h1>Dataset</h1>
+<div class="box_content">
 
 <%=content_tag(:p, @preliminary, :class => "preliminary important") if @preliminary -%>
 
@@ -91,7 +91,7 @@ file_sections = [
 -%>
 
 <% for section, filetypes in file_sections -%>
-  <%=content_tag(:h3, section)-%>
+  <%=content_tag(:h2, section)-%>
   <% for type, display in filetypes -%>
     <% if file = @file_result[type] and file != 0 -%>
       <p><%=link_to(display[0], file)%> - <%=display[1]-%></p>
@@ -103,12 +103,13 @@ file_sections = [
 <div class="box_bottom"></div>
 </div>
 <%# End Data Info and Files column -%>
+</div>
 
-<%- if updates_available %>
-  <%= render :partial => 'cruise_data_updates' %>
-<%- end %>
+<%= render :partial => 'cruise_data_updates' %>
+
 <div class="clear"></div>
 <%= render :partial => 'cruise_data_history' %>
 </div>
 
+</div>
 <% end -%>
