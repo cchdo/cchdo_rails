@@ -94,7 +94,7 @@ end
 
   <tr>
     <td><%=f.label :cruise_date_1i, 'Cruise Date'%></td>
-    <td><%=f.date_select :cruise_date, :start_year => 1970, :include_blank => true%></td>
+    <td><%=f.date_select :cruise_date, :start_year => Date.current.year, :end_year => 1960, :include_blank => true%></td>
     <%=content_tag(:td, f.error_message_on(:cruise_date))%>
   </tr>
 </table>

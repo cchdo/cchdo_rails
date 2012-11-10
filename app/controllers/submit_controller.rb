@@ -13,10 +13,6 @@ class SubmitController < ApplicationController
                        "errors in the form and resubmit.</p>",
     }
  
-    # GET /submit/simple
-    def simple
-    end
-
     # GET /submit
     def new
     end
