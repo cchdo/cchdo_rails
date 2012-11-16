@@ -248,21 +248,27 @@ end
 ####################################################
 ##### Submitted Files ##############################
 
+def _queue_submissions
+    queue_submissions = Hash.new {|h, k| h[k] = []}
+    for qf in QueueFile.all()
+        if qf.submission_id != 0
+            queue_submissions[qf.submission_id] << qf
+        end
+    end
+    queue_submissions
+end
+
 def submitted_files
     @user = User.find(session[:user])
     @user = @user.username
     @submissions = Submission.find(:all, :order => "submission_date DESC")
-    @queue_submissions = Hash.new {|h, k| h[k] = []}
-    for qf in QueueFile.all()
-        if qf.submission_id != 0
-            @queue_submissions[qf.submission_id] << qf
-        end
-    end
+    @queue_submissions = _queue_submissions()
     render :file => "/staff/submitted_files/submitted_files", :layout => true
 end
 
 def submission_list
     condition = params[:submission_list]
+    @queue_submissions = _queue_submissions()
     @parameters = params
     if params[:Sort]
         sort_condition = params[:Sort]
@@ -273,9 +279,33 @@ def submission_list
         @submissions = Submission.find(:all,:order => sort_condition)
     elsif condition == 'unassigned'
         @submissions = Submission.find(:all, :conditions => ["assigned = '0'"], :order => sort_condition)
-    elsif condition == 'unassimilated'
+    elsif condition == 'not_queued'
         @submissions = Submission.find(:all, :conditions => ["assimilated = '0'"], :order => sort_condition)
+    elsif condition == 'old_submissions':
+        @old_submissions = OldSubmission.all()
+        render :partial => "/staff/submitted_files/old_submission_list"
+        return
     end
+    render :partial => "/staff/submitted_files/submission_list"
+end
+
+def submission_search
+    @query = params[:submission][:query] || ''
+
+    cur_max = -1
+    for column in Submission.columns
+        condition = ["`#{column.name}` regexp ?", @query]
+        results = Submission.count(:conditions => condition)
+        if results > cur_max
+            cur_max = results
+            best_result = condition
+        end
+    end
+
+    @submissions = Submission.all(
+        :conditions => best_result,
+        :order => "submission_date DESC")
+    @queue_submissions = _queue_submissions()
     render :partial => "/staff/submitted_files/submission_list"
 end
 
@@ -346,36 +376,6 @@ def hide_note
     @note_id = params[:sub_id]
     @submission = Submission.find(@note_id)
     render :partial => "/staff/submitted_files/hide_note"
-end
-
-def submission_search
-    @best_result = []
-    @cur_max = 0
-    @names = []
-    @submissions = []
-    @results = []
-    if @query = params[:submission][:query] 
-        for column in Submission.columns
-            @names << column.human_name
-            @results = Submission.find(
-                :all,
-                :conditions => ["`#{column.name}` regexp ?", @query],
-                :order => "submission_date DESC")
-                if @results.length > @cur_max
-                    @cur_max = @results.length
-                    @best_result = @results
-                    @results=[]
-                end
-        end
-    end
-    @submissions = @best_result
-    render :partial => "/staff/submitted_files/submission_list"
-end
-
-def old_submissions
-    @old_submissions = OldSubmission.find(:all)
-    @cruisesTEST = Cruise.find(:all)
-    render :partial => "/staff/submitted_files/old_submission_list"
 end
 
 #########################################################################
