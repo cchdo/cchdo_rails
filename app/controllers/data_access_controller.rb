@@ -124,7 +124,7 @@ class DataAccessController < ApplicationController
          end # if (@dir)
 
          @queue_files = QueueFile.all(:conditions => {:ExpoCode => @expo, :Merged => false})
-         @merged_queue_files = QueueFile.all(:conditions => {:ExpoCode => @expo, :Merged => true})
+         @merged_queue_files = QueueFile.all(:conditions => {:ExpoCode => @expo, :Merged => true}, :order => ['DateMerged DESC, DateRecieved DESC'])
 
          @support_files = SupportFile.find(:all, :conditions => ["`ExpoCode` = '#{@expo}'"])
          if (@expo)
