@@ -92,6 +92,9 @@ class Argo::FilesController < ApplicationController
 
   def download
     file = Argo::File.find(params[:file_id])
+    unless File.exists?(file.public_filename)
+        raise ActiveRecord::RecordNotFound
+    end
 
     file.downloads << Argo::Download.new(:ip => request.remote_ip)
 
