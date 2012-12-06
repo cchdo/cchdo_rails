@@ -26,8 +26,6 @@ input[type='text']:focus, input[type='password']:focus, select:focus { border: 1
 .dev_info { color: #18434d; }
 .name { font-style: italic; }
 .credit { font-style: italic; }
-.errorExplanation h2 { color: #006f89; font-size: 1.1em; }
-.errorExplanation ul { color: #999; font-size: 0.9em; list-style-type: square; margin-left: 2em; }
 
 h2 { color: #006f89; font-size: medium; }
 h3 { margin-top: 1em; margin-bottom: 1em; font-weight: bold; }
@@ -1179,4 +1177,21 @@ tr.not_in_map { background-color: #FFDDDD; }
 .atlantic_cruise h4 a {
   color: #006f89;
   font-style: italic;
+}
+
+/* rails form error explanation */
+.errorExplanation {
+  color: #b94a48;
+  background: #f2dede;
+  border-color: #eed3d7;
+  padding: 0.5em;
+}
+.errorExplanation h2,
+.errorExplanation p {
+  display: none;
+}
+.errorExplanation ul {
+  font-size: 0.9em;
+  list-style-type: disc;
+  margin-left: 2em;
 }

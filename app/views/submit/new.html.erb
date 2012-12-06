@@ -15,10 +15,6 @@ h2 span { color: #000; font-size: 0.8em; text-transform: none; font-weight: norm
 
 <div class="box_content">
 
-<p>
-This form replaces the normal submission form for reliability with all browsers.
-</p>
-
 <p><sup>*</sup> Indicates a required field</p>
 
 <%
@@ -39,6 +35,8 @@ def title(text)
 end 
 -%>
 <%form_for(:submission, :url => submission_path, :html => {:multipart => true}) do |f|%>
+
+<%= f.error_messages %>
 
 <%step do%>
 <%=title('Contact Information')%>

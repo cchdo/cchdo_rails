@@ -49,6 +49,7 @@ class SubmitController < ApplicationController
         rescue ActiveRecord::RecordInvalid => msg
             @submission.unsave_file()
             SUBMITLOG.info("FAILED: invalid record: #{msg}")
+            SUBMITLOG.info(@submission.errors)
             flash.now[:notice] = $MSGS[:incomplete]
             render :action => :new, :status => 400
             return
