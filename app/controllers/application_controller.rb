@@ -75,9 +75,12 @@ class ApplicationController < ActionController::Base
         # USA ships in the future
         # specifics include ports of call and departure/arrival dates
         # It is allowed to specify year, however.
+        if cruises.nil?
+            return cruises
+        end
         today = Date.today
         was_singular = false
-        if cruises.is_a?(Cruise)
+        if cruises.kind_of?(Cruise)
              was_singular = true
              cruises = [cruises]
         end
