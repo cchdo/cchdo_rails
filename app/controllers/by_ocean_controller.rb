@@ -4,7 +4,7 @@ def arctic
   Document.find(:all, :select=>"DISTINCT ExpoCode").each do |document|
     @documents << document.ExpoCode
   end
-  @cruises = Cruise.find(:all, :conditions => ["`Group` LIKE ?", "%arctic%"], :order=>"Line, Begin_Date ASC")
+  @cruises = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ?", "%arctic%"], :order=>"Line, Begin_Date ASC"))
   @cruises.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
 end
 
@@ -13,16 +13,16 @@ def southern
   Document.find(:all, :select=>"ExpoCode").each do |document|
     @documents << document.ExpoCode
   end
-  @southern_basin = Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ?)", "%southern%", "S%"], :order=>"Line, Begin_Date ASC")
+  @southern_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ?)", "%southern%", "S%"], :order=>"Line, Begin_Date ASC"))
   @southern_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
 
-  @indian_basin = Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ?)", "%southern%", "I%", "AIS%"], :order=>"Line, Begin_Date ASC")
+  @indian_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ?)", "%southern%", "I%", "AIS%"], :order=>"Line, Begin_Date ASC"))
   @indian_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)} 
 
-  @pacific_basin = Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ?)", "%southern%", "P%", "AAI%"], :order=>"Line, Begin_Date ASC")
+  @pacific_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ?)", "%southern%", "P%", "AAI%"], :order=>"Line, Begin_Date ASC"))
   @pacific_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
 
-  @atlantic_basin = Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ? OR `Line` LIKE ? )", "%southern%", "A__", "AR%", "AJ%"], :order=>"Line, Begin_Date ASC")
+  @atlantic_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ? OR `Line` LIKE ? )", "%southern%", "A__", "AR%", "AJ%"], :order=>"Line, Begin_Date ASC"))
   @atlantic_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
 end 
 def indian 

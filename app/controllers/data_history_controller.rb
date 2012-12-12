@@ -26,7 +26,7 @@ class DataHistoryController < ApplicationController
          else
             @events = Event.find(:all,:conditions=>["ExpoCode='#{@expo}'"],:order=>['Date_Entered DESC'])
          end
-         @cruise = Cruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"])
+         @cruise = reduce_specifics(Cruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"]))
       end
       if (@note)
          @note_entry = Event.find(:first,:conditions=>["ID=#{@entry}"])
@@ -53,7 +53,7 @@ class DataHistoryController < ApplicationController
             else
                @events = Event.find(:all,:conditions=>["ExpoCode='#{@expo}'"],:order=>['Date_Entered DESC'])
             end
-            @cruise = Cruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"])
+            @cruise = reduce_specifics(Cruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"]))
          end
      else
         redirect_to "http://cchdo.ucsd.edu/data_access"

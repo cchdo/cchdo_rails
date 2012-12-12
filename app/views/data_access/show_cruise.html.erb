@@ -25,16 +25,6 @@
     <a href="<%=big%>"><p><img src="<%=small%>"></p><p class="caption">Full Size</p></a>
   </div>
 <% end %>
-
-<%
-  def self_or_empty(x)
-    x ? x : ''
-  end
-
-  def date_or_empty(date)
-    date ? date.strftime("%a %b %e, %Y") : ''
-  end
-%>
 <p><strong>ExpoCode:</strong> <%= @cruise.ExpoCode %></p>
 <p><strong>Line:</strong> <%= @cruise.Line %></p>
 <% if @cruise.Alias and @cruise.Alias =~/\w/ %>
@@ -42,7 +32,7 @@
 <% end %>
 <p><strong>Ship/Country:</strong> <%=self_or_empty(@cruise.Ship_Name)%>/<%=self_or_empty(@cruise.Country)%></p>
 <p><strong>Chief Scientists:</strong> <%=self_or_empty(@cruise.Chief_Scientist)%></p>
-<p><strong>Cruise Dates:</strong> <%=date_or_empty(@cruise.Begin_Date)%> <b>-</b> <%=date_or_empty(@cruise.EndDate)%></p>
+<p><strong>Cruise Dates:</strong> <%= pretty_dates(@cruise) %></p>
 <% if @cruise.link %>
   <p><strong>Expedition Link:</strong> <%= link_to(@cruise.link, @cruise.link) %></p>
 <% end %>

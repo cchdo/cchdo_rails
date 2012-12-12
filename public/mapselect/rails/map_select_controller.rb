@@ -108,5 +108,6 @@ class MapSelectController < ActionController::Base
 			@cruises << Cruise.find(:first,
 						:conditions	=> ["`ExpoCode` = '#{expocode}'"])
 		end
+        reduce_specifics(@cruises)
 	end
 end

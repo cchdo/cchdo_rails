@@ -84,6 +84,8 @@ class MapSearchController < ApplicationController
       logger.warn "No tool selected at all."
     end
 
+    reduce_specifics(@cruise)
+
     @cruise_tracks = {}
     unless @cruises.blank?
       max_coords = params[:max_coords].to_i
@@ -107,6 +109,7 @@ class MapSearchController < ApplicationController
   def info
     @info = {}
     if cruise = Cruise.first(:conditions => {:ExpoCode => params[:expocode]})
+      reduce_specifics(cruise)
       chief_scientists_to_links!(cruise.Chief_Scientist)
       #thumbnail_uri(cruise.ExpoCode)
       @info = {
@@ -114,7 +117,7 @@ class MapSearchController < ApplicationController
         :ship => cruise.Ship_Name.strip,
         :country => cruise.Country.strip,
         :pi => cruise.Chief_Scientist,
-        :date_begin => cruise.Begin_Date#,
+        :date_begin => cruise.Begin_Date,
         #:date_end => cruise.EndDate,
         #:aliases => cruise.Alias,
         #:groups => cruise.Group

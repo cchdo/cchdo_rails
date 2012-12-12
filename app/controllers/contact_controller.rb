@@ -15,11 +15,9 @@ class ContactController < ApplicationController
       @contact = Contact.find(:first, :conditions => ["`LastName` = '#{params[:contact]}' "])
       @contact.Address.gsub!(/\n/,"<br>")
       logger.info @contact.inspect
-      #@cruises = Cruise.find(:all,:conditions => ["`Chief_Scientist` regexp '#{params[:contact]}'"])
      elsif params[:id] =~ /\w/
        @contact = Contact.find(params[:id])
        @contact.Address.gsub!(/\n/,"<br>")
-       #@cruises = ContactCruise.find(:all,:conditions => ["`Chief_Scientist` regexp '#{params[:contact]}'"])
      end
    end
 

@@ -19,6 +19,7 @@ layout "carina"
     else
       @cruises = CarinaCruise.find(:all)
     end
+    reduce_specifics(@cruises)
     @file_result = Hash.new
     @table_list = Hash.new{|@table_list,k| @table_list[k]={}}
     ctr = 0
@@ -117,6 +118,7 @@ layout "carina"
       else
         @cruises = CarinaCruise.find(:all)
       end
+      reduce_specifics(@cruises)
       @file_result = Hash.new
       @table_list = Hash.new{|@table_list,k| @table_list[k]= Hash.new(0)}
       ctr = 0
@@ -194,6 +196,7 @@ layout "carina"
   
   def sort_by_ship
     @cruises = CarinaCruise.find(:all,:order => ["Ship_Name"]) 
+    reduce_specifics(@cruises)
     params[:current_tab] = "ship_tab"
     render :partial => "sort_by_ship"
     

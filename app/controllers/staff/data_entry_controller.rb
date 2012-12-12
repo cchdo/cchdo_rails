@@ -39,7 +39,7 @@ class Staff::DataEntryController < ApplicationController
      @create_radio = "checked"
      @cruises = Cruise.all(:order => 'Line')
       if params[:cruiseID]
-        @cruise = Cruise.find(params[:cruiseID])
+        @cruise = reduce_specifics(Cruise.find(params[:cruiseID]))
       end
       @collections = Collection.all(:order => 'Name')
      #render :action => 'cruise_entry'
@@ -57,7 +57,7 @@ class Staff::DataEntryController < ApplicationController
      #render :partial => "cruise_entry"
      @cruises = Cruise.all(:order => 'Line')
      if params[:cruiseID]
-       @cruise = Cruise.find(params[:cruiseID])
+       @cruise = reduce_specifics(Cruise.find(params[:cruiseID]))
      end
      if params[:groupID]
         @collection = Collection.find(params[:groupID])
@@ -110,7 +110,7 @@ class Staff::DataEntryController < ApplicationController
     if params[:ExpoCode]
       @cruise = Cruise.first(:conditions => [:ExpoCode => params[:ExpoCode]])
     elsif params[:cruiseID]
-      @cruise = Cruise.find(params[:cruiseID])
+      @cruise = reduce_specifics(Cruise.find(params[:cruiseID]))
     end
     @collections = Collection.all(:order => 'Name')
     
@@ -135,7 +135,7 @@ class Staff::DataEntryController < ApplicationController
       if params[:cruise][:id] and params[:cruise][:id] =~ /\d/
         cruise_update = {params[:cruise][:id] => params[:cruise]}
         Cruise.update(params[:cruise][:id],params[:cruise])
-        @cruise = Cruise.find(params[:cruise][:id])
+        @cruise = reduce_specifics(Cruise.find(params[:cruise][:id]))
         
       else
         @cruise = Cruise.new(params[:cruise])
@@ -165,7 +165,7 @@ class Staff::DataEntryController < ApplicationController
         @params_returned = params
         if params[:contact][:LastName] 
           if params[:cruise][:id] and params[:cruise][:id] =~ /\d/
-            if @cruise = Cruise.find(params[:cruise][:id])
+            if @cruise = reduce_specifics(Cruise.find(params[:cruise][:id]))
               if @contact = Contact.first(:conditions =>{:LastName => params[:contact][:LastName] })
                 @cruise.contacts << @contact
                 #@contact_cruises_entry = ContactCruises.create :contact => @contact, :cruise => @cruise
@@ -199,7 +199,7 @@ class Staff::DataEntryController < ApplicationController
       @params_returned = params
       if params[:NewGroup] 
         if params[:cruise][:id] and params[:cruise][:id] =~ /\d/
-          if @cruise = Cruise.find(params[:cruise][:id])
+          if @cruise = reduce_specifics(Cruise.find(params[:cruise][:id]))
             if @group = Collection.first(:conditions =>{:Name => params[:NewGroup]})
               @cruise.collections << @group
               #@contact_cruises_entry = ContactCruises.create :contact => @contact, :cruise => @cruise
@@ -566,7 +566,7 @@ class Staff::DataEntryController < ApplicationController
              @message = "Updating #{params[:cruise][:ExpoCode]}  #{params[:cruise][:Line]}"
              @update_radio = "checked"
              @create_radio = " "
-             @cruise = Cruise.find(:first,:conditions => ["ExpoCode = '#{params[:cruise][:ExpoCode]}'"])
+             @cruise = reduce_specifics(Cruise.find(:first,:conditions => ["ExpoCode = '#{params[:cruise][:ExpoCode]}'"]))
              parameters = nil
              parameters = Parameter.find(:first,:conditions => ["ExpoCode = '#{params[:cruise][:ExpoCode]}'"])
              for col in @param_list

@@ -24,7 +24,7 @@ class CruiseNewsController < ApplicationController
                  @date_list[file_change.ExpoCode]["Files"] << " #{file_change.FileType},"
                end
             end
-            if cruise = Cruise.find(:first,:conditions => ["ExpoCode = '#{file_change.ExpoCode}'"])
+            if cruise = reduce_specifics(Cruise.find(:first,:conditions => ["ExpoCode = '#{file_change.ExpoCode}'"]))
                @date_list[file_change.ExpoCode]["Line"] = cruise.Line
             end
             @date_list[file_change.ExpoCode]["Date"] = Time.parse(d)

@@ -12,19 +12,17 @@
       </tr>
     <% end %>
     <tr valign="top"<%= cycle('class="highlighted_cell"', '')-%>>
-      <td><a href="/data_access?ExpoCode=<%= cruise.ExpoCode %>"><%= cruise.Line %></a>
+      <td><a href="/cruise/<%= cruise.ExpoCode %>"><%= cruise.Line %></a>
         <% if @table_list[cruise.ExpoCode]['Preliminary'] =~ /\w/ %>
           <div style="color:#FF0900; font-size:0.8em; font-weight:bold;"><%= @table_list[cruise.ExpoCode]["Preliminary"] %></div>
         <% else %>
           <br />
         <% end %>
       </td>
-      <td><i><%= cruise.ExpoCode %></i></td>
+      <td><i><%= link_to(cruise.ExpoCode, cruise_path(expocode=cruise.ExpoCode)) %></i></td>
       <td><%= cruise.Ship_Name %></td>
       <td>
-        <% if cruise.Begin_Date and cruise.EndDate -%>
-          <%= cruise.Begin_Date -%> to <%= cruise.EndDate -%>
-        <% end %>
+        <%= pretty_dates(cruise, '%Y-%m-%d', ' to ') %>
       </td>
       <td>
         <% @cruises[index].contacts.each_with_index do |contact,cnt| %>

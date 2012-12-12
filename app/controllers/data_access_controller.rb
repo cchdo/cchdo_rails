@@ -51,7 +51,7 @@ class DataAccessController < ApplicationController
      @preliminary = ""
      unless params[:commit] =~ /Cruises/ or params[:commit] =~ /Files/
       @expo = params[:ExpoCode] || params[:expocode]
-      @cruise = Cruise.find_by_ExpoCode(@expo)
+      @cruise = reduce_specifics(Cruise.find_by_ExpoCode(@expo))
       if(@cruise)
         @cruise_groups = Array.new
         if @groups = @cruise.Group
@@ -60,10 +60,11 @@ class DataAccessController < ApplicationController
         if @groups and @groups.length > 0
         for group in @groups
           if group =~ /\w/
+            cruises = reduce_specifics(Cruise.find(:all,:conditions => ["`Group` regexp '#{group}'"]))
             if @cruise_groups
-              @cruise_groups << Cruise.find(:all,:conditions => ["`Group` regexp '#{group}'"])
+              @cruise_groups << cruises
             else
-              @cruise_groups[0] =  Cruise.find(:all,:conditions => ["`Group` regexp '#{group}'"])
+              @cruise_groups[0] = cruises
             end
           end
         end
@@ -135,7 +136,7 @@ class DataAccessController < ApplicationController
             else
                @events = Event.find(:all,:conditions=>["ExpoCode='#{@expo}'"],:order=>['Date_Entered DESC'])
             end
-            @cruise = Cruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"])
+            @cruise = reduce_specifics(Cruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"]))
          end
          if params[:Note] and params[:Entry]
            @note = params[:Note]
@@ -213,9 +214,9 @@ class DataAccessController < ApplicationController
          end
       end
       if (@search_expression )
-         @cruises = Cruise.find_by_sql("SELECT DISTINCT ExpoCode,Line,Country,Ship_Name,Chief_Scientist,Begin_Date,EndDate,Alias,id From cruises where #{@search_expression} #{@sort_statement}")
+         @cruises = reduce_specifics(Cruise.find_by_sql("SELECT DISTINCT ExpoCode,Line,Country,Ship_Name,Chief_Scientist,Begin_Date,EndDate,Alias,id From cruises where #{@search_expression} #{@sort_statement}"))
          @cruise_objects = Array.new
-         @cruises.each { |e| @cruise_objects << Cruise.find(e.id) }
+         @cruises.each { |e| @cruise_objects << reduce_specifics(Cruise.find(e.id)) }
          @file_hash = Hash.new{|@file_hash,key| @file_hash[key]={}}
       @table_list = Hash.new{|@table_list,key| @table_list[key]={}}
                
@@ -391,7 +392,7 @@ class DataAccessController < ApplicationController
            else
               @events = Event.find(:all,:conditions=>["ExpoCode='#{@expo}'"],:order=>['Date_Entered DESC'])
            end
-          # @cruise = Cruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"])
+          # @cruise = reduce_specifics(Cruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"]))
         end
         if (@note)
            @note_entry = Event.find(:first,:conditions=>["ID=#{@entry}"])

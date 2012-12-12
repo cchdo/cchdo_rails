@@ -26,7 +26,7 @@ class CarinaDataHistoryController < ApplicationController
         else
            @events = CarinaEvent.find(:all,:conditions=>["ExpoCode='#{@expo}'"],:order=>['Date_Entered DESC'])
         end
-        @cruise = CarinaCruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"])
+        @cruise = reduce_specifics(CarinaCruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"]))
      end
      if (@note)
         @note_entry = CarinaEvent.find(:first,:conditions=>["ID=#{@entry}"])

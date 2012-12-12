@@ -16,14 +16,6 @@ module ApplicationHelper
     end
   end
 
-  def format_date(date)
-    if date
-      date.strftime "%a %b %e, %Y"
-    else
-      ''
-    end
-  end
-
   def getGAPIkey(host)
     return case host
       #when 'cchdo.ucsd.edu':        'ABQIAAAAZICfw-7ifUWoyrSbSFaNixTec8MiBufSHvQnWG6NDHYU8J6t-xTRqsJkl7OBlM2_ox3MeNhe_0-jXA'
@@ -38,6 +30,48 @@ module ApplicationHelper
       #'ABQIAAAAnfs7bKE82qgb3Zc2YyS-oBT2yXp_ZAY8_ufC3CFXhHIE1NvwkxSySz_REpPq-4WZA27OwgbtyR3VcA'
     end
   end
+
+    # Pretty print dates for cruises while being mindful of security regulations
+    def format_date(date, format)
+        if date
+            date.strftime(format)
+        else
+            nil
+        end
+    end
+
+    def reduced?(cruise)
+        if cruise.Begin_Date
+            if cruise.EndDate
+                if (    cruise.Begin_Date.mon == 1 and
+                        cruise.Begin_Date.day == 1 and 
+                        cruise.EndDate.mon == 1 and
+                        cruise.EndDate.day == 1)
+                    return true
+                end
+            else
+                if cruise.Begin_Date.mon == 1 and cruise.Begin_Date.day == 1
+                    return true
+                end
+            end
+        else
+            if cruise.EndDate and cruise.EndDate.mon == 1 and cruise.EndDate.day == 1
+                return true
+            end
+        end
+        return false
+    end
+
+    def pretty_dates(cruise, format="%a %b %e, %Y", joinstr=' <b>-</b>')
+        if reduced?(cruise)
+            format = "%Y"
+        end
+        dates = [
+            format_date(cruise.Begin_Date, format),
+            format_date(cruise.EndDate, format)
+        ]
+        return dates.compact.join(joinstr)
+    end
 
     def limit_str_len(s, limit, trailer='...')
         if s.length > limit

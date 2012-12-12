@@ -1,6 +1,3 @@
-class BottleDB < ActiveRecord::Base
-end
-
 class GroupsController < ApplicationController
   def index
     if params[:id]

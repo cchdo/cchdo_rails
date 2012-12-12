@@ -129,7 +129,7 @@ def queue_files
             'date', 'woce_line', 'expocode', 'filepath', 'contact',
             'date_received', 'submission_id', 'parameters', 'notes',
             'merge_notes'] 
-          cruises = Cruise.find_all_by_ExpoCode(@files_by_cruise.keys())
+          cruises = reduce_specifics(Cruise.find_all_by_ExpoCode(@files_by_cruise.keys()))
           cruises_by_expo = Hash.new {|h, k| h[k] = []}
           for cruise in cruises
             cruises_by_expo[cruise.ExpoCode] << cruise
@@ -207,7 +207,7 @@ def queue_search
     end
     @files = @best_result
     for file in @files
-        cruise = Cruise.find(:first,:conditions => ["ExpoCode = ?",file.ExpoCode])
+        cruise = reduce_specifics(Cruise.find(:first,:conditions => ["ExpoCode = ?",file.ExpoCode]))
         if cruise
             @cruises << cruise
         end
@@ -220,7 +220,7 @@ def show_all
     @files = QueueFile.find(:all,:order => "Merged")
     @cruises = Array.new
     for file in @files
-        cruise = Cruise.find(:first,:conditions => ["ExpoCode = ?",file.ExpoCode])
+        cruise = reduce_specifics(Cruise.find(:first,:conditions => ["ExpoCode = ?",file.ExpoCode]))
         if cruise
             @cruises << cruise
         end
@@ -232,7 +232,7 @@ end
 def cruise_queue
     expo = params[:cruise]
     @columns = ["Name", "Contact", "Original","DateRecieved", "Merged"]
-    @cruise = Cruise.find(:first, :conditions => ["ExpoCode = ?",expo])
+    @cruise = reduce_specifics(Cruise.find(:first, :conditions => ["ExpoCode = ?",expo]))
     @queue = QueueFile.find(:all, :conditions => ["ExpoCode = ?",expo],:order => "Merged")
     @events = Event.find(:all,:conditions=>["ExpoCode= ?",expo],:order=>['Date_Entered DESC'])
     render :partial => '/staff/queue_files/cruise_queue'
@@ -319,7 +319,7 @@ def enqueue
     sub_link = "<a href=\"#sub_#{submission_id}\">#{submission_id}</a>"
     couldnot = "Could not enqueue #{sub_link}: "
 
-    cruise = Cruise.find_by_ExpoCode(expocode)
+    cruise = reduce_specifics(Cruise.find_by_ExpoCode(expocode))
     if cruise.nil?
         flash[:notice] = "#{couldnot}Could not find cruise #{expocode} to attach to"
         redirect_to return_uri

@@ -28,7 +28,7 @@ class GroupSearchController < ApplicationController
        for group in @cruise_groups
          cruises = group.Cruises.split(',') 
          cruises.each do |cruise|
-           if cruise_row = Cruise.find(:first, :conditions => ["`ExpoCode` = '#{cruise}'"])
+           if cruise_row = reduce_specifics(Cruise.find(:first, :conditions => ["`ExpoCode` = '#{cruise}'"]))
              @cruise_hash[cruise] = cruise_row.Line
            end
            if doc_row = Document.find(:first, :conditions => ["`ExpoCode` = '#{cruise}' AND `FileType` = 'Small Plot'"])

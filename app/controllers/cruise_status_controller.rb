@@ -40,7 +40,7 @@ class CruiseStatusController < ApplicationController
     end
 
     def cruise_information
-        cruises = Cruise.find(:all)
+        cruises = reduce_specifics(Cruise.find(:all))
         @cruises = _organize_cruises(cruises)
         (@no_files_cruises, @some_files_cruises, file_results) = _flag_cruises(cruises)
         _get_cruise_meta()
@@ -58,7 +58,7 @@ class CruiseStatusController < ApplicationController
     end
 
     def sheet
-        cruises = Cruise.find(:all)
+        cruises = reduce_specifics(Cruise.find(:all))
         (_0, _1, file_results) = _flag_cruises(cruises)
 
         response = ''
@@ -214,7 +214,7 @@ class CruiseStatusController < ApplicationController
     def _get_cruise_meta()
         expocode = params[:expo]
         if expocode
-            @cruise = Cruise.find_by_ExpoCode(expocode)
+            @cruise = reduce_specifics(Cruise.find_by_ExpoCode(expocode))
 
             # Get data history
             @note = params[:Note]
@@ -234,7 +234,7 @@ class CruiseStatusController < ApplicationController
         else
             # If no cruise is specified, set up the view for the first
             # available cruise
-            @cruise = Cruise.find(:first)
+            @cruise = reduce_specifics(Cruise.find(:first))
         end
 
         expocode = @cruise.ExpoCode

@@ -1,5 +1,8 @@
 # Filters added to this controller will be run for all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
+class BottleDB < ActiveRecord::Base
+end
+
 def getGAPIkey(host)
   return case host
     #when 'cchdo.ucsd.edu' then 'ABQIAAAAZICfw-7ifUWoyrSbSFaNixTec8MiBufSHvQnWG6NDHYU8J6t-xTRqsJkl7OBlM2_ox3MeNhe_0-jXA'
@@ -52,6 +55,35 @@ class ApplicationController < ActionController::Base
     def signout
         session[:user] = nil
         redirect_to :action => :signin
+    end
+
+    def needs_reduction(cruise, date)
+        return false if session[:user]
+        return false if cruise.nil?
+        return false if cruise.Begin_Date < date and cruise.EndDate < date
+        return false unless cruise.ExpoCode =~ /^3[1-3]/
+        return true
+    end
+
+    def reduce_specifics(cruises)
+        # Comply with federal security regulations and remove specifics about
+        # USA ships in the future
+        # specifics include ports of call and departure/arrival dates
+        # It is allowed to specify year, however.
+        today = Date.today
+        cruises = [cruises] unless cruises.is_a?(Array)
+        cruises.each do |cruise|
+            if needs_reduction(cruise, today)
+                Rails.logger.info(
+                    "Reducing specifics for cruise #{cruise.ExpoCode}")
+                cruise.Begin_Date = Date.new(cruise.Begin_Date.year)
+                cruise.EndDate = Date.new(cruise.EndDate.year)
+            end
+        end
+        if cruises.length == 1
+            return cruises[0]
+        end
+        return cruises
     end
 
     protected
@@ -230,7 +262,7 @@ class ApplicationController < ActionController::Base
                 for column in Cruise.columns
                    if (column.name !~ /14C/)
                       @names << column.human_name
-                      @results = Cruise.find(:all ,:conditions => ["`#{column.name}` regexp '#{query}'"])
+                      @results = reduce_specifics(Cruise.find(:all ,:conditions => ["`#{column.name}` regexp '#{query}'"]))
                       if @date_query and @results.length > 0 and column.name.eql?("Begin_Date")
                          @best_result[query] =  "Date"
                          break  # Break out of the for column in Cruise.columns loop
@@ -263,10 +295,10 @@ class ApplicationController < ActionController::Base
              where_clause = where_clauses.join(' AND ')
              select_clause = 'cruises.ExpoCode,cruises.Line,cruises.Ship_Name,cruises.Country,cruises.Begin_Date,cruises.EndDate,cruises.Chief_Scientist,cruises.id'
              #select_clause = '*'
-             @cruises = Cruise.find_by_sql("SELECT DISTINCT #{select_clause} FROM cruises LEFT JOIN parameters ON cruises.ExpoCode = parameters.ExpoCode WHERE #{where_clause} #{@sort_statement}")
+             @cruises = reduce_specifics(Cruise.find_by_sql("SELECT DISTINCT #{select_clause} FROM cruises LEFT JOIN parameters ON cruises.ExpoCode = parameters.ExpoCode WHERE #{where_clause} #{@sort_statement}"))
              @table_list = Hash.new{|@table_list,key| @table_list[key]={}}
              @cruise_objects = Array.new
-             @cruises.each { |e| @cruise_objects << Cruise.find(e.id) }
+             @cruises.each { |e| @cruise_objects << reduce_specifics(Cruise.find(e.id)) }
              for result in @cruises
                 @text = result.ExpoCode
                 @dir = Document.find(:first ,:conditions => ["ExpoCode = '#{result.ExpoCode}' and FileType='Directory'"])
@@ -360,9 +392,7 @@ class ApplicationController < ActionController::Base
        join_on = 'LEFT JOIN (parameters) ON (cruises.ExpoCode=parameters.ExpoCode)'
      end
 
-     cruises = Cruise.find_by_sql("SELECT DISTINCT * FROM cruises #{join_on} #{where_clause} #{limit_clause}")
-     cruises.each do |cruise|
-     end
+     cruises = reduce_specifics(Cruise.find_by_sql("SELECT DISTINCT * FROM cruises #{join_on} #{where_clause} #{limit_clause}"))
      if count
        # Hopefully we can make expocodes indexed in the future
        return cruises, best_queries, Cruise.count_by_sql("SELECT count(cruises.id) FROM cruises #{join_on} #{where_clause}")
