@@ -7,7 +7,7 @@ class CarinaDataHistoryController < ApplicationController
      if(@expo)
         render :action => 'history'
      else
-        redirect_to "http://cchdo.ucsd.edu/data_access"
+        redirect_to "/data_access"
      end
   end
   

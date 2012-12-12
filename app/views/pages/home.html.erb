@@ -177,8 +177,8 @@ window.onload = init;
             <td>
               <h1><a href='/cruise/<%= expo -%>'> <%= info[:line] -%></a> <a href="/cruise/<%= expo -%>"><%= info[:expocode] -%></a></h1>
               <p><%= info[:ship] if info[:ship] -%></p>
-              <h2>Cruise Date:</h2><%= info[:begin_date] if info[:begin_date] -%><br />
-              <h2>Updated:</h2><%= info[:last_modified].strftime('%Y-%m-%d') if info[:last_modified] -%><br />
+              <h2>Cruise Date:</h2><%= format_date(info[:begin_date], '%Y-%m-%d', 'Unknown') -%><br />
+              <h2>Updated:</h2><%= format_date(info[:last_modified], '%Y-%m-%d', 'Unknown') -%><br />
             </td>
           </tr>
         <% end %>

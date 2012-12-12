@@ -32,11 +32,15 @@ module ApplicationHelper
   end
 
     # Pretty print dates for cruises while being mindful of security regulations
-    def format_date(date, format)
+    def format_date(date, format, default=nil)
         if date
-            date.strftime(format)
+            begin
+                date.strftime(format)
+            rescue
+                default
+            end
         else
-            nil
+            default
         end
     end
 

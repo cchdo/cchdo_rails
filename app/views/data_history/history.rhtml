@@ -34,7 +34,7 @@
            <a href="/data_history?ExpoCode=<%= @events[0].ExpoCode %>&Sort=Date_Entered">Date</a>
          | <a href="/data_history?ExpoCode=<%= @events[0].ExpoCode %>&Sort=LastName">Person</a> 
          | <a href="/data_history?ExpoCode=<%= @events[0].ExpoCode %>&Sort=Data_Type">Type</a>
-		 | <a href="/data_access?ExpoCode=<%= @events[0].ExpoCode %>">Data Files</a>
+		 | <a href="/cruise/<%= @events[0].ExpoCode %>">Data Files</a>
         </td>
 		<td align="right">
 			<a href="/data_access">New Search</a>

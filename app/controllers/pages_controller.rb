@@ -13,7 +13,7 @@ class PagesController < ApplicationController
         :ship => 'Unknown', 
         :map => nil
       }
-      if cruise = d.cruise
+      if cruise = reduce_specifics(d.cruise)
         info[:begin_date] = cruise.Begin_Date if cruise.Begin_Date
         info[:line] = cruise.Line if cruise.Line
         info[:ship] = cruise.Ship_Name if cruise.Ship_Name

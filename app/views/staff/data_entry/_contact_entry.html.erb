@@ -47,7 +47,7 @@
   <ul>
   <% for cruise in @contact.cruises %>
     <li>
-      <a href="/data_access?ExpoCode=<%= cruise.ExpoCode %>"><%= cruise.ExpoCode %>
+      <a href="/cruise/<%= cruise.ExpoCode %>"><%= cruise.ExpoCode %>
       <%= cruise.Line %></a>
     </li>
   <% end %>

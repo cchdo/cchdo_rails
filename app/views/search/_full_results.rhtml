@@ -14,16 +14,14 @@
         <table width="100%">
         <tr>
           <td width="40%">
-            <span class="cruise_title"><a href="/data_access?ExpoCode=<%= cruise.ExpoCode %>"><%= cruise.Line %> Cruise Page</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/data_history?ExpoCode=<%= cruise.ExpoCode %>">Data History</a></span>
+            <span class="cruise_title"><a href="/cruise/<%= cruise.ExpoCode %>"><%= cruise.Line %> Cruise Page</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/cruise/<%= cruise.ExpoCode %>#history">Data History</a></span>
             <% if @table_list[cruise.ExpoCode]["Preliminary"] =~ /\w/ %>
               <div style="color:#FF0900; font-size:0.8em; font-weight:bold;"><%= @table_list[cruise.ExpoCode]['Preliminary'] %></div>
             <% else %>
               <br />
             <% end %>
-            <i><%= cruise.ExpoCode %></i><br />
-            <% if cruise.Begin_Date and cruise.EndDate -%>
-              <%= cruise.Begin_Date %> to <%= cruise.EndDate %>
-            <% end -%>
+            <i><%= link_to(cruise.ExpoCode, cruise_path(expocode=cruise.ExpoCode)) %></i><br>
+            <%= pretty_dates(cruise, '%Y-%m-%d', ' to ') %>
           </td>
           <td width="60%">
             <% @cruises[index].contacts.each_with_index do |contact,cnt| %>
