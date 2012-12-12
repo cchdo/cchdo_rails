@@ -58,11 +58,16 @@ class ApplicationController < ActionController::Base
     end
 
     def needs_reduction(cruise, date)
+        return false unless cruise
+
         return false if session[:user]
-        return false if cruise.nil?
-        return false if cruise.Begin_Date < date and cruise.EndDate < date
-        return false unless cruise.ExpoCode =~ /^3[1-3]/
-        return true
+
+        if (    (cruise.ExpoCode and cruise.ExpoCode =~ /^3[1-3]/) and 
+                ((cruise.Begin_Date and cruise.Begin_Date > date) or
+                 (cruise.EndDate and cruise.EndDate > date)))
+            return true
+        end
+        return false
     end
 
     def reduce_specifics(cruises)
@@ -71,7 +76,11 @@ class ApplicationController < ActionController::Base
         # specifics include ports of call and departure/arrival dates
         # It is allowed to specify year, however.
         today = Date.today
-        cruises = [cruises] unless cruises.is_a?(Array)
+        was_singular = false
+        if cruises.is_a?(Cruise)
+             was_singular = true
+             cruises = [cruises]
+        end
         cruises.each do |cruise|
             if needs_reduction(cruise, today)
                 Rails.logger.info(
@@ -84,7 +93,7 @@ class ApplicationController < ActionController::Base
                 end
             end
         end
-        if cruises.length == 1
+        if was_singular
             return cruises[0]
         end
         return cruises
