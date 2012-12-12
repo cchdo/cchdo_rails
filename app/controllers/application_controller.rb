@@ -76,8 +76,12 @@ class ApplicationController < ActionController::Base
             if needs_reduction(cruise, today)
                 Rails.logger.info(
                     "Reducing specifics for cruise #{cruise.ExpoCode}")
-                cruise.Begin_Date = Date.new(cruise.Begin_Date.year)
-                cruise.EndDate = Date.new(cruise.EndDate.year)
+                if cruise.Begin_Date
+                    cruise.Begin_Date = Date.new(cruise.Begin_Date.year)
+                end
+                if cruise.EndDate
+                    cruise.EndDate = Date.new(cruise.EndDate.year)
+                end
             end
         end
         if cruises.length == 1
