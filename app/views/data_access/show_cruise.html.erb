@@ -84,7 +84,7 @@ file_sections = [
   <%=content_tag(:h2, section)-%>
   <% for type, display in filetypes -%>
     <% if file = @file_result[type] and file != 0 -%>
-      <p><%=link_to(display[0], file)%> - <%=display[1]-%></p>
+      <p><%=link_to(display[0], file, :expocode => @cruise.ExpoCode, :file_type => type)%> - <%=display[1]-%></p>
     <% end -%>
   <% end -%>
 <% end -%>
@@ -101,5 +101,6 @@ file_sections = [
 <%= render :partial => 'cruise_data_history' %>
 </div>
 
+<%= javascript_include_tag '//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js', 'click_tracker' -%>
 </div>
 <% end -%>
