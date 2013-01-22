@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
         end
         today = Date.today
         was_singular = false
-        if cruises.kind_of?(Cruise)
+        if cruises.kind_of?(Cruise) or cruises.kind_of?(CarinaCruise)
              was_singular = true
              cruises = [cruises]
         end

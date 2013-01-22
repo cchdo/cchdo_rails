@@ -21,8 +21,7 @@ class Document < ActiveRecord::Base
     def self.recently_edited_expocodes(num=5)
       excluded_filetypes = ['directory', 'Small Plot', 'Large Plot']
       sql_excluded_filetypes = excluded_filetypes.map {|f| "FileType != ?"}
-      today = Date.today
-      last_month = Date.new(today.year, today.mon - 1, today.day).to_s
+      last_month = Date.today << 1
       Document.all(
         :select => "DISTINCT ExpoCode",
         :conditions => [
