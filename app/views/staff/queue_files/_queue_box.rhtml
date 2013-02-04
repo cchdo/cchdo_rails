@@ -28,20 +28,43 @@
             <%= file.Parameters %>
           </td>
         </tr>
-        <tr>
-          <td class="notes" colspan="5"><%= file.Notes %></td>
-        </tr>
         <tr class="editor">
           <td colspan="5">
-            <div>
-              <%= form_tag("/queue/#{file.id}/edit") %>
+            <%= form_tag("/queue/#{file.id}/edit") %>
+              <div>
+                <label for="parameters">Parameters</label>
+                <input type="text" name="parameters" value="<%= file.Parameters %>">
+                <%= submit_tag 'Save parameters' %>
+              </div>
+              <div>
+                <label for="submission_notes">Submission notes</label>
+                <textarea name="submission_notes"><%= file.Notes %></textarea>
+                <div class="farright">
+                  <%= submit_tag 'Save submission note' %>
+                </div>
+              </div>
+              <div>
+                <label for="merge_notes">Merge notes</label>
                 <textarea name="merge_notes"><%= file.merge_notes %></textarea>
                 <div class="farright">
-                  <%= submit_tag 'Save note' %>
-                  <%= submit_tag 'Mark merged' %>
+                  <%= submit_tag 'Save merge note' %>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
+          </td>
+          <td class="actions">
+            <%- if file.Merged == 0 %>
+              <%= submit_tag 'Mark merged' %>
+              <%= submit_tag 'Hide' %>
+            <%- elsif file.Merged == 1 %>
+              <%= submit_tag 'Mark unmerged' %>
+              <%= submit_tag 'Hide' %>
+            <%- elsif file.Merged == 2 %>
+              <%= submit_tag 'Mark merged' %>
+              <%= submit_tag 'Unhide' %>
+            <%- else %>
+              <strong>WARNING!</strong> File has bad merge_status <%= file.merge_status %>
+            <%- end %>
           </td>
         </tr>
       <% end %>
@@ -52,30 +75,22 @@
 <% content_for :js do %>
 <script>
   jQuery(document).ready(function($) {
-    $('.notes').each(function () {
-      var notebox = $(this);
-      var notehtml = notebox.html();
-      var note = $('<p>').html(notehtml);
-      var button = $('<button>Show note</button>');
+    $('.editor').each(function () {
+      var editbox = $(this);
+      var button = $('<button>Show edit</button>');
 
-      var line = notebox.parent().prev();
-      var tdbutton = $('<td class="notebutton farright">');
+      editbox.hide();
+      var line = editbox.prev();
+      var tdbutton = $('<td class="editbutton farright">');
+      tdbutton.append(button);
       line.append(tdbutton);
-
-      if (notehtml != '') {
-        tdbutton.append(button)
-      } else {
-        return;
-      }
-
-      notebox.html('');
       button.click(function () {
-        if (button.html() == 'Show note') {
-          notebox.append(note);
-          button.html('Hide note');
+        if (button.html() == 'Show edit') {
+          editbox.show();
+          button.html('Hide edit');
         } else {
-          note.detach();
-          button.html('Show note');
+          editbox.hide();
+          button.html('Show edit');
         }
       });
     });

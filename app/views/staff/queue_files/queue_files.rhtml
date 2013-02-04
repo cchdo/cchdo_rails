@@ -1,9 +1,52 @@
-<h1>Merge Queue</h1>
-<% if @documentation == 1 %>
-  <p>Showing unmerged documentation. <%= link_to('Download as CSV', '/queue.csv?docs=y') %></p>
-  <%= link_to('Unmerged data', '/queue') %>
-<% else %>
-  <p>Showing unmerged data. <%= link_to('Download as CSV', '/queue.csv') %></p>
-  <%= link_to('Unmerged documentation', '/queue?docs=y') %>
-<% end %>
+<%- if params[:merge_status] == 'hidden' %>
+  <% if @documentation == 1 %>
+    <h1>Queue Hidden docs</h1>
+  <% else %>
+    <h1>Queue Hidden data</h1>
+  <% end %>
+<%- elsif params[:merge_status] == 'merged' %>
+  <% if @documentation == 1 %>
+    <h1>Queue Merged docs</h1>
+  <% else %>
+    <h1>Queue Merged data</h1>
+  <% end %>
+<%- else %>
+  <% if @documentation == 1 %>
+    <h1>Queue Unmerged docs</h1>
+  <% else %>
+    <h1>Queue Unmerged data</h1>
+  <% end %>
+<%- end %>
+
+<table>
+<tr>
+  <td>
+    <%= link_to('Unmerged data', '/queue') %>
+    <%= link_to('CSV', '/queue.csv') %>
+  </td>
+  <td>
+    <%= link_to('Hidden data', '/queue?merge_status=hidden') %>
+    <%= link_to('CSV', '/queue.csv?merge_status=hidden') %>
+  </td>
+  <td>
+    <%= link_to('Merged data', '/queue?merge_status=merged') %>
+    <%= link_to('CSV', '/queue.csv?merge_status=merged') %>
+  </td>
+</tr>
+<tr>
+  <td>
+    <%= link_to('Unmerged docs', '/queue?docs=y') %>
+    <%= link_to('CSV', '/queue.csv?docs=y') %>
+  </td>
+  <td>
+    <%= link_to('Hidden docs', '/queue?merge_status=hidden&docs=y') %>
+    <%= link_to('CSV', '/queue.csv?merge_status=hidden&docs=y') %>
+  </td>
+  <td>
+    <%= link_to('Merged docs', '/queue?merge_status=merged&docs=y') %>
+    <%= link_to('CSV', '/queue.csv?merge_status=merged&docs=y') %>
+  </td>
+</tr>
+</table>
+
 <%= render :partial => '/staff/queue_files/queue_box' %>

@@ -34,9 +34,10 @@ ActionController::Routing::Routes.draw do |map|
   map.sea_hunt_sort 'sea_hunt_sort', :controller => 'sea_hunt', :action => 'sort_table'
 
   map.submissions 'submissions', :controller => :staff, :action => :submitted_files
-  map.queue "queue", :controller => :staff, :action => :queue_files
-  map.queue_csv "queue.:format", :controller => :staff, :action => :queue_files
-  map.queue_file_edit 'queue/:id/edit', :controller => :staff, :action => :queue_edit
+
+  map.queue "queue", :controller => 'staff/queue', :action => :queue_files
+  map.queue_csv "queue.:format", :controller => 'staff/queue', :action => :queue_files
+  map.queue_file_edit 'queue/:id/edit', :controller => 'staff/queue', :action => :queue_edit
 
   map.old_submissions 'old_submissions', :controller => 'old_submissions', :action => 'index'
   map.old_submissions_sort 'old_submissions_sort', :controller => 'old_submissions', :action => 'sort_table'
@@ -44,6 +45,9 @@ ActionController::Routing::Routes.draw do |map|
   map.arctic 'arctic', :controller => :by_ocean, :action => :arctic
   map.southern 'southern', :controller => :by_ocean, :action => :southern
   map.indian 'indian', :controller => :by_ocean, :action => :indian
+
+  map.signin 'signin', :controller => 'staff', :action => 'signin'
+  map.signout 'signout', :controller => 'staff', :action => 'signout'
 
   map.root :controller => :pages, :action => :home
 

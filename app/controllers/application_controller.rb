@@ -42,10 +42,8 @@ class ApplicationController < ActionController::Base
             if user = User.authenticate(params[:username], params[:password])
                 session[:user] = user.id
                 session[:username] = params[:username]
-                intended_action = session[:intended_action] or 'index'
-                intended_controller = session[:intended_controller] or 'staff'
-                redirect_to :controller => intended_controller,
-                            :action => intended_action
+                intended_path = session[:intended_path] or '/'
+                redirect_to intended_path
             else
                 flash[:notice] = "Invalid user name or password"
             end
@@ -54,7 +52,7 @@ class ApplicationController < ActionController::Base
 
     def signout
         session[:user] = nil
-        redirect_to :action => :signin
+        redirect_to signin_path
     end
 
     def needs_reduction(cruise, date)
@@ -106,9 +104,8 @@ class ApplicationController < ActionController::Base
 
     def check_authentication
         unless session[:user]
-            session[:intended_action] = action_name
-            session[:intended_controller] = controller_name
-            redirect_to :controller => :staff, :action => :signin
+            session[:intended_path] = request.path
+            redirect_to signin_path
         else
             user = User.find(session[:user])
             if user.username =~ /guest/

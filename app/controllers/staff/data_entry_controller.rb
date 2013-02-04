@@ -25,7 +25,7 @@ NUMSTATUS = {
 
 class Staff::DataEntryController < ApplicationController
   layout 'staff'
-  before_filter :check_authentication, :except => [:signin, :images, :pis_for_lookup, :ships_for_lookup, :countries_for_lookup,:parameters_for_lookup, :expocodes_for_lookup, :contacts_for_lookup, :lines_for_lookup]
+  before_filter :check_authentication, :except => [:signin]
   auto_complete_for :cruise, :ExpoCode
   auto_complete_for :contact, :LastName
   auto_complete_for :collection, :Name
