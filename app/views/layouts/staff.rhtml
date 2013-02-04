@@ -13,20 +13,16 @@
   <% if session[:user] %>
     <div id="menu">
       <%= link_to("Staff Home", :controller => "/staff") %> |
+      <%= link_to("Submissions", submissions_path) %> |
+      <%= link_to("Queue", queue_path) %> |
       <!-- <%= link_to("Assignments", :controller => "task_manager") %> | -->
       <%= link_to("Data Entry", :controller => "/staff/data_entry") %> |
-      <%= link_to("Submissions", submissions_path) %> |
       <%= link_to("Cruise Info", :controller => "/cruise_status") %> |
       <%= link_to("Documentation",:controller=>'/staff',:action =>'documentation')%> |
       <%= link_to("Recent Updates", :controller => "/staff", :action => "recent_updates") %> |
-      <%= link_to("Software", :controller=>'/staff',:action =>'software')%> |
       <%= link_to("Minutes", :controller=>'/staff',:action =>'minutes_archive') %> |
-      <%= link_to("Queue", queue_path) %> |
       <%= link_to("Tasks(Dave)", :controller=>'arctic_tasks') %> | 
       <%= link_to("File Calendar",:controller => '/staff/cal') %>
-    </div>
-    <div id="signout">
-      <%= link_to("Sign out [#{h session[:username]}]", :controller => "/staff", :action => "signout") %>
     </div>
   <% end %>
   <div id='content'>
