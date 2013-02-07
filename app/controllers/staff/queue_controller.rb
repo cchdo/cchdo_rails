@@ -112,7 +112,7 @@ class Staff::QueueController < ApplicationController
         queue = QueueFile.find(params[:id])
         unless queue
             flash[:notice] = "That is not a valid queue file"
-            redirect_to "/queue" && return
+            return redirect_to("/queue")
         end
 
         if params[:commit] == 'Save parameters'
@@ -137,7 +137,7 @@ class Staff::QueueController < ApplicationController
             queue.Merged = 1
             queue.save
             flash[:notice] = "Marked queue file #{queue.id} as merged"
-            redirect_to "/queue?merge_status=merged" && return
+            return redirect_to("/queue?merge_status=merged")
         elsif params[:commit] == 'Unhide'
             queue.DateMerged = Time.now
             queue.Merged = 0
@@ -148,7 +148,7 @@ class Staff::QueueController < ApplicationController
             queue.Merged = 2
             queue.save
             flash[:notice] = "Hid queue file #{queue.id}"
-            redirect_to "/queue?merge_status=hidden" && return
+            return redirect_to("/queue?merge_status=hidden")
         end
         redirect_to "/queue"
     end

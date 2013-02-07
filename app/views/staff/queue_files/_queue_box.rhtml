@@ -1,101 +1,74 @@
-<div class="queue">
-  <% for date in @eudates %>
-    <% for expo in @cruises_by_earliest_unmerged_date[date] %>
-      <h2 class="cruise"><span class="date_received"><%= date %></span> <%= link_to(expo, "/cruise/#{expo}") %></h2>
-      <table class="files">
-      <% for file in @files_by_cruise[expo] %>
-        <tr id="queue_<%= file.id %>" class="file">
-          <td class="link">
-            <%= link_to(limit_str_len(file.Name, 27), file.UnprocessedInput, :title => file.Name) %>
-          </td>
-          <td class="contact">
-            <%= file.Contact %>
-          </td>
-          <td class="date_received">
-            <%= file.DateRecieved %>	
-          </td>
-          <td class="submission">
-            <% if file.submission_id != 0 %>
-              <%= link_to("Submission #{file.submission_id}", "/submissions#sub_#{file.submission_id}") %> &rarr;
-            <% end %>
-          </td>
-          <td class="id"><%= file.id %></td>
-          <% param_class = 'parameters' %>
-          <% if file.Parameters =~ /\bctd\b/i %>
-            <% param_class += ' ctd' %>
+<% for date in @eudates %>
+  <% for expo in @cruises_by_earliest_unmerged_date[date] %>
+    <h3 class="cruise"><span class="date_received"><%= date %></span> <%= link_to(expo, "/cruise/#{expo}") %></h3>
+    <table class="files">
+    <% for file in @files_by_cruise[expo] %>
+      <tr id="queue_<%= file.id %>" class="file">
+        <td class="link">
+          <%= link_to(limit_str_len(file.Name, 27), file.UnprocessedInput, :title => file.Name) %>
+        </td>
+        <td class="contact">
+          <%= file.Contact %>
+        </td>
+        <td class="date_received">
+          <%= file.DateRecieved %>	
+        </td>
+        <td class="submission">
+          <% if file.submission_id != 0 %>
+            <%= link_to("Submission #{file.submission_id}", "/submissions#sub_#{file.submission_id}") %> &rarr;
           <% end %>
-          <td class="<%= param_class %>">
-            <%= file.Parameters %>
-          </td>
-        </tr>
-        <tr class="editor">
-          <td colspan="5">
-            <%= form_tag("/queue/#{file.id}/edit") %>
-              <div>
-                <label for="parameters">Parameters</label>
-                <input type="text" name="parameters" value="<%= file.Parameters %>">
-                <%= submit_tag 'Save parameters' %>
+        </td>
+        <td class="id"><%= file.id %></td>
+        <% param_class = 'parameters' %>
+        <% if file.Parameters =~ /\bctd\b/i %>
+          <% param_class += ' ctd' %>
+        <% end %>
+        <td class="<%= param_class %>">
+          <%= file.Parameters %>
+        </td>
+      </tr>
+      <tr class="editor">
+        <td colspan="5">
+          <%= form_tag("/queue/#{file.id}/edit") %>
+            <div>
+              <label for="parameters">Parameters</label>
+              <input type="text" name="parameters" value="<%= file.Parameters %>">
+              <%= submit_tag 'Save parameters' %>
+            </div>
+            <div>
+              <label for="submission_notes">Submission notes</label>
+              <textarea name="submission_notes"><%= file.Notes %></textarea>
+              <div class="farright">
+                <%= submit_tag 'Save submission note' %>
               </div>
-              <div>
-                <label for="submission_notes">Submission notes</label>
-                <textarea name="submission_notes"><%= file.Notes %></textarea>
-                <div class="farright">
-                  <%= submit_tag 'Save submission note' %>
-                </div>
+            </div>
+            <div>
+              <label for="merge_notes">Merge notes</label>
+              <textarea name="merge_notes"><%= file.merge_notes %></textarea>
+              <div class="farright">
+                <%= submit_tag 'Save merge note' %>
               </div>
-              <div>
-                <label for="merge_notes">Merge notes</label>
-                <textarea name="merge_notes"><%= file.merge_notes %></textarea>
-                <div class="farright">
-                  <%= submit_tag 'Save merge note' %>
-                </div>
-              </div>
-            </form>
-          </td>
-          <td class="actions">
-            <%= form_tag("/queue/#{file.id}/edit") %>
-              <%- if file.Merged == 0 %>
-                <%= submit_tag 'Mark merged' %>
-                <%= submit_tag 'Hide' %>
-              <%- elsif file.Merged == 1 %>
-                <%= submit_tag 'Mark unmerged' %>
-                <%= submit_tag 'Hide' %>
-              <%- elsif file.Merged == 2 %>
-                <%= submit_tag 'Mark merged' %>
-                <%= submit_tag 'Unhide' %>
-              <%- else %>
-                <strong>WARNING!</strong> File has bad merge_status <%= file.merge_status %>
-              <%- end %>
-            </form>
-          </td>
-        </tr>
-      <% end %>
-      </table>
+            </div>
+          </form>
+        </td>
+        <td class="actions">
+          <%= form_tag("/queue/#{file.id}/edit") %>
+            <%- if file.Merged == 0 %>
+              <%= submit_tag 'Mark merged' %>
+              <%= submit_tag 'Hide' %>
+            <%- elsif file.Merged == 1 %>
+              <%= submit_tag 'Mark unmerged' %>
+              <%= submit_tag 'Hide' %>
+            <%- elsif file.Merged == 2 %>
+              <%= submit_tag 'Mark merged' %>
+              <%= submit_tag 'Unhide' %>
+            <%- else %>
+              <strong>WARNING!</strong> File has bad merge_status <%= file.merge_status %>
+            <%- end %>
+          </form>
+        </td>
+      </tr>
     <% end %>
+    </table>
   <% end %>
-</div>
-<% content_for :js do %>
-<script>
-  jQuery(document).ready(function($) {
-    $('.editor').each(function () {
-      var editbox = $(this);
-      var button = $('<button>Show edit</button>');
-
-      editbox.hide();
-      var line = editbox.prev();
-      var tdbutton = $('<td class="editbutton farright">');
-      tdbutton.append(button);
-      line.append(tdbutton);
-      button.click(function () {
-        if (button.html() == 'Show edit') {
-          editbox.show();
-          button.html('Hide edit');
-        } else {
-          editbox.hide();
-          button.html('Show edit');
-        }
-      });
-    });
-  });
-</script>
 <% end %>

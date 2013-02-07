@@ -1,52 +1,85 @@
-<%- if params[:merge_status] == 'hidden' %>
-  <% if @documentation == 1 %>
-    <h1>Queue Hidden docs</h1>
-  <% else %>
-    <h1>Queue Hidden data</h1>
-  <% end %>
-<%- elsif params[:merge_status] == 'merged' %>
-  <% if @documentation == 1 %>
-    <h1>Queue Merged docs</h1>
-  <% else %>
-    <h1>Queue Merged data</h1>
-  <% end %>
-<%- else %>
-  <% if @documentation == 1 %>
-    <h1>Queue Unmerged docs</h1>
-  <% else %>
-    <h1>Queue Unmerged data</h1>
-  <% end %>
-<%- end %>
+<h1>Queue</h1>
+<%-
+def cls_to_title(cls)
+  cls.capitalize
+end
 
-<table>
-<tr>
-  <td>
-    <%= link_to('Unmerged data', '/queue') %>
-    <%= link_to('CSV', '/queue.csv') %>
-  </td>
-  <td>
-    <%= link_to('Hidden data', '/queue?merge_status=hidden') %>
-    <%= link_to('CSV', '/queue.csv?merge_status=hidden') %>
-  </td>
-  <td>
-    <%= link_to('Merged data', '/queue?merge_status=merged') %>
-    <%= link_to('CSV', '/queue.csv?merge_status=merged') %>
-  </td>
-</tr>
-<tr>
-  <td>
-    <%= link_to('Unmerged docs', '/queue?docs=y') %>
-    <%= link_to('CSV', '/queue.csv?docs=y') %>
-  </td>
-  <td>
-    <%= link_to('Hidden docs', '/queue?merge_status=hidden&docs=y') %>
-    <%= link_to('CSV', '/queue.csv?merge_status=hidden&docs=y') %>
-  </td>
-  <td>
-    <%= link_to('Merged docs', '/queue?merge_status=merged&docs=y') %>
-    <%= link_to('CSV', '/queue.csv?merge_status=merged&docs=y') %>
-  </td>
-</tr>
-</table>
+def cls_to_query(cls)
+  q = {}
+  s, t = cls.split(' ')
+  if ['hidden', 'merged'].include?(s)
+    q[:merge_status] = s
+  end
+  if t == 'docs'
+    q[:docs] = 'y'
+  end
+  q
+end
 
-<%= render :partial => '/staff/queue_files/queue_box' %>
+cls = []
+
+mstatus = params[:merge_status]
+if not ['hidden', 'merged'].include?(mstatus)
+  mstatus = 'unmerged'
+end
+cls << mstatus
+
+if @documentation == 1
+  cls << 'docs'
+else
+  cls << 'data'
+end
+cls = cls.join(' ')
+
+title = cls_to_title(cls)
+%>
+
+<div class="queue">
+  <table class="tabs">
+    <%- for t in ['data', 'docs'] %>
+      <tr>
+        <%- for s in ['unmerged', 'hidden', 'merged'] %>
+          <%- ccls = s + ' ' + t %>
+          <%- q = cls_to_query(ccls) %>
+          <%- if ccls == cls %>
+            <%- tdcls = ccls + ' active' %>
+          <%- else %>
+            <%- tdcls = ccls %>
+          <%- end %>
+          <td class="<%= tdcls %>">
+            <%= link_to(cls_to_title(ccls), queue_path(q), :class => 'link') %>
+            <%= link_to('CSV', queue_path(q), :class => 'csv') %>
+          </td>
+        <%- end %>
+      </tr>
+    <%- end %>
+  </table>
+  <div class="<%= cls %>">
+    <%= render :partial => '/staff/queue_files/queue_box' %>
+  </div>
+</div>
+<% content_for :js do %>
+<script>
+  jQuery(document).ready(function($) {
+    $('.editor').each(function () {
+      var editbox = $(this);
+      var button = $('<button>Show edit</button>');
+
+      editbox.hide();
+      var line = editbox.prev();
+      var tdbutton = $('<td class="editbutton farright">');
+      tdbutton.append(button);
+      line.append(tdbutton);
+      button.click(function () {
+        if (button.html() == 'Show edit') {
+          editbox.show();
+          button.html('Hide edit');
+        } else {
+          editbox.hide();
+          button.html('Show edit');
+        }
+      });
+    });
+  });
+</script>
+<% end %>

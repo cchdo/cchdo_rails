@@ -921,9 +921,56 @@ div.tm_auto_complete ul strong.highlight { color: #800; margin: 0; padding:0; }
   margin-bottom: 1em;
 }
 
-.queue h2 {
-  margin-top: 1em;
+.queue h3 {
+  margin-top: 0.5em;
+  color: #006F89;
+  font-size: 1.2em;
+  margin-bottom: 0;
+  font-weight: normal;
 }
+.queue .tabs {
+  width: 100%;
+}
+.queue .tabs td {
+  text-align: center;
+}
+.queue .tabs .active {
+  font-family: Helvetica;
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 1.087em;
+}
+.queue .tabs a {
+  text-decoration: none;
+}
+.queue .tabs a.csv {
+  padding-left: 0.5em;
+  font-family: Inconsolata, monospace;
+  font-size: 0.7em;
+}
+.queue .tabs .active a.link,
+.queue .tabs a:hover {
+  text-decoration: underline;
+}
+.queue .tabs .active.unmerged {
+  background-color: #FFDDDD;
+}
+.queue .tabs .unmerged {
+  background-color: #FFEEEE;
+}
+.queue .tabs .active.hidden {
+  background-color: #FFFFBB;
+}
+.queue .tabs .hidden {
+  background-color: #FFFFEE;
+}
+.queue .tabs .active.merged {
+  background-color: #DDFFDD;
+}
+.queue .tabs .merged {
+  background-color: #EEFFEE;
+}
+
 .queue .cruise {
 }
 .queue .cruise a {
