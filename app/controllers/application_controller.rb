@@ -483,38 +483,51 @@ class ApplicationController < ActionController::Base
      return track_coords
    end
 
-   # This function returns a hash of 
+   # This function returns a hash of short file name to file path
    def get_files_from_dir(dir)
-     @file_result = Hash.new
-     if(dir)
-        @files = dir.Files.split(/\s/)
-        trash,path = dir.FileName.split(/data/)
-        if @files
-           #file_result[result.ExpoCode] = []
-           for file in @files
-              if file
-                 if(file =~ /\*$/)
-                    file.chop!
-                 end
-                 case file
-                 when /su.txt$/ then @file_result['woce_sum'] = "/data#{path}/#{file}"
-                 when /ct.zip/  then @file_result['woce_ctd'] = "/data#{path}/#{file}"
-                 when /hy.txt/  then @file_result['woce_bot'] = "/data#{path}/#{file}"
-                 when /hy1.csv/ then @file_result['exchange_bot'] = "/data#{path}/#{file}"
-                 when /ct1.zip/ then @file_result['exchange_ctd'] = "/data#{path}/#{file}"
-                 when /ctd.zip/ then @file_result['netcdf_ctd'] = "/data#{path}/#{file}"
-                 when /hyd.zip/ then @file_result['netcdf_bot'] = "/data#{path}/#{file}"
-                 when /do.txt/  then @file_result['text_doc'] = "/data#{path}/#{file}"
-                 when /do.pdf/  then @file_result['pdf_doc'] = "/data#{path}/#{file}"
-                 when /.gif/    then @file_result['big_pic'] = "/data#{path}/#{file}"
-                 when /.jpg/    then @file_result['small_pic'] = "/data#{path}/#{file}"
-                 end
-              end # if file
-              @lfile = file
-           end #for files in @files
-        end #if(@files)
-     end #if(dir)
-    @file_result ?  (return @file_result) :  (return nil)
+       @file_result = Hash.new
+       unless dir
+           return nil
+       end
+
+       @files = dir.Files.split(/\s/)
+       trash, path = dir.FileName.split(/data/)
+       unless @files
+           return nil
+       end
+
+       for file in @files
+          unless file
+              continue
+          end
+          if file =~ /\*$/
+             file.chop!
+          end
+          key = case file
+              when /su.txt$/ then 'woce_sum'
+              when /ct.zip/  then 'woce_ctd'
+              when /hy.txt/  then 'woce_bot'
+              when /hy1.csv/ then 'exchange_bot'
+              when /ct1.zip/ then 'exchange_ctd'
+              when /ctd.zip/ then 'netcdf_ctd'
+              when /hyd.zip/ then 'netcdf_bot'
+              when /do.txt/  then 'text_doc'
+              when /do.pdf/  then 'pdf_doc'
+              when /.gif/    then 'big_pic'
+              when /.jpg/    then 'small_pic'
+              else nil
+          end
+          if key
+              @file_result[key] = "/data#{path}/#{file}"
+          end
+          @lfile = file
+       end
+
+       if @file_result
+           return @file_result
+       else
+           return nil
+       end
    end
 
    def switch_x_y_polygon(polygon)
