@@ -53,18 +53,20 @@
             </form>
           </td>
           <td class="actions">
-            <%- if file.Merged == 0 %>
-              <%= submit_tag 'Mark merged' %>
-              <%= submit_tag 'Hide' %>
-            <%- elsif file.Merged == 1 %>
-              <%= submit_tag 'Mark unmerged' %>
-              <%= submit_tag 'Hide' %>
-            <%- elsif file.Merged == 2 %>
-              <%= submit_tag 'Mark merged' %>
-              <%= submit_tag 'Unhide' %>
-            <%- else %>
-              <strong>WARNING!</strong> File has bad merge_status <%= file.merge_status %>
-            <%- end %>
+            <%= form_tag("/queue/#{file.id}/edit") %>
+              <%- if file.Merged == 0 %>
+                <%= submit_tag 'Mark merged' %>
+                <%= submit_tag 'Hide' %>
+              <%- elsif file.Merged == 1 %>
+                <%= submit_tag 'Mark unmerged' %>
+                <%= submit_tag 'Hide' %>
+              <%- elsif file.Merged == 2 %>
+                <%= submit_tag 'Mark merged' %>
+                <%= submit_tag 'Unhide' %>
+              <%- else %>
+                <strong>WARNING!</strong> File has bad merge_status <%= file.merge_status %>
+              <%- end %>
+            </form>
           </td>
         </tr>
       <% end %>
