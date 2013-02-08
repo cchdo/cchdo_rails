@@ -487,13 +487,13 @@ class ApplicationController < ActionController::Base
    def get_files_from_dir(dir)
        @file_result = Hash.new
        unless dir
-           return nil
+           return @file_result
        end
 
        @files = dir.Files.split(/\s/)
        trash, path = dir.FileName.split(/data/)
        unless @files
-           return nil
+           return @file_result
        end
 
        for file in @files
@@ -523,11 +523,7 @@ class ApplicationController < ActionController::Base
           @lfile = file
        end
 
-       if @file_result
-           return @file_result
-       else
-           return nil
-       end
+       return @file_result
    end
 
    def switch_x_y_polygon(polygon)
