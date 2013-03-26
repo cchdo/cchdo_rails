@@ -33,6 +33,9 @@
 <p><strong>Ship/Country:</strong> <%=self_or_empty(@cruise.Ship_Name)%>/<%=self_or_empty(@cruise.Country)%></p>
 <p><strong>Chief Scientists:</strong> <%=self_or_empty(@cruise.Chief_Scientist)%></p>
 <p><strong>Cruise Dates:</strong> <%= pretty_dates(@cruise) %></p>
+<%#- if @cruise.track_line %>
+<%# <p><strong>Stations:</strong> <%= @cruise.track_line.Track.length ></p> %>
+<%#- end %>
 <% if @cruise.link %>
   <p><strong>Expedition Link:</strong> <%= link_to(@cruise.link, @cruise.link) %></p>
 <% end %>
