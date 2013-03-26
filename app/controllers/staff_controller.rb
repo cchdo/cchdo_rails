@@ -181,7 +181,11 @@ def enqueue
 
     begin
         event = QueueFile.enqueue(user, submission, cruise, opts)
-        EnqueuedMailer.deliver_confirm(event)
+        if ENV['RAILS_ENV'] == 'production'
+            EnqueuedMailer.deliver_confirm(event)
+        else
+            Rails.logger.debug(event.inspect)
+        end
         flash[:notice] = "Enqueued Submission #{sub_link}"
         redirect_to return_uri
     rescue => e
