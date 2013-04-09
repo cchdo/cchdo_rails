@@ -1,6 +1,47 @@
-class DataAccessController < ApplicationController
-   layout 'standard', :except => :feed
+require 'cruise_data_formats'
+
+class ExpoDate
+    attr_reader :expo, :date
+    def initialize(expo, date)
+        @expo = expo
+        @date = date
+    end
+end
+
   
+class DataAccessController < ApplicationController
+    layout 'standard', :except => :feed
+
+    $fsecs = [
+        FormatSection.new('Exchange', [
+            FormatType.new('exchange_ctd', 'CTD', 'ZIP archive of ASCII .csv CTD data with station information'),
+            FormatType.new('exchange_bot', 'BTL', 'ASCII .csv bottle data with station information'),
+            FormatType.new('exchange_large_volume', 'Large Volume', 'ASCII .csv bottle data with station information'),
+            FormatType.new('trace_metal', 'Trace Metals', 'ASCII .csv trace metal data with station information'),
+        ]),
+        FormatSection.new('NetCDF', [
+            FormatType.new('netcdf_ctd', 'CTD', 'ZIP archive of binary CTD data with station information'),
+            FormatType.new('netcdf_bot', 'BTL', 'Binary bottle data with station information'),
+        ]),
+        FormatSection.new("Documentation", [
+            FormatType.new('text_doc', 'Text', 'ASCII cruise and data documentation'),
+            FormatType.new('pdf_doc', 'PDF', 'Portable Document Format cruise and data information'),
+        ]),
+        FormatSection.new("Other formats",
+            [], [
+            FormatSection.new("WOCE", [
+                FormatType.new('woce_sum', 'SUM', 'ASCII station/cast information'),
+                FormatType.new('woce_ctd', 'CTD', 'ASCII CTD data without station information'),
+                FormatType.new('woce_bot', 'BTL', 'ASCII bottle data without station information'),
+                FormatType.new('large_volume', 'Large Volume', 'ASCII bottle data without station information'),
+            ]), 
+            FormatSection.new("OceanSITES", [
+                FormatType.new('os_ctd', 'CTD', 'Binary CTD data conforming to OceanSITES data format'),
+                FormatType.new('os_btl', 'BTL', 'Binary bottle data conforming to OceanSITES data format'),
+            ]),
+        ]),
+    ]
+
    def index
       @expo=params[:ExpoCode]
       @parameters = params;
@@ -11,14 +52,6 @@ class DataAccessController < ApplicationController
       end
    end
    
-   class ExpoDate
-     attr_reader :expo,:date
-     def initialize(expo,date)
-        @expo = expo
-        @date = date
-     end
-   end
-
     # GET /feed/:expocodes/as.atom
     # Params:
     #   expocodes - comma separated list of expocodes
@@ -128,15 +161,21 @@ class DataAccessController < ApplicationController
          @merged_queue_files = QueueFile.all(:conditions => {:ExpoCode => @expo, :Merged => true}, :order => ['DateMerged DESC, DateRecieved DESC'])
 
          @support_files = SupportFile.find(:all, :conditions => ["`ExpoCode` = '#{@expo}'"])
-         if (@expo)
-           if(@cur_sort == "LastName")
-               @events = Event.find(:all,:conditions=>["ExpoCode='#{@expo}'"],:order=>['LastName'])
-            elsif( @cur_sort == "Data_Type")
-               @events = Event.find(:all,:conditions=>["ExpoCode='#{@expo}'"],:order=>['Data_Type'])
-            else
-               @events = Event.find(:all,:conditions=>["ExpoCode='#{@expo}'"],:order=>['Date_Entered DESC'])
-            end
-            @cruise = reduce_specifics(Cruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"]))
+         if @expo
+             sort_hist = params[:sort_history]
+             if sort_hist == "person"
+                 sort_column = 'LastName'
+             elsif sort_hist == "action"
+                 sort_column = 'Action'
+             elsif sort_hist == "summary"
+                 sort_column = 'Summary'
+             elsif sort_hist == "data_type"
+                 sort_column = 'Data_Type'
+             else
+                 sort_column = 'Date_Entered DESC'
+             end
+             @events = Event.find(:all, :conditions=>["ExpoCode=?", @expo], :order => [sort_column])
+             @cruise = reduce_specifics(Cruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"]))
          end
          if params[:Note] and params[:Entry]
            @note = params[:Note]
@@ -145,7 +184,7 @@ class DataAccessController < ApplicationController
           @note = nil
         end
          if (@note)
-            @note_entry = Event.find(:first,:conditions=>["ID=#{@entry}"])
+            @note_entry = Event.find_by_ID(@entry)
             @note_entry[:Note].gsub!(/[\n\r\f]/,"<br>")
             @note_entry[:Note].gsub!(/[\t]/,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
          end
@@ -154,7 +193,7 @@ class DataAccessController < ApplicationController
    end
    
    def list_cruises
-                 @param_list = Hash.new{|h,k| h[k]={}}
+      @param_list = Hash.new{|h,k| h[k]={}}
 
       @parameters = params
       if params[:expanded]

@@ -48,50 +48,10 @@
 <h1>Dataset</h1>
 <div class="box_content">
 
-<%=content_tag(:p, @preliminary, :class => "preliminary important") if @preliminary -%>
+<%= content_tag(:p, @preliminary, :class => "preliminary important") if @preliminary -%>
 
-<%
-file_sections = [
-  [:Exchange,
-    [
-      ['exchange_ctd', ['CTD', 'ZIP archive of ASCII .csv CTD data with station information']],
-      ['exchange_bot', ['BOT', 'ASCII .csv bottle data with station information']],
-      ['exchange_large_volume', ['Large Volume', 'ASCII .csv bottle data with station information']],
-      ['trace_metal', ['Trace Metals', 'ASCII .csv trace metal data with station information']],
-    ]
-  ],
-  [:NetCDF,
-    [
-      ['netcdf_ctd', ['CTD', 'ZIP archive of binary CTD data with station information']],
-      ['netcdf_bot', ['BOT', 'Binary bottle data with station information']],
-    ]
-  ],
-  [:WOCE,
-    [
-      ['woce_sum', ['SUM', 'ASCII station/cast information']],
-      ['woce_ctd', ['CTD', 'ASCII CTD data without station information']],
-      ['woce_bot', ['BOT', 'ASCII bottle data without station information']],
-      ['large_volume', ['Large Volume', 'ASCII bottle data without station information']],
-    ]
-  ],
-  [:Documentation,
-    [
-      ['text_doc', ['Text', 'ASCII cruise and data documentation']],
-      ['pdf_doc', ['PDF', 'Portable Document Format cruise and data information']],
-    ]
-  ]
-]
--%>
+<%= show_files($fsecs, @file_result) %>
 
-<% for section, filetypes in file_sections -%>
-  <%=content_tag(:h2, section)-%>
-  <% for type, display in filetypes -%>
-    <% if file = @file_result[type] and file != 0 -%>
-      <p><%=link_to(display[0], file, :expocode => @cruise.ExpoCode, :file_type => type)%> - <%=display[1]-%></p>
-    <% end -%>
-  <% end -%>
-<% end -%>
-  
 </div>
 <div class="box_bottom"></div>
 </div>
@@ -105,5 +65,4 @@ file_sections = [
 </div>
 
 <%= javascript_include_tag '//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js', 'click_tracker' -%>
-</div>
 <% end -%>

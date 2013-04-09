@@ -660,6 +660,13 @@ table.table_step2 {
 .data_access .boxed td { vertical-align: top;}
 .data_access .boxed td.date { font-weight: bold; white-space: nowrap; }
 .data_access .boxed .upper { max-height: 40em; overflow-y: auto; }
+.data_access #data { position: relative; }
+.data_access #data abbr { font-size: 0.5em; vertical-align: super; }
+.data_access #data .file_type {}
+.data_access #data .bulk { position: absolute; left: 9em;}
+.data_access #data .formats { padding-left: 1em;}
+.data_access #data .sub-formats h3 { padding-left: 1em;}
+.data_access #data .sub-formats .formats { padding-left: 2em;}
 .data_access .note {}
 .data_access .note pre { overflow: auto; width: 74em; }
 .data_access .note .close { text-align: right; }

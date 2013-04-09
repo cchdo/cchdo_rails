@@ -1,14 +1,21 @@
-<% if @events.blank? %>
+<%- if @events.blank? %>
   <h4>No cruise history.</h4>
-<% else %>
+<%- else %>
   <div id="data_access_history">
     <table>
-      <tr><th>Date</th><th>Data Type</th><th>Action</th><th>Summary</th></tr>
+      <tr>
+        <th>Permalink</th>
+        <th><%= link_to('Date', :sort_history => 'date') %></th>
+        <th><%= link_to('Person', :sort_history => 'person') %></th>
+        <th><%= link_to('Data Type', :sort_history => 'data_type') %></th>
+        <th><%= link_to('Action', :sort_history => 'action') %></th>
+        <th><%= link_to('Summary', :sort_history => 'summary') %></th>
+      </tr>
       <% @events.each do |event|
          date_entered = event.Date_Entered || ''
          lastName = event.LastName || ''
          firstName = event.First_Name || ''
-         data_Type = event.Data_Type || ''
+         data_type = event.Data_Type || ''
          action = event.Action || ''
          summary = event.Summary || 'full note'
          cycle_class = cycle '', ' class="hl"'
@@ -17,40 +24,69 @@
          end
       -%>
         <%- noteid = "note_#{event.ID}" %>
-        <tr<%= cycle_class -%>>
+        <tr<%= cycle_class -%> id="<%= noteid %>">
+          <td class="permalink"><%= link_to(event.ID, "##{noteid}") %></td>
           <td class="date"><%= date_entered -%></td>
-          <td><%= data_Type -%></td>
+          <td class="person"><%= event.LastName %>, <%= event.First_Name -%></td>
+          <td><%= data_type -%></td>
           <td><%= action -%></td>
           <td>
-            <%= link_to(summary, 'javascript:void(0);', :onclick => "toggleNote(#{noteid})") %>
+            <%= link_to(summary, 'javascript:void(0);', :class => "history-summary") %>
           </td>
         </tr>
         <tr<%= cycle_class -%>>
-          <td id="<%= noteid %>" class="note" colspan="4">
-            <p><b>Detailed Notes</b> - <em><%= event.LastName -%>, <%= event.First_Name -%></em></p>
+          <td id="<%= noteid %>_detail" class="note" colspan="6">
             <pre><%= event.Note -%></pre>
           </td>
         </tr>
       <% end # for events -%>
     </table>
   </div>
+<%- end %>
+<% content_for :js do %>
   <script>
-    function toggleNote(noteid) {
-      if (!window._history_showing) {
-        window._history_showing = {};
+    var J = jQuery;
+    J(function() {
+      function getNoteID(summary) {
+        return summary.closest('tr').attr('id');
       }
-      noteid = noteid.id
-      var n = $(noteid);
-      if (window._history_showing[noteid] === undefined) {
-        n.hide();
-        window._history_showing[noteid] = false;
-      } else if (window._history_showing[noteid]) {
-        n.hide();
-        window._history_showing[noteid] = false;
-      } else {
-        n.show();
-        window._history_showing[noteid] = true;
+      function getNoteDetail(summary) {
+          var detail_id = '#' + getNoteID(summary) + '_detail';
+          return J(detail_id);
       }
-    }
+      J('.history-summary').click(function() {
+          var detail = getNoteDetail(J(this));
+          console.log(detail.data('shown'));
+          var shown = detail.data('shown');
+          if (shown === undefined) {
+            shown = true;
+          }
+          if (shown) {
+              detail.data('shown', false);
+              detail.hide();
+          } else {
+              detail.data('shown', true);
+              detail.show();
+          }
+      });
+      var toggle_button = J('<button>');
+      toggle_button.click(function() {
+          if (J(this).data('details')) {
+              J(this).data('details', false);
+              J(this).html('Show all note details');
+              J('.history-summary').each(function() {
+                  getNoteDetail(J(this)).data('shown', false).hide();
+              });
+          } else {
+              J(this).data('details', true);
+              J(this).html('Hide all note details');
+              J('.history-summary').each(function() {
+                  getNoteDetail(J(this)).data('shown', true).show();
+              });
+          }
+      });
+      toggle_button.data('details', true).click();
+      J('#data_access_history').prepend(toggle_button);
+  });
   </script>
 <% end -%>
