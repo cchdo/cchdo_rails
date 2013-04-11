@@ -179,9 +179,11 @@ def enqueue
         return
     end
 
+    dont_email = params['enqueue_noemail'] || false
+
     begin
         event = QueueFile.enqueue(user, submission, cruise, opts)
-        if ENV['RAILS_ENV'] == 'production'
+        if ENV['RAILS_ENV'] == 'production' and not dont_email
             EnqueuedMailer.deliver_confirm(event)
         else
             Rails.logger.debug(event.inspect)
