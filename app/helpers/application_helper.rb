@@ -83,6 +83,142 @@ module ApplicationHelper
         end
         return s
     end
+
+    def bulk_link(act, link={}, html={})
+        link_to(content_tag(:div, act, :class => "bulk-icon"), link, html)
+    end
+
+    def bulk_link_file(act, dir, basename)
+        if act == 'Remove'
+            action = 'remove'
+            classname = 'bulk-remove'
+            title = 'Remove from bulk downloads'
+        elsif act == 'Add'
+            action = 'add'
+            classname = 'bulk-add'
+            title = 'Add to bulk downloads'
+        end
+
+        bulk_link(act,
+            {
+                :controller => 'bulk',
+                :action => action,
+                :dirid => dir.id,
+                :file => basename
+            }, {
+                :class => classname,
+                :title => title
+            })
+    end
+
+    def bulk_link_cruise(act, cruise)
+        if act == 'Remove'
+            action = 'remove_cruise'
+            classname = 'bulk-remove bulk-remove-cruise'
+            title = 'Remove cruise from bulk downloads'
+        elsif act == 'Add'
+            action = 'add_cruise'
+            classname = 'bulk-add bulk-add-cruise'
+            title = 'Add cruise to bulk downloads'
+        end
+
+        bulk_link("#{act} all",
+            {
+                :controller => 'bulk',
+                :action => action,
+                :cruise_id => cruise.id
+            }, {
+                :class => classname,
+                :title => title
+            })
+    end
+
+    def display_subcategory(dir, expocode, header_level, section, files, short)
+        header = section.title
+        types = section.types
+
+        mapped = []
+        for ftype in section.types
+            file = files[ftype.key_name]
+            if not file or file == 0
+                next
+            end
+            mapped << [ftype, file]
+        end
+        
+        if mapped.empty?
+            return ''
+        end
+
+        ul_class = "formats"
+        if short
+            result = ''
+            ul_class += " short"
+        else
+            result = content_tag(header_level, header)
+        end
+        result += content_tag(:ul, :class => ul_class) do
+            ulresult = ''
+            for ftype, file in mapped
+                ulresult += content_tag(:li) do
+                    short_name = ftype.short_name
+                    if short
+                        short_name = "#{header} #{short_name}"
+                    end
+                    liresult = content_tag(:span, 
+                        link_to(
+                            short_name, file,
+                            :expocode => expocode,
+                            :file_type => ftype.key_name),
+                        :class => "file_type") + \
+                    content_tag(:abbr, '?', :title => ftype.description) + \
+                    content_tag(:span, :class => "bulk") do
+                        basename = File.basename(file)
+                        if @bulk.include?([dir.id, basename])
+                            bulk_link_file('Remove', dir, basename)
+                        else
+                            bulk_link_file('Add', dir, basename)
+                        end
+                    end
+                    liresult
+                end
+            end
+            ulresult
+        end
+        result
+    end
+
+    def show_files(cruise, format_sections, files, short=false)
+        directory = cruise.directory
+        expocode = cruise.ExpoCode
+        result = ''
+
+        result += content_tag(:div, bulk_link_cruise('Add', cruise) + bulk_link_cruise('Remove', cruise), :class => "bulk-cruise")
+
+        for section in format_sections
+            if section.has_subsections?
+                ulresult = ''
+                for subsection in section.subsections
+                    liresult = display_subcategory(directory, expocode, :h3, subsection, files, short)
+                    unless liresult.empty?
+                        ulresult += content_tag(:li, liresult)
+                    end
+                end
+                unless ulresult.empty?
+                    ul_class = "sub-formats"
+                    unless short
+                        result += content_tag(:h2, section.title)
+                    else
+                        ul_class += " short"
+                    end
+                    result += content_tag(:ul, ulresult, :class => ul_class)
+                end
+            else
+                result += display_subcategory(directory, expocode, :h2, section, files, short)
+            end
+        end
+        result
+    end
 end
 
 class String

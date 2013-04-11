@@ -1,0 +1,47 @@
+<div class="boxed bulk-dl">
+  <h1>Bulk download</h1>
+  <div class="box_content">
+    <%- if @bulk.empty? %>
+      <p>Please visit a cruise page to add files to download.</p>
+    <%- else %>
+      <div class="tools">
+        <%= form_tag(bulk_clear_path) %><input type="submit" value="Clear list" class="clear"></form>
+      <div>
+      <table>
+        <tr class="header">
+          <th>Cruise</th>
+          <th>File</th>
+          <th></th>
+          <th></th>
+        </tr>
+      <%- hlclass = 'hl' %>
+      <%- @bulk.each_with_index do |(directory, file), i| %>
+        <% directory = Document.find_by_id(directory) %>
+        <%- if i % $zip_file_limit == 0 %>
+          <%- hlclass = cycle('hl', '') %>
+        <%- end %>
+        <tr class="<%= hlclass %>">
+          <td class="cruise">
+            <%= link_to(directory.ExpoCode, cruise_path(directory.ExpoCode)) %>
+          </td>
+          <td class="filename">
+            <%= file %>
+          </td>
+          <td class="bulk-remove">
+            <%= bulk_link('Remove', bulk_remove_path(:dirid => directory.id, :file => file)) %>
+          </td>
+          <%- if i % $zip_file_limit == 0 %>
+            <%- num_files_in_set = [(@bulk.length - i), $zip_file_limit].min %>
+            <td class="tools" rowspan="<%= num_files_in_set %>">
+              <%= form_tag(bulk_download_path) %>
+                <input type="hidden" name="set" value="<%= (i / $zip_file_limit).to_i %>">
+                <input type="submit" value="Download set (<%= pluralize(num_files_in_set, 'file') %>)" class="download">
+              </form>
+            </td>
+          <%- end %>
+        </tr>
+      <%- end %>
+      </table>
+    <%- end %>
+  </div>
+</div>

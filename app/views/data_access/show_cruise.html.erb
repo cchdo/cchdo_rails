@@ -44,13 +44,12 @@
 <div class="box_bottom"></div>
 </div>
 
-<div id="data" class="boxed">
+<div id="data" class="boxed data-formats">
 <h1>Dataset</h1>
 <div class="box_content">
 
-<%= content_tag(:p, @preliminary, :class => "preliminary important") if @preliminary -%>
-
-<%= show_files($fsecs, @file_result) %>
+<%= content_tag(:p, @preliminary, :class => "status-preliminary") if @preliminary -%>
+<%= show_files(@cruise, $data_format_sections, @file_result) %>
 
 </div>
 <div class="box_bottom"></div>
@@ -64,5 +63,7 @@
 <%= render :partial => 'cruise_data_history' %>
 </div>
 
-<%= javascript_include_tag '//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js', 'click_tracker' -%>
+  <%- content_for :js do %>
+    <%= javascript_include_tag 'bulkdl', 'click_tracker' -%>
+  <%- end %>
 <% end -%>

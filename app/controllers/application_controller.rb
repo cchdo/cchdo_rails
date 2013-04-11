@@ -1,20 +1,21 @@
+require 'cruise_data_formats'
+
+COUNTRIES = {
+   'germany'     => 'ger', 'japan' => 'jpn',
+   'france'      => 'fra', 'england' => 'uk',
+   'canada'      => 'can', 'us' => 'usa',
+   'usa'         => 'usa', 'india' => 'ind',
+   'russia'      => 'rus', 'spain' => 'spn',
+   'argentina'   => 'arg', 'ukrain' => 'ukr',
+   'Netherlands' => 'net', 'norway' => 'nor',
+   'finland'     => 'fin', 'iceland' => 'ice',
+   'australia'   => 'aus', 'chile' => 'chi',
+   'new zealand' => 'new', 'taiwan' => 'tai',
+   'china'       => 'prc'
+}
+
 # Filters added to this controller will be run for all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
-class BottleDB < ActiveRecord::Base
-end
-
-def getGAPIkey(host)
-  return case host
-    #when 'cchdo.ucsd.edu' then 'ABQIAAAAZICfw-7ifUWoyrSbSFaNixTec8MiBufSHvQnWG6NDHYU8J6t-xTRqsJkl7OBlM2_ox3MeNhe_0-jXA'
-    when 'cchdo.ucsd.edu' then 'ABQIAAAATXJifusyeTqIXK5-oRfMqRTec8MiBufSHvQnWG6NDHYU8J6t-xQu6FK5KGtXjapXKCGo-If8o-ibsQ'
-    #when 'whpo.ucsd.edu' then 'ABQIAAAATXJifusyeTqIXK5-oRfMqRRrtQtAbE2ICKyeJmE150l9FUtvWRQ_qb0gC6W0P4gBV_W3RstdZXEcOw'
-    #when 'watershed.ucsd.edu' then 'ABQIAAAATXJifusyeTqIXK5-oRfMqRRkZzjLi0nUJ4TwOC8xt4Ov2IJhKBQTGSNz9nt4_eT3w1Wv_O1VSaMyBA'
-    #when 'ushydro.ucsd.edu' then 'ABQIAAAATXJifusyeTqIXK5-oRfMqRRtY8Vb6BVQ_NYWg4_c_l3k0L4OIhQFByUZ1IXeNowVep-DwxF7cwWzVg'
-    #when 'ushydro.ucsd.edu:3000' then 'ABQIAAAATXJifusyeTqIXK5-oRfMqRQE8zGWDTi-uP6FZiwQgVhVR-BtSxRIgqf0aU_WJtUPpTZNUXmvRubneQ'
-    #when 'ghdc.ucsd.edu' then 'ABQIAAAAZICfw-7ifUWoyrSbSFaNixRCPOjKkl_WpOSxLSW5BpFmpsf_3BSArp5f0mTCYw9o7efmB5J3NGXrXg'
-  end
-end
-
 class Array
   def oob_to_nil
     oob_value = -999
@@ -32,10 +33,42 @@ end
 class ApplicationController < ActionController::Base
     layout 'standard'
 
+    before_filter :setup_bulk
+
     # Scrub sensitive parameters from your log
     filter_parameter_logging :password, :password_confirmation
 
     protect_from_forgery
+
+    $data_format_sections = [
+        FormatSection.new('Exchange', [
+            FormatType.new('exchange_ctd', 'CTD', 'ZIP archive of ASCII .csv CTD data with station information'),
+            FormatType.new('exchange_bot', 'BTL', 'ASCII .csv bottle data with station information'),
+            FormatType.new('exchange_large_volume', 'Large Volume', 'ASCII .csv bottle data with station information'),
+            FormatType.new('trace_metal', 'Trace Metals', 'ASCII .csv trace metal data with station information'),
+        ]),
+        FormatSection.new('NetCDF', [
+            FormatType.new('netcdf_ctd', 'CTD', 'ZIP archive of binary CTD data with station information'),
+            FormatType.new('netcdf_bot', 'BTL', 'Binary bottle data with station information'),
+        ]),
+        FormatSection.new("Documentation", [
+            FormatType.new('pdf_doc', 'PDF', 'Portable Document Format cruise and data information'),
+            FormatType.new('text_doc', 'Text', 'ASCII cruise and data documentation'),
+        ]),
+        FormatSection.new("Other formats",
+            [], [
+            FormatSection.new("WOCE", [
+                FormatType.new('woce_sum', 'SUM', 'ASCII station/cast information'),
+                FormatType.new('woce_ctd', 'CTD', 'ASCII CTD data without station information'),
+                FormatType.new('woce_bot', 'BTL', 'ASCII bottle data without station information'),
+                FormatType.new('large_volume', 'Large Volume', 'ASCII bottle data without station information'),
+            ]), 
+            FormatSection.new("OceanSITES", [
+                FormatType.new('os_ctd', 'CTD', 'Binary CTD data conforming to OceanSITES data format'),
+                FormatType.new('os_btl', 'BTL', 'Binary bottle data conforming to OceanSITES data format'),
+            ]),
+        ]),
+    ]
 
     def signin
         if request.post?
@@ -100,6 +133,10 @@ class ApplicationController < ActionController::Base
         return cruises
     end
 
+    def setup_bulk
+        @bulk = session['bulk'] || Bulk.new()
+    end
+
     protected
 
     def check_authentication
@@ -133,7 +170,7 @@ class ApplicationController < ActionController::Base
         return map.FileName[0..-5]
       end
       return nil
-    end
+  end
 
   def best_query_type(query)
     best_queries = Hash.new
@@ -164,7 +201,7 @@ class ApplicationController < ActionController::Base
         if $2.length == 1
            query = "#{$1}0#{$2}"
         end
-        best_queries['Line'] = query
+        best_queries['Group'] = query
       elsif query =~ /\b\d{4}\b/
         best_queries['Date'] = query
       elsif country = COUNTRIES[query.downcase]
@@ -181,6 +218,43 @@ class ApplicationController < ActionController::Base
     best_queries.delete_if {|key, value| key.empty?}
     return best_queries, param_queries
   end
+
+  # Provide the message used to indicate a cruise is preliminary
+  def preliminary_message(cruise)
+    expo = cruise.ExpoCode
+    any_preliminary = Document.exists?(:ExpoCode => expo, :Preliminary => 1)
+    if any_preliminary
+      "Preliminary (See <a href=\"/cruise/#{expo}#history\">data history</a>)"
+    else
+      ""
+    end
+  end
+
+    def load_files_and_params(cruise)
+        files_for_expocode = get_files_from_cruise(cruise)
+        files_for_expocode["Preliminary"] = preliminary_message(cruise)
+
+        param_for_expocode = {
+            'stations' => 0,
+            'parameters' => '',
+        }
+        cruise_parameters = BottleDB.find_by_ExpoCode(cruise.ExpoCode)
+        if cruise_parameters
+            param_for_expocode['stations'] = cruise_parameters.Stations
+            param_list = cruise_parameters.Parameters
+            if param_list =~ /\w/
+                param_persistance = cruise_parameters.Parameter_Persistance
+
+                param_for_expocode['parameters'] = param_list#.split(',')
+                param_array = param_list.split(',')
+                persistance_array = param_persistance.split(',')
+                for ctr in 1..param_array.length
+                    param_for_expocode[param_array[ctr]] = persistance_array[ctr]
+                end
+            end
+        end
+        [files_for_expocode, param_for_expocode]
+    end
   
   COLUMNS = {
     'Group' => 'Group',
@@ -192,164 +266,130 @@ class ApplicationController < ActionController::Base
     'Line' => 'Line',
     'Parameter' => 'Parameter'
   }
-  @testing = ""
+
   def find_by_params_query
-    if (params[:query])
-       @query_link = "search?query=#{params[:query]}"
-       @query_with_sort_link = "#{@query_link}"
-       @q_pass = params[:query]
-       @query = params[:query].upcase
-       @query.strip!
-       if @query =~ /\w/
-          @sort_statement = ""
-          @sort_check = ["Line","ExpoCode","Begin_Date","Ship_Name","Chief_Scientist","Country"]
-          if params[:Sort]
-            @sort_by = params[:Sort]
-            if @sort_check.include?(@sort_by)
-              @sort_statement = "ORDER BY cruises.#{@sort_by}"
-              @query_with_sort_link << "&Sort=#{@sort_by}"
+    if not params[:query]
+       return
+    end
+    @query_link = "search?query=#{params[:query]}"
+    @query_with_sort_link = "#{@query_link}"
+    @q_pass = params[:query]
+    @query = params[:query].upcase.strip
+    if not @query =~ /\w/
+       return
+    end
+    @sort_statement = ""
+    @sort_check = ["Line","ExpoCode","Begin_Date","Ship_Name","Chief_Scientist","Country"]
+    if params[:Sort]
+       @sort_by = params[:Sort]
+       if @sort_check.include?(@sort_by)
+          @sort_statement = "ORDER BY cruises.#{@sort_by}"
+          @query_with_sort_link << "&Sort=#{@sort_by}"
+       end
+    end
+    # Initializations ##
+    @queries = []
+    @queries = @query.split(/\s+/) # Make an array that contains all queries, as split by whitespace
+    @best_result = Hash.new
+    @cruises = Hash.new
+    @parameter_columns = Parameter.columns.map {|col| col.name}
+    @param_queries = []
+    # Initializations ##
+    for query in @queries
+       @cols = []
+       @names = []
+       @results = []
+       @cur_max = 0
+       @dir = []
+       @line_query = nil
+       @date_query = nil
+       # Special Case 1: Token Search
+       #  associate the query with it's requested
+       #  column in the best_result hash
+       if (query =~ /^(\w*)\:(\w*)$/)
+          @tok= $1.capitalize
+          @val = $2.downcase.capitalize
+          if COLUMNS.keys.include? @tok
+            if @tok == 'Parameter'
+              @param_queries << query
+            else 
+              @best_result[$2] = COLUMNS[@tok]
             end
           end
-          # Initializations ##
-          @queries = []
-          @queries = @query.split(/\s+/) # Make an array that contains all queries, as split by whitespace
-          @best_result = Hash.new
-          @cruises = Hash.new
-          @parameter_columns = Parameter.columns.map {|col| col.name}
-          @param_queries = []
-          @param_list = Hash.new{|h,k| h[k]={}}
-          # Initializations ##
-          for query in @queries
-             @cols = []
-             @names = []
-             @results = []
-             @cur_max = 0
-             @dir = []
-             @text
-             @line_query = nil
-             @date_query = nil
-             # Special Case 1: Token Search
-             #  associate the query with it's requested
-             #  column in the best_result hash
-             if (query =~ /^(\w*)\:(\w*)$/)
-                @tok= $1.capitalize
-                @val = $2.downcase.capitalize
-                if COLUMNS.keys.include? @tok
-                  if @tok == 'Parameter'
-                    @param_queries << query
-                  else 
-                    @best_result[$2] = COLUMNS[@tok]
-                  end
-                end
-             end
+       end
 
-             # Change queries formated like I9, or A6
-             # to be I09 or A06
-             #if (query =~ /^[a-zst][0-9]$/i)
-             #   letters = query.split(//)
-             #   query = "#{letters[0]}0#{letters[1]}"
-             #end
-             if (query =~/^[a-zA-Z]{1,3}\d{1,2}$/i)
-                if query =~/^([a-zA-Z]{1,3})(\d)$/
-                   query = "#{$1}0#{$2}"
-                end
-                @line_query = query
+       # Change queries formated like I9, or A6
+       # to be I09 or A06
+       #if (query =~ /^[a-zst][0-9]$/i)
+       #   letters = query.split(//)
+       #   query = "#{letters[0]}0#{letters[1]}"
+       #end
+       if (query =~/^[a-zA-Z]{1,3}\d{1,2}$/i)
+          if query =~/^([a-zA-Z]{1,3})(\d)$/
+             query = "#{$1}0#{$2}"
+          end
+          @line_query = query
+       end
+       # If the search contains a full country name, replace it with
+       # the cchdo country abreviation
+       if COUNTRIES[query.downcase]
+          query = COUNTRIES[query.downcase]
+       end
+       # Check for four digit year queries
+       if query =~ /^\d{4}$/
+          @date_query = query
+       end
+       if @parameter_columns.include?(query)
+          @param_queries << query
+       end
+       #Search against every column within the cruise database
+       #Keep the result with the most matches
+       for column in Cruise.columns
+          if (column.name !~ /14C/)
+             @names << column.human_name
+             @results = reduce_specifics(Cruise.find(:all ,:conditions => ["`#{column.name}` regexp '#{query}'"]))
+             if @date_query and @results.length > 0 and column.name.eql?("Begin_Date")
+                @best_result[query] =  "Date"
+                break  # Break out of the for column in Cruise.columns loop
              end
-             # If the search contains a full country name, replace it with
-             # the cchdo country abreviation
-             if COUNTRIES[query.downcase]
-                query = COUNTRIES[query.downcase]
+             if @results.length > @cur_max
+                @cur_max = @results.length
+                @best_result[query] = column.name#@results
+                @results=[]
              end
-             # Check for four digit year queries
-             if query =~ /^\d{4}$/
-                @date_query = query
-             end
-             if @parameter_columns.include?(query)
-                @param_queries << query
-             end
-             #Search against every column within the cruise database
-             #Keep the result with the most matches UNLESS the query format is recognized
-             if @line_query and Cruise.count(:conditions => ["Line REGEXP ?", @line_query]) > 0
-               @best_result[query] = "Line"
-             else
-                for column in Cruise.columns
-                   if (column.name !~ /14C/)
-                      @names << column.human_name
-                      @results = reduce_specifics(Cruise.find(:all ,:conditions => ["`#{column.name}` regexp '#{query}'"]))
-                      if @date_query and @results.length > 0 and column.name.eql?("Begin_Date")
-                         @best_result[query] =  "Date"
-                         break  # Break out of the for column in Cruise.columns loop
-                      end
-                      if @results.length > @cur_max
-                         @cur_max = @results.length
-                         @best_result[query] = column.name#@results
-                         @results=[]
-                      end
-                   end
-                end
-             end
-          end # for query in @queries
+          end
+       end
+    end # for query in @queries
 
-          #Build sql query based on best results
-          where_clauses = []
-          if @best_result.keys.length > 0
-             for query in @best_result.keys
-                if @best_result[query] =~ /Date/
-                   where_clauses << "(Begin_Date regexp '#{query}' or EndDate regexp '#{query}')"
-                else
-                   where_clauses << "cruises.#{@best_result[query]} regexp '#{query}'"
-                end
-                if @param_queries.length > 0
-                   for q in @param_queries
-                      where_clauses << "parameters.`#{q}` != 'NULL'"
-                   end
-                end
+    #Build sql query based on best results
+    where_clauses = []
+    if @best_result.keys.length > 0
+       for query in @best_result.keys
+          if @best_result[query] =~ /Date/
+             where_clauses << "(Begin_Date regexp '#{query}' or EndDate regexp '#{query}')"
+          else
+             where_clauses << "cruises.#{@best_result[query]} regexp '#{query}'"
+          end
+          if @param_queries.length > 0
+             for q in @param_queries
+                where_clauses << "parameters.`#{q}` != 'NULL'"
              end
-             where_clause = where_clauses.join(' AND ')
-             select_clause = 'cruises.ExpoCode,cruises.Line,cruises.Ship_Name,cruises.Country,cruises.Begin_Date,cruises.EndDate,cruises.Chief_Scientist,cruises.id'
-             #select_clause = '*'
-             @cruises = reduce_specifics(Cruise.find_by_sql("SELECT DISTINCT #{select_clause} FROM cruises LEFT JOIN parameters ON cruises.ExpoCode = parameters.ExpoCode WHERE #{where_clause} #{@sort_statement}"))
-             @table_list = Hash.new{|@table_list,key| @table_list[key]={}}
-             @cruise_objects = Array.new
-             @cruises.each { |e| @cruise_objects << reduce_specifics(Cruise.find(e.id)) }
-             for result in @cruises
-                @text = result.ExpoCode
-                @dir = Document.find(:first ,:conditions => ["ExpoCode = '#{result.ExpoCode}' and FileType='Directory'"])
-                @files_for_expocode = get_files_from_dir(@dir) 
-# This code needs to be optimized #############
-                if(@dir)
-                @cruise_files = Document.find(:all, :conditions => ["ExpoCode = '#{result.ExpoCode}'"])
-                @table_list[result.ExpoCode]["Preliminary"] = ""
-                 for cruise_file in @cruise_files
-                   if cruise_file.Preliminary == 1
-                     @files_for_expocode["Preliminary"] = "Preliminary (See <a href=\"http://cchdo.ucsd.edu/data_history?ExpoCode=#{result.ExpoCode}\">data history</a>)"
-                   end
-                 end
-                end
-###############################################
-                cruise_parameters = BottleDB.find(:first, :conditions => ["ExpoCode = '#{result.ExpoCode}'"])
-                 @param_list[result.ExpoCode]['stations'] = 0
-                 @param_list[result.ExpoCode]['parameters']= ""
-                 param_list = ""
-                 if cruise_parameters
-                    @param_list[result.ExpoCode]['stations'] = cruise_parameters.Stations
-                    if cruise_parameters.Parameters =~ /\w/
-                      param_list = cruise_parameters.Parameters
-                      param_persistance = cruise_parameters.Parameter_Persistance
-
-                      @param_list[result.ExpoCode]['parameters'] = param_list#.split(',')
-                      param_array = param_list.split(',')
-                      persistance_array = param_persistance.split(',')
-                      for ctr in 1..param_array.length
-                        @param_list[result.ExpoCode]["#{param_array[ctr]}"]  = persistance_array[ctr]
-                      end
-                    end
-                 end # if cruise_parameters
-                @table_list[result.ExpoCode] = @files_for_expocode
-             end #for result in @best_result
-          end# if @best_result.keys.length > 0
-       end #   if @query =~ /\w/
-    end#   if(params[:query])
+          end
+       end
+       where_clause = where_clauses.join(' AND ')
+       select_clause = 'cruises.ExpoCode,cruises.Line,cruises.Ship_Name,cruises.Country,cruises.Begin_Date,cruises.EndDate,cruises.Chief_Scientist,cruises.id'
+       #select_clause = '*'
+       @cruises = reduce_specifics(Cruise.find_by_sql(
+            "SELECT DISTINCT #{select_clause} FROM cruises LEFT JOIN parameters ON cruises.ExpoCode = parameters.ExpoCode WHERE #{where_clause} #{@sort_statement}"))
+    else
+       @cruises = []
+    end
+    @table_list = Hash.new{|h,k| h[k]={}}
+    @param_list = Hash.new{|h,k| h[k]={}}
+    for result in @cruises
+        expo = result.ExpoCode
+        @table_list[expo], @param_list[expo] = load_files_and_params(result)
+    end
   end
   
   # deprecated
@@ -483,6 +523,14 @@ class ApplicationController < ActionController::Base
      return track_coords
    end
 
+   def get_files_from_cruise(cruise)
+       if directory = cruise.directory
+           get_files_from_dir(directory)
+       else
+           {}
+       end
+   end
+
    # This function returns a hash of short file name to file path
    def get_files_from_dir(dir)
        @file_result = Hash.new
@@ -505,16 +553,20 @@ class ApplicationController < ActionController::Base
           end
           key = case file
               when /su.txt$/ then 'woce_sum'
-              when /ct.zip/  then 'woce_ctd'
-              when /hy.txt/  then 'woce_bot'
-              when /hy1.csv/ then 'exchange_bot'
-              when /ct1.zip/ then 'exchange_ctd'
-              when /ctd.zip/ then 'netcdf_ctd'
-              when /hyd.zip/ then 'netcdf_bot'
-              when /do.txt/  then 'text_doc'
-              when /do.pdf/  then 'pdf_doc'
-              when /.gif/    then 'big_pic'
-              when /.jpg/    then 'small_pic'
+              when /ct.zip$/  then 'woce_ctd'
+              when /hy.txt$/  then 'woce_bot'
+              when /lv_hy1.csv$/ then 'exchange_large_volume'
+              when /lv.txt$/ then 'large_volume'
+              when /lvs.txt$/ then 'large_volume'
+              when /tm_hy1.csv$/ then 'trace_metal'
+              when /hy1.csv$/ then 'exchange_bot'
+              when /ct1.zip$/ then 'exchange_ctd'
+              when /ctd.zip$/ then 'netcdf_ctd'
+              when /hyd.zip$/ then 'netcdf_bot'
+              when /do.txt$/  then 'text_doc'
+              when /do.pdf$/  then 'pdf_doc'
+              when /.gif$/    then 'big_pic'
+              when /.jpg$/    then 'small_pic'
               else nil
           end
           if key

@@ -35,8 +35,11 @@ class Cruise < ActiveRecord::Base
                         :message => "is missing or invalid",
                         :allow_nil => true
 
+    def directory
+        return Document.find_by_ExpoCode_and_FileType(self.ExpoCode, 'Directory')
+    end
+
     def data_dir
-        dirdoc = Document.find_by_ExpoCode_and_FileType(self.ExpoCode, 'Directory')
-        return dirdoc.FileName
+        return self.directory.FileName
     end
 end

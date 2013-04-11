@@ -9,6 +9,12 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.argo 'argo', :controller => :argo, :action => :index
 
+  map.bulk "bulk", :controller => "bulk", :action => :index
+  map.bulk_add "bulk/add", :controller => "bulk", :action => :add
+  map.bulk_remove "bulk/remove", :controller => "bulk", :action => :remove
+  map.bulk_clear "bulk/clear", :controller => "bulk", :action => :clear, :conditions => {:method => :post}
+  map.bulk_download "bulk/download", :controller => "bulk", :action => :download, :conditions => {:method => :post}
+
   map.new_submission '/submit', :controller => :submit, :action => :new,
                                 :conditions => {:method => :get}
   map.new_simple_submission '/submit/simple', :controller => :submit,

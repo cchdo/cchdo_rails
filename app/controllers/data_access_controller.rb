@@ -1,5 +1,3 @@
-require 'cruise_data_formats'
-
 class ExpoDate
     attr_reader :expo, :date
     def initialize(expo, date)
@@ -8,50 +6,19 @@ class ExpoDate
     end
 end
 
-  
+
 class DataAccessController < ApplicationController
     layout 'standard', :except => :feed
 
-    $fsecs = [
-        FormatSection.new('Exchange', [
-            FormatType.new('exchange_ctd', 'CTD', 'ZIP archive of ASCII .csv CTD data with station information'),
-            FormatType.new('exchange_bot', 'BTL', 'ASCII .csv bottle data with station information'),
-            FormatType.new('exchange_large_volume', 'Large Volume', 'ASCII .csv bottle data with station information'),
-            FormatType.new('trace_metal', 'Trace Metals', 'ASCII .csv trace metal data with station information'),
-        ]),
-        FormatSection.new('NetCDF', [
-            FormatType.new('netcdf_ctd', 'CTD', 'ZIP archive of binary CTD data with station information'),
-            FormatType.new('netcdf_bot', 'BTL', 'Binary bottle data with station information'),
-        ]),
-        FormatSection.new("Documentation", [
-            FormatType.new('text_doc', 'Text', 'ASCII cruise and data documentation'),
-            FormatType.new('pdf_doc', 'PDF', 'Portable Document Format cruise and data information'),
-        ]),
-        FormatSection.new("Other formats",
-            [], [
-            FormatSection.new("WOCE", [
-                FormatType.new('woce_sum', 'SUM', 'ASCII station/cast information'),
-                FormatType.new('woce_ctd', 'CTD', 'ASCII CTD data without station information'),
-                FormatType.new('woce_bot', 'BTL', 'ASCII bottle data without station information'),
-                FormatType.new('large_volume', 'Large Volume', 'ASCII bottle data without station information'),
-            ]), 
-            FormatSection.new("OceanSITES", [
-                FormatType.new('os_ctd', 'CTD', 'Binary CTD data conforming to OceanSITES data format'),
-                FormatType.new('os_btl', 'BTL', 'Binary bottle data conforming to OceanSITES data format'),
-            ]),
-        ]),
-    ]
+    def index
+        expo = params[:ExpoCode]
+        if expo
+            redirect_to :action => 'show_cruise', :ExpoCode => expo
+        else
+            redirect_to :action => 'advanced_search'
+        end
+    end
 
-   def index
-      @expo=params[:ExpoCode]
-      @parameters = params;
-      if(@expo)
-         redirect_to :action => 'show_cruise', :ExpoCode => @expo
-      else
-         redirect_to :action => 'advanced_search'
-      end
-   end
-   
     # GET /feed/:expocodes/as.atom
     # Params:
     #   expocodes - comma separated list of expocodes
@@ -72,126 +39,100 @@ class DataAccessController < ApplicationController
         @updates.sort do |a, b|
             a.feed_datetime() <=> b.feed_datetime()
         end
- 
+
         respond_to do |format|
             format.atom
         end
     end
-   
-   def show_cruise
-     @file_result = Hash.new(0);
-     
-     @preliminary = ""
-     unless params[:commit] =~ /Cruises/ or params[:commit] =~ /Files/
-      @expo = params[:ExpoCode] || params[:expocode]
-      @cruise = reduce_specifics(Cruise.find_by_ExpoCode(@expo))
-      if(@cruise)
-        @cruise_groups = Array.new
-        if @groups = @cruise.Group
-          @groups = @groups.split(',')
+
+    def convert_chisci_to_links(cruise)
+        # Regular expression for exctracting multiple names from Chief_Scientist
+        if not cruise.Chief_Scientist
+            return
         end
-        if @groups and @groups.length > 0
-        for group in @groups
-          if group =~ /\w/
+        pi_names = cruise.Chief_Scientist.scan( /([a-z]+)\/?\\?([a-z]*):?\/?([a-z]*)\/?\\?([a-z]*)/i)
+        #Substitute name matches for links to the contact's page
+        #if @pi_names.length > 1
+        for group in pi_names
+            for name in group
+                # This says Dickson, MAFF, , . I don't know what's up with the extra empty string entries.
+                RAILS_DEFAULT_LOGGER.warn("#{name} is in #{group} in #{pi_names}")
+
+                if pi_found = Contact.find_by_LastName(name)
+                    cruise.Chief_Scientist.sub!(/(#{name})/,"<a href=\'contact?contact=#{name}\'>#{name}</a>")
+                end
+            end
+        end
+    end
+
+   def show_cruise
+      return if params[:commit] =~ /Cruises/ or params[:commit] =~ /Files/
+
+      @expo = params[:ExpoCode] || params[:expocode]
+      return unless @expo
+
+      @cruise = reduce_specifics(Cruise.find_by_ExpoCode(@expo))
+      return if not @cruise
+
+      @preliminary = ""
+
+      @cruise_groups = Array.new
+      if @groups = @cruise.Group
+         @groups = @groups.split(',')
+      end
+      for group in @groups
+         if group =~ /\w/
             cruises = reduce_specifics(Cruise.find(:all,:conditions => ["`Group` regexp '#{group}'"]))
             if @cruise_groups
-              @cruise_groups << cruises
+               @cruise_groups << cruises
             else
-              @cruise_groups[0] = cruises
+               @cruise_groups[0] = cruises
             end
-          end
-        end
-        end
-        @pi_names = []
-	    # Regular expression for exctracting multiple names from Chief_Scientist
-	       if @cruise.Chief_Scientist
-	         @pi_names = @cruise.Chief_Scientist.scan( /([a-z]+)\/?\\?([a-z]*):?\/?([a-z]*)\/?\\?([a-z]*)/i)
-	         #Substitute name matches for links to the contact's page
-	         #if @pi_names.length > 1
-	         for group in @pi_names
-		          for name in group
-		 	           if pi_found = Contact.find(:first,:conditions => ["LastName = '#{name}'"])
-			              @cruise.Chief_Scientist.sub!(/(#{name})/,"<a href=\'contact?contact=#{name}\'>#{name}</a>")
-			           end
-		          end
-	         end # for group in @pi_names
-         end # if @cruise.Chief_Scientist
-         @dir = Document.find_by_ExpoCode(@cruise.ExpoCode, :conditions => {:FileType => 'Directory'})
-         @cruise_files = Document.find_all_by_ExpoCode(@expo)
-         for cruise_file in @cruise_files
-           if cruise_file.Preliminary == 1
-             @preliminary = "These data are preliminary (See <a href=\"http://cchdo.ucsd.edu/data_history?ExpoCode=#{@expo}\">Data History</a>)"
-           end
          end
-         @file_result = Hash.new(0);
-         #@file_result = Hash.new{|@file_result,key| @file_result[key]={}}
-         if @dir
-            @files = @dir.Files.split(/\s/)
-            trash,path = @dir.FileName.split(/data/)
-            if @files
-               for file in @files
-                  if file
-                     if(file =~ /\*$/)
-                        file.chop!
-                     end
-                     case file
-                        when /su.txt$/ then @file_result['woce_sum'] = "/data#{path}/#{file}"
-                        when /ct.zip/  then @file_result['woce_ctd'] = "/data#{path}/#{file}"
-                        when /hy.txt/  then @file_result['woce_bot'] = "/data#{path}/#{file}"
-                        when /lv_hy1.csv/  then @file_result['exchange_large_volume'] = "/data#{path}/#{file}"
-                        when /lv.txt/  then @file_result['large_volume'] = "/data#{path}/#{file}"
-                        when /lvs.txt/  then @file_result['large_volume'] = "/data#{path}/#{file}"
-                        when /^(?!.*(lv|tm)_).*hy1.csv/ then @file_result['exchange_bot'] = "/data#{path}/#{file}"
-                        when /ct1.zip/ then @file_result['exchange_ctd'] = "/data#{path}/#{file}"
-                        when /ctd.zip/ then @file_result['netcdf_ctd'] = "/data#{path}/#{file}"
-                        when /hyd.zip/ then @file_result['netcdf_bot'] = "/data#{path}/#{file}"
-                        when /do.txt/  then @file_result['text_doc'] = "/data#{path}/#{file}"
-                        when /do.pdf/  then @file_result['pdf_doc'] = "/data#{path}/#{file}"
-                        when /.gif/    then @file_result['big_pic'] = "/data#{path}/#{file}"
-                        when /.jpg/    then @file_result['small_pic'] = "/data#{path}/#{file}"
-                        when /tm_hy1.csv/    then @file_result['trace_metal'] = "/data#{path}/#{file}"
-                     end # case file
-                  end # if file
-                  @lfile = file
-               end # for file in @files
-            end # if @files
-         end # if (@dir)
+      end
 
-         @queue_files = QueueFile.all(:conditions => {:ExpoCode => @expo, :Merged => false})
-         @merged_queue_files = QueueFile.all(:conditions => {:ExpoCode => @expo, :Merged => true}, :order => ['DateMerged DESC, DateRecieved DESC'])
+      convert_chisci_to_links(@cruise)
 
-         @support_files = SupportFile.find(:all, :conditions => ["`ExpoCode` = '#{@expo}'"])
-         if @expo
-             sort_hist = params[:sort_history]
-             if sort_hist == "person"
-                 sort_column = 'LastName'
-             elsif sort_hist == "action"
-                 sort_column = 'Action'
-             elsif sort_hist == "summary"
-                 sort_column = 'Summary'
-             elsif sort_hist == "data_type"
-                 sort_column = 'Data_Type'
-             else
-                 sort_column = 'Date_Entered DESC'
-             end
-             @events = Event.find(:all, :conditions=>["ExpoCode=?", @expo], :order => [sort_column])
-             @cruise = reduce_specifics(Cruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"]))
-         end
-         if params[:Note] and params[:Entry]
-           @note = params[:Note]
-           @entry = params[:Entry]
-         else
-          @note = nil
-        end
-         if (@note)
-            @note_entry = Event.find_by_ID(@entry)
-            @note_entry[:Note].gsub!(/[\n\r\f]/,"<br>")
-            @note_entry[:Note].gsub!(/[\t]/,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-         end
-      end # if @cruise  // If we matched the supplied expocode to a row in the cruises table
-    end
+      @dir = Document.find_by_ExpoCode_and_FileType(@cruise.ExpoCode, 'Directory')
+      @file_result = get_files_from_dir(@dir)
+      @preliminary = preliminary_message(@cruise)
+
+      @queue_files = QueueFile.all(
+        :conditions => {:ExpoCode => @expo, :Merged => false})
+      @merged_queue_files = QueueFile.all(
+        :conditions => {:ExpoCode => @expo, :Merged => true},
+        :order => ['DateMerged DESC, DateRecieved DESC'])
+      @support_files = SupportFile.find(
+        :all, :conditions => {:ExpoCode => @expo})
+
+      sort_hist = params[:sort_history]
+      if sort_hist == "person"
+          sort_column = 'LastName'
+      elsif sort_hist == "action"
+          sort_column = 'Action'
+      elsif sort_hist == "summary"
+          sort_column = 'Summary'
+      elsif sort_hist == "data_type"
+          sort_column = 'Data_Type'
+      else
+          sort_column = 'Date_Entered DESC'
+      end
+      @events = Event.find(
+        :all, :conditions => {:ExpoCode => @expo}, :order => [sort_column])
+
+      if params[:Note] and params[:Entry]
+         @note = params[:Note]
+         @entry = params[:Entry]
+
+         @note_entry = Event.find_by_ID(@entry)
+         @note_entry[:Note].gsub!(/[\n\r\f]/,"<br>")
+         @note_entry[:Note].gsub!(/[\t]/,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+      else
+         @note = nil
+      end
    end
-   
+
+   # deprecated search functionality?
    def list_cruises
       @param_list = Hash.new{|h,k| h[k]={}}
 
@@ -203,30 +144,29 @@ class DataAccessController < ApplicationController
       @t = ""
       @query_mem = ""
       @parameters.each_pair{ |key,value| 
-                              
-                              unless key == 'expanded'
-                                @query_mem << "#{key}=#{value}&"
-                              end
-                              if(key != "commit" and
-                                 key != "YEARSTART" and
-                                 key != "MONTHSTART" and
-                                 key != "YEAREND" and
-                                 key != "MONTHEND" and
-                                 key != "post" and
-                                 key != "action" and
-                                 key != "controller" and
-                                 key != "expanded" and
-                                 key !~ /Type/ and
-                                 key != "Sort" and
-                                 value =~ /\w/
-                                 )
-                                    if(@search_expression)
-                                       @search_expression << " AND #{key} REGEXP \"#{value}\""
-                                    else
-                                       @search_expression = "#{key} REGEXP \"#{value}\""
-                                    end
-                              end
-                           }
+          unless key == 'expanded'
+              @query_mem << "#{key}=#{value}&"
+          end
+          if(key != "commit" and
+             key != "YEARSTART" and
+             key != "MONTHSTART" and
+             key != "YEAREND" and
+             key != "MONTHEND" and
+             key != "post" and
+             key != "action" and
+             key != "controller" and
+             key != "expanded" and
+             key !~ /Type/ and
+             key != "Sort" and
+             value =~ /\w/
+            )
+              if(@search_expression)
+                  @search_expression << " AND #{key} REGEXP \"#{value}\""
+              else
+                  @search_expression = "#{key} REGEXP \"#{value}\""
+              end
+          end
+      }
       @query_mem.gsub!(/\s/,'+')
       @expanded_link = "data_access/list_cruises?#{@query_mem}"
       @condensed_link = "data_access/list_cruises?#{@query_mem}"
@@ -257,64 +197,18 @@ class DataAccessController < ApplicationController
          @cruise_objects = Array.new
          @cruises.each { |e| @cruise_objects << reduce_specifics(Cruise.find(e.id)) }
          @file_hash = Hash.new{|@file_hash,key| @file_hash[key]={}}
-      @table_list = Hash.new{|@table_list,key| @table_list[key]={}}
-               
-               for result in @cruises
-                  @text = result.ExpoCode
-                  if result.Chief_Scientist
-                     # Regular expression for extracting multiple names from Chief_Scientist
-                     @pi_names = result.Chief_Scientist.scan(/([a-z]+)\/?\\?([a-z]*):?\/?([a-z]*)\/?\\?([a-z]*)/i)
-                     # Substitute name matches for links to the contact's page
-                     #if @pi_names.length > 1
-                     for group in @pi_names
-                        for name in group
 
-                           # This says Dickson, MAFF, , . I don't know what's up with the extra empty string entries.
-                           RAILS_DEFAULT_LOGGER.warn("#{name} is in #{group} in #{@pi_names}")
+         @table_list = Hash.new{|@table_list,key| @table_list[key]={}}
 
-                           if pi_found = Contact.find(:first, :conditions => ["LastName = '#{name}'"])
-                              result.Chief_Scientist.sub!(/(#{name})/,"<a href=\'contact?contact=#{name}\'>#{name}</a>")
-                           end
-                        end
-                     end
-                  end
-                  @dir = Document.find(:first ,:conditions => ["ExpoCode = '#{result.ExpoCode}' and FileType='Directory'"])
-                  @files_for_expocode = get_files_from_dir(@dir) 
-  # This code needs to be optimized #############
-                  if(@dir)
-                  @cruise_files = Document.find(:all, :conditions => ["ExpoCode = '#{result.ExpoCode}'"])
-                  @table_list[result.ExpoCode]["Preliminary"] = ""
-                   for cruise_file in @cruise_files
-                     if cruise_file.Preliminary == 1
-                       @files_for_expocode["Preliminary"] = "Preliminary (See <a href=\"http://cchdo.ucsd.edu/data_history?ExpoCode=#{result.ExpoCode}\">data history</a>)"
-                     end
-                   end
-                  end
-  ###############################################
-                  @cruise_parameters = BottleDB.find(:first, :conditions => ["ExpoCode = '#{result.ExpoCode}'"])
-                   @param_list[result.ExpoCode]['stations'] = 0
-                   @param_list[result.ExpoCode]['parameters']= ""
-                   param_list = ""
-                   if @cruise_parameters
-                      @param_list[result.ExpoCode]['stations'] = @cruise_parameters.Stations
-                      if @cruise_parameters.Parameters =~ /\w/
-                        param_list = @cruise_parameters.Parameters
-                        param_persistance = @cruise_parameters.Parameter_Persistance
-
-                        @param_list[result.ExpoCode]['parameters'] = param_list#.split(',')
-                        param_array = param_list.split(',')
-                        persistance_array = param_persistance.split(',')
-                        for ctr in 1..param_array.length
-                          @param_list[result.ExpoCode]["#{param_array[ctr]}"]  = persistance_array[ctr]
-                        end
-                      end
-                   end # if cruise_parameters
-                  @table_list[result.ExpoCode] = @files_for_expocode
-               end #for result in @best_result
+         for result in @cruises
+            convert_chisci_to_links(result)
+            expo = result.ExpoCode
+            @table_list[expo], @param_list[expo] = load_files_and_params(result)
+         end
       end #if(@search_expression)
       render 'search/index',:layout => true
    end
-   
+
    def list_files
       @paramerters = params
       if params[:FileType] =~ /\w/
@@ -335,7 +229,7 @@ class DataAccessController < ApplicationController
             @files = Document.find_by_sql("SELECT distinct documents.FileName,documents.ExpoCode,documents.LastModified,cruises.Line,cruises.Ship_Name,cruises.Country,cruises.Begin_Date,cruises.EndDate from cruises,documents where #{@file_expression}")
             file_path = Array.new
             for file in @files
-              
+
                unless @expos.include? file.ExpoCode
                  @expos << file.ExpoCode
                  @changed_sets[file.ExpoCode]["Files"] = String.new
@@ -410,12 +304,10 @@ class DataAccessController < ApplicationController
            end
            @expo_dates.sort!{|a,b| date_sort(a.date,b.date)}
          end
-           
+
        end #if params[:FileType] =~ /\w/
    end
-   
-   
-   
+
     def history
         @expo = params[:ExpoCode]
         @note = params[:Note]
@@ -437,16 +329,15 @@ class DataAccessController < ApplicationController
            @note_entry = Event.find(:first,:conditions=>["ID=#{@entry}"])
            @note_entry[:Note].gsub!(/[\n\r\f]/,"<br>")
            @note_entry[:Note].gsub!(/[\t]/,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-        end      
+        end
      end
-    
+
      def note
        @entry = params[:Entry]
        @note_entry = Event.find(:first,:conditions=>["ID=#{@entry}"])
        render :partial => "note"
      end
-   
-   
+
    def date_sort(a,b)
      if a < b
        ret_val = -1
@@ -457,12 +348,10 @@ class DataAccessController < ApplicationController
      end
      return(ret_val)
    end
-   
-   
+
    def advanced_search
-      
    end
-   
+
    def pis_for_lookup
    	@pis = Cruise.find(:all,:select => ["DISTINCT Chief_Scientist"])
    	headers['content-type'] = 'text/javascript'
