@@ -88,6 +88,6 @@ rescue
                      "Needed for file uploading.")
 end
 begin
-  FileUtils.chown(nil, '_www', passengeruploadbufferdir)
+  FileUtils.chown(nil, 'www-data', passengeruploadbufferdir)
 rescue Errno::EPERM
 end

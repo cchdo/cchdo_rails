@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
             if user = User.authenticate(params[:username], params[:password])
                 session[:user] = user.id
                 session[:username] = params[:username]
-                intended_path = session[:intended_path] or '/'
+                intended_path = session[:intended_path] || '/'
                 redirect_to intended_path
             else
                 flash[:notice] = "Invalid user name or password"
