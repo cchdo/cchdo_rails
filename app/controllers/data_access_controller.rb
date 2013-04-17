@@ -79,6 +79,8 @@ class DataAccessController < ApplicationController
       @cruise_groups = Array.new
       if @groups = @cruise.Group
          @groups = @groups.split(',')
+      else
+         @groups = []
       end
       for group in @groups
          if group =~ /\w/

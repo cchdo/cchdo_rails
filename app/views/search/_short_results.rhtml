@@ -1,37 +1,40 @@
-<% cruise_ctr = 0 %>
 <table class="status_table">
   <% @cruises.each_with_index do |cruise, index| %>
-    <% if cruise_ctr % 20 == 0 %>
+    <% if index % 20 == 0 %>
       <tr>
-      <th width="10%"><a href="/<%= @query_link %>&Sort=Line">Line</a></th>
-      <th width="15%"><a href="/<%= @query_link %>&Sort=ExpoCode">ExpoCode</a></th>
-      <th width="10%"><a href="/<%= @query_link %>&Sort=Ship_Name">Ship</a></th>
-      <th width="25%"><a href="/<%= @query_link %>&Sort=Begin_Date">Cruise Dates</a></th>
-      <th width="20%"><a href="/<%= @query_link %>&Sort=Chief_Scientist">Chief Scientist</a></th>
-      <th width="10%"><a href="/<%= @query_link %>&Sort=Country">Country</a></th>
+          <th width="10%"><%= link_to('Line', params.merge(:Sort => "Line")) %></th>
+          <th width="15%"><%= link_to('ExpoCode', params.merge(:Sort => "ExpoCode")) %></th>
+          <th width="10%"><%= link_to('Ship', params.merge(:Sort => "Ship_Name")) %></th>
+          <th width="25%"><%= link_to('Cruise Dates', params.merge(:Sort => "Begin_Date")) %></th>
+          <th width="20%"><%= link_to('Chief Scientist', params.merge(:Sort => "Chief_Scientist")) %></th>
+          <th width="10%"><%= link_to('Country', params.merge(:Sort => "Country")) %></th>
       </tr>
     <% end %>
-    <tr valign="top"<%= cycle('class="highlighted_cell"', '')-%>>
-      <td><a href="/cruise/<%= cruise.ExpoCode %>"><%= cruise.Line %></a>
-        <% if @table_list[cruise.ExpoCode]['Preliminary'] =~ /\w/ %>
-          <div style="color:#FF0900; font-size:0.8em; font-weight:bold;"><%= @table_list[cruise.ExpoCode]["Preliminary"] %></div>
-        <% else %>
-          <br />
+    <%- cruise_table = @table_list[cruise.ExpoCode] %>
+    <%- hlclass = cycle('class="highlighted_cell"', '') %>
+    <tr <%= hlclass %>>
+      <td class="cruise_title">
+        <%- if cruise.Line %>
+          <%= link_to(cruise.Line, cruise_path(cruise.ExpoCode), :class => "woce-line") %>
+        <%- end %>
+      </td>
+      <td class="cruise_title">
+        <%= link_to(cruise.ExpoCode, cruise_path(cruise.ExpoCode), :class => "expocode") %>
+        <% if cruise_table['Preliminary'] %>
+          <div class="status-preliminary"><%= cruise_table["Preliminary"] %></div>
         <% end %>
       </td>
-      <td><i><%= link_to(cruise.ExpoCode, cruise_path(expocode=cruise.ExpoCode)) %></i></td>
       <td><%= cruise.Ship_Name %></td>
       <td>
         <%= pretty_dates(cruise, '%Y-%m-%d', ' to ') %>
       </td>
       <td>
-        <% @cruises[index].contacts.each_with_index do |contact,cnt| %>
+        <% cruise.contacts.each_with_index do |contact,cnt| %>
           <% if cnt > 0 %>, <% end %>
           <a href="/contact?id=<%= contact.id %>"><%= contact.FirstName %>&nbsp;<%= contact.LastName %> </a> 
         <% end %>
       </td>
       <td><%= cruise.Country %></td>
     </tr>
-    <% cruise_ctr += 1 %>
   <% end %>
 </table>

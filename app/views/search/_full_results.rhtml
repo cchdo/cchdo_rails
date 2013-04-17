@@ -2,8 +2,16 @@
   <% @cruises.each_with_index do |cruise, index| %>
     <% if index % 10 == 0 %>
       <tr>
-        <th class="metadata-cruise">Line/ExpoCode/Dates</th>
-        <th class="metadata-how">PI/Ship/Country</th>
+        <th class="metadata-cruise">
+          <%= link_to('Line', params.merge(:Sort => "Line")) %>/
+          <%= link_to('ExpoCode', params.merge(:Sort => "ExpoCode")) %>/
+          <%= link_to('Dates', params.merge(:Sort => "Begin_Date")) %>
+        </th>
+        <th class="metadata-how">
+          <%= link_to('PI', params.merge(:Sort => "Chief_Scientist")) %>/
+          <%= link_to('Ship', params.merge(:Sort => "Ship_Name")) %>/
+          <%= link_to('Country', params.merge(:Sort => "Country")) %>
+        </th>
         <th class="data-formats">Files</th>
         <th></th>
       </tr>
@@ -13,22 +21,30 @@
     <%- hlclass = cycle('class="highlighted_cell"', '') %>
     <tr <%= hlclass -%>>
       <td class="metadata-cruise">
-        <span class="cruise_title"><a href="/cruise/<%= cruise.ExpoCode %>"><%= cruise.Line %> Cruise Page</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/cruise/<%= cruise.ExpoCode %>#history">Data History</a></span>
+        <span class="cruise_title">
+          <%= link_to("#{cruise.Line}", cruise_path(cruise.ExpoCode), :class => "woce-line") %>
+          <%= link_to("#{cruise.ExpoCode}", cruise_path(cruise.ExpoCode), :class => "expocode") %>
+        </span>
+
         <% if cruise_table["Preliminary"] %>
           <div class="status-preliminary"><%= cruise_table['Preliminary'] %></div>
-        <% else %>
-          <br />
         <% end %>
-        <i><%= link_to(cruise.ExpoCode, cruise_path(expocode=cruise.ExpoCode)) %></i><br>
+
         <%= pretty_dates(cruise, '%Y-%m-%d', ' to ') %>
+
+        <div class="links">
+          <%= button_to("Cruise Page", cruise_path(cruise.ExpoCode), :method => :get) %>
+          <%= button_to("Data History", cruise_path(cruise.ExpoCode, :anchor => 'history'), :method => :get) %>
+        </div>
       </td>
       <td class="metadata-how">
-            <% @cruises[index].contacts.each_with_index do |contact,cnt| %>
-              <% if cnt > 0 %>, <% end %>
-              <a href="/contact?id=<%= contact.id %>"><%= contact.FirstName %>&nbsp;<%= contact.LastName %> </a> 
-            <% end %><br />
-            <%= cruise.Ship_Name %><br />
-            <%= cruise.Country %>
+        <p>
+        <% cruise.contacts.each_with_index do |contact,cnt| %>
+          <% if cnt > 0 %>, <% end %>
+          <a href="/contact?id=<%= contact.id %>"><%= contact.FirstName %>&nbsp;<%= contact.LastName %> </a> 
+        <% end %></p>
+        <p><%= cruise.Ship_Name %></p>
+        <p><%= cruise.Country %></p>
       </td>
       <td class="data-formats" rowspan="2">
         <%= show_files(cruise, $data_format_sections, cruise_table, short=true) %>

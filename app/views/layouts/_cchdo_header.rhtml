@@ -3,7 +3,7 @@
     <%= link_to(image_tag('logos/CCHDO_logo.png'), '/') -%>
   </div>
   <div id='cchdo_search' class="masthead-block">
-    <% form_tag '/search' do -%>
+    <% form_tag '/search', :method => "GET" do -%>
       <%= text_field_tag 'query', params[:query], :class=>'search_box' -%>
       <%= image_submit_tag 'buttons/button_search.png', :class=>'search_button', :alt=>'Search Data' -%>
     <% end -%>
