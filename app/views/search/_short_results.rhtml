@@ -1,14 +1,14 @@
-<table class="status_table">
+<table class="status_table condensed">
   <% @cruises.each_with_index do |cruise, index| %>
     <% if index % 20 == 0 %>
       <tr>
           <th width="10%"><%= link_to('Line', params.merge(:Sort => "Line")) %></th>
           <th width="15%"><%= link_to('ExpoCode', params.merge(:Sort => "ExpoCode")) %></th>
           <th width="10%"><%= link_to('Ship', params.merge(:Sort => "Ship_Name")) %></th>
-          <th width="25%"><%= link_to('Cruise Dates', params.merge(:Sort => "Begin_Date")) %></th>
-          <th width="20%"><%= link_to('Chief Scientist', params.merge(:Sort => "Chief_Scientist")) %></th>
+          <th width="20%"><%= link_to('Cruise Dates', params.merge(:Sort => "Begin_Date")) %></th>
+          <th width="30%"><%= link_to('Chief Scientist', params.merge(:Sort => "Chief_Scientist")) %></th>
           <th width="10%"><%= link_to('Country', params.merge(:Sort => "Country")) %></th>
-          <th></th>
+          <th class="expander"><%= link_to('Expand', params.merge(:expanded => true), :title => "Detailed results") %></th>
       </tr>
     <% end %>
     <%- cruise_table = @table_list[cruise.ExpoCode] %>

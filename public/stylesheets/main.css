@@ -207,7 +207,7 @@ td.map img {
 }
 .status_table a:hover, .hovered_link {
   color:#a8a8a8;
-  text-decoration:underline !important;
+  text-decoration: underline;
 }
 .status_table td { 
   padding: 5px;
@@ -216,6 +216,33 @@ td.map img {
 }
 .status_table tr {
   vertical-align: top;
+}
+.status_table th.expander {
+  width: 2em;
+  font-size: 1.2em;
+  font-weight: normal;
+  background-color: #B1CDCC;
+  vertical-align: middle;
+  padding: 0;
+}
+.status_table th.expander a {
+  line-height: 1.2em;
+  display: block;
+  text-align: center;
+  padding: 0 0.5em;
+}
+.status_table th.expander a:hover {
+  text-decoration: none;
+  color: #415D5C;
+}
+.status_table th.expander:hover {
+  background-color: #C1DDDC;
+}
+.status_table th.expander:active {
+  background-color: #A1BDBC;
+}
+.status_table th.expander:active a {
+  color: #EEEEEE;
 }
 .heading_table {
   color:#515151;
@@ -240,6 +267,10 @@ td.map img {
   font-size: 1.2em;
   font-weight: normal;
   color: #89773F;
+  position: absolute;
+}
+.expanded .cruise_title .expocode {
+  left: 5.57em;
 }
 .metadata-cruise .links {
   text-transform: uppercase;
@@ -372,7 +403,7 @@ td.map img {
   position: relative;
   /*padding-top: 84px; /* Push the menu down */
   height: 125px;
-  z-index: 1;
+  z-index: 1000;
 }
 #bannerA, #bannerB {
   position: absolute;

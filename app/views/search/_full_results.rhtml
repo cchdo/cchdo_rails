@@ -1,4 +1,4 @@
-<table class="status_table">
+<table class="status_table expanded">
   <% @cruises.each_with_index do |cruise, index| %>
     <% if index % 10 == 0 %>
       <tr>
@@ -13,7 +13,7 @@
           <%= link_to('Country', params.merge(:Sort => "Country")) %>
         </th>
         <th class="data-formats">Files</th>
-        <th></th>
+        <th class="expander"><%= link_to('Condense', params.merge(:expanded => false), :title => "Short results") %></th>
       </tr>
     <% end %>
     <%- cruise_table = @table_list[cruise.ExpoCode] %>
