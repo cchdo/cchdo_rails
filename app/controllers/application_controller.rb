@@ -287,8 +287,13 @@ class ApplicationController < ActionController::Base
     if params[:Sort]
        @sort_by = params[:Sort]
        if @sort_check.include?(@sort_by)
-          @sort_statement = "ORDER BY cruises.#{@sort_by}"
-          @query_with_sort_link << "&Sort=#{@sort_by}"
+           if params[:Sort_dir] and ['ASC', 'DESC'].include?(params[:Sort_dir])
+               dir = params[:Sort_dir]
+           else
+               dir = 'ASC'
+           end
+           @sort_statement = "ORDER BY cruises.#{@sort_by} #{dir}"
+           @query_with_sort_link << "&Sort=#{@sort_by}&Sort_dir=#{dir}"
        end
     end
     # Initializations ##

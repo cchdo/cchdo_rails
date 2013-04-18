@@ -35,8 +35,10 @@ jQuery(function($) {
   var datacart_icons = $('.datacart-icon:not(.datacart-cart)');
   datacart_icons.live('click', function() {
     var icon = $(this);
-    console.log(icon);
     var link = icon.closest('.datacart-link');
+    if (link.hasClass('datacart-results')) {
+      return true;
+    }
     var parser = document.createElement("A");
     parser.href = link.attr('href');
     var adder;

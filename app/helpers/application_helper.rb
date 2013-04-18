@@ -133,11 +133,48 @@ module ApplicationHelper
             })
     end
 
-    def datacart_link_cruise(cruise)
-        if @datacart.cruise_files_in_cart(cruise) > 0
-            link = datacart_link_cruise_action('Remove', cruise)
+    def datacart_link_cruises(cruises)
+        nfiles_in_cart_all = 0
+        nfiles_all = 0
+        for cruise in cruises
+            nfiles_in_cart, nfiles = @datacart.cruise_files_in_cart(cruise)
+            nfiles_in_cart_all += nfiles_in_cart
+            nfiles_all += nfiles
+        end
+        if nfiles_in_cart_all > 0
+            link = datacart_link('Remove all data in result',
+                {
+                    :controller => 'datacart',
+                    :action => 'remove_cruises',
+                    :ids => cruises.map {|x| x.id}
+                }, {
+                    :class => 'datacart-link datacart-results datacart-remove',
+                    :title => 'Remove all result data from data cart',
+                })
+        elsif nfiles_all > 0
+            link = datacart_link('Add all data in result',
+                {
+                    :controller => 'datacart',
+                    :action => 'add_cruises',
+                    :ids => cruises.map {|x| x.id}
+                }, {
+                    :class => 'datacart-link datacart-results datacart-add',
+                    :title => 'Add all result data to data cart',
+                })
         else
+            link = ''
+        end
+        content_tag(:div, link, :class => "datacart-cruises-links")
+    end
+
+    def datacart_link_cruise(cruise)
+        nfiles_in_cart, nfiles = @datacart.cruise_files_in_cart(cruise)
+        if nfiles_in_cart > 0
+            link = datacart_link_cruise_action('Remove', cruise)
+        elsif nfiles > 0
             link = datacart_link_cruise_action('Add', cruise)
+        else
+            link = ''
         end
         content_tag(:div, link, :class => "datacart-cruise-links")
     end

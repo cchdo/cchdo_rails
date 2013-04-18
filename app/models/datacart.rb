@@ -21,6 +21,6 @@ class Datacart < Set
             end
         end
 
-        file_count
+        [file_count, mapped_files.length]
     end
 end

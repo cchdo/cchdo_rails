@@ -2,12 +2,12 @@
   <% @cruises.each_with_index do |cruise, index| %>
     <% if index % 20 == 0 %>
       <tr>
-          <th width="10%"><%= link_to('Line', params.merge(:Sort => "Line")) %></th>
-          <th width="15%"><%= link_to('ExpoCode', params.merge(:Sort => "ExpoCode")) %></th>
-          <th width="10%"><%= link_to('Ship', params.merge(:Sort => "Ship_Name")) %></th>
-          <th width="20%"><%= link_to('Cruise Dates', params.merge(:Sort => "Begin_Date")) %></th>
-          <th width="30%"><%= link_to('Chief Scientist', params.merge(:Sort => "Chief_Scientist")) %></th>
-          <th width="10%"><%= link_to('Country', params.merge(:Sort => "Country")) %></th>
+          <th width="10%"><%= sort_on('Line') %></th>
+          <th width="15%"><%= sort_on('ExpoCode') %></th>
+          <th width="10%"><%= sort_on('Ship', "Ship_Name") %></th>
+          <th width="20%"><%= sort_on('Cruise Dates', "Begin_Date") %></th>
+          <th width="30%"><%= sort_on('Chief Scientist', "Chief_Scientist") %></th>
+          <th width="10%"><%= sort_on('Country') %></th>
           <th class="expander"><%= link_to('Expand', params.merge(:expanded => true), :title => "Detailed results") %></th>
       </tr>
     <% end %>

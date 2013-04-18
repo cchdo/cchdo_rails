@@ -31,8 +31,7 @@ class DatacartController < ApplicationController
         redirect_to datacart_path
     end
 
-    def add_cruise
-        cruise_id = params[:cruise_id]
+    def _add_cruise(cruise_id)
         cruise = Cruise.find_by_id(cruise_id)
         if not cruise
             flash[:notice] = 'Error adding cruise dataset to data cart.'
@@ -53,6 +52,13 @@ class DatacartController < ApplicationController
 
         after_count = @datacart.length
         count_diff = after_count - before_count
+        [file_count, count_diff]
+    end
+
+    def add_cruise
+        cruise_id = params[:cruise_id]
+
+        file_count, count_diff = _add_cruise(cruise_id)
 
         if request.xhr?
             render :json => {:cart_count => @datacart.length,
@@ -61,6 +67,33 @@ class DatacartController < ApplicationController
         else
             message = "Added #{pluralize(count_diff, 'file')} to datacart"
             present_count = file_count - count_diff
+            if present_count > 0
+                message += " (#{present_count} already present)."
+            else
+                message += "."
+            end
+            flash[:notice] = message
+            redirect_to :back
+        end
+    end
+
+    def add_cruises
+        cruise_ids = params[:ids]
+        file_count_all = 0
+        count_diff_all = 0
+        for id in cruise_ids
+            file_count, count_diff = _add_cruise(id)
+            file_count_all += file_count
+            count_diff_all += count_diff
+        end
+
+        if request.xhr?# {{{
+            render :json => {:cart_count => @datacart.length,
+                             :diff => count_diff_all},
+                   :status => :ok
+        else
+            message = "Added #{pluralize(count_diff_all, 'file')} to datacart"
+            present_count = file_count_all - count_diff_all
             if present_count > 0
                 message += " (#{present_count} already present)."
             else
@@ -88,10 +121,9 @@ class DatacartController < ApplicationController
         end
     rescue ActionController::RedirectBackError
         redirect_to datacart_path
-    end
+    end# }}}
 
-    def remove_cruise
-        cruise_id = params[:cruise_id]
+    def _remove_cruise(cruise_id)
         cruise = Cruise.find_by_id(cruise_id)
         if not cruise
             flash[:notice] = 'Error removing cruise dataset from data cart.'
@@ -112,6 +144,13 @@ class DatacartController < ApplicationController
 
         after_count = @datacart.length
         count_diff = before_count - after_count
+        [file_count, count_diff]
+    end
+
+    def remove_cruise
+        cruise_id = params[:cruise_id]
+
+        file_count, count_diff = _remove_cruise(cruise_id)
 
         if request.xhr?
             render :json => {:cart_count => @datacart.length,
@@ -120,6 +159,33 @@ class DatacartController < ApplicationController
         else
             message = "Removed #{pluralize(count_diff, 'file')} from data cart"
             present_count = file_count - count_diff
+            if present_count > 0
+                message += " (#{present_count} not present)."
+            else
+                message += "."
+            end
+            flash[:notice] = message
+            redirect_to :back
+        end
+    end
+
+    def remove_cruises
+        cruise_ids = params[:ids]
+        file_count_all = 0
+        count_diff_all = 0
+        for id in cruise_ids
+            file_count, count_diff = _remove_cruise(id)
+            file_count_all += file_count
+            count_diff_all += count_diff
+        end
+
+        if request.xhr?
+            render :json => {:cart_count => @datacart.length,
+                             :diff => count_diff_all},
+                   :status => :ok
+        else
+            message = "Removed #{pluralize(count_diff_all, 'file')} from datacart"
+            present_count = file_count_all - count_diff_all
             if present_count > 0
                 message += " (#{present_count} not present)."
             else

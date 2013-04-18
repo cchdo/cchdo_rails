@@ -834,6 +834,8 @@ table.table_step2 {
 .lt-ie9 .datacart-add-cruise .datacart-icon { background-position: 0 60px; }
 .lt-ie9 .datacart-remove-cruise .datacart-icon { background-position: 0 0px; }
 
+#search_results .tools { padding: 0.5em 0.2em; position: relative; }
+#search_results .tools .datacart-cruises-links { position: relative; right: 0; }
 #search_results td.metadata-cruise { width: 30%; }
 #search_results td.metadata-how { width: 20%; }
 #search_results td.data-formats { width: 40%; position: relative; }

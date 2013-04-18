@@ -2,6 +2,9 @@
   <% if @cruises.blank? -%>
     <h3>No results for <%= @query %></h3>
   <% else -%>
+    <div class="tools">
+      <%= datacart_link_cruises(@cruises) %>
+    </div>
     <% if params[:expanded] -%>
       <%= render :partial => 'search/full_results' -%>
     <% else %>
