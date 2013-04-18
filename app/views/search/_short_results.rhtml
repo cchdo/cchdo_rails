@@ -8,6 +8,7 @@
           <th width="25%"><%= link_to('Cruise Dates', params.merge(:Sort => "Begin_Date")) %></th>
           <th width="20%"><%= link_to('Chief Scientist', params.merge(:Sort => "Chief_Scientist")) %></th>
           <th width="10%"><%= link_to('Country', params.merge(:Sort => "Country")) %></th>
+          <th></th>
       </tr>
     <% end %>
     <%- cruise_table = @table_list[cruise.ExpoCode] %>
@@ -35,6 +36,10 @@
         <% end %>
       </td>
       <td><%= cruise.Country %></td>
+      <td>
+        <%= bulk_link_cruise('Add', cruise) %>
+        <%= bulk_link_cruise('Remove', cruise) %>
+      </td>
     </tr>
   <% end %>
 </table>
