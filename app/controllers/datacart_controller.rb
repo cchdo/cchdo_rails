@@ -42,7 +42,7 @@ class DatacartController < ApplicationController
         before_count = @datacart.length
 
         dir = cruise.directory
-        mapped_files = get_files_from_cruise(cruise)
+        mapped_files = cruise.get_files()
         file_count = 0
         for key, file in mapped_files
             next if key =~ /_pic$/
@@ -55,7 +55,9 @@ class DatacartController < ApplicationController
         count_diff = after_count - before_count
 
         if request.xhr?
-            render :json => {:cart_count => @datacart.length}, :status => :ok
+            render :json => {:cart_count => @datacart.length,
+                             :diff => count_diff},
+                   :status => :ok
         else
             message = "Added #{pluralize(count_diff, 'file')} to datacart"
             present_count = file_count - count_diff
@@ -99,7 +101,7 @@ class DatacartController < ApplicationController
         before_count = @datacart.length
 
         dir = cruise.directory
-        mapped_files = get_files_from_cruise(cruise)
+        mapped_files = cruise.get_files()
         file_count = 0
         for key, file in mapped_files
             next if key =~ /_pic$/
@@ -112,10 +114,11 @@ class DatacartController < ApplicationController
         count_diff = before_count - after_count
 
         if request.xhr?
-            render :json => {:cart_count => @datacart.length}, :status => :ok
+            render :json => {:cart_count => @datacart.length,
+                             :diff => count_diff},
+                   :status => :ok
         else
-            message = "Removed #{pluralize(count_diff, 'file')} from " + \
-                             "data cart"
+            message = "Removed #{pluralize(count_diff, 'file')} from data cart"
             present_count = file_count - count_diff
             if present_count > 0
                 message += " (#{present_count} not present)."

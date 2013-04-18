@@ -1,4 +1,9 @@
 include Math 
+
+include ActionView::Helpers::UrlHelper
+include ActionView::Helpers::TagHelper
+include ApplicationHelper
+
 class MapSearchController < ApplicationController
   layout 'standard'
   $RADIUS_EARTH = 6371.01 #km
@@ -113,11 +118,12 @@ class MapSearchController < ApplicationController
       chief_scientists_to_links!(cruise.Chief_Scientist)
       #thumbnail_uri(cruise.ExpoCode)
       @info = {
-        :line => cruise.Line.strip,
-        :ship => cruise.Ship_Name.strip,
-        :country => cruise.Country.strip,
-        :pi => cruise.Chief_Scientist,
-        :date_begin => cruise.Begin_Date,
+        :line => (cruise.Line || '').strip,
+        :ship => (cruise.Ship_Name || '').strip,
+        :country => (cruise.Country || '').strip,
+        :pi => (cruise.Chief_Scientist || ''),
+        :date_begin => (cruise.Begin_Date || ''),
+        :data => datacart_link_cruise(cruise),
         #:date_end => cruise.EndDate,
         #:aliases => cruise.Alias,
         #:groups => cruise.Group

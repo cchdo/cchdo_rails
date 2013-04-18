@@ -17,8 +17,7 @@ class PagesController < ApplicationController
         info[:begin_date] = cruise.Begin_Date if cruise.Begin_Date
         info[:line] = cruise.Line if cruise.Line
         info[:ship] = cruise.Ship_Name if cruise.Ship_Name
-        dir = Document.find_by_ExpoCode_and_FileType(cruise.ExpoCode, 'Directory')
-        files = get_files_from_dir(dir)
+        files = cruise.get_files()
         if map = files['small_pic']
           info[:map] = map
         end

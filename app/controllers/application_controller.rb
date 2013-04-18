@@ -235,7 +235,7 @@ class ApplicationController < ActionController::Base
   end
 
     def load_files_and_params(cruise)
-        files_for_expocode = get_files_from_cruise(cruise)
+        files_for_expocode = cruise.get_files()
         files_for_expocode["Preliminary"] = preliminary_message(cruise)
 
         param_for_expocode = {
@@ -525,61 +525,6 @@ class ApplicationController < ActionController::Base
        end
      end
      return track_coords
-   end
-
-   def get_files_from_cruise(cruise)
-       if directory = cruise.directory
-           get_files_from_dir(directory)
-       else
-           {}
-       end
-   end
-
-   # This function returns a hash of short file name to file path
-   def get_files_from_dir(dir)
-       @file_result = Hash.new
-       unless dir
-           return @file_result
-       end
-
-       @files = dir.Files.split(/\s/)
-       trash, path = dir.FileName.split(/data/)
-       unless @files
-           return @file_result
-       end
-
-       for file in @files
-          unless file
-              continue
-          end
-          if file =~ /\*$/
-             file.chop!
-          end
-          key = case file
-              when /su.txt$/ then 'woce_sum'
-              when /ct.zip$/  then 'woce_ctd'
-              when /hy.txt$/  then 'woce_bot'
-              when /lv_hy1.csv$/ then 'exchange_large_volume'
-              when /lv.txt$/ then 'large_volume'
-              when /lvs.txt$/ then 'large_volume'
-              when /tm_hy1.csv$/ then 'trace_metal'
-              when /hy1.csv$/ then 'exchange_bot'
-              when /ct1.zip$/ then 'exchange_ctd'
-              when /ctd.zip$/ then 'netcdf_ctd'
-              when /hyd.zip$/ then 'netcdf_bot'
-              when /do.txt$/  then 'text_doc'
-              when /do.pdf$/  then 'pdf_doc'
-              when /.gif$/    then 'big_pic'
-              when /.jpg$/    then 'small_pic'
-              else nil
-          end
-          if key
-              @file_result[key] = "/data#{path}/#{file}"
-          end
-          @lfile = file
-       end
-
-       return @file_result
    end
 
    def switch_x_y_polygon(polygon)

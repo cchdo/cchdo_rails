@@ -36,9 +36,8 @@
         <% end %>
       </td>
       <td><%= cruise.Country %></td>
-      <td>
-        <%= datacart_link_cruise('Add', cruise) %>
-        <%= datacart_link_cruise('Remove', cruise) %>
+      <td class="datacart">
+        <%= datacart_link_cruise(cruise) %>
       </td>
     </tr>
   <% end %>

@@ -84,7 +84,7 @@ class DataAccessController < ApplicationController
       end
       for group in @groups
          if group =~ /\w/
-            cruises = reduce_specifics(Cruise.find(:all,:conditions => ["`Group` regexp '#{group}'"]))
+            cruises = reduce_specifics(Cruise.find(:all,:conditions => ["`Group` regexp ?", group]))
             if @cruise_groups
                @cruise_groups << cruises
             else
@@ -95,8 +95,7 @@ class DataAccessController < ApplicationController
 
       convert_chisci_to_links(@cruise)
 
-      @dir = Document.find_by_ExpoCode_and_FileType(@cruise.ExpoCode, 'Directory')
-      @file_result = get_files_from_dir(@dir)
+      @file_result = @cruise.get_files()
       @preliminary = preliminary_message(@cruise)
 
       @queue_files = QueueFile.all(

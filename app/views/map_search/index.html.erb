@@ -12,7 +12,9 @@
   </script>
   <%= javascript_include_tag 'map_search/Graticule',
                              'map_search/dragTool',
-                             'map_search/map_search' %>
+                             'map_search/map_search',
+                             'datacart'
+   %>
   <% if params[:autoload] -%><script type='text/javascript'>google.setOnLoadCallback(CM.load_with_submit);</script><% end -%>
 <% end -%>
 <noscript><h1 class='notice'><strong>JavaScript must be enabled in order for you to use Google Maps.</strong> It seems JavaScript is either disabled or not supported by your browser. To view Google Maps, enable JavaScript by changing your browser options, and then try again.</h1></noscript>

@@ -91,11 +91,11 @@ module ApplicationHelper
     def datacart_link_file(act, dir, basename)
         if act == 'Remove'
             action = 'remove'
-            classname = 'datacart-remove'
+            classname = 'datacart-link datacart-remove'
             title = 'Remove from data cart'
         elsif act == 'Add'
             action = 'add'
-            classname = 'datacart-add'
+            classname = 'datacart-link datacart-add'
             title = 'Add to data cart'
         end
 
@@ -111,14 +111,14 @@ module ApplicationHelper
             })
     end
 
-    def datacart_link_cruise(act, cruise)
+    def datacart_link_cruise_action(act, cruise)
         if act == 'Remove'
             action = 'remove_cruise'
-            classname = 'datacart-remove datacart-remove-cruise'
+            classname = 'datacart-link datacart-cruise datacart-remove'
             title = 'Remove all cruise data from data cart'
         elsif act == 'Add'
             action = 'add_cruise'
-            classname = 'datacart-add datacart-add-cruise'
+            classname = 'datacart-link datacart-cruise datacart-add'
             title = 'Add all cruise data to data cart'
         end
 
@@ -131,6 +131,15 @@ module ApplicationHelper
                 :class => classname,
                 :title => title
             })
+    end
+
+    def datacart_link_cruise(cruise)
+        if @datacart.cruise_files_in_cart(cruise) > 0
+            link = datacart_link_cruise_action('Remove', cruise)
+        else
+            link = datacart_link_cruise_action('Add', cruise)
+        end
+        content_tag(:div, link, :class => "datacart-cruise-links")
     end
 
     def display_subcategory(dir, expocode, header_level, section, files, short)
@@ -193,7 +202,8 @@ module ApplicationHelper
         expocode = cruise.ExpoCode
         result = ''
 
-        result += content_tag(:div, datacart_link_cruise('Add', cruise) + datacart_link_cruise('Remove', cruise), :class => "datacart-cruise")
+        result += datacart_link_cruise(cruise)
+        sec_result = ''
 
         for section in format_sections
             if section.has_subsections?
@@ -207,17 +217,17 @@ module ApplicationHelper
                 unless ulresult.empty?
                     ul_class = "sub-formats"
                     unless short
-                        result += content_tag(:h2, section.title)
+                        sec_result += content_tag(:h2, section.title)
                     else
                         ul_class += " short"
                     end
-                    result += content_tag(:ul, ulresult, :class => ul_class)
+                    sec_result += content_tag(:ul, ulresult, :class => ul_class)
                 end
             else
-                result += display_subcategory(directory, expocode, :h2, section, files, short)
+                sec_result += display_subcategory(directory, expocode, :h2, section, files, short)
             end
         end
-        result
+        result + content_tag(:div, sec_result, :class => 'formats-sections')
     end
 end
 

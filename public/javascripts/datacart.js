@@ -1,5 +1,6 @@
 jQuery(function($) {
-  // Don't instrument the datacart download list page
+  // Don't instrument the datacart download list page. That requires removing
+  // list elements and changing page logic.
   if (window.location.pathname.split('/')[0] == 'datacart') {
     return;
   }
@@ -18,39 +19,72 @@ jQuery(function($) {
     }
   }
 
-  var datacart_links = $('.datacart-icon');
-  datacart_links.each(function() {
+  function setIconAdd(icon) {
+    var link = icon.closest('.datacart-link');
+    link.removeClass('datacart-remove').addClass('datacart-add');
+    link.attr('title', link.attr('title').replace('Remove', 'Add').replace('from', 'to'));
+    icon.html(icon.html().replace('Remove', 'Add'));
+  }
+  function setIconRemove(icon) {
+    var link = icon.closest('.datacart-link');
+    link.removeClass('datacart-add').addClass('datacart-remove');
+    link.attr('title', link.attr('title').replace('Add', 'Remove').replace('to', 'from'));
+    icon.html(icon.html().replace('Add', 'Remove'));
+  }
+
+  var datacart_icons = $('.datacart-icon:not(.datacart-cart)');
+  datacart_icons.live('click', function() {
     var icon = $(this);
-    if (icon.hasClass('datacart-cart')) {
+    console.log(icon);
+    var link = icon.closest('.datacart-link');
+    var parser = document.createElement("A");
+    parser.href = link.attr('href');
+    var adder;
+    if (link.hasClass('datacart-add')) {
+      parser.pathname = parser.pathname.replace("remove", "add");
+      adder = true;
+    } else if (link.hasClass('datacart-remove')) {
+      parser.pathname = parser.pathname.replace("add", "remove");
+      adder = false;
+    } else {
       return;
     }
-    var link = icon.closest('a');
-    if (link.hasClass('datacart-add-cruise') || link.hasClass('datacart-remove-cruise')) {
-      return;
-    }
-    icon.click(function() {
-      var parser = document.createElement("A");
-      parser.href = link.attr('href');
-      if (link.hasClass('datacart-add')) {
-        parser.pathname = parser.pathname.replace("remove", "add");
-      } else if (link.hasClass('datacart-remove')) {
-        parser.pathname = parser.pathname.replace("add", "remove");
+    $.get(parser.href, function(data) {
+      setCartCount(data.cart_count);
+      if (adder) {
+        setIconRemove(icon);
       } else {
-        return;
+        setIconAdd(icon);
       }
-      $.get(parser.href, function(data) {
-        setCartCount(data.cart_count);
-        if (link.hasClass('datacart-add')) {
-          link.removeClass('datacart-add').addClass('datacart-remove');
-          link.attr('title', link.attr('title').replace('Add to', 'Remove from'));
-          icon.html('Remove');
-        } else if (link.hasClass('datacart-remove')) {
-          link.removeClass('datacart-remove').addClass('datacart-add');
-          link.attr('title', link.attr('title').replace('Remove from', 'Add to'));
-          icon.html('Add');
+      if (link.hasClass('datacart-cruise')) {
+        link.parents('.datacart-cruise-links').siblings('.formats-sections').find('.datacart-icon').each(function() {
+          if (adder) {
+            setIconRemove($(this));
+          } else {
+            setIconAdd($(this));
+          }
+        });
+      } else {
+        var list = link.closest('.formats-sections');
+        var links = list.find('.datacart-link');
+        var alladd = true;
+        var allremove = true;
+        links.each(function() {
+          console.log(this);
+          alladd = alladd && $(this).hasClass('datacart-add');
+          allremove = allremove && $(this).hasClass('datacart-remove');
+        });
+        console.log(links, alladd, allremove);
+        if (alladd || allremove) {
+          var cruiseicon = list.siblings('.datacart-cruise-links').find('.datacart-icon');
+          if (alladd) {
+            setIconAdd(cruiseicon);
+          } else if (allremove) {
+            setIconRemove(cruiseicon);
+          }
         }
-      });
-      return false;
+      }
     });
+    return false;
   });
 });

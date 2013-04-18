@@ -530,7 +530,8 @@ CM.Info.prototype = {
            {label: 'Ship', type: 'string'},
            {label: 'Country', type: 'string'},
            {label: 'PI', type: 'string'},
-           {label: 'Begin Date', type: 'date'}],
+           {label: 'Begin Date', type: 'date'},
+           {label: 'data', type: 'string'}],
     rows: []
   }, 0.6), /* = wire protocol version */
   data_table_opts: {
@@ -597,7 +598,7 @@ CM.Info.prototype.get_row_num = function(tr) {
   return -1;
 };
 CM.Info.prototype.add = function(info, notrack) {
-  var data_row = this.info_data_table.addRow([info.line, info.expocode, info.ship, info.country, info.pi, info.date_begin]);
+  var data_row = this.info_data_table.addRow([info.line, info.expocode, info.ship, info.country, info.pi, info.date_begin, info.data]);
   if (notrack) {
     for (var i=0; i<this.info_data_table.getNumberOfColumns(); i++) {
       this.info_data_table.setProperty(data_row, i, 'style', 'background-color: #ffdddd;');
