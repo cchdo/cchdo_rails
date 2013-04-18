@@ -9,11 +9,11 @@ ActionController::Routing::Routes.draw do |map|
   end
   map.argo 'argo', :controller => :argo, :action => :index
 
-  map.bulk "bulk", :controller => "bulk", :action => :index
-  map.bulk_add "bulk/add", :controller => "bulk", :action => :add
-  map.bulk_remove "bulk/remove", :controller => "bulk", :action => :remove
-  map.bulk_clear "bulk/clear", :controller => "bulk", :action => :clear, :conditions => {:method => :post}
-  map.bulk_download "bulk/download", :controller => "bulk", :action => :download, :conditions => {:method => :post}
+  map.datacart "datacart", :controller => "datacart", :action => :index
+  map.datacart_add "datacart/add", :controller => "datacart", :action => :add
+  map.datacart_remove "datacart/remove", :controller => "datacart", :action => :remove
+  map.datacart_clear "datacart/clear", :controller => "datacart", :action => :clear, :conditions => {:method => :post}
+  map.datacart_download "datacart/download", :controller => "datacart", :action => :download, :conditions => {:method => :post}
 
   map.new_submission '/submit', :controller => :submit, :action => :new,
                                 :conditions => {:method => :get}

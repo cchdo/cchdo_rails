@@ -84,24 +84,24 @@ module ApplicationHelper
         return s
     end
 
-    def bulk_link(act, link={}, html={})
-        link_to(content_tag(:div, act, :class => "bulk-icon"), link, html)
+    def datacart_link(act, link={}, html={})
+        link_to(content_tag(:div, act, :class => "datacart-icon"), link, html)
     end
 
-    def bulk_link_file(act, dir, basename)
+    def datacart_link_file(act, dir, basename)
         if act == 'Remove'
             action = 'remove'
-            classname = 'bulk-remove'
-            title = 'Remove from bulk downloads'
+            classname = 'datacart-remove'
+            title = 'Remove from data cart'
         elsif act == 'Add'
             action = 'add'
-            classname = 'bulk-add'
-            title = 'Add to bulk downloads'
+            classname = 'datacart-add'
+            title = 'Add to data cart'
         end
 
-        bulk_link(act,
+        datacart_link(act,
             {
-                :controller => 'bulk',
+                :controller => 'datacart',
                 :action => action,
                 :dirid => dir.id,
                 :file => basename
@@ -111,20 +111,20 @@ module ApplicationHelper
             })
     end
 
-    def bulk_link_cruise(act, cruise)
+    def datacart_link_cruise(act, cruise)
         if act == 'Remove'
             action = 'remove_cruise'
-            classname = 'bulk-remove bulk-remove-cruise'
-            title = 'Remove cruise from bulk downloads'
+            classname = 'datacart-remove datacart-remove-cruise'
+            title = 'Remove all cruise data from data cart'
         elsif act == 'Add'
             action = 'add_cruise'
-            classname = 'bulk-add bulk-add-cruise'
-            title = 'Add cruise to bulk downloads'
+            classname = 'datacart-add datacart-add-cruise'
+            title = 'Add all cruise data to data cart'
         end
 
-        bulk_link("#{act} all",
+        datacart_link("#{act} all",
             {
-                :controller => 'bulk',
+                :controller => 'datacart',
                 :action => action,
                 :cruise_id => cruise.id
             }, {
@@ -172,12 +172,12 @@ module ApplicationHelper
                             :file_type => ftype.key_name),
                         :class => "file_type") + \
                     content_tag(:abbr, '?', :title => ftype.description) + \
-                    content_tag(:span, :class => "bulk") do
+                    content_tag(:span, :class => "datacart") do
                         basename = File.basename(file)
-                        if @bulk.include?([dir.id, basename])
-                            bulk_link_file('Remove', dir, basename)
+                        if @datacart.include?([dir.id, basename])
+                            datacart_link_file('Remove', dir, basename)
                         else
-                            bulk_link_file('Add', dir, basename)
+                            datacart_link_file('Add', dir, basename)
                         end
                     end
                     liresult
@@ -193,7 +193,7 @@ module ApplicationHelper
         expocode = cruise.ExpoCode
         result = ''
 
-        result += content_tag(:div, bulk_link_cruise('Add', cruise) + bulk_link_cruise('Remove', cruise), :class => "bulk-cruise")
+        result += content_tag(:div, datacart_link_cruise('Add', cruise) + datacart_link_cruise('Remove', cruise), :class => "datacart-cruise")
 
         for section in format_sections
             if section.has_subsections?

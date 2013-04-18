@@ -33,7 +33,7 @@ end
 class ApplicationController < ActionController::Base
     layout 'standard'
 
-    before_filter :setup_bulk
+    before_filter :setup_datacart
 
     # Scrub sensitive parameters from your log
     filter_parameter_logging :password, :password_confirmation
@@ -133,8 +133,12 @@ class ApplicationController < ActionController::Base
         return cruises
     end
 
-    def setup_bulk
-        @bulk = session['bulk'] || Bulk.new()
+    def setup_datacart
+        begin
+            @datacart = session['datacart'] || Datacart.new()
+        rescue ActionController::SessionRestoreError
+            session.clear()
+        end
     end
 
     protected

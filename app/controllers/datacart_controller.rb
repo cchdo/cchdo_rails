@@ -4,9 +4,9 @@ require 'zip/zip'
 
 include ActionView::Helpers::TextHelper
 
-class BulkController < ApplicationController
+class DatacartController < ApplicationController
     $zip_file_limit = 20
-    $tempname = 'bulk_dl_zip'
+    $tempname = 'data_cart_zip'
 
     def index
     end
@@ -16,49 +16,48 @@ class BulkController < ApplicationController
         file = params[:file]
         document = Document.find_by_id(dirid)
         if not document or not document.Files.include?(file)
-            flash[:notice] = 'Error adding file to bulk download list.'
+            flash[:notice] = 'Error adding file to data cart.'
             raise ActionController:RoutingError.new('Not Found')
         end
-        @bulk << [dirid, file]
-        session['bulk'] = @bulk
+        @datacart << [dirid, file]
+        session['datacart'] = @datacart
         if request.xhr?
-            render :json => {:cart_count => @bulk.length}, :status => :ok
+            render :json => {:cart_count => @datacart.length}, :status => :ok
         else
-            flash[:notice] = "Added #{file} to bulk download list"
+            flash[:notice] = "Added #{file} to data cart"
             redirect_to :back
         end
     rescue ActionController::RedirectBackError
-        redirect_to bulk_path
+        redirect_to datacart_path
     end
 
     def add_cruise
         cruise_id = params[:cruise_id]
         cruise = Cruise.find_by_id(cruise_id)
         if not cruise
-            flash[:notice] = 'Error adding cruise dataset to bulk download list.'
+            flash[:notice] = 'Error adding cruise dataset to data cart.'
             raise ActionController::RoutingError.new('Not found')
         end
 
-        before_count = @bulk.length
+        before_count = @datacart.length
 
         dir = cruise.directory
         mapped_files = get_files_from_cruise(cruise)
         file_count = 0
         for key, file in mapped_files
             next if key =~ /_pic$/
-            @bulk << [dir.id, File.basename(file)]
+            @datacart << [dir.id, File.basename(file)]
             file_count += 1
         end
-        session['bulk'] = @bulk
+        session['datacart'] = @datacart
 
-        after_count = @bulk.length
+        after_count = @datacart.length
         count_diff = after_count - before_count
 
         if request.xhr?
-            render :json => {:cart_count => @bulk.length}, :status => :ok
+            render :json => {:cart_count => @datacart.length}, :status => :ok
         else
-            message = "Added #{pluralize(count_diff, 'file')} to " + \
-                             "bulk download list"
+            message = "Added #{pluralize(count_diff, 'file')} to datacart"
             present_count = file_count - count_diff
             if present_count > 0
                 message += " (#{present_count} already present)."
@@ -75,48 +74,48 @@ class BulkController < ApplicationController
         file = params[:file]
         document = Document.find_by_id(dirid)
         if not document or not document.Files.include?(file)
-            flash[:notice] = 'Error removing file from bulk download list.'
+            flash[:notice] = 'Error removing file from data cart.'
             raise ActionController:RoutingError.new('Not Found')
         end
-        session['bulk'] = @bulk.delete([dirid, file])
+        session['datacart'] = @datacart.delete([dirid, file])
         if request.xhr?
-            render :json => {:cart_count => @bulk.length}, :status => :ok
+            render :json => {:cart_count => @datacart.length}, :status => :ok
         else
-            flash[:notice] = "Removed #{file} from bulk download list"
+            flash[:notice] = "Removed #{file} from data cart"
             redirect_to :back
         end
     rescue ActionController::RedirectBackError
-        redirect_to bulk_path
+        redirect_to datacart_path
     end
 
     def remove_cruise
         cruise_id = params[:cruise_id]
         cruise = Cruise.find_by_id(cruise_id)
         if not cruise
-            flash[:notice] = 'Error removing cruise dataset from bulk download list.'
+            flash[:notice] = 'Error removing cruise dataset from data cart.'
             raise ActionController::RoutingError.new('Not found')
         end
 
-        before_count = @bulk.length
+        before_count = @datacart.length
 
         dir = cruise.directory
         mapped_files = get_files_from_cruise(cruise)
         file_count = 0
         for key, file in mapped_files
             next if key =~ /_pic$/
-            @bulk = @bulk.delete([dir.id, File.basename(file)])
+            @datacart = @datacart.delete([dir.id, File.basename(file)])
             file_count += 1
         end
-        session['bulk'] = @bulk
+        session['datacart'] = @datacart
 
-        after_count = @bulk.length
+        after_count = @datacart.length
         count_diff = before_count - after_count
 
         if request.xhr?
-            render :json => {:cart_count => @bulk.length}, :status => :ok
+            render :json => {:cart_count => @datacart.length}, :status => :ok
         else
             message = "Removed #{pluralize(count_diff, 'file')} from " + \
-                             "bulk download list"
+                             "data cart"
             present_count = file_count - count_diff
             if present_count > 0
                 message += " (#{present_count} not present)."
@@ -132,15 +131,15 @@ class BulkController < ApplicationController
         unless request.post?
             raise ActionController::UnknownAction
         end
-        session.delete('bulk')
+        session.delete('datacart')
         if request.xhr?
             render :json => {:cart_count => 0}, :status => :ok
         else
-            flash[:notice] = 'Cleared bulk download list'
+            flash[:notice] = 'Cleared data cart'
             redirect_to :back
         end
     rescue ActionController::RedirectBackError
-        redirect_to bulk_path
+        redirect_to datacart_path
     end
 
     def download
@@ -148,8 +147,8 @@ class BulkController < ApplicationController
             raise ActionController::UnknownAction
         end
 
-        set = params[:set].to_i
-        to_dl = @bulk.to_a.slice(set * $zip_file_limit, $zip_file_limit)
+        archive = params[:archive].to_i
+        to_dl = @datacart.to_a.slice(archive * $zip_file_limit, $zip_file_limit)
 
         paths = []
         for dirid, bfile in to_dl
@@ -173,13 +172,13 @@ class BulkController < ApplicationController
             :disposition => 'attachment',
             :filename => "cchdo_download_#{Time.now.iso8601}.zip")
     rescue ActionController::RedirectBackError
-        redirect_to bulk_path
+        redirect_to datacart_path
     end
 
 private
 
     def cleanup_downloads
-        # Delete bulk download tempfiles older than 10 minutes.
+        # Delete datacart tempfiles older than 10 minutes.
         threshold = Time.now - 10
         Dir.foreach(TEMPDIR) do |fname|
             next unless fname =~ /^#{$tempname}/

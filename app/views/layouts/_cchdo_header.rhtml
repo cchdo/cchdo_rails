@@ -9,10 +9,10 @@
     <% end -%>
   </div>
   <div class="masthead-block masthead-right">
-    <div id="cchdo_bulk" class="masthead-block<%- if @bulk.empty? %> hidden<%- end %>">
-      <a class="bulk-link" href="<%= bulk_path %>">
-        <div class="bulk-icon bulk-cart">
-          <div class="count"><%= @bulk.length %></div>
+    <div id="cchdo_datacart" class="masthead-block<%- if @datacart.empty? %> hidden<%- end %>">
+      <a class="datacart-link" href="<%= datacart_path %>">
+        <div class="datacart-icon datacart-cart">
+          <div class="count"><%= @datacart.length %></div>
         </div>
       </a>
     </div>
