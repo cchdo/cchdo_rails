@@ -843,6 +843,16 @@ table.table_step2 {
 .bulk-dl .bulk-remove {
   width: 5em;
 }
+.bulk-dl #quick-dl p {
+  width: auto;
+  max-width: none;
+}
+.bulk-dl #quick-dl li {
+  float: left;
+}
+.bulk-dl table {
+  clear: left;
+}
 .bulk-dl .tools .download {
   font-size: 1.1em;
   background-color: #CCEEBB;

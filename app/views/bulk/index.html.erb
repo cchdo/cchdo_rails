@@ -7,6 +7,27 @@
       <div class="tools">
         <%= form_tag(bulk_clear_path) %><input type="submit" value="Clear list" class="clear"></form>
       <div>
+
+      <div id="quick-dl">
+        <h2>Download all</h2>
+        <p>In order to maintain response times considering file sizes, the list can be downloaded in archives of at most <%= $zip_file_limit %> at a time.</p>
+        <p>Following are all the archives for your <%= pluralize(@bulk.length, 'file') %>. Click each in succession to download the entire list.</p>
+        <ol>
+        <%- @bulk.each_with_index do |(directory, file), i| %>
+          <%- if i % $zip_file_limit == 0 %>
+            <li>
+              <%- num_files_in_set = [(@bulk.length - i), $zip_file_limit].min %>
+              <%- set_id = (i / $zip_file_limit).to_i %>
+              <%= form_tag(bulk_download_path) %>
+                <input type="hidden" name="set" value="<%= set_id %>">
+                <input type="submit" value="Download <%= (set_id + 1).ordinalize %> archive (<%= pluralize(num_files_in_set, 'file') %>)" class="download">
+              </form>
+            </li>
+          <%- end %>
+        <%- end %>
+        </ol>
+      </div>
+
       <table>
         <tr class="header">
           <th>Cruise</th>
@@ -35,7 +56,7 @@
             <td class="tools" rowspan="<%= num_files_in_set %>">
               <%= form_tag(bulk_download_path) %>
                 <input type="hidden" name="set" value="<%= (i / $zip_file_limit).to_i %>">
-                <input type="submit" value="Download set (<%= pluralize(num_files_in_set, 'file') %>)" class="download">
+                <input type="submit" value="Download archive (<%= pluralize(num_files_in_set, 'file') %>)" class="download">
               </form>
             </td>
           <%- end %>
