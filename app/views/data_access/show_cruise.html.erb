@@ -49,7 +49,7 @@
 <div class="box_content">
 
 <%= content_tag(:p, @preliminary, :class => "status-preliminary") if @preliminary -%>
-<%= show_files(@cruise, $data_format_sections, @file_result) %>
+<%= show_files(@cruise, @file_result) %>
 
 </div>
 <div class="box_bottom"></div>

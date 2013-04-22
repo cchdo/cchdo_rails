@@ -40,36 +40,6 @@ class ApplicationController < ActionController::Base
 
     protect_from_forgery
 
-    $data_format_sections = [
-        FormatSection.new('Exchange', [
-            FormatType.new('exchange_ctd', 'CTD', 'ZIP archive of ASCII .csv CTD data with station information'),
-            FormatType.new('exchange_bot', 'BTL', 'ASCII .csv bottle data with station information'),
-            FormatType.new('exchange_large_volume', 'Large Volume', 'ASCII .csv bottle data with station information'),
-            FormatType.new('trace_metal', 'Trace Metals', 'ASCII .csv trace metal data with station information'),
-        ]),
-        FormatSection.new('NetCDF', [
-            FormatType.new('netcdf_ctd', 'CTD', 'ZIP archive of binary CTD data with station information'),
-            FormatType.new('netcdf_bot', 'BTL', 'Binary bottle data with station information'),
-        ]),
-        FormatSection.new("Documentation", [
-            FormatType.new('pdf_doc', 'PDF', 'Portable Document Format cruise and data information'),
-            FormatType.new('text_doc', 'Text', 'ASCII cruise and data documentation'),
-        ]),
-        FormatSection.new("Other formats",
-            [], [
-            FormatSection.new("WOCE", [
-                FormatType.new('woce_sum', 'SUM', 'ASCII station/cast information'),
-                FormatType.new('woce_ctd', 'CTD', 'ASCII CTD data without station information'),
-                FormatType.new('woce_bot', 'BTL', 'ASCII bottle data without station information'),
-                FormatType.new('large_volume', 'Large Volume', 'ASCII bottle data without station information'),
-            ]), 
-            FormatSection.new("OceanSITES", [
-                FormatType.new('os_ctd', 'CTD', 'Binary CTD data conforming to OceanSITES data format'),
-                FormatType.new('os_btl', 'BTL', 'Binary bottle data conforming to OceanSITES data format'),
-            ]),
-        ]),
-    ]
-
     def signin
         if request.post?
             if user = User.authenticate(params[:username], params[:password])

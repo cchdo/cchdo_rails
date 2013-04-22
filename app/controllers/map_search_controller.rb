@@ -2,7 +2,7 @@ include Math
 
 include ActionView::Helpers::UrlHelper
 include ActionView::Helpers::TagHelper
-include ApplicationHelper
+include DocumentsHelper
 
 class MapSearchController < ApplicationController
   layout 'standard'
@@ -123,7 +123,8 @@ class MapSearchController < ApplicationController
         :country => (cruise.Country || '').strip,
         :pi => (cruise.Chief_Scientist || ''),
         :date_begin => (cruise.Begin_Date || ''),
-        :data => datacart_link_cruise(cruise),
+        :cruise_id => cruise.id,
+        :data => show_files(cruise, load_files_and_params(cruise)[0], short=true),
         #:date_end => cruise.EndDate,
         #:aliases => cruise.Alias,
         #:groups => cruise.Group

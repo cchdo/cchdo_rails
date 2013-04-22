@@ -755,22 +755,29 @@ table.table_step2 {
 .status-preliminary { color: #ff0900; font-weight: bold; }
 .data_access .status-preliminary { font-size: 1.3em; }
 
+a.datacart-link .datacart-icon {
+  display: inline-block;
+}
+div.formats-sections span,
+a.datacart-link {
+  padding: 0;
+}
 .data-formats abbr { font-size: 0.5em; font-family: sans-serif; padding-left: 0.2em; color: #BBBBBB;}
 .data-formats .file_type {}
 .data-formats .formats { padding-left: 1em; position: relative; }
-.data-formats .datacart { position: absolute; left: 10em; margin-top: 3px; }
+.data-formats .datacart { position: absolute; left: 10em; }
 .data-formats .sub-formats h3 { padding-left: 1em;}
 .data-formats .sub-formats .formats { padding-left: 2em;}
 .data-formats .short.formats { padding-left: 0;}
 .data-formats .short.sub-formats .formats { padding-left: 0;}
 .data-formats .short.formats { font-size: 0.9em; line-height: 1.3em; }
 .data-formats .short .datacart { left: 13em; margin-top: 0; }
-
 .condensed .datacart-cruise-links {
   padding-right: 3.5em;
 }
 .data_access #data .datacart-cruise-links,
-.expanded .datacart-cruise-links {
+.expanded .datacart-cruise-links,
+.ui-dialog .datacart-cruise-links {
   position: absolute;
   right: 4em;
   top: 0.3em;
@@ -780,14 +787,11 @@ table.table_step2 {
   */
   z-index: 1;
 }
-.datacart-cruise-links a.datacart-link, 
-.datacart-cruise-links a.datacart-link .datacart-icon {
-  padding-top: 0;
-  padding-bottom: 0;
-}
-.datacart-icon {
+div.datacart-icon {
   background: url("/images/cart/cart_sprite.png");
   white-space: nowrap;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 #cchdo_datacart.hidden {
   display: none;
@@ -812,7 +816,7 @@ table.table_step2 {
 .lt-ie9 .datacart-remove .datacart-icon {
   background: transparent url("/images/cart/cart_sprite_small.png") repeat-y;
 }
-.datacart-add .datacart-icon, .datacart-remove .datacart-icon {
+.datacart-blank .datacart-icon, .datacart-add .datacart-icon, .datacart-remove .datacart-icon {
   background-size: 15px auto;
   background-position: 8px;
   background-repeat: repeat-y;
@@ -825,6 +829,7 @@ table.table_step2 {
   font-size: 0.9em;
   text-decoration: none;
 }
+.datacart-blank .datacart-icon { background-position: 0 45px; padding-left: 0; }
 .datacart-add .datacart-icon { background-position: 0 30px; }
 .datacart-remove .datacart-icon { background-position: 0 15px; }
 .datacart-add-cruise .datacart-icon { background-position: 0 60px; }

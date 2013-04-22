@@ -542,9 +542,17 @@ CM.Info.prototype = {
     sortColumn: 5,
     sortAscending: false
   },
+  _dialogs: null,
   i_to_d: null
 };
 CM.Info.prototype.table_rows = function() { return $('tr', this.jdom); }
+CM.Info.prototype.dialogs = function() { 
+  if (this._dialogs === null) {
+    this._dialogs = $('<div id="data-formats-dialogs"></div>');
+    this._dialogs.appendTo('body');
+  }
+  return this._dialogs;
+}
 CM.Info.prototype.setJdom = function(jdom) {
   if (this.jdom) {
     this.jdom.empty();
@@ -554,20 +562,27 @@ CM.Info.prototype.setJdom = function(jdom) {
   this.info_table = new google.visualization.Table(this.jdom[0]);
 
   var CMI = this;
-  this.table_rows()
-    .live('mouseenter', function() {
-      CM.results.dim(CMI.get_id(this), true);
-      return false;
-    })
-    .live('mouseleave', function() {
-      CM.results.darken(CMI.get_id(this), true);
-      return false;
-    })
-    .live('click', function() {
-      CM.results.lighten(CMI.get_id(this), true);
-    });
+  this.jdom.delegate('tr', 'mouseenter', function() {
+    CM.results.dim(CMI.get_id(this), true);
+    return false;
+  }).delegate('tr', 'mouseleave', function() {
+    CM.results.darken(CMI.get_id(this), true);
+    return false;
+  }).delegate('tr', 'click', function() {
+    CM.results.lighten(CMI.get_id(this), true);
+  });
   google.visualization.events.addListener(this.info_table, 'sort', function(event) {
     CMI.sync_sortorder(event);
+  });
+
+  this.jdom.delegate('button[infodata-id]', 'click', function() {
+    var button = $(this);
+    var iid = button.attr('infodata-id');
+    $('#' + iid).dialog({
+      width: 350,
+      position: {my: 'right', at: 'left', of: button},
+    });
+    return false;
   });
 };
 CM.Info.prototype.sync_sortorder = function(sortorder) {
@@ -598,7 +613,20 @@ CM.Info.prototype.get_row_num = function(tr) {
   return -1;
 };
 CM.Info.prototype.add = function(info, notrack) {
-  var data_row = this.info_data_table.addRow([info.line, info.expocode, info.ship, info.country, info.pi, info.date_begin, info.data]);
+  var dataid = info.id;
+  var datadiv = $('<div>' + info.data + '</div>').
+    addClass('data-formats').
+    css('position', 'relative').
+    attr('title', info.expocode).
+    attr('id', 'infodata' + info.cruise_id).
+    appendTo(this.dialogs());
+  var databutton = '<button class="datacart-blank" infodata-id="infodata' +
+    info.cruise_id +'" title="Add/remove data">' +
+    '<div class="datacart-icon"></div></button>';
+
+  var data_row = this.info_data_table.addRow(
+    [info.line, info.expocode, info.ship, info.country, info.pi,
+     info.date_begin, databutton]);
   if (notrack) {
     for (var i=0; i<this.info_data_table.getNumberOfColumns(); i++) {
       this.info_data_table.setProperty(data_row, i, 'style', 'background-color: #ffdddd;');
@@ -700,13 +728,14 @@ CM.results = {
           CM.state('Received '+expocode);
           var CME = CM.entries;
           var info = response;
+          var cruise_link = '<a href="/cruise/'+expocode+'">'+expocode+'</a>';
           if (info) {
-            info.expocode = '<a href="http://cchdo.ucsd.edu/data_access?ExpoCode='+expocode+'">'+expocode+'</a>';
+            info.expocode = cruise_link;
             info.date_begin = parseYYYYmmdd(info.date_begin);
             info.date_end = parseYYYYmmdd(info.date_end);
           } else {
-            info = {'expocode': '<a href="http://cchdo.ucsd.edu/data_access?ExpoCode='+expocode+'">'+expocode+'</a>',
-                    'line': null, 'ship': null, 'country': null, 'pi': null, 'date_begin': null};
+            info = {'expocode': cruise_link, 'line': null, 'ship': null,
+                    'country': null, 'pi': null, 'date_begin': null};
           }
           /* Plot the cruise track and do the appropriate event attaching */
           var G = google.maps;
