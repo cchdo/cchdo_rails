@@ -3,7 +3,14 @@
     <h3>No results for <%= @query %></h3>
   <% else -%>
     <div class="tools">
-      <%= datacart_link_cruises(@cruises) %>
+      <div class="tool tool-expander">
+        <%- if params[:expanded] %>
+          <%= button_to('Condense', params.merge(:expanded => false), :title => "Short results") %>
+        <%- else %>
+          <%= button_to('Expand', params.merge(:expanded => true), :title => "Detailed results") %>
+        <%- end %>
+      </div>
+      <%= datacart_link_cruises(@cruises, {:class => "tool"}) %>
     </div>
     <% if params[:expanded] -%>
       <%= render :partial => 'search/full_results' -%>

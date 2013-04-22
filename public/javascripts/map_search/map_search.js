@@ -542,17 +542,25 @@ CM.Info.prototype = {
     sortColumn: 5,
     sortAscending: false
   },
+  datacart_all_link: null,
   _dialogs: null,
   i_to_d: null
 };
 CM.Info.prototype.table_rows = function() { return $('tr', this.jdom); }
 CM.Info.prototype.dialogs = function() { 
   if (this._dialogs === null) {
-    this._dialogs = $('<div id="data-formats-dialogs"></div>');
+    this._dialogs = $('<div id="data-formats-dialogs"></div>').css('display', 'none');
     this._dialogs.appendTo('body');
   }
   return this._dialogs;
 }
+CM.Info.prototype.setDatacartAllLink = function(link) {
+  if (this.datacart_all_link) {
+    this.datacart_all_link.remove();
+  }
+  this.datacart_all_link = $(link);
+  this.jdom.prepend(this.datacart_all_link);
+};
 CM.Info.prototype.setJdom = function(jdom) {
   if (this.jdom) {
     this.jdom.empty();
@@ -574,6 +582,10 @@ CM.Info.prototype.setJdom = function(jdom) {
   google.visualization.events.addListener(this.info_table, 'sort', function(event) {
     CMI.sync_sortorder(event);
   });
+
+  if (this.datacart_all_link) {
+    this.jdom.append(this.datacart_all_link);
+  }
 
   this.jdom.delegate('button[infodata-id]', 'click', function() {
     var button = $(this);
@@ -669,6 +681,7 @@ CM.Info.prototype.redraw = function() {
     this.info_table.draw(this.info_data_table, this.data_table_opts);
     this.sync_sortorder(this.info_table.getSortInfo());
     if (this.selected) { this.info_table.setSelection(this.selected); }
+    this.jdom.prepend(this.datacart_all_link);
   }
 };
 CM.Info.prototype.popout = function() {
@@ -903,10 +916,10 @@ CM.tracks_handler = function(request) {
   var cruise_tracks = request;
   var check = undefined;
   var num_ids = 0;
-  for (var expocode in cruise_tracks) {
+  for (var expocode in cruise_tracks['cruises']) {
     check = expocode;
     num_ids += 1;
-    CM.results.add(expocode, cruise_tracks[expocode]);
+    CM.results.add(expocode, cruise_tracks['cruises'][expocode]);
   }
   if (check === undefined) {
     CM.state('No cruises found');
@@ -915,6 +928,7 @@ CM.tracks_handler = function(request) {
     CM.pane.activate();
     CM.pane.unshade();
   }
+
   var added = 0;
   CM.state('Adding info');
   $(CM.results).bind('added', function () {
@@ -925,6 +939,7 @@ CM.tracks_handler = function(request) {
       $(this).unbind();
     }
   });
+  CM.info.setDatacartAllLink(cruise_tracks['datacart_all_link']);
 };
 CM.remote_submit = function() { $('form[name=tool_details]').submit(); };
 CM.submit = function() {

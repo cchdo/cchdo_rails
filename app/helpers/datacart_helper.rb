@@ -48,7 +48,7 @@ module DatacartHelper
             })
     end
 
-    def datacart_link_cruises(cruises)
+    def datacart_link_cruises(cruises, div_attributes={})
         nfiles_in_cart_all = 0
         nfiles_all = 0
         for cruise in cruises
@@ -57,29 +57,38 @@ module DatacartHelper
             nfiles_all += nfiles
         end
         if nfiles_in_cart_all > 0
-            link = datacart_link('Remove all data in result',
-                {
-                    :controller => 'datacart',
-                    :action => 'remove_cruises',
-                    :ids => cruises.map {|x| x.id}
-                }, {
-                    :class => 'datacart-link datacart-results datacart-remove',
-                    :title => 'Remove all result data from data cart',
-                })
+            link_str = 'Remove all data in result'
+            link_params = {
+                :controller => 'datacart',
+                :action => 'remove_cruises',
+                :ids => cruises.map {|x| x.id}
+            }
+            link_attrs = {
+                :class => 'datacart-link datacart-results datacart-remove',
+                :title => 'Remove all result data from data cart',
+            }
         elsif nfiles_all > 0
-            link = datacart_link('Add all data in result',
-                {
-                    :controller => 'datacart',
-                    :action => 'add_cruises',
-                    :ids => cruises.map {|x| x.id}
-                }, {
-                    :class => 'datacart-link datacart-results datacart-add',
-                    :title => 'Add all result data to data cart',
-                })
+            link_str = 'Add all data in result'
+            link_params = {
+                :controller => 'datacart',
+                :action => 'add_cruises',
+                :ids => cruises.map {|x| x.id}
+            }
+            link_attrs = {
+                :class => 'datacart-link datacart-results datacart-add',
+                :title => 'Add all result data to data cart',
+            }
         else
             link = ''
         end
-        content_tag(:div, link, :class => "datacart-cruises-links")
+        div_attrs = {:class => "datacart-cruises-links"}
+        div_attrs_proper = div_attributes.merge(div_attrs)
+        if div_attributes.include?(:class)
+            puts div_attributes.inspect
+            div_attrs_proper[:class] = "#{div_attrs[:class]} #{div_attributes[:class]}"
+        end
+        link = datacart_link(link_str, link_params, link_attrs)
+        content_tag(:div, link, div_attrs_proper)
     end
 
     def datacart_link_cruise(cruise)

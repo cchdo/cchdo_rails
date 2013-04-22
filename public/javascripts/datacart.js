@@ -32,8 +32,7 @@ jQuery(function($) {
     icon.html(icon.html().replace('Add', 'Remove'));
   }
 
-  var datacart_icons = $('.datacart-icon:not(.datacart-cart)');
-  datacart_icons.live('click', function() {
+  $('body').delegate('.datacart-icon:not(.datacart-cart)', 'click', function() {
     var icon = $(this);
     var link = icon.closest('.datacart-link');
     if (link.hasClass('datacart-results')) {

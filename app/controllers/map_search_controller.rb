@@ -2,6 +2,7 @@ include Math
 
 include ActionView::Helpers::UrlHelper
 include ActionView::Helpers::TagHelper
+include DatacartHelper
 include DocumentsHelper
 
 class MapSearchController < ApplicationController
@@ -91,7 +92,7 @@ class MapSearchController < ApplicationController
 
     reduce_specifics(@cruise)
 
-    @cruise_tracks = {}
+    cruise_tracks = {}
     unless @cruises.blank?
       max_coords = params[:max_coords].to_i
       @cruises.each do |cruise|
@@ -102,13 +103,17 @@ class MapSearchController < ApplicationController
           track = TrackLine.first(:select => 'Track', :conditions => {:ExpoCode => cruise.ExpoCode})
         end
         if track and track.Track
-          @cruise_tracks[cruise.ExpoCode] = flip_lnglat(pareDown(track_to_a(track.Track), max_coords))
+          cruise_tracks[cruise.ExpoCode] = flip_lnglat(pareDown(track_to_a(track.Track), max_coords))
         else
-          @cruise_tracks[cruise.ExpoCode] = []
+          cruise_tracks[cruise.ExpoCode] = []
         end
       end
     end
-    render :json => @cruise_tracks
+    tracks = {
+        :cruises => cruise_tracks,
+        :datacart_all_link => datacart_link_cruises(@cruises, {:class => "data-formats"})
+    }
+    render :json => tracks
   end
 
   def info

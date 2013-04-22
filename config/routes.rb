@@ -12,6 +12,10 @@ ActionController::Routing::Routes.draw do |map|
   map.datacart "datacart", :controller => "datacart", :action => :index
   map.datacart_add "datacart/add", :controller => "datacart", :action => :add
   map.datacart_remove "datacart/remove", :controller => "datacart", :action => :remove
+  map.datacart_add_cruise "datacart/add_cruise", :controller => "datacart", :action => :add_cruise
+  map.datacart_remove_cruise "datacart/remove_cruise", :controller => "datacart", :action => :remove_cruise
+  map.datacart_add_cruises "datacart/add_cruises", :controller => "datacart", :action => :add_cruises
+  map.datacart_remove_cruises "datacart/remove_cruises", :controller => "datacart", :action => :remove_cruises
   map.datacart_clear "datacart/clear", :controller => "datacart", :action => :clear, :conditions => {:method => :post}
   map.datacart_download "datacart/download", :controller => "datacart", :action => :download, :conditions => {:method => :post}
 

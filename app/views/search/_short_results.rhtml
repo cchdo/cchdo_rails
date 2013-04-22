@@ -8,7 +8,7 @@
           <th width="20%"><%= sort_on('Cruise Dates', "Begin_Date") %></th>
           <th width="30%"><%= sort_on('Chief Scientist', "Chief_Scientist") %></th>
           <th width="10%"><%= sort_on('Country') %></th>
-          <th class="expander"><%= link_to('Expand', params.merge(:expanded => true), :title => "Detailed results") %></th>
+          <th></th>
       </tr>
     <% end %>
     <%- cruise_table = @table_list[cruise.ExpoCode] %>
