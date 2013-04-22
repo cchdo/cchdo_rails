@@ -76,6 +76,7 @@
   height: 28px;
   margin-top: -10px;
   vertical-align: middle;
+  white-space: nowrap;
 }
 .tool_button {
   padding-bottom: 4px;

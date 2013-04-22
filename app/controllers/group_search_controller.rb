@@ -1,5 +1,5 @@
 class GroupSearchController < ApplicationController
-  layout 'group'
+  layout 'standard'
    def index
        if params[:id]
           @group = params[:id]

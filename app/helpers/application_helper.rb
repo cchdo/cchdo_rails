@@ -83,6 +83,7 @@ module ApplicationHelper
         end
         return s
     end
+    include DocumentsHelper
 end
 
 class String

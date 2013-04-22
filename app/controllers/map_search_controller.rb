@@ -1,4 +1,10 @@
 include Math 
+
+include ActionView::Helpers::UrlHelper
+include ActionView::Helpers::TagHelper
+include DatacartHelper
+include DocumentsHelper
+
 class MapSearchController < ApplicationController
   layout 'standard'
   $RADIUS_EARTH = 6371.01 #km
@@ -86,7 +92,7 @@ class MapSearchController < ApplicationController
 
     reduce_specifics(@cruise)
 
-    @cruise_tracks = {}
+    cruise_tracks = {}
     unless @cruises.blank?
       max_coords = params[:max_coords].to_i
       @cruises.each do |cruise|
@@ -97,13 +103,17 @@ class MapSearchController < ApplicationController
           track = TrackLine.first(:select => 'Track', :conditions => {:ExpoCode => cruise.ExpoCode})
         end
         if track and track.Track
-          @cruise_tracks[cruise.ExpoCode] = flip_lnglat(pareDown(track_to_a(track.Track), max_coords))
+          cruise_tracks[cruise.ExpoCode] = flip_lnglat(pareDown(track_to_a(track.Track), max_coords))
         else
-          @cruise_tracks[cruise.ExpoCode] = []
+          cruise_tracks[cruise.ExpoCode] = []
         end
       end
     end
-    render :json => @cruise_tracks
+    tracks = {
+        :cruises => cruise_tracks,
+        :datacart_all_link => datacart_link_cruises(@cruises, {:class => "data-formats"})
+    }
+    render :json => tracks
   end
 
   def info
@@ -113,11 +123,13 @@ class MapSearchController < ApplicationController
       chief_scientists_to_links!(cruise.Chief_Scientist)
       #thumbnail_uri(cruise.ExpoCode)
       @info = {
-        :line => cruise.Line.strip,
-        :ship => cruise.Ship_Name.strip,
-        :country => cruise.Country.strip,
-        :pi => cruise.Chief_Scientist,
-        :date_begin => cruise.Begin_Date,
+        :line => (cruise.Line || '').strip,
+        :ship => (cruise.Ship_Name || '').strip,
+        :country => (cruise.Country || '').strip,
+        :pi => (cruise.Chief_Scientist || ''),
+        :date_begin => (cruise.Begin_Date || ''),
+        :cruise_id => cruise.id,
+        :data => show_files(cruise, load_files_and_params(cruise)[0], short=true),
         #:date_end => cruise.EndDate,
         #:aliases => cruise.Alias,
         #:groups => cruise.Group

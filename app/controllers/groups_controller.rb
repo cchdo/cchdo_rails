@@ -31,7 +31,6 @@ class GroupsController < ApplicationController
       if cruise.ExpoCode =~ /\w/
         @table_list[cruise.ExpoCode]['woce_sum'] = ''
         # Collect Bottle, CTD, Document file info
-        @dir = Document.first(:conditions => {:ExpoCode => cruise.ExpoCode, :FileType => 'Directory'})
         if cruise.Country =~ /\w/ 
           if COUNTRIES.values.include?(cruise.Country.downcase.strip)
             cruise.Country = (COUNTRIES.invert[cruise.Country.downcase] || '').capitalize
@@ -43,7 +42,7 @@ class GroupsController < ApplicationController
             end
           end
         end
-        @files_for_expocode = get_files_from_dir(@dir) 
+        @files_for_expocode = cruise.get_files() 
         @files_for_expocode["Preliminary"] = ''
         if Document.count(:conditions => {:ExpoCode => cruise.ExpoCode, :Preliminary => 1}) > 0
           @files_for_expocode["Preliminary"] = "Preliminary (See <a href=\"http://cchdo.ucsd.edu/data_history?ExpoCode=#{cruise.ExpoCode}\">data history</a>)"

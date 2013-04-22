@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>CCHDO | CLIVAR & Carbon Hydrographic Data Office<%= yield :title -%></title>
-<%= stylesheet_link_tag 'main' -%>
+<%= stylesheet_link_tag 'main', '//fonts.googleapis.com/css?family=Open+Sans:400italic,400' -%>
 <%= yield :head -%>
 <%= render :partial => 'layouts/ie_compatibility' -%>
 <meta name="google-site-verification" content="xBVm_AfJYEdA-tbww41dajF9RuGbZHAjpOBhwWwqbcM" />
@@ -20,7 +23,7 @@
   <%= render :partial => 'layouts/cchdo_footer' -%>
 </div>
 <div id="scripts">
-<%= javascript_include_tag 'img_rotate', 'toggle' -%>
+<%= javascript_include_tag 'img_rotate', 'toggle', '//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js' -%>
 <% if @content_for_js %>
   <%= yield :js -%>
 <% else %>

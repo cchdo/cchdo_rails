@@ -1,15 +1,25 @@
 <div id='cchdo_header'>
-  <%= link_to(image_tag('logos/CCHDO_logo.png', :id=>'cchdo_logo'), '/') -%>
-  <div id='cchdo_search'>
-    <% form_tag '/search' do -%>
-      <%= text_field_tag 'query', params[:query], :size=>20, :class=>'search_box' -%>
+  <div id="cchdo_logo" class="masthead-block">
+    <%= link_to(image_tag('logos/CCHDO_logo.png'), '/') -%>
+  </div>
+  <div id='cchdo_search' class="masthead-block">
+    <% form_tag '/search', :method => "GET" do -%>
+      <%= text_field_tag 'query', params[:query], :class=>'search_box' -%>
       <%= image_submit_tag 'buttons/button_search.png', :class=>'search_button', :alt=>'Search Data' -%>
     <% end -%>
-    <a href='/data_access' style='font-size: x-small;'>Advanced Search</a>
+  </div>
+  <div class="masthead-block masthead-right">
+    <div id="cchdo_datacart" class="masthead-block<%- if @datacart.empty? %> hidden<%- end %>">
+      <a class="datacart-link" href="<%= datacart_path %>">
+        <div class="datacart-icon datacart-cart">
+          <div class="count"><%= @datacart.length %></div>
+        </div>
+      </a>
+    </div>
     <%- if session[:user] %>
-      <div style="font-size: 0.8em; color: #333; position: absolute; bottom: 0; right: 0;">
-        <%= session[:username] %>
-        <a href="/signout">Sign out</a>
+      <div id="cchdo_user" class="masthead-block">
+        <p>Hi <span class="username"><%= link_to(session[:username], '/staff') %></span></p>
+        <a class="signout" href="/signout">Sign out</a>
       </div>
     <%- end %>
   </div>

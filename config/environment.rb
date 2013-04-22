@@ -60,26 +60,12 @@ end
 
 # Include your application configuration below
 
-SUBMITLOG = Logger.new("#{RAILS_ROOT}/log/submit.log")
+SUBMITLOG = Logger.new(Rails.root.join('log', 'submit.log'))
 SUBMITLOG.level = Logger::DEBUG
 
-COUNTRIES = {
-   'germany'     => 'ger', 'japan' => 'jpn',
-   'france'      => 'fra', 'england' => 'uk',
-   'canada'      => 'can', 'us' => 'usa',
-   'usa'         => 'usa', 'india' => 'ind',
-   'russia'      => 'rus', 'spain' => 'spn',
-   'argentina'   => 'arg', 'ukrain' => 'ukr',
-   'Netherlands' => 'net', 'norway' => 'nor',
-   'finland'     => 'fin', 'iceland' => 'ice',
-   'australia'   => 'aus', 'chile' => 'chi',
-   'new zealand' => 'new', 'taiwan' => 'tai',
-   'china'       => 'prc'
-}
-
 # Initialize the PassengerUploadBufferDir
-passengeruploadbufferdir = Rails.root.join('tmp', 'passengeruploadbuffer')
 require 'fileutils'
+passengeruploadbufferdir = Rails.root.join('tmp', 'passengeruploadbuffer')
 begin
   FileUtils.mkdir_p(passengeruploadbufferdir)
   FileUtils.chmod(0775, passengeruploadbufferdir)
@@ -87,7 +73,10 @@ rescue
   Rails.logger.error("#{passengeruploadbufferdir} could not be created. " + 
                      "Needed for file uploading.")
 end
+TEMPDIR = Rails.root.join('tmp')
 begin
-  FileUtils.chown(nil, 'www-data', passengeruploadbufferdir)
-rescue Errno::EPERM
+  FileUtils.mkdir_p(TEMPDIR)
+  FileUtils.chmod(0775, TEMPDIR)
+rescue
+  Rails.logger.error("#{TEMPDIR} could not be created.")
 end

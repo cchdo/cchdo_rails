@@ -1,99 +1,78 @@
-<% cruise_ctr = 0 %>
-<table class="status_table">
+<table class="status_table expanded">
   <% @cruises.each_with_index do |cruise, index| %>
-    <% if cruise_ctr % 10 == 0 %>
+    <% if index % 10 == 0 %>
       <tr>
-        <th width="40%">Line/ExpoCode/Dates</th>
-        <th width="40%">PI/Ship/Country</th>
-        <th width="20%">Files</th>
+        <th class="metadata-cruise">
+          <%= sort_on('Line') %>/
+          <%= sort_on('ExpoCode') %>/
+          <%= sort_on('Dates', "Begin_Date") %>
+        </th>
+        <th class="metadata-how">
+          <%= sort_on('PI', "Chief_Scientist") %>/
+          <%= sort_on('Ship', "Ship_Name") %>/
+          <%= sort_on('Country') %>
+        </th>
+        <th class="data-formats">Files</th>
         <th></th>
       </tr>
     <% end %>
-    <tr valign="top"<%= cycle('class="highlighted_cell"', '')-%>>
-      <td colspan="2">
-        <table width="100%">
-        <tr>
-          <td width="40%">
-            <span class="cruise_title"><a href="/cruise/<%= cruise.ExpoCode %>"><%= cruise.Line %> Cruise Page</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/cruise/<%= cruise.ExpoCode %>#history">Data History</a></span>
-            <% if @table_list[cruise.ExpoCode]["Preliminary"] =~ /\w/ %>
-              <div style="color:#FF0900; font-size:0.8em; font-weight:bold;"><%= @table_list[cruise.ExpoCode]['Preliminary'] %></div>
-            <% else %>
-              <br />
-            <% end %>
-            <i><%= link_to(cruise.ExpoCode, cruise_path(expocode=cruise.ExpoCode)) %></i><br>
-            <%= pretty_dates(cruise, '%Y-%m-%d', ' to ') %>
-          </td>
-          <td width="60%">
-            <% @cruises[index].contacts.each_with_index do |contact,cnt| %>
-              <% if cnt > 0 %>, <% end %>
-              <a href="/contact?id=<%= contact.id %>"><%= contact.FirstName %>&nbsp;<%= contact.LastName %> </a> 
-            <% end %><br />
-            <%= cruise.Ship_Name %><br />
-            <%= cruise.Country %>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" class="parameter_cell">
-          <% unless @param_list[cruise.ExpoCode]['stations'].blank? or @param_list[cruise.ExpoCode]['stations'] == 0 %>
-            <span class="param_title"><%= @param_list[cruise.ExpoCode]['stations'] %> Stations with the following parameters</span><br />
-            <p class="parameters">
-            <% if @p = @param_list[cruise.ExpoCode]['parameters'] %>
-              <% @param_hash = @param_list[cruise.ExpoCode] %>
-              <% @keys = @param_hash.keys.sort %>
-              <% @keys.each do |param| %>
-                <% if param =~ /\w/ and param !~ /(castno)|(flag)|(time)|(expocode)|(sampno)|(sect_id)|(depth)|(latitude)|(longitude)|(stnnbr)|(btlnbr)|(date)|(stations)|(parameters)/i %>
-                  <%= param %><% if @param_list[cruise.ExpoCode][param].to_i < 10 %>* <% end %>&nbsp;
-                <% end %> 
-              <% end %>
-            <% end %>
-            </p>
-          <% else %><!--No Bottle File Information -->
-          <% end %>
-          </td>
-        </tr>
-      </table>
-    </td>
-    <td>  
-      <% if @table_list[cruise.ExpoCode]['exchange_bot'] %>
-        <a href="<%=  @table_list[cruise.ExpoCode]['exchange_bot'] %>"> Exchange Bottle&nbsp;</a><br>
-      <% end %>
-      <% if @table_list[cruise.ExpoCode]['exchange_ctd'] %>
-        <a href="<%=  @table_list[cruise.ExpoCode]['exchange_ctd'] %>">Exchange CTD&nbsp;</a><br>
-      <% end %>
-        <% if @table_list[cruise.ExpoCode]['netcdf_ctd'] %>
-        <a href="<%=  @table_list[cruise.ExpoCode]['netcdf_ctd'] %>">NetCDF CTD&nbsp;</a><br>
-      <% end %>
-      <% if @table_list[cruise.ExpoCode]['netcdf_bot'] %>
-        <a href="<%=  @table_list[cruise.ExpoCode]['netcdf_bot'] %>">NetCDF Bottle&nbsp;</a><br>
-      <% end %>
-      <% if @table_list[cruise.ExpoCode]['woce_sum'] =~ /\w/%>
-        <a href="<%=  @table_list[cruise.ExpoCode]['woce_sum'] %>"><b>Sum</b>mary File&nbsp;</a><br>
-      <% end %>
-      <% if @table_list[cruise.ExpoCode]['woce_ctd'] %>
-        <a href="<%=  @table_list[cruise.ExpoCode]['woce_ctd'] %>">Woce CTD&nbsp;</a><br>
-      <% end %>
-      <% if @table_list[cruise.ExpoCode]['woce_bot'] %>
-        <a href="<%=  @table_list[cruise.ExpoCode]['woce_bot'] %>">Woce Bottle&nbsp;</a><br>
-      <% end %>
-      <% if @table_list[cruise.ExpoCode]['large_volume'] %>
-        <a href="<%=  @table_list[cruise.ExpoCode]['large_volume'] %>">Large Volume&nbsp;</a><br>
-      <% end %>
-      <% if @table_list[cruise.ExpoCode]['pdf_doc'] %>
-        <a href="<%=  @table_list[cruise.ExpoCode]['pdf_doc'] %>">PDF Documentation&nbsp;</a><br>
-      <% end %>
-      <% if @table_list[cruise.ExpoCode]['text_doc'] %>
-        <a href="<%=  @table_list[cruise.ExpoCode]['text_doc'] %>">Text Documentation&nbsp;</a>
-      <% end %>
-  </td>
-  <td>
-    <% if (@table_list[cruise.ExpoCode]['big_pic']) %>
-      <a href="<%= @table_list[cruise.ExpoCode]['big_pic'] -%>">
-        <img height="110" width="110" src="<%= @table_list[cruise.ExpoCode]['small_pic'] %>">
-      </a>
-    <% end %>
-  </td>
+    <%- cruise_table = @table_list[cruise.ExpoCode] %>
+    <%- params = @param_list[cruise.ExpoCode] %>
+    <%- hlclass = cycle('class="highlighted_cell"', '') %>
+    <tr <%= hlclass -%>>
+      <td class="metadata-cruise">
+        <span class="cruise_title">
+          <%= link_to(cruise.Line || '', cruise_path(cruise.ExpoCode), :class => "woce-line") %>
+          <%= link_to(cruise.ExpoCode, cruise_path(cruise.ExpoCode), :class => "expocode") %>
+        </span>
 
-   </tr>
-     <% cruise_ctr += 1 %>
-   <% end %>
-</Table>
+        <% if cruise_table["Preliminary"] %>
+          <div class="status-preliminary"><%= cruise_table['Preliminary'] %></div>
+        <% end %>
+
+        <%= pretty_dates(cruise, '%Y-%m-%d', ' to ') %>
+
+        <div class="links">
+          <%= button_to("Cruise Page", cruise_path(cruise.ExpoCode), :method => :get) %>
+          <%= button_to("Data History", cruise_path(cruise.ExpoCode, :anchor => 'history'), :method => :get) %>
+        </div>
+      </td>
+      <td class="metadata-how">
+        <p>
+        <% cruise.contacts.each_with_index do |contact,cnt| %>
+          <% if cnt > 0 %>, <% end %>
+          <a href="/contact?id=<%= contact.id %>"><%= contact.FirstName %>&nbsp;<%= contact.LastName %> </a> 
+        <% end %></p>
+        <p><%= cruise.Ship_Name %></p>
+        <p><%= cruise.Country %></p>
+      </td>
+      <td class="data-formats" rowspan="2">
+        <%= show_files(cruise, cruise_table, short=true) %>
+      </td>
+      <td class="thumbnail" rowspan="2">
+        <% if (cruise_table['big_pic']) %>
+          <a href="<%= cruise_table['big_pic'] -%>">
+            <img height="110" width="110" src="<%= cruise_table['small_pic'] %>">
+          </a>
+        <% end %>
+      </td>
+    </tr>
+    <tr <%= hlclass %>>
+      <td colspan="2" class="parameter_cell">
+        <% unless params['stations'].blank? or params['stations'] == 0 %>
+          <span class="param_title"><%= params['stations'] %> Stations with the following parameters</span><br />
+        <% end %>
+        <% if params['parameters'] %>
+          <p class="parameters">
+            <% keys = params.keys.reject(&:blank?).sort %>
+            <% keys.each do |param| %>
+              <% if param =~ /\w/ and param !~ /(castno)|(flag)|(time)|(expocode)|(sampno)|(sect_id)|(depth)|(latitude)|(longitude)|(stnnbr)|(btlnbr)|(date)|(stations)|(parameters)/i %>
+                <%= param %><% if params[param].to_i < 10 %>* <% end %>&nbsp;
+              <% end %> 
+            <% end %>
+          </p>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

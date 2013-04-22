@@ -1,16 +1,24 @@
-<% if params[:expanded] -%>
-  <a href="/<%= @query_with_sort_link -%>">Condensed View</a>
-<% else -%>
-  <a href="/<%= @query_with_sort_link -%>&expanded=true">Expanded View</a>
-<% end -%>
 <div id="search_results">
-  <% unless @cruises.blank? -%>
-	  <% if params[:expanded] -%>
+  <% if @cruises.blank? -%>
+    <h3>No results for <%= @query %></h3>
+  <% else -%>
+    <div class="tools">
+      <div class="tool tool-expander">
+        <%- if params[:expanded] %>
+          <%= button_to('Condense', params.merge(:expanded => false), :title => "Short results") %>
+        <%- else %>
+          <%= button_to('Expand', params.merge(:expanded => true), :title => "Detailed results") %>
+        <%- end %>
+      </div>
+      <%= datacart_link_cruises(@cruises, {:class => "tool"}) %>
+    </div>
+    <% if params[:expanded] -%>
       <%= render :partial => 'search/full_results' -%>
     <% else %>
       <%= render :partial => 'search/short_results' -%>
     <% end %>
-  <% else -%>
-    <h3>No results for <%= @query %></h3>
   <% end -%>
 </div>
+<%- content_for :js do %>
+  <%= javascript_include_tag 'datacart' -%>
+<%- end %>

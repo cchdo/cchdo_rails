@@ -530,7 +530,8 @@ CM.Info.prototype = {
            {label: 'Ship', type: 'string'},
            {label: 'Country', type: 'string'},
            {label: 'PI', type: 'string'},
-           {label: 'Begin Date', type: 'date'}],
+           {label: 'Begin Date', type: 'date'},
+           {label: 'data', type: 'string'}],
     rows: []
   }, 0.6), /* = wire protocol version */
   data_table_opts: {
@@ -541,9 +542,25 @@ CM.Info.prototype = {
     sortColumn: 5,
     sortAscending: false
   },
+  datacart_all_link: null,
+  _dialogs: null,
   i_to_d: null
 };
 CM.Info.prototype.table_rows = function() { return $('tr', this.jdom); }
+CM.Info.prototype.dialogs = function() { 
+  if (this._dialogs === null) {
+    this._dialogs = $('<div id="data-formats-dialogs"></div>').css('display', 'none');
+    this._dialogs.appendTo('body');
+  }
+  return this._dialogs;
+}
+CM.Info.prototype.setDatacartAllLink = function(link) {
+  if (this.datacart_all_link) {
+    this.datacart_all_link.remove();
+  }
+  this.datacart_all_link = $(link);
+  this.jdom.prepend(this.datacart_all_link);
+};
 CM.Info.prototype.setJdom = function(jdom) {
   if (this.jdom) {
     this.jdom.empty();
@@ -553,20 +570,31 @@ CM.Info.prototype.setJdom = function(jdom) {
   this.info_table = new google.visualization.Table(this.jdom[0]);
 
   var CMI = this;
-  this.table_rows()
-    .live('mouseenter', function() {
-      CM.results.dim(CMI.get_id(this), true);
-      return false;
-    })
-    .live('mouseleave', function() {
-      CM.results.darken(CMI.get_id(this), true);
-      return false;
-    })
-    .live('click', function() {
-      CM.results.lighten(CMI.get_id(this), true);
-    });
+  this.jdom.delegate('tr', 'mouseenter', function() {
+    CM.results.dim(CMI.get_id(this), true);
+    return false;
+  }).delegate('tr', 'mouseleave', function() {
+    CM.results.darken(CMI.get_id(this), true);
+    return false;
+  }).delegate('tr', 'click', function() {
+    CM.results.lighten(CMI.get_id(this), true);
+  });
   google.visualization.events.addListener(this.info_table, 'sort', function(event) {
     CMI.sync_sortorder(event);
+  });
+
+  if (this.datacart_all_link) {
+    this.jdom.append(this.datacart_all_link);
+  }
+
+  this.jdom.delegate('button[infodata-id]', 'click', function() {
+    var button = $(this);
+    var iid = button.attr('infodata-id');
+    $('#' + iid).dialog({
+      width: 350,
+      position: {my: 'right', at: 'left', of: button},
+    });
+    return false;
   });
 };
 CM.Info.prototype.sync_sortorder = function(sortorder) {
@@ -597,7 +625,20 @@ CM.Info.prototype.get_row_num = function(tr) {
   return -1;
 };
 CM.Info.prototype.add = function(info, notrack) {
-  var data_row = this.info_data_table.addRow([info.line, info.expocode, info.ship, info.country, info.pi, info.date_begin]);
+  var dataid = info.id;
+  var datadiv = $('<div>' + info.data + '</div>').
+    addClass('data-formats').
+    css('position', 'relative').
+    attr('title', info.expocode).
+    attr('id', 'infodata' + info.cruise_id).
+    appendTo(this.dialogs());
+  var databutton = '<button class="datacart-blank" infodata-id="infodata' +
+    info.cruise_id +'" title="Add/remove data">' +
+    '<div class="datacart-icon"></div></button>';
+
+  var data_row = this.info_data_table.addRow(
+    [info.line, info.expocode, info.ship, info.country, info.pi,
+     info.date_begin, databutton]);
   if (notrack) {
     for (var i=0; i<this.info_data_table.getNumberOfColumns(); i++) {
       this.info_data_table.setProperty(data_row, i, 'style', 'background-color: #ffdddd;');
@@ -640,6 +681,7 @@ CM.Info.prototype.redraw = function() {
     this.info_table.draw(this.info_data_table, this.data_table_opts);
     this.sync_sortorder(this.info_table.getSortInfo());
     if (this.selected) { this.info_table.setSelection(this.selected); }
+    this.jdom.prepend(this.datacart_all_link);
   }
 };
 CM.Info.prototype.popout = function() {
@@ -699,13 +741,14 @@ CM.results = {
           CM.state('Received '+expocode);
           var CME = CM.entries;
           var info = response;
+          var cruise_link = '<a href="/cruise/'+expocode+'">'+expocode+'</a>';
           if (info) {
-            info.expocode = '<a href="http://cchdo.ucsd.edu/data_access?ExpoCode='+expocode+'">'+expocode+'</a>';
+            info.expocode = cruise_link;
             info.date_begin = parseYYYYmmdd(info.date_begin);
             info.date_end = parseYYYYmmdd(info.date_end);
           } else {
-            info = {'expocode': '<a href="http://cchdo.ucsd.edu/data_access?ExpoCode='+expocode+'">'+expocode+'</a>',
-                    'line': null, 'ship': null, 'country': null, 'pi': null, 'date_begin': null};
+            info = {'expocode': cruise_link, 'line': null, 'ship': null,
+                    'country': null, 'pi': null, 'date_begin': null};
           }
           /* Plot the cruise track and do the appropriate event attaching */
           var G = google.maps;
@@ -873,10 +916,10 @@ CM.tracks_handler = function(request) {
   var cruise_tracks = request;
   var check = undefined;
   var num_ids = 0;
-  for (var expocode in cruise_tracks) {
+  for (var expocode in cruise_tracks['cruises']) {
     check = expocode;
     num_ids += 1;
-    CM.results.add(expocode, cruise_tracks[expocode]);
+    CM.results.add(expocode, cruise_tracks['cruises'][expocode]);
   }
   if (check === undefined) {
     CM.state('No cruises found');
@@ -885,6 +928,7 @@ CM.tracks_handler = function(request) {
     CM.pane.activate();
     CM.pane.unshade();
   }
+
   var added = 0;
   CM.state('Adding info');
   $(CM.results).bind('added', function () {
@@ -895,6 +939,7 @@ CM.tracks_handler = function(request) {
       $(this).unbind();
     }
   });
+  CM.info.setDatacartAllLink(cruise_tracks['datacart_all_link']);
 };
 CM.remote_submit = function() { $('form[name=tool_details]').submit(); };
 CM.submit = function() {
