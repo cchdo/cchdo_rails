@@ -832,12 +832,8 @@ div.datacart-icon {
 .datacart-blank .datacart-icon { background-position: 0 45px; padding-left: 0; }
 .datacart-add .datacart-icon { background-position: 0 30px; }
 .datacart-remove .datacart-icon { background-position: 0 15px; }
-.datacart-add-cruise .datacart-icon { background-position: 0 60px; }
-.datacart-remove-cruise .datacart-icon { background-position: 0 0px; }
-.lt-ie9 .datacart-add .datacart-icon { background-position: 0 30px; }
-.lt-ie9 .datacart-remove .datacart-icon { background-position: 0 15px; }
-.lt-ie9 .datacart-add-cruise .datacart-icon { background-position: 0 60px; }
-.lt-ie9 .datacart-remove-cruise .datacart-icon { background-position: 0 0px; }
+.datacart-add-cruise .datacart-icon { background-position: 0 0px; }
+.datacart-remove-cruise .datacart-icon { background-position: 0 60px; }
 
 #search_results .tools { padding: 0.5em 0.2em; position: relative; }
 #search_results .tools .datacart-cruises-links { position: relative; right: 0; }
