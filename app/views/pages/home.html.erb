@@ -172,7 +172,7 @@ window.onload = init;
            expo = info[:expocode] -%>
           <tr>
             <td>
-              <% if info[:map] -%><a href='/cruise/<%= expo -%>'><img src="/<%= info[:map] -%>"></a><% end %>
+              <% if info[:map] -%><a href='/cruise/<%= expo -%>'><img src="<%= info[:map] -%>"></a><% end %>
             </td>
             <td>
               <h1><a href='/cruise/<%= expo -%>'> <%= info[:line] -%></a> <a href="/cruise/<%= expo -%>"><%= info[:expocode] -%></a></h1>
