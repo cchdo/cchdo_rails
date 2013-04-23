@@ -280,7 +280,6 @@ class ApplicationController < ActionController::Base
        @results = []
        @cur_max = 0
        @dir = []
-       @line_query = nil
        @date_query = nil
        # Special Case 1: Token Search
        #  associate the query with it's requested
@@ -297,17 +296,15 @@ class ApplicationController < ActionController::Base
           end
        end
 
-       # Change queries formated like I9, or A6
-       # to be I09 or A06
-       #if (query =~ /^[a-zst][0-9]$/i)
-       #   letters = query.split(//)
-       #   query = "#{letters[0]}0#{letters[1]}"
-       #end
+       # Change queries formated like I9, or A6 to be I09 or A06
+       col_multiplier = {
+           'Group' => 1
+       }
        if (query =~/^[a-zA-Z]{1,3}\d{1,2}$/i)
           if query =~/^([a-zA-Z]{1,3})(\d)$/
              query = "#{$1}0#{$2}"
           end
-          @line_query = query
+          col_multiplier['Group'] = 100
        end
        # If the search contains a full country name, replace it with
        # the cchdo country abreviation
@@ -326,14 +323,15 @@ class ApplicationController < ActionController::Base
        for column in Cruise.columns
           if (column.name !~ /14C/)
              @names << column.human_name
-             @results = reduce_specifics(Cruise.find(:all ,:conditions => ["`#{column.name}` regexp '#{query}'"]))
+             @results = reduce_specifics(Cruise.find(:all ,:conditions => ["`#{column.name}` regexp ?", query]))
              if @date_query and @results.length > 0 and column.name.eql?("Begin_Date")
                 @best_result[query] =  "Date"
                 break  # Break out of the for column in Cruise.columns loop
              end
-             if @results.length > @cur_max
+             multiplier = col_multiplier[column.name] || 1
+             if @results.length * multiplier > @cur_max
                 @cur_max = @results.length
-                @best_result[query] = column.name#@results
+                @best_result[query] = column.name
                 @results=[]
              end
           end
