@@ -1,37 +1,6 @@
 <h1>Queue</h1>
 <%-
-def cls_to_title(cls)
-  cls.capitalize
-end
 
-def cls_to_query(cls)
-  q = {}
-  s, t = cls.split(' ')
-  if ['hidden', 'merged'].include?(s)
-    q[:merge_status] = s
-  end
-  if t == 'docs'
-    q[:docs] = 'y'
-  end
-  q
-end
-
-cls = []
-
-mstatus = params[:merge_status]
-if not ['hidden', 'merged'].include?(mstatus)
-  mstatus = 'unmerged'
-end
-cls << mstatus
-
-if @documentation == 1
-  cls << 'docs'
-else
-  cls << 'data'
-end
-cls = cls.join(' ')
-
-title = cls_to_title(cls)
 %>
 
 <div class="queue">
@@ -41,7 +10,7 @@ title = cls_to_title(cls)
         <%- for s in ['unmerged', 'hidden', 'merged'] %>
           <%- ccls = s + ' ' + t %>
           <%- q = cls_to_query(ccls) %>
-          <%- if ccls == cls %>
+          <%- if ccls == cls() %>
             <%- tdcls = ccls + ' active' %>
           <%- else %>
             <%- tdcls = ccls %>
@@ -54,7 +23,7 @@ title = cls_to_title(cls)
       </tr>
     <%- end %>
   </table>
-  <div class="<%= cls %>">
+  <div class="queue-box <%= cls() %>">
     <%= render :partial => '/staff/queue_files/queue_box' %>
   </div>
 </div>

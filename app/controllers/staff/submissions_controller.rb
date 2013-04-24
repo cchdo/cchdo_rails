@@ -26,6 +26,8 @@ class Staff::SubmissionsController < StaffController
 
         if condition_name == 'all'
             type_cond = nil
+        elsif condition_name == 'id'
+            type_cond = "id = #{(params[:query] || '0').to_i}"
         elsif condition_name == 'argo'
             type_cond = "public = 'argo'"
         elsif condition_name == 'unassigned'
@@ -38,13 +40,11 @@ class Staff::SubmissionsController < StaffController
             type_cond = "assimilated = 0 AND (public IS NULL OR public != 'argo')"
         end
         unless pre_conditions.nil?
-            conditions = [[pre_conditions[0], type_cond].map {|x| "(#{x})"}.join(' AND ')]
+            conditions = [[pre_conditions[0], type_cond].compact.map {|x| "(#{x})"}.join(' AND ')]
             conditions.concat([pre_conditions.slice(1..-1)])
         else
             conditions = [type_cond].compact
         end
-        Rails.logger.debug(conditions.inspect)
-        Rails.logger.debug(sort_condition.inspect)
         @submissions = Submission.find(
             :all, :conditions => conditions, :order => sort_condition)
     end
@@ -82,7 +82,7 @@ class Staff::SubmissionsController < StaffController
             @old_submissions = OldSubmission.all()
         else
             @query = params[:query] || ''
-            if @query.length > 0
+            if @query.length > 0 and list_type != 'id'
                 query_conditions = _best_submission_query_condition(@query)
             else
                 query_conditions = nil

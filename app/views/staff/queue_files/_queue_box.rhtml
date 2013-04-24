@@ -3,7 +3,7 @@
     <h3 class="cruise"><span class="date_received"><%= date %></span> <%= link_to(expo, "/cruise/#{expo}") %></h3>
     <table class="files">
     <% for file in @files_by_cruise[expo] %>
-      <tr id="queue_<%= file.id %>" class="file">
+      <tr id="queue_<%= file.id %>" class="file <%= cls_status_doc(qfile_status(file), file.documentation) %>">
         <td class="link">
           <%= link_to(limit_str_len(file.Name, 27), file.UnprocessedInput, :title => file.Name) %>
         </td>
@@ -15,7 +15,7 @@
         </td>
         <td class="submission">
           <% if file.submission_id != 0 %>
-            <%= link_to("Submission #{file.submission_id}", "/submissions#sub_#{file.submission_id}") %> &rarr;
+            <%= link_to("Submission #{file.submission_id}", submissions_path(:submission_list => 'id', :query => file.submission_id)) %> &rarr;
           <% end %>
         </td>
         <td class="id"><%= file.id %></td>

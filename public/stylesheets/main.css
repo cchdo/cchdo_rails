@@ -1207,24 +1207,18 @@ div.tm_auto_complete ul strong.highlight { color: #800; margin: 0; padding:0; }
 .queue .tabs a:hover {
   text-decoration: underline;
 }
-.queue .tabs .active.unmerged {
-  background-color: #FFDDDD;
-}
-.queue .tabs .unmerged {
-  background-color: #FFEEEE;
-}
-.queue .tabs .active.hidden {
-  background-color: #FFFFBB;
-}
-.queue .tabs .hidden {
-  background-color: #FFFFEE;
-}
-.queue .tabs .active.merged {
-  background-color: #DDFFDD;
-}
-.queue .tabs .merged {
-  background-color: #EEFFEE;
-}
+.queue .tabs .active.unmerged { background-color: #FFDDDD; }
+.queue .tabs .unmerged { background-color: #FFEEEE; }
+.queue .tabs .active.hidden { background-color: #FFFFBB; }
+.queue .tabs .hidden { background-color: #FFFFEE; }
+.queue .tabs .active.merged { background-color: #DDFFDD; }
+.queue .tabs .merged { background-color: #EEFFEE; }
+.queue .queue-box.id .unmerged,
+.queue .queue-box.expocode .unmerged { background: #FFDDDD; }
+.queue .queue-box.id .merged,
+.queue .queue-box.expocode .merged { background: #DDFFDD; }
+.queue .queue-box.id .hidden,
+.queue .queue-box.expocode .hidden { background: #FFFFBB; }
 
 .queue .cruise {
 }

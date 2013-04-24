@@ -3,6 +3,9 @@ class Staff::QueueController < ApplicationController
     before_filter :check_authentication, :except => [:signin]
 
     def queue_files
+        # Providing any of parameters id, expocode will only show the queue for
+        # that file or cruise's files
+
         @user = User.find(session[:user]).username
 
         @documentation = 0
@@ -28,8 +31,14 @@ class Staff::QueueController < ApplicationController
         # group by date of first unmerged file for cruise
         #   group by cruise
 
-        files = QueueFile.find_all_by_Merged_and_documentation(
-            merge_status, @documentation, :order => :DateRecieved)
+        if params[:id]
+            files = QueueFile.find_all_by_id(params[:id])
+        elsif params[:expocode]
+            files = QueueFile.find_all_by_ExpoCode(params[:expocode])
+        else
+            files = QueueFile.find_all_by_Merged_and_documentation(
+                merge_status, @documentation, :order => :DateRecieved)
+        end
 
         files_by_cruise = Hash.new {|h, k| h[k] = []}
         for file in files

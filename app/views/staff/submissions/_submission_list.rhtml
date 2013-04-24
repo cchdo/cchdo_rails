@@ -24,7 +24,7 @@
           <td><%= submission.id %>
             <% unless qfs.empty? %>
               <% correct_expo = qfs[0].ExpoCode %>
-              &rarr; QueueFiles [<%= qfs.map {|qf| link_to(qf.id.to_s, "/queue#queue_#{qf.id}") }.join(', ') %>]
+              &rarr; QueueFiles [<%= qfs.map {|qf| link_to(qf.id.to_s, queue_path(:id => qf.id)) }.join(', ') %>]
             <% end %>
           <td>
             <% if not correct_expo.nil? and correct_expo != submission.ExpoCode %>
