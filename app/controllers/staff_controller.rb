@@ -85,55 +85,89 @@ def _queue_submissions
     queue_submissions
 end
 
+$submission_sort_columns = [
+    "submission_date", "name", "institute", "Country", "email", "Line",
+    "ExpoCode", "Ship_Name", "cruise_date"
+]
+
+def _submission_list_type(condition_name, pre_conditions=nil)
+    if params[:sort] and $submission_sort_columns.include?(params[:sort])
+        sort_condition = params[:sort]
+    else
+        sort_condition = params[:sort] = 'submission_date'
+    end
+    if sort_condition == 'submission_date'
+        sort_condition += ' DESC'
+    end
+
+    if condition_name == 'all'
+        type_cond = nil
+    elsif condition_name == 'argo'
+        type_cond = "public = 'argo'"
+    elsif condition_name == 'unassigned'
+        type_cond = "assigned = 0"
+    elsif condition_name == 'not_queued'
+        type_cond = "assimilated = 0"
+    elsif condition_name == 'not_queued_not_argo'
+        type_cond = "assimilated = 0 AND (public IS NULL OR public != 'argo')"
+    else
+        type_cond = "assimilated = 0 AND (public IS NULL OR public != 'argo')"
+    end
+    unless pre_conditions.nil?
+        conditions = [[pre_conditions[0], type_cond].map {|x| "(#{x})"}.join(' AND ')]
+        conditions.concat([pre_conditions.slice(1..-1)])
+    else
+        conditions = [type_cond].compact
+    end
+    Rails.logger.debug(conditions.inspect)
+    Rails.logger.debug(sort_condition.inspect)
+    @submissions = Submission.find(
+        :all, :conditions => conditions, :order => sort_condition)
+end
+
 def submitted_files
-    @user = User.find(session[:user])
-    @user = @user.username
-    @submissions = Submission.find(:all, :order => "submission_date DESC")
-    @queue_submissions = _queue_submissions()
+    user = User.find(session[:user])
+    if not user or user.username =~ /guest/
+        raise ActionController::RoutingError.new('Unauthorized')
+    end
+
+    list_type = params[:submission_list]
+    if not list_type
+        list_type = params[:submission_list] = 'not_queued_not_argo'
+    end
+    _generate_submission_list(list_type)
     render :file => "/staff/submitted_files/submitted_files", :layout => true
 end
 
-def submission_list
-    condition = params[:submission_list]
-    @queue_submissions = _queue_submissions()
-    @parameters = params
-    if params[:Sort]
-        sort_condition = params[:Sort]
-    else
-        sort_condition = "submission_date"
-    end
-    if condition == 'all'
-        @submissions = Submission.find(:all,:order => sort_condition)
-    elsif condition == 'unassigned'
-        @submissions = Submission.find(:all, :conditions => ["assigned = '0'"], :order => sort_condition)
-    elsif condition == 'not_queued'
-        @submissions = Submission.find(:all, :conditions => ["assimilated = '0'"], :order => sort_condition)
-    elsif condition == 'old_submissions':
-        @old_submissions = OldSubmission.all()
-        render :partial => "/staff/submitted_files/old_submission_list"
-        return
-    end
-    render :partial => "/staff/submitted_files/submission_list"
-end
-
-def submission_search
-    @query = params[:submission][:query] || ''
-
+def _best_submission_query_condition(query)
     cur_max = -1
+    best_condition = nil
     for column in Submission.columns
-        condition = ["`#{column.name}` regexp ?", @query]
+        condition = ["`#{column.name}` regexp ?", query]
         results = Submission.count(:conditions => condition)
         if results > cur_max
             cur_max = results
-            best_result = condition
+            best_condition = condition
         end
     end
+    return best_condition
+end
 
-    @submissions = Submission.all(
-        :conditions => best_result,
-        :order => "submission_date DESC")
-    @queue_submissions = _queue_submissions()
-    render :partial => "/staff/submitted_files/submission_list"
+def _generate_submission_list(list_type)
+    if list_type == 'old_submissions'
+        @old_submissions = OldSubmission.all()
+    else
+        @query = params[:query] || ''
+        if @query.length > 0
+            query_conditions = _best_submission_query_condition(@query)
+        else
+            query_conditions = nil
+        end
+        Rails.logger.debug(query_conditions)
+
+        _submission_list_type(list_type, query_conditions)
+        @queue_submissions = _queue_submissions()
+    end
 end
 
 def enqueue

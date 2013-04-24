@@ -1,0 +1,105 @@
+<div class="submissions">
+  <h1>Submitted Files</h1>
+  <div id="submission_color_key">
+    <table>
+      <tr>
+        <td class="submission-queued odd" width="20"></td>
+        <td class="submission-queued even" width="20"></td>
+        <td>Queued</td>
+      </tr>
+      <tr>
+        <td class="submission-new odd" width="20"></td>
+        <td class="submission-new even" width="20"></td>
+        <td>New</td>
+      </tr>
+    </table>
+  </div>
+  <form id="tools">
+    <%-
+      lists = [
+        #['Unassigned', :unassigned],
+        ['Not queued not Argo', :not_queued_not_argo],
+        ['Not queued all', :not_queued],
+        ['Argo', :argo],
+        ['All', :all],
+        ['Old Submissions', :old_submissions]
+      ]
+    %>
+    <%- for (label, key) in lists %>
+      <%- checked = nil %>
+      <% if params[:submission_list] == key.to_s %>
+        <%- checked = {:checked => true} %>
+      <%- end %>
+      <%= radio_button_tag(:submission_list, key, checked) %>
+      <%= label(:submission_list, key, label) %>
+    <%- end %>
+
+    <div class="filter">
+      <%= text_field_tag :query, params[:query] %> <%= submit_tag "Filter" %>
+    </div>
+
+    <%- if params[:submission_list] != 'old_submissions' %>
+      <div class="sort">
+        <h1>Sort by:</h1>
+        <% for column in $submission_sort_columns %>
+          <%- checked = nil %>
+          <% if params[:sort] == column %>
+            <%- checked = {:checked => true} %>
+          <%- end %>
+          <%= radio_button_tag(:sort, column, checked) %>
+          <%= label(:sort, column.downcase, column) %>
+        <%- end %>
+      </div>
+    <%- end %>
+  </form>
+
+  <div id="submissions">
+    <%- if params[:submission_list] == 'old_submissions' %>
+      <%= render :partial => '/staff/submitted_files/old_submission_list' %>
+    <%- else %>
+      <%= render :partial => '/staff/submitted_files/submission_list' %>
+    <%- end %>
+  </div>
+</div>
+<%- content_for :js do %>
+  <script>
+  jQuery(function($) {
+    $('#submissions').delegate('button', 'click', function() {
+      var button = $(this);
+      var details = button.closest('tr').nextAll('.submission-details:nth(0)').find('.hideable');
+      if (details.data('showing')) {
+        details.hide().data('showing', false);
+        button.html('Show details');
+      } else {
+        details.show().data('showing', true);
+        button.html('Hide details');
+      }
+    });
+    function init_submissions_list() {
+      $('#submissions thead tr').append($('<th class="expander">'));
+      $('#submissions .submission-meta-first').append(
+        $('<td rowspan="4" class="expander"><button>Show details</button></td>')
+      );
+      $('#submissions .submission-details .hideable').hide();
+    }
+    init_submissions_list();
+
+    function updateHtml(html) {
+      $('#submissions').html(html);
+      init_submissions_list();
+    }
+
+    function radioChange() {
+      window.location.href = "<%= request.path %>?" + 
+        $.param({
+          submission_list: $('#tools [name=submission_list]:radio:checked').val(),
+          query: $('#tools #query').val(),
+          sort: $('#tools [name=sort]:radio:checked').val()
+        });
+      return false;
+    }
+    $('#tools').submit(radioChange);
+    $('#tools :radio').change(radioChange);
+  });
+  </script>
+<%- end %>

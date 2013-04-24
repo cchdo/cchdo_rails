@@ -1,3 +1,5 @@
+require 'cruise_data_formats'
+
 class Document < ActiveRecord::Base
     belongs_to :cruise, :primary_key => 'ExpoCode', :foreign_key => 'ExpoCode'
 

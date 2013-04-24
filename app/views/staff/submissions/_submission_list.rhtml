@@ -1,0 +1,110 @@
+<% unless @submissions.length > 0 %>
+  <p>No submissions matched "<%= @query %>"</p>
+<% else %>
+  <p class="summary"><%= pluralize(@submissions.length, 'submission') %> in <%= h params[:submission_list] %> filtered by '<%= h params[:query] %>'</p>
+	<table id="submitted_files" style="width: 100%">
+		<thead>
+		<tr>
+	    <th>Submission</th>
+	    <th>Cruise</th>
+	    <th>Submitted by</th>
+      <th>Status</th>
+	  </tr>
+	  </thead>
+      <% for submission in @submissions %>
+        <% if submission.assimilated  %>
+          <% trclass = 'submission-queued' %>
+        <% else %>
+          <% trclass = 'submission-new' %>
+        <% end %>
+        <% trclass += ' ' + cycle('odd', 'even') %>
+        <tr id="sub_<%= submission.id %>" class="submission-meta submission-meta-first <%= trclass %>">
+          <% correct_expo = nil %>
+          <% qfs = @queue_submissions[submission.id] %>
+          <td><%= submission.id %>
+            <% unless qfs.empty? %>
+              <% correct_expo = qfs[0].ExpoCode %>
+              &rarr; QueueFiles [<%= qfs.map {|qf| link_to(qf.id.to_s, "/queue#queue_#{qf.id}") }.join(', ') %>]
+            <% end %>
+          <td>
+            <% if not correct_expo.nil? and correct_expo != submission.ExpoCode %>
+              <%= link_to(submission.ExpoCode, cruise_path(submission.ExpoCode), :class => "corrected") %>
+              <%= link_to(correct_expo, cruise_path(correct_expo)) %>
+            <% else %>
+              <%= link_to(submission.ExpoCode, cruise_path(submission.ExpoCode || '')) %>
+            <% end %>
+          </td>
+          <td><%= submission.name %></td>
+          <td><% if submission.public == 'public' %>&#x2713;<% else %><%= submission.public %><% end %></td>
+        </tr>
+        <tr class="submission-meta <%= trclass %>">
+          <td><a href="<%= Submission.public_file_path(submission) %>"><%= File.basename(submission.file) %></a>
+            <% if File.basename(submission.file) =~ /^multiple_files\.\d+\.zip/ %>
+              <ul>
+              <% for fn in multiple_files_names(Submission.private_file_path(submission)) %>
+                <li><%= fn %></li>
+              <% end %>
+              </ul>
+            <% end %>
+          </td>
+          <td><%= submission.Line %></td>
+          <td><%= submission.email %></td>
+          <td><%= submission.Ship_Name %></td>
+        </tr>
+        <tr class="submission-meta <%= trclass %>">
+          <td><%= submission.submission_date %></td>	 
+          <td><%= submission.cruise_date %></td>
+          <td><%= submission.institute %></td>
+          <td><%= submission.Country %></td>
+        </tr>
+        <tr class="submission-details <%= trclass %>">
+          <td colspan="4" class="hideable">
+            <div class="submission-note">
+              <% if submission.notes %>
+                <textarea disabled="disabled"><%= submission.notes %></textarea>
+              <% else %>
+                <p>No note</p>
+              <% end %>
+            </div>
+            <% if not submission.assimilated %>
+              <div class="enqueue-form enqueuer" id="enqueue_<%= submission.id %>">
+                <form id="enqueue_<%= submission.id %>" action="/staff/enqueue">
+                  <input type="hidden" name="enqueue_submission" value="<%= submission.id %>">
+                  <table style="width: 95%">
+                    <tr>
+                      <th><label for="enqueue_attach_to_expocode">Attach to cruise</label></th>
+                      <td>
+                        <input name="enqueue_attach_to_expocode" type="text" value="<%= submission.ExpoCode %>">
+                      </td>
+                    </tr>
+                    <tr>
+                      <th><label for="enqueue_notes">Notes</label></th>
+                      <td><textarea name="enqueue_notes" style="height: 2em;"></textarea></td>
+                    </tr>
+                    <tr>
+                      <th><label for="enqueue_parmaeters">Data type</label></th>
+                      <td><input name="enqueue_parameters" type="text"></td>
+                    </tr>
+                    <tr>
+                      <th><label for="enqueue_documentation">Is documentation</label></th>
+                      <td><input name="enqueue_documentation" type="checkbox"></td>
+                    </tr>
+                    <tr>
+                      <th><label for="enqueue_noemail">Don't send email</label></th>
+                      <td><input name="enqueue_noemail" type="checkbox"></td>
+                    </tr>
+                    <tr>
+                      <th></th>
+                      <td>
+                        <%= submit_tag "Enqueue", :confirm => 'Are you sure?' %>
+                      </td>
+                    </tr>
+                  </table>
+                </form>
+              </div>
+            <% end %>
+          </td>
+        </tr>
+		<% end %>
+	</table>
+<% end %>
