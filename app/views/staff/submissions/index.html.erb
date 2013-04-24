@@ -1,64 +1,67 @@
-<div class="submissions">
-  <h1>Submitted Files</h1>
-  <div id="submission_color_key">
-    <table>
-      <tr>
-        <td class="submission-queued odd" width="20"></td>
-        <td class="submission-queued even" width="20"></td>
-        <td>Queued</td>
-      </tr>
-      <tr>
-        <td class="submission-new odd" width="20"></td>
-        <td class="submission-new even" width="20"></td>
-        <td>New</td>
-      </tr>
-    </table>
-  </div>
-  <form id="tools">
-    <%-
-      lists = [
-        #['Unassigned', :unassigned],
-        ['Not queued not Argo', :not_queued_not_argo],
-        ['Not queued all', :not_queued],
-        ['Argo', :argo],
-        ['All', :all],
-        ['Old Submissions', :old_submissions]
-      ]
-    %>
-    <%- for (label, key) in lists %>
-      <%- checked = nil %>
-      <% if params[:submission_list] == key.to_s %>
-        <%- checked = {:checked => true} %>
-      <%- end %>
-      <%= radio_button_tag(:submission_list, key, checked) %>
-      <%= label(:submission_list, key, label) %>
-    <%- end %>
-
-    <div class="filter">
-      <%= text_field_tag :query, params[:query] %> <%= submit_tag "Filter" %>
+<div class="submissions boxed">
+  <h1>Submissions</h1>
+  <div class="box_content">
+    <div class="legend">
+      <table>
+        <tr>
+          <td class="submission-queued odd" width="20"></td>
+          <td class="submission-queued even" width="20"></td>
+          <td>Queued</td>
+        </tr>
+        <tr>
+          <td class="submission-new odd" width="20"></td>
+          <td class="submission-new even" width="20"></td>
+          <td>New</td>
+        </tr>
+      </table>
     </div>
-
-    <%- if params[:submission_list] != 'old_submissions' %>
-      <div class="sort">
-        <h1>Sort by:</h1>
-        <% for column in $submission_sort_columns %>
-          <%- checked = nil %>
-          <% if params[:sort] == column %>
-            <%- checked = {:checked => true} %>
-          <%- end %>
-          <%= radio_button_tag(:sort, column, checked) %>
-          <%= label(:sort, column.downcase, column) %>
+    <form id="tools">
+      <%-
+        lists = [
+          #['Unassigned', :unassigned],
+          ['Not queued not Argo', :not_queued_not_argo],
+          ['Not queued all', :not_queued],
+          ['Argo', :argo],
+          ['All', :all],
+          ['Old Submissions', :old_submissions]
+        ]
+      %>
+      <%- for (label, key) in lists %>
+        <%- checked = nil %>
+        <% if params[:submission_list] == key.to_s %>
+          <%- checked = {:checked => true} %>
         <%- end %>
-      </div>
-    <%- end %>
-  </form>
+        <%= radio_button_tag(:submission_list, key, checked) %>
+        <%= label(:submission_list, key, label) %>
+      <%- end %>
 
-  <div id="submissions">
-    <%- if params[:submission_list] == 'old_submissions' %>
-      <%= render :partial => '/staff/submitted_files/old_submission_list' %>
-    <%- else %>
-      <%= render :partial => '/staff/submitted_files/submission_list' %>
-    <%- end %>
+      <div class="filter">
+        <%= text_field_tag :query, params[:query] %> <%= submit_tag "Filter" %>
+      </div>
+
+      <%- if params[:submission_list] != 'old_submissions' %>
+        <div class="sort">
+          <h1>Sort by:</h1>
+          <% for column in $submission_sort_columns %>
+            <%- checked = nil %>
+            <% if params[:sort] == column %>
+              <%- checked = {:checked => true} %>
+            <%- end %>
+            <%= radio_button_tag(:sort, column, checked) %>
+            <%= label(:sort, column.downcase, column) %>
+          <%- end %>
+        </div>
+      <%- end %>
+    </form>
+
+    <div id="submissions">
+      <%- if params[:submission_list] == 'old_submissions' %>
+        <%= render :partial => '/staff/submissions/old_submission_list' %>
+      <%- else %>
+        <%= render :partial => '/staff/submissions/submission_list' %>
+      <%- end %>
+    </div>
+    <div class="box_bottom"></div>
   </div>
 </div>
 <%- content_for :js do %>

@@ -68,7 +68,7 @@
             </div>
             <% if not submission.assimilated %>
               <div class="enqueue-form enqueuer" id="enqueue_<%= submission.id %>">
-                <form id="enqueue_<%= submission.id %>" action="/staff/enqueue">
+                <form id="enqueue_<%= submission.id %>" action="<%= enqueue_path %>">
                   <input type="hidden" name="enqueue_submission" value="<%= submission.id %>">
                   <table style="width: 95%">
                     <tr>

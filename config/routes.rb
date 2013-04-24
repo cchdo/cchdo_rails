@@ -43,14 +43,12 @@ ActionController::Routing::Routes.draw do |map|
   map.sea_hunt 'sea_hunt', :controller => 'sea_hunt', :action => 'index'
   map.sea_hunt_sort 'sea_hunt_sort', :controller => 'sea_hunt', :action => 'sort_table'
 
-  map.submissions 'submissions', :controller => :staff, :action => :submitted_files
+  map.submissions 'submissions', :controller => 'staff/submissions', :action => :index
+  map.enqueue 'submissions/enqueue', :controller => 'staff/submissions', :action => :enqueue
 
   map.queue "queue", :controller => 'staff/queue', :action => :queue_files
   map.queue_csv "queue.:format", :controller => 'staff/queue', :action => :queue_files
   map.queue_file_edit 'queue/:id/edit', :controller => 'staff/queue', :action => :queue_edit
-
-  map.old_submissions 'old_submissions', :controller => 'old_submissions', :action => 'index'
-  map.old_submissions_sort 'old_submissions_sort', :controller => 'old_submissions', :action => 'sort_table'
 
   map.arctic 'arctic', :controller => :by_ocean, :action => :arctic
   map.southern 'southern', :controller => :by_ocean, :action => :southern

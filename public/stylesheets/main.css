@@ -1003,6 +1003,21 @@ div.scroll {overflow: auto; width: 100%; height: 36em;}
   background: #D8D8D8 !important;
 }
 
+.submission-queued.even { background: #888888; color: #444444; }
+.submission-queued.odd { background: #777777; color: #333333; }
+.submission-new.even {  background: #F1EBCC; }
+.submission-new.odd {  background: #FFFFDD; }
+.submissions .legend { background-color: #EEEEEE; padding: 0.5em; float: right; margin-bottom: 1em; }
+.submissions .sort h1 { display: inline; font-weight: bold; }
+.submissions .enqueue-form th { border: none; }
+#submissions .summary { font-size: 1.1em; padding: 0.3em 0.2em; margin: 0.2em 0; background: #DDFFDD; max-width: none; }
+#submissions thead th { font-size: 1.1em; font-weight: normal; background: #EEEEEE; padding: 0.25em; }
+#submissions .corrected { text-decoration: line-through; }
+#submissions .submission-note textarea { width: 90%; background: transparent; border: 0; }
+#submissions .enqueue-form th { width: 10em; text-align: right; }
+#submissions .enqueue-form textarea,
+#submissions .enqueue-form input[type=text] { width: 100%; }
+#submissions .expander { width: 6em; vertical-align: top; }
 
 /* Staff Pages */
 .staff #menu { background: #c0c0c0; color: #A0A0A0; padding: 0.5em; }
@@ -1019,20 +1034,6 @@ div.scroll {overflow: auto; width: 100%; height: 36em;}
 }
 
 #results { margin: 1em; }
-
-.submission-queued.even { background: #888888; color: #444444; }
-.submission-queued.odd { background: #777777; color: #333333; }
-.submission-new.even {  background: #F1EBCC; }
-.submission-new.odd {  background: #FFFFDD; }
-.submissions .sort h1 { display: inline; font-weight: bold; }
-#submissions .summary { font-size: 1.1em; padding: 0.3em 0.2em; margin: 0.2em 0; background: #DDFFDD; max-width: none; }
-#submissions thead th { font-size: 1.1em; font-weight: normal; background: #EEEEEE; padding: 0.25em; }
-#submissions .corrected { text-decoration: line-through; }
-#submissions .submission-note textarea { width: 90%; background: transparent; border: 0; }
-#submissions .enqueue-form th { width: 10em; text-align: right; }
-#submissions .enqueue-form textarea,
-#submissions .enqueue-form input[type=text] { width: 100%; }
-#submissions .expander { width: 6em; vertical-align: top; }
 
 #task_color_key { border: 1px solid #FFF; }
 
@@ -1173,13 +1174,6 @@ div.tm_auto_complete ul strong.highlight { color: #800; margin: 0; padding:0; }
 .assignment_project_cell {
   color: #000001;
   font: 110% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
-}
-
-#submission_color_key {
-  background-color: #9ec4cd;
-  padding: 0.5em;
-  float: right;
-  margin-bottom: 1em;
 }
 
 .queue h3 {
