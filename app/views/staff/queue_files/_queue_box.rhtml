@@ -18,7 +18,7 @@
             <%= link_to("Submission #{file.submission_id}", submissions_path(:submission_list => 'id', :query => file.submission_id)) %> &rarr;
           <% end %>
         </td>
-        <td class="id"><%= file.id %></td>
+        <td class="id"><%= link_to(file.id, queue_path(:id => file.id)) %></td>
         <% param_class = 'parameters' %>
         <% if file.Parameters =~ /\bctd\b/i %>
           <% param_class += ' ctd' %>

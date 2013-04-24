@@ -1,9 +1,6 @@
+<div class="boxed">
 <h1>Queue</h1>
-<%-
-
-%>
-
-<div class="queue">
+<div class="box_content queue">
   <table class="tabs">
     <%- for t in ['data', 'docs'] %>
       <tr>
@@ -26,6 +23,8 @@
   <div class="queue-box <%= cls() %>">
     <%= render :partial => '/staff/queue_files/queue_box' %>
   </div>
+</div>
+<div class="box_bottom"></div>
 </div>
 <% content_for :js do %>
 <script>

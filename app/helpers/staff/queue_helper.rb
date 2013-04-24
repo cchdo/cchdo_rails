@@ -16,7 +16,7 @@ module Staff::QueueHelper
     end
 
     def cls()
-        cls_status_doc(params[:merge_status], @documentation)
+        cls = cls_status_doc(params[:merge_status], @documentation)
 
         if not params[:id].nil?
           cls = 'id'
