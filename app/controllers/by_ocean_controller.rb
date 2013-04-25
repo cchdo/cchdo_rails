@@ -47,13 +47,6 @@ order_by = "ORDER BY area, Begin_Date ASC"
   @southern_basin = SpatialGroups.find_by_sql(["#{joined} #{ind} AND #{atl} AND #{sou} #{order_by}",'1','0','1'])
   @southern_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)} 
 
-
-
-
-
-
-
-
   #@southern_basin = Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ?)", "%indian%", "S%"], :order=>"Line, Begin_Date ASC")
   #@southern_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
 

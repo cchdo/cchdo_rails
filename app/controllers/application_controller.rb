@@ -7,7 +7,7 @@ COUNTRIES = {
    'usa'         => 'usa', 'india' => 'ind',
    'russia'      => 'rus', 'spain' => 'spn',
    'argentina'   => 'arg', 'ukrain' => 'ukr',
-   'Netherlands' => 'net', 'norway' => 'nor',
+   'netherlands' => 'net', 'norway' => 'nor',
    'finland'     => 'fin', 'iceland' => 'ice',
    'australia'   => 'aus', 'chile' => 'chi',
    'new zealand' => 'new', 'taiwan' => 'tai',
@@ -139,70 +139,26 @@ class ApplicationController < ActionController::Base
       end
     end
 
-  def thumbnail_uri(expocode)
-      if map = Document.find(:first, :conditions => { :ExpoCode => expocode, :FileType => 'Small Plot'})
-        return map.FileName[0..-5]
-      end
-      return nil
-  end
-
-  def best_query_type(query)
-    best_queries = Hash.new
-    param_queries = Array.new
-
-    ignored_queries = ['commit', 'action', 'controller', 'post', 'FileType', 'limit', 'skip']
-    queries = parse_query_string(query) - ignored_queries
-
-    keywords = {'group' => '`Group`', 'chief_scientist' => 'Chief_Scientist', 
-                'expocode' => 'ExpoCode', 'alias' => 'Alias', 
-                'ship_name' => 'Ship_Name', 'ship' => 'Ship_Name',
-                'year_start' => 'year_start', 'year_end' => 'year_end',
-                'month_start' => 'month_start', 'month_end' => 'month_end',
-                'date' => 'Date', 'line' => 'Line'}
-    parameters = Parameter.column_names
-
-    # See if we recognize the query type
-    queries.each do |query|
-      # Query term is in format 'keyword:value'
-      if query =~ /(\w+\:\w+)/
-        keyword, value = query.split(':', 2)
-        if keywords.include?(keyword.downcase.strip)
-          best_queries[keywords[keyword.downcase]] = value
+    def thumbnail_uri(expocode)
+        # WARNING this is not reliable since most datafile operations on
+        # Document model rely on the Directory entry's Files list rather than
+        # the individual file entries.
+        if map = Document.find(:first, :conditions => { :ExpoCode => expocode, :FileType => 'Small Plot'})
+          return map.FileName[0..-5]
         end
-      elsif query =~ /^([a-zA-Z]{1,3})(\d{1,2})$/i # Line number
-        query = "#{$1}#{$2}"
-        # Change queries formatted like I9, or A6 to be I09 or A06
-        if $2.length == 1
-           query = "#{$1}0#{$2}"
-        end
-        best_queries['Group'] = query
-      elsif query =~ /\b\d{4}\b/
-        best_queries['Date'] = query
-      elsif country = COUNTRIES[query.downcase]
-        best_queries['Country'] = country
-      elsif parameters.include? query.upcase
-        param_queries << query
-      elsif query.downcase =~ /\ball\b/i
-        best_queries['All'] = ' All results are on this page.'
-      else # Resort to highest number of matches
-        best_queries[find_best_query(query)] = query
-      end
+        return nil
     end
 
-    best_queries.delete_if {|key, value| key.empty?}
-    return best_queries, param_queries
-  end
-
-  # Provide the message used to indicate a cruise is preliminary
-  def preliminary_message(cruise)
-    expo = cruise.ExpoCode
-    any_preliminary = Document.exists?(:ExpoCode => expo, :Preliminary => 1)
-    if any_preliminary
-      "Preliminary (See <a href=\"/cruise/#{expo}#history\">data history</a>)"
-    else
-      ""
+    # Provide the message used to indicate a cruise is preliminary
+    def preliminary_message(cruise)
+        expo = cruise.ExpoCode
+        any_preliminary = Document.exists?(:ExpoCode => expo, :Preliminary => 1)
+        if any_preliminary
+            "Preliminary (See <a href=\"/cruise/#{expo}#history\">data history</a>)"
+        else
+            ""
+        end
     end
-  end
 
     def load_files_and_params(cruise)
         files_for_expocode = cruise.get_files()
@@ -229,287 +185,351 @@ class ApplicationController < ActionController::Base
         end
         [files_for_expocode, param_for_expocode]
     end
-  
-  COLUMNS = {
-    'Group' => 'Group',
-    'Chief_scientist' => 'Chief_Scientist',
-    'Expocode' => 'ExpoCode',
-    'Alias' => 'Alias',
-    'Ship_name' => 'Ship_Name',
-    'Ship' => 'Ship_Name',
-    'Line' => 'Line',
-    'Parameter' => 'Parameter'
-  }
 
-  def find_by_params_query
-    if not params[:query]
-       return
-    end
-    @query_link = "search?query=#{params[:query]}"
-    @query_with_sort_link = "#{@query_link}"
-    @q_pass = params[:query]
-    @query = params[:query].upcase.strip
-    if not @query =~ /\w/
-       return
-    end
-    @sort_statement = ""
-    @sort_check = ["Line","ExpoCode","Begin_Date","Ship_Name","Chief_Scientist","Country"]
-    if params[:Sort]
-       @sort_by = params[:Sort]
-       if @sort_check.include?(@sort_by)
-           if params[:Sort_dir] and ['ASC', 'DESC'].include?(params[:Sort_dir])
-               dir = params[:Sort_dir]
-           else
-               dir = 'ASC'
-           end
-           @sort_statement = "ORDER BY cruises.#{@sort_by} #{dir}"
-           @query_with_sort_link << "&Sort=#{@sort_by}&Sort_dir=#{dir}"
-       end
-    end
-    # Initializations ##
-    @queries = []
-    @queries = @query.split(/\s+/) # Make an array that contains all queries, as split by whitespace
-    @best_result = Hash.new
-    @cruises = Hash.new
-    @parameter_columns = Parameter.columns.map {|col| col.name}
-    @param_queries = []
-    # Initializations ##
-    for query in @queries
-       @cols = []
-       @names = []
-       @results = []
-       @cur_max = 0
-       @dir = []
-       @date_query = nil
-       # Special Case 1: Token Search
-       #  associate the query with it's requested
-       #  column in the best_result hash
-       if (query =~ /^(\w*)\:(\w*)$/)
-          @tok= $1.capitalize
-          @val = $2.downcase.capitalize
-          if COLUMNS.keys.include? @tok
-            if @tok == 'Parameter'
-              @param_queries << query
-            else 
-              @best_result[$2] = COLUMNS[@tok]
+    def best_cruise_column_for_query(query, col_multiplier)
+        cur_max = 0
+        best_column = nil
+        for column in Cruise.columns
+            # TODO don't know why this is here because there are no Cruise columns with 14C
+            next if column.name =~ /14C/
+
+            ncruises = Cruise.count(:all, :conditions => ["`#{column.name}` regexp ?", query])
+            multiplier = col_multiplier[column.name] || 1
+            if ncruises * multiplier > cur_max
+                cur_max = ncruises
+                best_column = column.name
             end
-          end
-       end
+        end
+        best_column || 'Group'
+    end
+  
+    @@columns = {
+        'Group' => 'Group',
+        'Chief_scientist' => 'Chief_Scientist',
+        'Expocode' => 'ExpoCode',
+        'Alias' => 'Alias',
+        'Ship_name' => 'Ship_Name',
+        'Ship' => 'Ship_Name',
+        'Line' => 'Line',
+        'Parameter' => 'Parameter'
+    }
+  
+    @@parameter_names = Parameter.columns.map {|col| col.name}.reject do |x|
+        x =~ /(^(id|ExpoCode)$|(_PI|_Date)$)/
+    end
 
-       # Change queries formated like I9, or A6 to be I09 or A06
-       col_multiplier = {
-           'Group' => 1
-       }
-       if (query =~/^[a-zA-Z]{1,3}\d{1,2}$/i)
-          if query =~/^([a-zA-Z]{1,3})(\d)$/
+    def best_queries(queries)
+        best_result = {}
+        param_queries = []
+        for query in queries
+            # Special Case 1: Token Search
+            #  associate the query with its requested column
+            if query =~ /^(\w+)\:\s*(\w+)$/
+                tok = $1.capitalize
+                if @@columns.keys.include?(tok)
+                    if tok == 'Parameter'
+                        param_queries << $2
+                    else 
+                        best_result[$2] = @@columns[tok]
+                    end
+                    next
+                end
+            end
+            # Change queries formatted like I9 or A6 to be I09 or A06 and
+            # weight heavily toward Group column
+            col_multiplier = {
+                'Group' => 1
+            }
+            if query =~ /^([a-zA-Z]{1,3})(\d{1,2})$/i
+                if $2.length < 2
+                    query = "#{$1}0#{$2}"
+                    col_multiplier['Group'] = 100
+                end
+            end
+            # If the search contains a full country name, replace it with the cchdo
+            # country abreviation
+            if COUNTRIES.include?(query.downcase)
+                query = COUNTRIES[query.downcase]
+                best_result[query] = 'Country'
+                next
+            end
+            # Check for four digit year queries
+            if query =~ /^\d{4}$/
+                ncruises = Cruise.count(:all, :conditions => ['`Begin_Date` REGEXP ?', query])
+                if ncruises > 0
+                    best_result[query] = 'Date'
+                    next
+                end
+            end
+            # Check for parameters
+            if @@parameter_names.include?(query)
+                param_queries << query
+                next
+            end
+
+            best_result[query] = best_cruise_column_for_query(query, col_multiplier)
+        end
+        [best_result, param_queries]
+    end
+
+    def find_by_params_query
+        query = params[:query]
+        return unless query
+
+        @query_link = "search?query=#{query}"
+        @query_with_sort_link = @query_link.to_s
+        @q_pass = query
+        @query = query.upcase.strip
+        return unless @query =~ /\w/
+
+        @sort_statement = ""
+        @sort_check = ["Line","ExpoCode","Begin_Date","Ship_Name","Chief_Scientist","Country"]
+        if params[:Sort]
+            @sort_by = params[:Sort]
+            if @sort_check.include?(@sort_by)
+                if params[:Sort_dir] and ['ASC', 'DESC'].include?(params[:Sort_dir])
+                    dir = params[:Sort_dir]
+                else
+                    dir = 'ASC'
+                end
+                @sort_statement = "ORDER BY cruises.#{@sort_by} #{dir}"
+                @query_with_sort_link << "&Sort=#{@sort_by}&Sort_dir=#{dir}"
+            end
+        end
+
+        # tokenize query based on whitespace or '/'
+        @queries = @query.split(/\s+|\//)
+        @best_result, @param_queries = best_queries(@queries)
+
+        # Build sql query based on best results
+        select_columns = [
+            'ExpoCode', 'Line', 'Ship_Name', 'Country', 'Begin_Date',
+            'EndDate', 'Chief_Scientist', 'id']
+        where_clauses = []
+        sql_parameters = []
+        if @best_result.keys.length <= 0
+            @cruises = []
+        else
+            select_clause = select_columns.map {|x| "`cruises`.`#{x}`" }.join(',')
+            for token in @best_result.keys
+                column = @best_result[token]
+                if column == 'Date'
+                    where_clauses << "(Begin_Date REGEXP ? OR EndDate REGEXP ?)"
+                    sql_parameters << token
+                    sql_parameters << token
+                else
+                    where_clauses << "`cruises`.`#{column}` REGEXP ?"
+                    sql_parameters << token
+                end
+            end
+            for col in @param_queries
+                where_clauses << "`parameters`.`#{col}` != 'NULL'"
+            end
+            where_clause = where_clauses.join(' AND ')
+            sql = "SELECT DISTINCT #{select_clause} FROM cruises " + 
+                "LEFT JOIN parameters ON cruises.ExpoCode = parameters.ExpoCode " + 
+                "WHERE #{where_clause} #{@sort_statement}"
+            @cruises = Cruise.find_by_sql([sql] + sql_parameters)
+        end
+
+        @cruises = reduce_specifics(@cruises)
+        @table_list = Hash.new{|h,k| h[k]={}}
+        @param_list = Hash.new{|h,k| h[k]={}}
+        for result in @cruises
+            expo = result.ExpoCode
+            @table_list[expo], @param_list[expo] = load_files_and_params(result)
+        end
+    end
+  
+    # deprecated
+    def best_query_type(query)
+      best_queries = Hash.new
+      param_queries = Array.new
+
+      ignored_queries = ['commit', 'action', 'controller', 'post', 'FileType', 'limit', 'skip']
+      queries = parse_query_string(query) - ignored_queries
+
+      keywords = {'group' => '`Group`', 'chief_scientist' => 'Chief_Scientist', 
+                  'expocode' => 'ExpoCode', 'alias' => 'Alias', 
+                  'ship_name' => 'Ship_Name', 'ship' => 'Ship_Name',
+                  'year_start' => 'year_start', 'year_end' => 'year_end',
+                  'month_start' => 'month_start', 'month_end' => 'month_end',
+                  'date' => 'Date', 'line' => 'Line'}
+      parameters = Parameter.column_names
+
+      # See if we recognize the query type
+      queries.each do |query|
+        # Query term is in format 'keyword:value'
+        if query =~ /(\w+\:\w+)/
+          keyword, value = query.split(':', 2)
+          if keywords.include?(keyword.downcase.strip)
+            best_queries[keywords[keyword.downcase]] = value
+          end
+        elsif query =~ /^([a-zA-Z]{1,3})(\d{1,2})$/i # Line number
+          query = "#{$1}#{$2}"
+          # Change queries formatted like I9, or A6 to be I09 or A06
+          if $2.length == 1
              query = "#{$1}0#{$2}"
           end
-          col_multiplier['Group'] = 100
-       end
-       # If the search contains a full country name, replace it with
-       # the cchdo country abreviation
-       if COUNTRIES[query.downcase]
-          query = COUNTRIES[query.downcase]
-       end
-       # Check for four digit year queries
-       if query =~ /^\d{4}$/
-          @date_query = query
-       end
-       if @parameter_columns.include?(query)
-          @param_queries << query
-       end
-       #Search against every column within the cruise database
-       #Keep the result with the most matches
-       for column in Cruise.columns
-          if (column.name !~ /14C/)
-             @names << column.human_name
-             @results = reduce_specifics(Cruise.find(:all ,:conditions => ["`#{column.name}` regexp ?", query]))
-             if @date_query and @results.length > 0 and column.name.eql?("Begin_Date")
-                @best_result[query] =  "Date"
-                break  # Break out of the for column in Cruise.columns loop
-             end
-             multiplier = col_multiplier[column.name] || 1
-             if @results.length * multiplier > @cur_max
-                @cur_max = @results.length
-                @best_result[query] = column.name
-                @results=[]
-             end
-          end
-       end
-    end # for query in @queries
+          best_queries['Group'] = query
+        elsif query =~ /\b\d{4}\b/
+          best_queries['Date'] = query
+        elsif country = COUNTRIES[query.downcase]
+          best_queries['Country'] = country
+        elsif parameters.include? query.upcase
+          param_queries << query
+        elsif query.downcase =~ /\ball\b/i
+          best_queries['All'] = ' All results are on this page.'
+        else # Resort to highest number of matches
+          best_queries[find_best_query(query)] = query
+        end
+      end
 
-    #Build sql query based on best results
-    where_clauses = []
-    if @best_result.keys.length > 0
-       for query in @best_result.keys
-          if @best_result[query] =~ /Date/
-             where_clauses << "(Begin_Date regexp '#{query}' or EndDate regexp '#{query}')"
-          else
-             where_clauses << "cruises.#{@best_result[query]} regexp '#{query}'"
-          end
-          if @param_queries.length > 0
-             for q in @param_queries
-                where_clauses << "parameters.`#{q}` != 'NULL'"
-             end
-          end
-       end
-       where_clause = where_clauses.join(' AND ')
-       select_clause = 'cruises.ExpoCode,cruises.Line,cruises.Ship_Name,cruises.Country,cruises.Begin_Date,cruises.EndDate,cruises.Chief_Scientist,cruises.id'
-       #select_clause = '*'
-       @cruises = reduce_specifics(Cruise.find_by_sql(
-            "SELECT DISTINCT #{select_clause} FROM cruises LEFT JOIN parameters ON cruises.ExpoCode = parameters.ExpoCode WHERE #{where_clause} #{@sort_statement}"))
-    else
-       @cruises = []
+      best_queries.delete_if {|key, value| key.empty?}
+      return best_queries, param_queries
     end
-    @table_list = Hash.new{|h,k| h[k]={}}
-    @param_list = Hash.new{|h,k| h[k]={}}
-    for result in @cruises
-        expo = result.ExpoCode
-        @table_list[expo], @param_list[expo] = load_files_and_params(result)
-    end
-  end
-  
-  # deprecated
-  def find_cruises(query, skip=0, limit=nil, count=false)
-     best_queries, param_queries = best_query_type(query)
 
-     # Build SQL query
-     where_clauses = Array.new
-     limit_clause = (limit && "LIMIT #{skip}, #{limit}") || ''
+    # deprecated
+    def find_cruises(query, skip=0, limit=nil, count=false)
+       best_queries, param_queries = best_query_type(query)
 
-     if best_queries
-       best_queries.each_pair do |type, query|
-         if type == 'All'
-           skip = 0
-           limit = 0
-           limit_clause = ''
-         elsif type == 'Date'
-           where_clauses << "(Begin_Date REGEXP '#{query}' OR EndDate REGEXP '#{query}')"
-         # Also search for aliases that look like lines
-         elsif type == 'Line'
-           where_clauses << "#{type} REGEXP '#{query}' OR Alias REGEXP '#{query}'"
-         elsif type =~ /\byear.?start/ # \b to keep from grabbing file_year_start too
-           required_others = ['year_end', 'month_start', 'month_end']
-           other_types = best_queries.keys
-           if required_others == required_others & other_types
-             begin_date = "#{sprintf("%04u", best_queries['year_start'])}-#{sprintf("%02u", best_queries['month_start'])}-00"
-             end_date   = "#{sprintf("%04u", best_queries['year_end'])}-#{sprintf("%02u", best_queries['month_end'])}-00"
-             where_clauses << "(\"#{begin_date}\" < Begin_Date AND Begin_Date < \"#{end_date}\")"
+       # Build SQL query
+       where_clauses = Array.new
+       limit_clause = (limit && "LIMIT #{skip}, #{limit}") || ''
+
+       if best_queries
+         best_queries.each_pair do |type, query|
+           if type == 'All'
+             skip = 0
+             limit = 0
+             limit_clause = ''
+           elsif type == 'Date'
+             where_clauses << "(Begin_Date REGEXP '#{query}' OR EndDate REGEXP '#{query}')"
+           # Also search for aliases that look like lines
+           elsif type == 'Line'
+             where_clauses << "#{type} REGEXP '#{query}' OR Alias REGEXP '#{query}'"
+           elsif type =~ /\byear.?start/ # \b to keep from grabbing file_year_start too
+             required_others = ['year_end', 'month_start', 'month_end']
+             other_types = best_queries.keys
+             if required_others == required_others & other_types
+               begin_date = "#{sprintf("%04u", best_queries['year_start'])}-#{sprintf("%02u", best_queries['month_start'])}-00"
+               end_date   = "#{sprintf("%04u", best_queries['year_end'])}-#{sprintf("%02u", best_queries['month_end'])}-00"
+               where_clauses << "(\"#{begin_date}\" < Begin_Date AND Begin_Date < \"#{end_date}\")"
+             end
+           elsif type =~ /(year_end)|(month_start)|(month_end)|(file_month_start)|(file_year_start)|(FileType)/i
+             # ignore these (already handled or not handling)
+           else
+             if type == 'ExpoCode'
+               type = 'cruises.ExpoCode'
+             end
+             where_clauses << "#{type} REGEXP '#{query}'"
            end
-         elsif type =~ /(year_end)|(month_start)|(month_end)|(file_month_start)|(file_year_start)|(FileType)/i
-           # ignore these (already handled or not handling)
-         else
-           if type == 'ExpoCode'
-             type = 'cruises.ExpoCode'
+         end
+       end
+
+       param_queries.each do |parameter|
+         where_clauses << "parameters.`#{parameter}` > 0"
+       end
+
+       # join them all together
+       where_clause = ''
+       if wheres = where_clauses.join(' AND ') and not wheres.empty?
+         where_clause = "WHERE #{wheres}"
+       end
+
+       join_on = ''
+       unless param_queries.empty?
+         join_on = 'LEFT JOIN (parameters) ON (cruises.ExpoCode=parameters.ExpoCode)'
+       end
+
+       cruises = reduce_specifics(Cruise.find_by_sql("SELECT DISTINCT * FROM cruises #{join_on} #{where_clause} #{limit_clause}"))
+       if count
+         # Hopefully we can make expocodes indexed in the future
+         return cruises, best_queries, Cruise.count_by_sql("SELECT count(cruises.id) FROM cruises #{join_on} #{where_clause}")
+       else
+         return cruises, best_queries
+       end
+     end
+
+     def parse_query_string(query_str)
+       # There must be words in a query
+       if query_str !~ /\w/
+         return nil
+       end
+
+       # Erase illegal characters
+       query_str = query_str.strip.tr(";'$%&*()<>/@~`+=#?|{}[]", '.')
+
+       # Get the literals and replace them with place holders
+       literals = query_str.scan(/".*?"/)
+       literals.each {|literal| query_str.gsub!(literal, '?')}
+       literals.map! {|query| query[1..-2]}
+
+       # Make all keyworded queries one chunk
+       query_str.gsub!(/\:\s*/, ':')
+
+       # All spaces are now delimiters
+       query_str.gsub!(/\s+/, ';')
+
+       # Delete all keywords without values
+       query_str.gsub!(/\w+\:;/, '')
+
+       # Get all the terms
+       terms = query_str.split(';')
+
+       # Fill in all place holders; they are in order of appearance
+       count = 0
+       terms.each do |term|
+         if term.include? '?'
+           term.gsub!('?', literals[count])
+           count += 1
+         end
+       end
+       return terms
+     end
+
+     def find_best_query(query)
+       best = ''
+       cur_max = 0
+       Cruise.column_names.each do |column|
+         if column !~ /(14C)|(id)/
+           if column == 'Group'
+             column = "`#{column}`"
            end
-           where_clauses << "#{type} REGEXP '#{query}'"
+           num_matches = Cruise.count(:all, :conditions => ["#{column} REGEXP '#{query}'"])
+           if num_matches > cur_max
+             best = column
+             cur_max = num_matches
+           end
          end
        end
+       return best
      end
 
-     param_queries.each do |parameter|
-       where_clauses << "parameters.`#{parameter}` > 0"
-     end
-
-     # join them all together
-     where_clause = ''
-     if wheres = where_clauses.join(' AND ') and not wheres.empty?
-       where_clause = "WHERE #{wheres}"
-     end
-
-     join_on = ''
-     unless param_queries.empty?
-       join_on = 'LEFT JOIN (parameters) ON (cruises.ExpoCode=parameters.ExpoCode)'
-     end
-
-     cruises = reduce_specifics(Cruise.find_by_sql("SELECT DISTINCT * FROM cruises #{join_on} #{where_clause} #{limit_clause}"))
-     if count
-       # Hopefully we can make expocodes indexed in the future
-       return cruises, best_queries, Cruise.count_by_sql("SELECT count(cruises.id) FROM cruises #{join_on} #{where_clause}")
-     else
-       return cruises, best_queries
-     end
-   end
-
-   def parse_query_string(query_str)
-     # There must be words in a query
-     if query_str !~ /\w/
-       return nil
-     end
-
-     # Erase illegal characters
-     query_str = query_str.strip.tr(";'$%&*()<>/@~`+=#?|{}[]", '.')
-
-     # Get the literals and replace them with place holders
-     literals = query_str.scan(/".*?"/)
-     literals.each {|literal| query_str.gsub!(literal, '?')}
-     literals.map! {|query| query[1..-2]}
-
-     # Make all keyworded queries one chunk
-     query_str.gsub!(/\:\s*/, ':')
-
-     # All spaces are now delimiters
-     query_str.gsub!(/\s+/, ';')
-
-     # Delete all keywords without values
-     query_str.gsub!(/\w+\:;/, '')
-
-     # Get all the terms
-     terms = query_str.split(';')
-
-     # Fill in all place holders; they are in order of appearance
-     count = 0
-     terms.each do |term|
-       if term.include? '?'
-         term.gsub!('?', literals[count])
-         count += 1
-       end
-     end
-     return terms
-   end
-
-   def find_best_query(query)
-     best = ''
-     cur_max = 0
-     Cruise.column_names.each do |column|
-       if column !~ /(14C)|(id)/
-         if column == 'Group'
-           column = "`#{column}`"
-         end
-         num_matches = Cruise.count(:all, :conditions => ["#{column} REGEXP '#{query}'"])
-         if num_matches > cur_max
-           best = column
-           cur_max = num_matches
+     def track_coords_in(expocode)
+       # Returns an array of track coordinates for given expocode.
+       track_coords = Array.new
+       if track = Track.find(:first, :conditions => { :ExpoCode => expocode})
+         coords = track.Track.split(/\n/)
+         coords.each_index do |coord_i|
+           if coord_i % 10 == 0
+             track_coords << coords[coord_i]
+           end
          end
        end
+       return track_coords
      end
-     return best
-   end
 
-   def track_coords_in(expocode)
-     # Returns an array of track coordinates for given expocode.
-     track_coords = Array.new
-     if track = Track.find(:first, :conditions => { :ExpoCode => expocode})
-       coords = track.Track.split(/\n/)
-       coords.each_index do |coord_i|
-         if coord_i % 10 == 0
-           track_coords << coords[coord_i]
-         end
+     def switch_x_y_polygon(polygon)
+       rings = polygon.rings
+       @points = []
+       for ring in rings 
+           for coord in ring
+             @points << Point.from_x_y(coord.y,coord.x)
+           end
        end
+       poly = Polygon.from_points([@points])
+       return poly
      end
-     return track_coords
-   end
-
-   def switch_x_y_polygon(polygon)
-     rings = polygon.rings
-     @points = []
-     for ring in rings 
-         for coord in ring
-           @points << Point.from_x_y(coord.y,coord.x)
-         end
-     end
-     poly = Polygon.from_points([@points])
-     return poly
-   end
 
 end
