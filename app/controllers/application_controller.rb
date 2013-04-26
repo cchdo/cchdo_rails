@@ -170,16 +170,17 @@ class ApplicationController < ActionController::Base
         }
         cruise_parameters = BottleDB.find_by_ExpoCode(cruise.ExpoCode)
         if cruise_parameters
-            param_for_expocode['stations'] = cruise_parameters.Stations
+            param_for_expocode['stations'] = (cruise_parameters.Stations || 0).to_i
             param_list = cruise_parameters.Parameters
-            if param_list =~ /\w/
-                param_persistance = cruise_parameters.Parameter_Persistance
-
-                param_for_expocode['parameters'] = param_list#.split(',')
+            param_persistance = cruise_parameters.Parameter_Persistance
+            params = param_for_expocode['parameters'] = {}
+            if param_list =~ /\w/ and param_persistance =~ /\w/
                 param_array = param_list.split(',')
                 persistance_array = param_persistance.split(',')
-                for ctr in 1..param_array.length
-                    param_for_expocode[param_array[ctr]] = persistance_array[ctr]
+                for param, persist in param_array.zip(persistance_array)
+                    next if param !~ /\w/
+                    next if param =~ /castno|flag|time|expocode|sampno|sect_id|depth|latitude|longitude|stnnbr|btlnbr|date|stations|parameters/i
+                    params[param] = persist.to_i
                 end
             end
         end
@@ -190,9 +191,6 @@ class ApplicationController < ActionController::Base
         cur_max = 0
         best_column = nil
         for column in Cruise.columns
-            # TODO don't know why this is here because there are no Cruise columns with 14C
-            next if column.name =~ /14C/
-
             ncruises = Cruise.count(:all, :conditions => ["`#{column.name}` regexp ?", query])
             multiplier = col_multiplier[column.name] || 1
             if ncruises * multiplier > cur_max
@@ -211,12 +209,18 @@ class ApplicationController < ActionController::Base
         'Ship_name' => 'Ship_Name',
         'Ship' => 'Ship_Name',
         'Line' => 'Line',
-        'Parameter' => 'Parameter'
+        'Parameter' => 'Parameter',
+        'After' => 'after',
+        'Before' => 'before'
     }
   
     @@parameter_names = Parameter.columns.map {|col| col.name}.reject do |x|
         x =~ /(^(id|ExpoCode)$|(_PI|_Date)$)/
     end
+    @@sortable_columns = [
+        "Line", "ExpoCode", "Begin_Date", "Ship_Name", "Chief_Scientist",
+        "Country"]
+    @@sort_directions = ['ASC', 'DESC']
 
     def best_queries(queries)
         best_result = {}
@@ -224,11 +228,15 @@ class ApplicationController < ActionController::Base
         for query in queries
             # Special Case 1: Token Search
             #  associate the query with its requested column
-            if query =~ /^(\w+)\:\s*(\w+)$/
+            if query =~ /^([\w-]+)\:\s*([\w-]+)$/
                 tok = $1.capitalize
                 if @@columns.keys.include?(tok)
                     if tok == 'Parameter'
-                        param_queries << $2
+                        if @@parameter_names.include?($2)
+                            param_queries << $2
+                        else
+                            Rails.logger.info("Ignored unknown parameter #{$2}")
+                        end
                     else 
                         best_result[$2] = @@columns[tok]
                     end
@@ -282,24 +290,23 @@ class ApplicationController < ActionController::Base
         @query = query.upcase.strip
         return unless @query =~ /\w/
 
-        @sort_statement = ""
-        @sort_check = ["Line","ExpoCode","Begin_Date","Ship_Name","Chief_Scientist","Country"]
-        if params[:Sort]
-            @sort_by = params[:Sort]
-            if @sort_check.include?(@sort_by)
-                if params[:Sort_dir] and ['ASC', 'DESC'].include?(params[:Sort_dir])
-                    dir = params[:Sort_dir]
-                else
-                    dir = 'ASC'
-                end
-                @sort_statement = "ORDER BY cruises.#{@sort_by} #{dir}"
-                @query_with_sort_link << "&Sort=#{@sort_by}&Sort_dir=#{dir}"
+        if sort_by = params[:Sort] and @@sortable_columns.include?(sort_by)
+            dir = params[:Sort_dir]
+            if not dir or not @@sort_directions.include?(dir)
+                dir = @@sort_directions[0]
             end
+            @sort_statement = "ORDER BY cruises.#{sort_by} #{dir}"
+            @query_with_sort_link << "&Sort=#{sort_by}&Sort_dir=#{dir}"
+        else
+            @sort_statement = ""
         end
 
         # tokenize query based on whitespace or '/'
         @queries = @query.split(/\s+|\//)
         @best_result, @param_queries = best_queries(@queries)
+
+        Rails.logger.debug(@best_result.inspect)
+        Rails.logger.debug(@param_queries.inspect)
 
         # Build sql query based on best results
         select_columns = [
@@ -307,7 +314,7 @@ class ApplicationController < ActionController::Base
             'EndDate', 'Chief_Scientist', 'id']
         where_clauses = []
         sql_parameters = []
-        if @best_result.keys.length <= 0
+        if @best_result.keys.length <= 0 and @param_queries.length <= 0
             @cruises = []
         else
             select_clause = select_columns.map {|x| "`cruises`.`#{x}`" }.join(',')
@@ -317,18 +324,27 @@ class ApplicationController < ActionController::Base
                     where_clauses << "(Begin_Date REGEXP ? OR EndDate REGEXP ?)"
                     sql_parameters << token
                     sql_parameters << token
+                elsif column == 'after'
+                    where_clauses << "Begin_Date > ?"
+                    sql_parameters << token
+                elsif column == 'before'
+                    where_clauses << "EndDate < ?"
+                    sql_parameters << token
                 else
                     where_clauses << "`cruises`.`#{column}` REGEXP ?"
                     sql_parameters << token
                 end
             end
-            for col in @param_queries
-                where_clauses << "`parameters`.`#{col}` != 'NULL'"
+            sql = "SELECT DISTINCT #{select_clause} FROM cruises "
+            if @param_queries.length > 0
+                for param in @param_queries
+                    where_clauses << "`bottle_dbs`.`parameters` LIKE ?"
+                    sql_parameters << "%#{param}%"
+                end
+                sql += "LEFT JOIN bottle_dbs ON cruises.ExpoCode = bottle_dbs.ExpoCode "
             end
             where_clause = where_clauses.join(' AND ')
-            sql = "SELECT DISTINCT #{select_clause} FROM cruises " + 
-                "LEFT JOIN parameters ON cruises.ExpoCode = parameters.ExpoCode " + 
-                "WHERE #{where_clause} #{@sort_statement}"
+            sql += "WHERE #{where_clause} #{@sort_statement}"
             @cruises = Cruise.find_by_sql([sql] + sql_parameters)
         end
 

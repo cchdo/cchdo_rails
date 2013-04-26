@@ -10,6 +10,9 @@
           <%= button_to('Expand', params.merge(:expanded => true), :title => "Detailed results") %>
         <%- end %>
       </div>
+      <div class="tool tool-count">
+        <%= pluralize(@cruises.length, 'result') %>
+      </div>
       <%= datacart_link_cruises(@cruises, {:class => "tool"}) %>
     </div>
     <% if params[:expanded] -%>

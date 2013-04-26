@@ -17,7 +17,7 @@
       </tr>
     <% end %>
     <%- cruise_table = @table_list[cruise.ExpoCode] %>
-    <%- params = @param_list[cruise.ExpoCode] %>
+    <%- param_table = @param_list[cruise.ExpoCode] %>
     <%- hlclass = cycle('class="highlighted_cell"', '') %>
     <tr <%= hlclass -%>>
       <td class="metadata-cruise">
@@ -59,16 +59,13 @@
     </tr>
     <tr <%= hlclass %>>
       <td colspan="2" class="parameter_cell">
-        <% unless params['stations'].blank? or params['stations'] == 0 %>
-          <span class="param_title"><%= params['stations'] %> Stations with the following parameters</span><br />
+        <% unless param_table['stations'] == 0 %>
+          <span class="param_title"><%= param_table['stations'] %> stations with the following parameters</span><br />
         <% end %>
-        <% if params['parameters'] %>
+        <% if parameters = param_table['parameters'] %>
           <p class="parameters">
-            <% keys = params.keys.reject(&:blank?).sort %>
-            <% keys.each do |param| %>
-              <% if param =~ /\w/ and param !~ /(castno)|(flag)|(time)|(expocode)|(sampno)|(sect_id)|(depth)|(latitude)|(longitude)|(stnnbr)|(btlnbr)|(date)|(stations)|(parameters)/i %>
-                <%= param %><% if params[param].to_i < 10 %>* <% end %>&nbsp;
-              <% end %> 
+            <% parameters.keys.sort.each do |param| %>
+              <%= param %><% if parameters[param] < 10 %><abbr title="Less than 10 data points">*</abbr> <% end %>
             <% end %>
           </p>
         <% end %>
