@@ -31,34 +31,10 @@ class DatacartController < ApplicationController
         redirect_to datacart_path
     end
 
-    def _add_cruise(cruise_id)
-        cruise = Cruise.find_by_id(cruise_id)
-        if not cruise
-            flash[:notice] = 'Error adding cruise dataset to data cart.'
-            raise ActionController::RoutingError.new('Not found')
-        end
-
-        before_count = @datacart.length
-
-        dir = cruise.directory
-        mapped_files = cruise.get_files()
-        file_count = 0
-        for key, file in mapped_files
-            next if key =~ /_pic$/
-            @datacart << [dir.id, File.basename(file)]
-            file_count += 1
-        end
-        session['datacart'] = @datacart
-
-        after_count = @datacart.length
-        count_diff = after_count - before_count
-        [file_count, count_diff]
-    end
-
     def add_cruise
         cruise_id = params[:cruise_id]
 
-        file_count, count_diff = _add_cruise(cruise_id)
+        file_count, count_diff = add_single_cruise(cruise_id)
 
         if request.xhr?
             render :json => {:cart_count => @datacart.length,
@@ -75,6 +51,8 @@ class DatacartController < ApplicationController
             flash[:notice] = message
             redirect_to :back
         end
+    rescue ActionController::RedirectBackError
+        redirect_to datacart_path
     end
 
     def add_cruises
@@ -82,12 +60,12 @@ class DatacartController < ApplicationController
         file_count_all = 0
         count_diff_all = 0
         for id in cruise_ids
-            file_count, count_diff = _add_cruise(id)
+            file_count, count_diff = add_single_cruise(id)
             file_count_all += file_count
             count_diff_all += count_diff
         end
 
-        if request.xhr?# {{{
+        if request.xhr?
             render :json => {:cart_count => @datacart.length,
                              :diff => count_diff_all},
                    :status => :ok
@@ -102,6 +80,8 @@ class DatacartController < ApplicationController
             flash[:notice] = message
             redirect_to :back
         end
+    rescue ActionController::RedirectBackError
+        redirect_to datacart_path
     end
 
     def remove
@@ -121,36 +101,12 @@ class DatacartController < ApplicationController
         end
     rescue ActionController::RedirectBackError
         redirect_to datacart_path
-    end# }}}
-
-    def _remove_cruise(cruise_id)
-        cruise = Cruise.find_by_id(cruise_id)
-        if not cruise
-            flash[:notice] = 'Error removing cruise dataset from data cart.'
-            raise ActionController::RoutingError.new('Not found')
-        end
-
-        before_count = @datacart.length
-
-        dir = cruise.directory
-        mapped_files = cruise.get_files()
-        file_count = 0
-        for key, file in mapped_files
-            next if key =~ /_pic$/
-            @datacart = @datacart.delete([dir.id, File.basename(file)])
-            file_count += 1
-        end
-        session['datacart'] = @datacart
-
-        after_count = @datacart.length
-        count_diff = before_count - after_count
-        [file_count, count_diff]
     end
 
     def remove_cruise
         cruise_id = params[:cruise_id]
 
-        file_count, count_diff = _remove_cruise(cruise_id)
+        file_count, count_diff = remove_single_cruise(cruise_id)
 
         if request.xhr?
             render :json => {:cart_count => @datacart.length,
@@ -167,6 +123,8 @@ class DatacartController < ApplicationController
             flash[:notice] = message
             redirect_to :back
         end
+    rescue ActionController::RedirectBackError
+        redirect_to datacart_path
     end
 
     def remove_cruises
@@ -174,7 +132,7 @@ class DatacartController < ApplicationController
         file_count_all = 0
         count_diff_all = 0
         for id in cruise_ids
-            file_count, count_diff = _remove_cruise(id)
+            file_count, count_diff = remove_single_cruise(id)
             file_count_all += file_count
             count_diff_all += count_diff
         end
@@ -194,6 +152,8 @@ class DatacartController < ApplicationController
             flash[:notice] = message
             redirect_to :back
         end
+    rescue ActionController::RedirectBackError
+        redirect_to datacart_path
     end
 
     def clear
@@ -245,6 +205,54 @@ class DatacartController < ApplicationController
     end
 
 private
+
+    def add_single_cruise(cruise_id)
+        cruise = Cruise.find_by_id(cruise_id)
+        if not cruise
+            flash[:notice] = 'Error adding cruise dataset to data cart.'
+            raise ActionController::RoutingError.new('Not found')
+        end
+
+        before_count = @datacart.length
+
+        dir = cruise.directory
+        mapped_files = cruise.get_files()
+        file_count = 0
+        for key, file in mapped_files
+            next if key =~ /_pic$/
+            @datacart << [dir.id, File.basename(file)]
+            file_count += 1
+        end
+        session['datacart'] = @datacart
+
+        after_count = @datacart.length
+        count_diff = after_count - before_count
+        [file_count, count_diff]
+    end
+
+    def remove_single_cruise(cruise_id)
+        cruise = Cruise.find_by_id(cruise_id)
+        if not cruise
+            flash[:notice] = 'Error removing cruise dataset from data cart.'
+            raise ActionController::RoutingError.new('Not found')
+        end
+
+        before_count = @datacart.length
+
+        dir = cruise.directory
+        mapped_files = cruise.get_files()
+        file_count = 0
+        for key, file in mapped_files
+            next if key =~ /_pic$/
+            @datacart = @datacart.delete([dir.id, File.basename(file)])
+            file_count += 1
+        end
+        session['datacart'] = @datacart
+
+        after_count = @datacart.length
+        count_diff = before_count - after_count
+        [file_count, count_diff]
+    end
 
     def cleanup_downloads
         # Delete datacart tempfiles older than 10 minutes.
