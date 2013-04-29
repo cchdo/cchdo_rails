@@ -211,7 +211,11 @@ class ApplicationController < ActionController::Base
         'Line' => 'Line',
         'Parameter' => 'Parameter',
         'After' => 'after',
-        'Before' => 'before'
+        'Before' => 'before',
+        'Year_start' => 'year_start',
+        'Year_end' => 'year_end',
+        'Month_start' => 'month_start',
+        'Month_end' => 'month_end'
     }
   
     @@parameter_names = Parameter.columns.map {|col| col.name}.reject do |x|
@@ -222,23 +226,42 @@ class ApplicationController < ActionController::Base
         "Country"]
     @@sort_directions = ['ASC', 'DESC']
 
+
     def best_queries(queries)
         best_result = {}
         param_queries = []
+
+        date_range = [nil, nil, nil, nil]
+
         for query in queries
             # Special Case 1: Token Search
             #  associate the query with its requested column
             if query =~ /^([\w-]+)\:\s*([\w-]+)$/
                 tok = $1.capitalize
+                val = $2
                 if @@columns.keys.include?(tok)
                     if tok == 'Parameter'
-                        if @@parameter_names.include?($2)
-                            param_queries << $2
+                        if @@parameter_names.include?(val)
+                            param_queries << val
                         else
-                            Rails.logger.info("Ignored unknown parameter #{$2}")
+                            Rails.logger.info("Ignored unknown parameter #{val}")
+                        end
+                    elsif tok =~ /(Year|Month)_(start|end)/
+                        if tok =~ /^Year_/
+                            if tok =~ /start$/
+                                date_range[0] = val
+                            else
+                                date_range[1] = val
+                            end
+                        else
+                            if tok =~ /start$/
+                                date_range[2] = val
+                            else
+                                date_range[3] = val
+                            end
                         end
                     else 
-                        best_result[$2] = @@columns[tok]
+                        best_result[val] = @@columns[tok]
                     end
                     next
                 end
@@ -276,6 +299,16 @@ class ApplicationController < ActionController::Base
             end
 
             best_result[query] = best_cruise_column_for_query(query, col_multiplier)
+        end
+        if date_range.compact.length > 0
+            begin
+                best_result[Date.new(date_range[0].to_i, date_range[2].to_i).strftime('%F')] = 'after'
+            rescue
+            end
+            begin
+                best_result[Date.new(date_range[1].to_i, date_range[3].to_i).strftime('%F')] = 'before'
+            rescue
+            end
         end
         [best_result, param_queries]
     end

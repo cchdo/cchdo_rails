@@ -26,7 +26,7 @@ class MapSearchController < ApplicationController
       params[:max_coords] = '100'
       @cruises = params[:expocodes].split(',').map {|expo| Cruise.first(:conditions => {:ExpoCode => expo})}
     elsif params[:tool] == 'query' and params[:query]
-      params[:query] += " year_start:#{min_time} month_start:0 year_end:#{max_time} month_end:12"
+      #params[:query] += " year_start:#{min_time} month_start:0 year_end:#{max_time} month_end:12"
       find_by_params_query()
     elsif params[:tool] == 'rectangle'
       sw_lng, sw_lat = params[:sw_lng].to_f, params[:sw_lat].to_f
