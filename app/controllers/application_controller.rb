@@ -275,6 +275,9 @@ class ApplicationController < ActionController::Base
                 if $2.length < 2
                     query = "#{$1}0#{$2}"
                     col_multiplier['Group'] = 100
+                else
+                    query = "#{$1}#{$2}"
+                    col_multiplier['Group'] = 100
                 end
             end
             # If the search contains a full country name, replace it with the cchdo
