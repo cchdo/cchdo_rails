@@ -166,14 +166,14 @@ class ApplicationController < ActionController::Base
 
         param_for_expocode = {
             'stations' => 0,
-            'parameters' => '',
+            'parameters' => {},
         }
+        params = param_for_expocode['parameters']
         cruise_parameters = BottleDB.find_by_ExpoCode(cruise.ExpoCode)
         if cruise_parameters
             param_for_expocode['stations'] = (cruise_parameters.Stations || 0).to_i
             param_list = cruise_parameters.Parameters
             param_persistance = cruise_parameters.Parameter_Persistance
-            params = param_for_expocode['parameters'] = {}
             if param_list =~ /\w/ and param_persistance =~ /\w/
                 param_array = param_list.split(',')
                 persistance_array = param_persistance.split(',')
@@ -388,6 +388,7 @@ class ApplicationController < ActionController::Base
             expo = result.ExpoCode
             @table_list[expo], @param_list[expo] = load_files_and_params(result)
         end
+        Rails.logger.debug(@param_list.inspect)
     end
   
     # deprecated
