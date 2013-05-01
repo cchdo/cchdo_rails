@@ -1,5 +1,6 @@
 module DatacartHelper
     def datacart_link(act, link={}, html={})
+        html[:rel] = ' nofollow' + (html[:ref] || '')
         link_to(content_tag(:div, act, :class => "datacart-icon"), link, html)
     end
 
