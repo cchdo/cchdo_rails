@@ -3,6 +3,10 @@
 ActionController::Routing::Routes.draw do |map|
   map.search "/search", :controller => "search", :action => "index"
 
+  # legacy links
+  map.groups "/groups", :controller => "legacy", :action => "search"
+  map.table "/table", :controller => "legacy", :action => "search"
+
   map.namespace(:argo) do |argo|
     argo.resources :files do |files|
         files.get 'download', :on => :member, :controller => :files,
