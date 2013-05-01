@@ -1,6 +1,6 @@
-<div id="search_results">
+<div id="search_results" class="boxed">
   <% if @cruises.blank? -%>
-    <h3>No results for <%= @query %></h3>
+    <h1>No results for <%= h @query %></h1>
   <% else -%>
     <div class="tools">
       <div class="tool tool-expander">

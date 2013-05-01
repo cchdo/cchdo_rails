@@ -11,8 +11,7 @@ class StaticController < ApplicationController
     path = basepath + 'index.html.erb'
     render_cached(path) && return if template_exists?(path)
 
-    redirect_to '/404.html'
-    #raise ::ActionController::RoutingError, "Recognition failed for #{request.path.inspect}"
+    raise ::ActionController::RoutingError, "Recognition failed for #{request.path.inspect}"
   end
 
   private

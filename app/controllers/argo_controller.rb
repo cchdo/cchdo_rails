@@ -15,7 +15,7 @@ class ArgoController < ApplicationController
 
     def details
         unless @template.allowed_to_see_details()
-            render :file => 'public/401.html', :status => :unauthorized
+            raise ActiveResource::UnauthorizedAccess
         else
             @files = Argo::File.all
             @hidden = Argo::File.count(:conditions => {:display => false})

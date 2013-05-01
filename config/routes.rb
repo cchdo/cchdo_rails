@@ -1,6 +1,8 @@
 # The priority is based upon order of creation: first created -> highest priority.
 
 ActionController::Routing::Routes.draw do |map|
+  map.search "/search", :controller => "search", :action => "index"
+
   map.namespace(:argo) do |argo|
     argo.resources :files do |files|
         files.get 'download', :on => :member, :controller => :files,

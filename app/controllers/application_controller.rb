@@ -40,6 +40,40 @@ class ApplicationController < ActionController::Base
 
     protect_from_forgery
 
+    unless ActionController::Base.consider_all_requests_local
+        rescue_from Exception, :with => :render_500
+        rescue_from ActiveResource::UnauthorizedAccess, :with => :render_401
+        rescue_from ActiveRecord::RecordNotFound,
+                    ActionController::RoutingError,
+                    ActionController::UnknownController,
+                    ActionController::UnknownAction,
+                    ActionController::MethodNotAllowed do |exception|
+             render_404(exception)
+        end
+    end
+
+    def render_401(exception)
+        @code = 401
+        @message = "Unauthorized"
+        render 'errors/errors', :status => :unauthorized
+    end
+
+    def render_404(exception)
+        Rails.logger.error("404 for #{exception.inspect}")
+        @code = 404
+        @message = "Not found"
+        render 'errors/errors', :status => :not_found
+    end
+
+    def render_500(exception)
+        Rails.logger.error("500 for #{exception.inspect}")
+        Rails.logger.error(exception.backtrace.slice(0..10).join("\n"))
+        Rails.logger.error('traceback snipped')
+        @code = 500
+        @message = "Oops! That is an error. We are looking into it."
+        render 'errors/errors', :status => :internal_server_error
+    end
+
     def signin
         if request.post?
             if user = User.authenticate(params[:username], params[:password])
@@ -317,13 +351,12 @@ class ApplicationController < ActionController::Base
     end
 
     def find_by_params_query
-        query = params[:query]
-        return unless query
+        @query = params[:query]
+        return unless @query
 
-        @query_link = "search?query=#{query}"
+        @query_link = "search?query=#{@query}"
         @query_with_sort_link = @query_link.to_s
-        @q_pass = query
-        @query = query.upcase.strip
+        @q_pass = @query
         return unless @query =~ /\w/
 
         if sort_by = params[:Sort] and @@sortable_columns.include?(sort_by)
@@ -338,7 +371,7 @@ class ApplicationController < ActionController::Base
         end
 
         # tokenize query based on whitespace or '/'
-        @queries = @query.split(/\s+|\//)
+        @queries = @query.upcase.strip.split(/\s+|\//)
         @best_result, @param_queries = best_queries(@queries)
 
         Rails.logger.debug(@best_result.inspect)
