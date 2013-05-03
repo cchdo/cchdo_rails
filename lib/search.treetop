@@ -1,0 +1,93 @@
+grammar Search
+    rule expression
+        logical / value
+    end
+
+    rule logical
+        op1:value space operator:binary space op2:expression {
+            def eval()
+                operator.eval(op1.eval(), op2.eval())
+            end
+        }
+        /
+        op1:value [\s]+ op2:expression {
+            def eval()
+                [:and, op1.eval(), op2.eval()]
+            end
+        }
+    end
+
+    rule binary
+        ('&' / 'and' / 'AND') {
+            def eval(a,b)
+                [:and, a, b]
+            end
+        }
+        /
+        ('|' / 'or' /'OR') {
+            def eval(a,b)
+                [:or, a, b]
+            end
+        }
+    end
+
+    rule unary
+        ('-' / 'not' / 'NOT') {
+            def eval(a)
+                [:not, a]
+            end
+        }
+    end
+
+    rule space
+        [\s]*
+    end
+  
+    rule word
+        [^\s\(\)]+ <Term>
+    end
+  
+    rule single_quote
+        [']
+    end
+  
+    rule single_quote_words
+        [^']+ <Term>
+    end
+  
+    rule double_quote
+        ["]
+    end
+  
+    rule double_quote_words
+        [^"]+ <Term>
+    end
+
+    rule value
+        '(' space expression space ')' {
+            def eval()
+                expression.eval()
+            end
+        }
+        /
+        operator:unary space value {
+            def eval()
+                operator.eval(value.eval())
+            end
+        }
+        /
+        double_quote double_quote_words double_quote {
+            def eval()
+                double_quote_words.eval()
+            end
+        }
+        /
+        single_quote single_quote_words single_quote {
+            def eval()
+                single_quote_words.eval()
+            end
+        }
+        /
+        word
+    end
+end

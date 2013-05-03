@@ -47,6 +47,7 @@ Rails::Initializer.run do |config|
   # See Rails::Configuration for more options
   config.gem 'rubyzip', :lib => 'zip/zip'
   config.gem 'fastercsv'
+  config.gem 'treetop'
 end
 
 # Add new inflection rules using the following format 
