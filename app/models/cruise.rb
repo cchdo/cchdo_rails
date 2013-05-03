@@ -35,6 +35,23 @@ class Cruise < ActiveRecord::Base
                         :message => "is missing or invalid",
                         :allow_nil => true
 
+    # Return the Chief_Scientist field with  the chief scientists into links if
+    # we have a contact entries that match.
+    def chief_scientists_as_links
+      pi = self.Chief_Scientist
+      if pi
+        # Take Chief Scientist string and extract multiple names
+        pi_names = pi.split(/\/|\\|\:/)
+        # Substitute name matches for links to the contact's page
+        pi_names.each do |name|
+          if Contact.exists?(:LastName => name)
+            pi.sub!(name, "<a href=\"/search?query=#{name}\">#{name}</a>")
+          end
+        end
+      end
+      pi
+    end
+
     def directory
         return Document.find_by_ExpoCode_and_FileType(self.ExpoCode, 'Directory')
     end

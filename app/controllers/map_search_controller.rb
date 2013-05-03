@@ -5,7 +5,7 @@ include ActionView::Helpers::TagHelper
 include DatacartHelper
 include DocumentsHelper
 
-class MapSearchController < ApplicationController
+class MapSearchController < SearchController
   layout 'standard'
   $RADIUS_EARTH = 6371.01 #km
 
@@ -120,13 +120,11 @@ class MapSearchController < ApplicationController
     @info = {}
     if cruise = Cruise.first(:conditions => {:ExpoCode => params[:expocode]})
       reduce_specifics(cruise)
-      chief_scientists_to_links!(cruise.Chief_Scientist)
-      #thumbnail_uri(cruise.ExpoCode)
       @info = {
         :line => (cruise.Line || '').strip,
         :ship => (cruise.Ship_Name || '').strip,
         :country => (cruise.Country || '').strip,
-        :pi => (cruise.Chief_Scientist || ''),
+        :pi => (cruise.chief_scientists_as_links() || ''),
         :date_begin => (cruise.Begin_Date || ''),
         :cruise_id => cruise.id,
         :data => show_files(cruise, load_files_and_params(cruise)[0], short=true),
@@ -155,7 +153,7 @@ class MapSearchController < ApplicationController
     render :text => "map_search_mirror/#{File.basename filename}"
   end
   
-  private
+private
 
   def getTracksInSelection(selection, min_time=nil, max_time=nil)
     selection << selection.first # add start point at end for polygon
@@ -262,4 +260,32 @@ class MapSearchController < ApplicationController
   def rad_to_deg(rad)
     rad * 180.0 / PI
   end
+
+    # unused
+    def track_coords_in(expocode)
+        # Returns an array of track coordinates for given expocode.
+        track_coords = Array.new
+        if track = Track.find(:first, :conditions => { :ExpoCode => expocode})
+            coords = track.Track.split(/\n/)
+            coords.each_index do |coord_i|
+                if coord_i % 10 == 0
+                    track_coords << coords[coord_i]
+                end
+            end
+        end
+        return track_coords
+    end
+
+    # unused
+    def switch_x_y_polygon(polygon)
+        rings = polygon.rings
+        @points = []
+        for ring in rings 
+            for coord in ring
+                @points << Point.from_x_y(coord.y,coord.x)
+            end
+        end
+        poly = Polygon.from_points([@points])
+        return poly
+    end
 end

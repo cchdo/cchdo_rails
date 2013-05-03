@@ -171,15 +171,12 @@ class DataAccessController < ApplicationController
       @query_mem.gsub!(/\s/,'+')
       @expanded_link = "data_access/list_cruises?#{@query_mem}"
       @condensed_link = "data_access/list_cruises?#{@query_mem}"
-      @query_link = "data_access/list_cruises?#{@query_mem}"
-      @query_with_sort_link = "#{@query_link}"
       @sort_statement = ""
       @sort_check = ["Line","ExpoCode","Begin_Date","Ship_Name","Chief_Scientist","Country"]
       if params[:Sort]
         @sort_by = params[:Sort]
         if @sort_check.include?(@sort_by)
           @sort_statement = "ORDER BY #{@sort_by}"
-          @query_with_sort_link << "&Sort=#{@sort_by}"
         end
       end
       if(@parameters[:YEARSTART] and @parameters[:YEAREND] and @parameters[:MONTHSTART] and @parameters[:YEAREND])

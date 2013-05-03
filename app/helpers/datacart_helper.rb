@@ -81,6 +81,8 @@ module DatacartHelper
             }
         else
             link = ''
+            link_params = {}
+            link_attrs = {}
         end
         div_attrs = {:class => "datacart-cruises-links"}
         div_attrs_proper = div_attributes.merge(div_attrs)
