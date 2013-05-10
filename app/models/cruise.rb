@@ -35,7 +35,7 @@ class Cruise < ActiveRecord::Base
                         :message => "is missing or invalid",
                         :allow_nil => true
 
-    # Return the Chief_Scientist field with  the chief scientists into links if
+    # Return the Chief_Scientist field with the chief scientists into links if
     # we have a contact entries that match.
     def chief_scientists_as_links
       pi = self.Chief_Scientist
@@ -50,6 +50,27 @@ class Cruise < ActiveRecord::Base
         end
       end
       pi
+    end
+
+    def chisci_to_links
+        # Regular expression for exctracting multiple names from Chief_Scientist
+        if not self.Chief_Scientist
+            return
+        end
+        pi_names = self.Chief_Scientist.scan( /([a-z]+)\/?\\?([a-z]*):?\/?([a-z]*)\/?\\?([a-z]*)/i)
+        #Substitute name matches for links to the contact's page
+        #if @pi_names.length > 1
+        for group in pi_names
+            for name in group
+                # This says Dickson, MAFF, , . I don't know what's up with the extra empty string entries.
+                RAILS_DEFAULT_LOGGER.warn("#{name} is in #{group} in #{pi_names}")
+
+                if pi_found = Contact.find_by_LastName(name)
+                    chisci = self.Chief_Scientist.sub(/(#{name})/,"<a href=\'/contact?contact=#{name}\'>#{name}</a>")
+                end
+            end
+        end
+        chisci
     end
 
     def directory

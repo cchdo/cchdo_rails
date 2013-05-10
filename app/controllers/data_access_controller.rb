@@ -45,26 +45,6 @@ class DataAccessController < ApplicationController
         end
     end
 
-    def convert_chisci_to_links(cruise)
-        # Regular expression for exctracting multiple names from Chief_Scientist
-        if not cruise.Chief_Scientist
-            return
-        end
-        pi_names = cruise.Chief_Scientist.scan( /([a-z]+)\/?\\?([a-z]*):?\/?([a-z]*)\/?\\?([a-z]*)/i)
-        #Substitute name matches for links to the contact's page
-        #if @pi_names.length > 1
-        for group in pi_names
-            for name in group
-                # This says Dickson, MAFF, , . I don't know what's up with the extra empty string entries.
-                RAILS_DEFAULT_LOGGER.warn("#{name} is in #{group} in #{pi_names}")
-
-                if pi_found = Contact.find_by_LastName(name)
-                    cruise.Chief_Scientist.sub!(/(#{name})/,"<a href=\'contact?contact=#{name}\'>#{name}</a>")
-                end
-            end
-        end
-    end
-
    def show_cruise
       return if params[:commit] =~ /Cruises/ or params[:commit] =~ /Files/
 
@@ -93,7 +73,7 @@ class DataAccessController < ApplicationController
          end
       end
 
-      convert_chisci_to_links(@cruise)
+      @cruise.Chief_Scientist = @cruise.chisci_to_links()
 
       @file_result = @cruise.get_files()
       @preliminary = preliminary_message(@cruise)
@@ -133,78 +113,8 @@ class DataAccessController < ApplicationController
       end
    end
 
-   # deprecated search functionality?
    def list_cruises
-      @param_list = Hash.new{|h,k| h[k]={}}
-
-      @parameters = params
-      if params[:expanded]
-        @expanded = true
-      end
-
-      @t = ""
-      @query_mem = ""
-      @parameters.each_pair{ |key,value| 
-          unless key == 'expanded'
-              @query_mem << "#{key}=#{value}&"
-          end
-          if(key != "commit" and
-             key != "YEARSTART" and
-             key != "MONTHSTART" and
-             key != "YEAREND" and
-             key != "MONTHEND" and
-             key != "post" and
-             key != "action" and
-             key != "controller" and
-             key != "expanded" and
-             key !~ /Type/ and
-             key != "Sort" and
-             value =~ /\w/
-            )
-              if(@search_expression)
-                  @search_expression << " AND #{key} REGEXP \"#{value}\""
-              else
-                  @search_expression = "#{key} REGEXP \"#{value}\""
-              end
-          end
-      }
-      @query_mem.gsub!(/\s/,'+')
-      @expanded_link = "data_access/list_cruises?#{@query_mem}"
-      @condensed_link = "data_access/list_cruises?#{@query_mem}"
-      @sort_statement = ""
-      @sort_check = ["Line","ExpoCode","Begin_Date","Ship_Name","Chief_Scientist","Country"]
-      if params[:Sort]
-        @sort_by = params[:Sort]
-        if @sort_check.include?(@sort_by)
-          @sort_statement = "ORDER BY #{@sort_by}"
-        end
-      end
-      if(@parameters[:YEARSTART] and @parameters[:YEAREND] and @parameters[:MONTHSTART] and @parameters[:YEAREND])
-         begin_date = "#{@parameters[:YEARSTART]}-#{@parameters[:MONTHSTART]}-01"
-         end_date   =  "#{@parameters[:YEAREND]}-#{@parameters[:MONTHEND]}-01"
-         unless begin_date.eql?(end_date)
-           if(@search_expression)
-               @search_expression << " AND Begin_Date > \"#{begin_date}\" AND Begin_Date < \"#{end_date}\""
-           else
-              @search_expression = "Begin_Date > \"#{begin_date}\" AND Begin_Date < \"#{end_date}\""
-           end
-         end
-      end
-      if (@search_expression )
-         @cruises = reduce_specifics(Cruise.find_by_sql("SELECT DISTINCT ExpoCode,Line,Country,Ship_Name,Chief_Scientist,Begin_Date,EndDate,Alias,id From cruises where #{@search_expression} #{@sort_statement}"))
-         @cruise_objects = Array.new
-         @cruises.each { |e| @cruise_objects << reduce_specifics(Cruise.find(e.id)) }
-         @file_hash = Hash.new{|@file_hash,key| @file_hash[key]={}}
-
-         @table_list = Hash.new{|@table_list,key| @table_list[key]={}}
-
-         for result in @cruises
-            convert_chisci_to_links(result)
-            expo = result.ExpoCode
-            @table_list[expo], @param_list[expo] = load_files_and_params(result)
-         end
-      end #if(@search_expression)
-      render 'search/index',:layout => true
+       redirect_to search_path
    end
 
    def list_files
@@ -306,36 +216,6 @@ class DataAccessController < ApplicationController
        end #if params[:FileType] =~ /\w/
    end
 
-    def history
-        @expo = params[:ExpoCode]
-        @note = params[:Note]
-        @entry = params[:Entry]
-        @cur_sort = params[:Sort]
-        @updated = Event.find_by_sql("SELECT * FROM events ORDER BY Date_Entered DESC LIMIT 1")
-        #@updated = Event.find(:first,:order=>'Date_Entered DESC')
-        if (@expo)
-           if(@cur_sort == "LastName")
-              @events = Event.find(:all,:conditions=>["ExpoCode='#{@expo}'"],:order=>['LastName'])
-           elsif( @cur_sort == "Data_Type")
-              @events = Event.find(:all,:conditions=>["ExpoCode='#{@expo}'"],:order=>['Data_Type'])
-           else
-              @events = Event.find(:all,:conditions=>["ExpoCode='#{@expo}'"],:order=>['Date_Entered DESC'])
-           end
-          # @cruise = reduce_specifics(Cruise.find(:first,:conditions=>["ExpoCode='#{@expo}'"]))
-        end
-        if (@note)
-           @note_entry = Event.find(:first,:conditions=>["ID=#{@entry}"])
-           @note_entry[:Note].gsub!(/[\n\r\f]/,"<br>")
-           @note_entry[:Note].gsub!(/[\t]/,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-        end
-     end
-
-     def note
-       @entry = params[:Entry]
-       @note_entry = Event.find(:first,:conditions=>["ID=#{@entry}"])
-       render :partial => "note"
-     end
-
    def date_sort(a,b)
      if a < b
        ret_val = -1
@@ -350,57 +230,4 @@ class DataAccessController < ApplicationController
    def advanced_search
    end
 
-   def pis_for_lookup
-   	@pis = Cruise.find(:all,:select => ["DISTINCT Chief_Scientist"])
-   	headers['content-type'] = 'text/javascript'
-	
-	# make things easier for the browser
-	str = "var pis = ["
-	@pis.each do |pi|
-		str += "\"#{pi.Chief_Scientist}\","
-	end
-	str = str[0..-2] + "];"
-	render :text => "#{str}"
-   end
-
-   def expocodes_for_lookup
-   	@expocodes = Cruise.find(:all,:select => ["DISTINCT ExpoCode"])
-   	headers['content-type'] = 'text/javascript'
-	
-	# make things easier for the browser
-	str = "var expocodes = ["
-	@expocodes.each do |expocode|
-		str += "\"#{expocode.ExpoCode}\","
-	end
-	str = str[0..-2] + "];"
-	render :text => "#{str}"
-   end
-
-   def ships_for_lookup
-   	@ships = Cruise.find(:all,:select => ["DISTINCT Ship_Name"])
-   	headers['content-type'] = 'text/javascript'
-	
-	# make things easier for the browser
-	str = "var ships = ["
-	@ships.each do |ship|
-		str += "\"#{ship.Ship_Name}\","
-	end
-	str = str[0..-2] + "];"
-	render :text => "#{str}"
-   end
-
-   def countries_for_lookup
-   	@countries = Cruise.find(:all,:select => ["DISTINCT Country"])
-   	headers['content-type'] = 'text/javascript'
-	
-	# make things easier for the browser
-	str = "var countries = ["
-	@countries.each do |country|
-		str += "\"#{country.Country}\","
-	end
-	str = str[0..-2] + "];"
-	render :text => "#{str}"
-   end
-   
-   
 end

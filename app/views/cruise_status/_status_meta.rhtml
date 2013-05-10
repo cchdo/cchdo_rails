@@ -1,11 +1,20 @@
 <% if @file_result %>
   <h1>Missing</h1>
   <ul class="missing">
-    <% for type, text in $file_types %>
-      <% unless @file_result[type] %>
-        <li><%= type %></li>
-      <% end %>
-    <% end %>
+    <% for section in Document.data_format_sections %>
+      <%- for type in section.types %>
+        <%- unless @file_result[type.key_name] %>
+          <li><%= section.title %> <%= type.short_name %></li>
+        <%- end %>
+      <%- end %>
+      <%- for subsection in section.subsections %>
+        <%- for type in subsection.types %>
+          <%- unless @file_result[type.key_name] %>
+            <li><%= subsection.title %> <%= type.short_name %></li>
+          <%- end %>
+        <%- end %>
+      <%- end %>
+    <%- end %>
   </ul>
 
   <h1>Online</h1>
@@ -13,6 +22,20 @@
     <% for type, text in $file_types %>
       <%= link_file(@file_result[type], text) %>
     <% end %>
+    <% for section in Document.data_format_sections %>
+      <%- for type in section.types %>
+        <%- unless @file_result[type.key_name] %>
+          <%= link_file(@file_result[type], "#{section.title} #{type.short_name}") %>
+        <%- end %>
+      <%- end %>
+      <%- for subsection in section.subsections %>
+        <%- for type in subsection.types %>
+          <%- unless @file_result[type.key_name] %>
+            <%= link_file(@file_result[type], "#{subsection.title} #{type.short_name}") %>
+          <%- end %>
+        <%- end %>
+      <%- end %>
+    <%- end %>
   </ul>
 <% else %>
   <h1>No cruise document status information</h1>

@@ -11,16 +11,9 @@ require 'models/event'
 require 'models/submission'
 
 class StaffController < ApplicationController
-    layout "staff", :except => [:pis_for_lookup, :ships_for_lookup,
-                                :countries_for_lookup, :parameters_for_lookup,
-                                :expocodes_for_lookup, :contacts_for_lookup,
-                                :lines_for_lookup]
-    before_filter :check_authentication, :except => [:signin, :images, :pis_for_lookup,
-                                       :ships_for_lookup,
-                                       :countries_for_lookup,:parameters_for_lookup,
-                                       :expocodes_for_lookup,
-                                       :contacts_for_lookup, :lines_for_lookup]
-#cache_sweeper :task_tracker
+    layout "staff"
+    before_filter :check_authentication, :except => [:signin, :images]
+    #cache_sweeper :task_tracker
 
 def index
     @user = User.find(session[:user])
@@ -71,101 +64,6 @@ def update_action_items
     render :partial => "minutes"
 end
 
-#########################################################################
-# Code for smart forms
-
-def pis_for_lookup
-	@pis = Cruise.find(:all, :select => ["DISTINCT Chief_Scientist"])
-	response.headers['Content-Type'] = 'text/javascript'
-	
-	# make things easier for the browser
-	str = "var pis = ["
-	@pis.each do |pi|
-		str += "\"#{pi.Chief_Scientist}\","
-	end
-	str = str[0..-2] + "];"
-	render :text => "#{str}"
-end
-
-def contacts_for_lookup
-	@contacts = Contact.find(:all, :select => ["DISTINCT LastName"])
-	response.headers['Content-Type'] = 'text/javascript'
-	
-	# make things easier for the browser
-	str = "var contacts = ["
-	@contacts.each do |contact|
-		str += "\"#{contact.LastName}\","
-	end
-	str = str[0..-2] + "];"
-	render :text => "#{str}"
-end
-
-def expocodes_for_lookup
-	@expocodes = Cruise.find(:all, :select => ["DISTINCT ExpoCode"])
-	response.headers['Content-Type'] = 'text/javascript'
-	
-	# make things easier for the browser
-	str = "var expocodes = ["
-	@expocodes.each do |expocode|
-		str += "\"#{expocode.ExpoCode}\","
-	end
-	str = str[0..-2] + "];"
-	render :text => "#{str}"
-end
-
-def ships_for_lookup
-	@ships = Cruise.find(:all, :select => ["DISTINCT Ship_Name"])
-	response.headers['Content-Type'] = 'text/javascript'
-	
-	# make things easier for the browser
-	str = "var ships = ["
-	@ships.each do |ship|
-		str += "\"#{ship.Ship_Name}\","
-	end
-	str = str[0..-2] + "];"
-	render :text => "#{str}"
-end
-
-def countries_for_lookup
-	@countries = Cruise.find(:all, :select => ["DISTINCT Country"])
-	response.headers['Content-Type'] = 'text/javascript'
-	
-	# make things easier for the browser
-	str = "var countries = ["
-	@countries.each do |country|
-		str += "\"#{country.Country}\","
-	end
-	str = str[0..-2] + "];"
-	render :text => "#{str}"
-end
-
-
-def parameters_for_lookup
-	@parameters = Parameter.column_names.delete_if {|x| x =~ /ExpoCode/ or x =~ /id/ or x =~ /_PI/ or x =~ /Date/i}
-
-	response.headers['Content-Type'] = 'text/javascript'
-	
-	# make things easier for the browser
-	str = "var parameters = ["
-	@parameters.each do |parameter|
-		str += "\"#{parameter}\","
-	end
-	str = str[0..-2] + "];"
-	render :text => "#{str}"
-end
-
-def lines_for_lookup
-    @lines = Cruise.find(:all, :select => ["DISTINCT Line"])
-    response.headers['Content-Type'] = 'text/javascript'
-
-    # make things easier for the browser
-    str = "var lines = ["
-    @lines.each do |line|
-        str += "\"#{line.Line}\","
-    end
-    str = str[0..-2] + "];"
-    render :text => "#{str}"
-end
 #--------------------Db-History----------------------------------
 def db_history
     @documents = Document.find_by_sql("select * from cchdo.documents where DATE_SUB(CURDATE(),interval 2 month) <= LastModified order by LastModified DESC")  #find documents that are most recently changed 

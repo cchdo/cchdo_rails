@@ -3,21 +3,6 @@ class CruiseStatusController < ApplicationController
 
     before_filter :check_authentication
 
-    $file_types = [ 
-        ['exchange_bot', 'Exchange Bottle'],
-        ['exchange_ctd', 'Exchange CTD'],
-
-        ['woce_sum', 'Sum File'],
-        ['woce_bot', 'WOCE Bottle'],
-        ['woce_ctd', 'WOCE CTD'],
-
-        ['netcdf_bot', 'NetCDF Bottle'],
-        ['netcdf_ctd', 'NetCDF CTD'],
-
-        ['text_doc', 'Text Document'],
-        ['pdf_doc', 'PDF Document']
-    ]
-
     $type_to_long_type = {
         'woce_sum' => 'Woce Sum',
         'woce_ctd' => 'Woce CTD (Zipped)',
