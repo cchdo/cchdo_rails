@@ -33,7 +33,8 @@ class Staff::DataEntryController < ApplicationController
   def index
      @user = User.find(session[:user]).username
      unless @user.eql?('cchdo_admin')
-      redirect_to :controller => '/staff', :action => 'index'
+         flash[:notice] = 'Unauthorized'
+         redirect_to :controller => '/staff', :action => 'index'
      end
      @update_radio = " "
      @create_radio = "checked"

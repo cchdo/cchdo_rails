@@ -1,8 +1,6 @@
 <div class="boxed">
-<h1></h1>
-
+<h1>Sign in</h1>
 <div class="box_content">
-
 <% form_tag :action => :signin do %>
 <table>
   <tr>
@@ -16,8 +14,11 @@
 </table>
 <%= submit_tag "Sign in" %>
 <% end %>
-
 </div>
-
 <div class="box_bottom"></div>
 </div>
+<%- content_for :js do %>
+<script>
+  document.getElementById('username').focus();
+</script>
+<%- end %>

@@ -56,7 +56,7 @@ layout "carina"
               @table_list[cruise.ExpoCode]["Preliminary"] = ""
                for cruise_file in @cruise_files
                  if cruise_file.Preliminary == 1
-                   @table_list[cruise.ExpoCode]["Preliminary"] = "Preliminary (See <a href=\"http://cchdo.ucsd.edu/data_history?ExpoCode=#{cruise.ExpoCode}\">data history</a>)"
+                   @table_list[cruise.ExpoCode]["Preliminary"] = "Preliminary (See <a href=\"http://cchdo.ucsd.edu/cruise/#{cruise.ExpoCode}#history\">data history</a>)"
                  end
                end
                @files = @dir.Files.split(/\s/)
@@ -155,7 +155,7 @@ layout "carina"
                 @table_list[cruise.ExpoCode]["Preliminary"] = ""
                  for cruise_file in @cruise_files
                    if cruise_file.Preliminary == 1
-                     @table_list[cruise.ExpoCode]["Preliminary"] = "Preliminary (See <a href=\"http://cchdo.ucsd.edu/data_history?ExpoCode=#{cruise.ExpoCode}\">data history</a>)"
+                     @table_list[cruise.ExpoCode]["Preliminary"] = "Preliminary (See <a href=\"http://cchdo.ucsd.edu/cruise/#{cruise.ExpoCode}#history\">data history</a>)"
                    end
                  end
                  @files = @dir.Files.split(/\s/)

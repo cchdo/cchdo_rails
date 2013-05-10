@@ -55,6 +55,8 @@ class SearchTerm
         query = self.query
         if type == 'All'
             all_query = true
+        elsif type == 'None'
+            where_clause = '1=0'
         elsif type == 'Date'
             where_clause = "(Begin_Date REGEXP ? OR EndDate REGEXP ?)"
             sql_parameters << query
@@ -218,12 +220,13 @@ protected
         resp = @@parser.parse("(#{@query})")
         if resp.nil?
             Rails.logger.error("Search: Unable to parse query")
-            qtree = []
+            qtree = SearchTerm.new(nil, 'None')
         else
             qtree = resp.eval()
         end
+        Rails.logger.debug("Search: rewriting #{qtree.inspect}")
         qtree = Term::rewrite(qtree)
-        Rails.logger.debug("Search: #{qtree.inspect}")
+        Rails.logger.debug("Search: rewritten #{qtree.inspect}")
 
         from_clause, sql_params, all_query = gen_from_qtree(qtree)
 

@@ -18,6 +18,8 @@ a, .link { color: #405381; }
 a:visited, .visited_link { color: #88673E; }
 pre { font-family: Andale Mono, Courier New, Courier, Fixed, monospace; }
 
+.cruiseid { font-size: 0.5em; color: #aaaaaa;}
+
 /* text fields */
 input[type='text'], input[type='password'], select { border: 1px solid #A0A0A0; }
 input[type='text']:focus, input[type='password']:focus, select:focus { border: 1px solid #1286FE; background-color: #DEFFFF; }
@@ -465,7 +467,7 @@ td.map img {
 }
 #cchdo_credit p {
   max-width: none;
-  width: 61em;
+  width: 59em;
   margin: 0 auto;
 }
 #cchdo_credit p:first-child {
@@ -894,6 +896,10 @@ div.datacart-icon {
 .data_access #updates .merged .odd td { background-color: #c9dadd; }
 .data_access #updates .notes { color: #000; }
 
+#data_access_history tr.active {
+  background: #FFFFDD;
+}
+
 .data_summary_history { background: #9ec4cd; }
 .data_summary_history a { color: #fff; }
 #data_summary_and_history { height:700px; }
@@ -969,7 +975,7 @@ div.datacart-icon {
 #old_submissions_table th {
   font-weight: bold;
   text-align:left;
-  background-color: #9ec4cd;;
+  background-color: #9ec4cd;
   padding: 5px 10px 5px 10px;
   color:#000;
   font-size: medium;

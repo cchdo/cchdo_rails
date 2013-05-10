@@ -40,6 +40,8 @@
   <p><strong>Expedition Link:</strong> <%= link_to(@cruise.link, @cruise.link) %></p>
 <% end %>
 <%- if session[:user] %>
+  <p><strong>Aliases:</strong> <%= @cruise.Alias %></p>
+  <p><strong>Groups</strong> <%= @cruise.Group %></p>
   <p><strong>Id:</strong> <%= @cruise.id %></p>
 <%- end %>
 

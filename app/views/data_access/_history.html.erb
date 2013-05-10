@@ -34,8 +34,8 @@
             <%= link_to(summary, 'javascript:void(0);', :class => "history-summary") %>
           </td>
         </tr>
-        <tr<%= cycle_class -%>>
-          <td id="<%= noteid %>_detail" class="note" colspan="6">
+        <tr<%= cycle_class -%> id="<%= noteid %>_detail">
+          <td class="note" colspan="6">
             <pre><%= event.Note -%></pre>
           </td>
         </tr>
@@ -45,48 +45,61 @@
 <%- end %>
 <% content_for :js do %>
   <script>
-    var J = jQuery;
-    J(function() {
-      function getNoteID(summary) {
-        return summary.closest('tr').attr('id');
-      }
-      function getNoteDetail(summary) {
-          var detail_id = '#' + getNoteID(summary) + '_detail';
-          return J(detail_id);
-      }
-      J('.history-summary').click(function() {
-          var detail = getNoteDetail(J(this));
-          console.log(detail.data('shown'));
-          var shown = detail.data('shown');
-          if (shown === undefined) {
-            shown = true;
-          }
-          if (shown) {
-              detail.data('shown', false);
-              detail.hide();
-          } else {
-              detail.data('shown', true);
-              detail.show();
-          }
-      });
-      var toggle_button = J('<button>');
-      toggle_button.click(function() {
-          if (J(this).data('details')) {
-              J(this).data('details', false);
-              J(this).html('Show all note details');
-              J('.history-summary').each(function() {
-                  getNoteDetail(J(this)).data('shown', false).hide();
-              });
-          } else {
-              J(this).data('details', true);
-              J(this).html('Hide all note details');
-              J('.history-summary').each(function() {
-                  getNoteDetail(J(this)).data('shown', true).show();
-              });
-          }
-      });
-      toggle_button.data('details', true).click();
-      J('#data_access_history').prepend(toggle_button);
+    jQuery(function($) {
+      $(function() {
+        function getNoteID(summary) {
+          return summary.closest('tr').attr('id');
+        }
+        function getNoteDetail(summary) {
+            var detail_id = '#' + getNoteID(summary) + '_detail';
+            return $(detail_id);
+        }
+        $('.history-summary').click(function() {
+            var detail = getNoteDetail($(this));
+            var shown = detail.data('shown');
+            if (shown === undefined) {
+              shown = true;
+            }
+            if (shown) {
+                detail.data('shown', false);
+                detail.hide();
+            } else {
+                detail.data('shown', true);
+                detail.show();
+            }
+        });
+        var toggle_button = $('<button>');
+        toggle_button.click(function() {
+            if ($(this).data('details')) {
+                $(this).data('details', false);
+                $(this).html('Show all note details');
+                $('.history-summary').each(function() {
+                    getNoteDetail($(this)).data('shown', false).hide();
+                });
+            } else {
+                $(this).data('details', true);
+                $(this).html('Hide all note details');
+                $('.history-summary').each(function() {
+                    getNoteDetail($(this)).data('shown', true).show();
+                });
+            }
+        });
+        // Automatically expand all history notes if sent here with history
+        // notes opened
+        if (window.location.hash == '#history') {
+          toggle_button.data('details', false).click();
+        // Automatically expand the one history notes if sent here with one
+        // history note opened
+        } else if (window.location.hash.indexOf('#note_') > -1) {
+          toggle_button.data('details', true).click();
+          $(window.location.hash).addClass('active');
+          $(window.location.hash).find('a.history-summary').click();
+          $(window.location.hash + '_detail').addClass('active');
+        } else {
+          toggle_button.data('details', true).click();
+        }
+        $('#data_access_history').prepend(toggle_button);
+    });
   });
   </script>
 <% end -%>

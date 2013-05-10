@@ -4,6 +4,9 @@
       <tr>
           <th width="10%"><%= sort_on('Line') %></th>
           <th width="15%"><%= sort_on('ExpoCode') %></th>
+          <%- if session[:user] %>
+            <th>id</th>
+          <%- end %>
           <th width="10%"><%= sort_on('Ship', "Ship_Name") %></th>
           <th width="20%"><%= sort_on('Cruise Dates', "Begin_Date") %></th>
           <th width="30%"><%= sort_on('Chief Scientist', "Chief_Scientist") %></th>
@@ -25,6 +28,9 @@
           <div class="status-preliminary"><%= cruise_table["Preliminary"] %></div>
         <% end %>
       </td>
+      <%- if session[:user] %>
+        <td class="cruiseid"><%= cruise.id %></td>
+      <%- end %>
       <td><%= cruise.Ship_Name %></td>
       <td>
         <%= pretty_dates(cruise, '%Y-%m-%d', ' to ') %>

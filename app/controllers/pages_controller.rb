@@ -13,14 +13,17 @@ class PagesController < ApplicationController
         :ship => 'Unknown', 
         :map => nil
       }
-      if cruise = reduce_specifics(d.cruise)
-        info[:begin_date] = cruise.Begin_Date if cruise.Begin_Date
-        info[:line] = cruise.Line if cruise.Line
-        info[:ship] = cruise.Ship_Name if cruise.Ship_Name
-        files = cruise.get_files()
-        if map = files['small_pic']
-          info[:map] = map
-        end
+      begin
+          if d.cruise and cruise = reduce_specifics(d.cruise)
+            info[:begin_date] = cruise.Begin_Date if cruise.Begin_Date
+            info[:line] = cruise.Line if cruise.Line
+            info[:ship] = cruise.Ship_Name if cruise.Ship_Name
+            files = cruise.get_files()
+            if map = files['small_pic']
+              info[:map] = map
+            end
+          end
+      rescue
       end
       info
     end

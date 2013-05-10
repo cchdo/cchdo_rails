@@ -84,11 +84,16 @@ class ApplicationController < ActionController::Base
             else
                 flash[:notice] = "Invalid user name or password"
             end
+        else
+            session[:intended_path] = request.referrer || '/'
         end
     end
 
     def signout
         session[:user] = nil
+        session[:username] = nil
+        redirect_to :back
+    rescue ActionController::RedirectBackError
         redirect_to signin_path
     end
 

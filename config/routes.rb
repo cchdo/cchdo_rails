@@ -1,11 +1,22 @@
 # The priority is based upon order of creation: first created -> highest priority.
 
 ActionController::Routing::Routes.draw do |map|
+  # Sample of regular route:
+  # map.connect 'products/:id', :controller => 'catalog', :action => 'view'
+  # Keep in mind you can assign values other than :controller and :action
+
+  # Sample of named route:
+  # map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
+  # This route can be invoked with purchase_url(:id => product.id)
+
   map.search "/search", :controller => "search", :action => "index"
+  map.search_advanced "/search/advanced", :controller => "data_access", :action => "advanced_search"
 
   # legacy links
   map.groups "/groups", :controller => "legacy", :action => "search"
   map.table "/table", :controller => "legacy", :action => "search"
+  map.data_history "/data_history", :controller => "legacy", :action => "data_history"
+  map.data_history "/data_history/full", :controller => "legacy", :action => "data_history"
 
   map.namespace(:argo) do |argo|
     argo.resources :files do |files|
@@ -33,16 +44,7 @@ ActionController::Routing::Routes.draw do |map|
   map.submission '/submit', :controller => :submit, :action => :create,
                         :conditions => {:method => :post}
 
-  # Sample of regular route:
-  # map.connect 'products/:id', :controller => 'catalog', :action => 'view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # Sample of named route:
-  # map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
-  # This route can be invoked with purchase_url(:id => product.id)
-
   map.cruise 'cruise/:expocode', :controller => :data_access, :action => :show_cruise
-  #map.resources :cruise
 
   map.feed 'feed/:expocodes', :controller => :data_access, :action => :feed, :format => 'atom'
   

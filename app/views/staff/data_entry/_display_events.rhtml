@@ -38,7 +38,7 @@
 		 <% @end= " " %> 
 	   <% else %> 
 	   	 <% @Summary = @events[cnt].Summary %>
-		 <% @Sum_Link= "<a href=\"/data_history?ExpoCode=#{@events[cnt].ExpoCode}&Entry=#{@events[cnt].ID}&Sort=#{@cur_sort}&Note=true\">"%>
+		 <% @Sum_Link= "<a href=\"/cruise/#{@events[cnt].ExpoCode}&sort_history=#{@cur_sort}#note_#{@events[cnt].ID}\">"%>
      	 <% @end = "</a>" %>
 	   <% end %>
 	

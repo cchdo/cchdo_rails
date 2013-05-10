@@ -24,6 +24,9 @@
         <span class="cruise_title">
           <%= link_to(cruise.Line || '', cruise_path(cruise.ExpoCode), :class => "woce-line") %>
           <%= link_to(cruise.ExpoCode, cruise_path(cruise.ExpoCode), :class => "expocode") %>
+          <%- if session[:user] %>
+            <span class="cruiseid"><%= cruise.id %></span>
+          <%- end %>
         </span>
 
         <% if cruise_table["Preliminary"] %>
