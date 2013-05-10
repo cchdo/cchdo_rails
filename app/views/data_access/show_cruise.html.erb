@@ -39,6 +39,9 @@
 <% if @cruise.link %>
   <p><strong>Expedition Link:</strong> <%= link_to(@cruise.link, @cruise.link) %></p>
 <% end %>
+<%- if session[:user] %>
+  <p><strong>Id:</strong> <%= @cruise.id %></p>
+<%- end %>
 
 </div>
 <div class="box_bottom"></div>

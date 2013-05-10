@@ -5,10 +5,19 @@
     <%- if @queue_files.blank? and @merged_queue_files.blank? %>
       <p>No as received files.</p>
     <%- end %>
+    <%- if session[:user] %>
+      <%- colspan = 4 %>
+    <%- else %>
+      <%- colspan = 3 %>
+    <%- end %>
     <% unless @queue_files.blank? -%>
       <h2>Unmerged</h2>
+      <%# TODO refactor. This table and the merged table is almost the same %>
       <table>
         <tr>
+          <%- if session[:user] %>
+            <th class="id">Id</th>
+          <%- end %>
           <th class="file">File</th>
           <th class="date">Date Received</th>
           <th class="date">Date Merged</th>
@@ -16,12 +25,20 @@
         <% @queue_files.each do |file| -%>
           <%- odd = cycle('', 'odd') %>
           <tr class="<%= odd %> first">
+            <%- if session[:user] %>
+              <td class="id"><%= link_to(file.id, queue_path(:id => file.id)) %></td>
+            <%- end %>
             <%= content_tag(:td, link_to(limit_str_len(file.Name, 35), file.UnprocessedInput, :title => file.Name), :class => 'file') -%>
             <td class="date"><%=file.DateRecieved -%><%# sic %></td>
             <td class="date">Not merged</td>
           </tr>
           <tr class="<%= odd %> last">
-            <td class="notes" colspan="3"><%=file.Notes if file.Notes -%></td>
+            <%- if session[:user] %>
+              <%- colspan = 4 %>
+            <%- else %>
+              <%- colspan = 3 %>
+            <%- end %>
+            <td class="notes" colspan="<%= colspan %>"><%=file.Notes if file.Notes -%></td>
           </tr>
         <% end %>
       </table>
@@ -29,16 +46,26 @@
     <% unless @merged_queue_files.blank? -%>
       <h2>Merged</h2>
       <table class="merged">
-        <tr><th class="file">File</th><th class="date">Date Received</th><th class="date">Date Merged</th></tr>
+        <tr>
+          <%- if session[:user] %>
+            <th class="id">Id</th>
+          <%- end %>
+          <th class="file">File</th>
+          <th class="date">Date Received</th>
+          <th class="date">Date Merged</th>
+        </tr>
         <% @merged_queue_files.each do |file| -%>
           <%- odd = cycle('', 'odd') %>
           <tr class="<%= odd %> first">
+            <%- if session[:user] %>
+              <td class="id"><%= link_to(file.id, queue_path(:id => file.id)) %></td>
+            <%- end %>
             <%=content_tag(:td, link_to(limit_str_len(file.Name, 35), file.UnprocessedInput, :title => file.Name), :class => 'file') -%>
             <td class="date"><%=file.DateRecieved -%><%# sic %></td>
             <td class="date"><%=file.DateMerged -%></td>
           </tr>
           <tr class="<%= odd %> last">
-            <td class="notes" colspan="3"><%=file.Notes -%></td>
+            <td class="notes" colspan="<%= colspan %>"><%=file.Notes -%></td>
           </tr>
         <% end %>
       </table>

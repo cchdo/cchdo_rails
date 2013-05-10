@@ -447,6 +447,16 @@ td.map img {
   margin-bottom: 1em;
   padding-top: 0.5em;
 }
+#cchdo_footer div.egg {
+  position: fixed;
+  bottom: 0.5em;
+  left: 0.5em;
+  text-align: left;
+}
+#cchdo_footer div.egg a {
+  color: #efefef;
+  text-decoration: none;
+}
 #cchdo_credit {
   margin-top: 1em;
   text-align: center;
