@@ -78,7 +78,11 @@ class Cruise < ActiveRecord::Base
     end
 
     def data_dir
-        return self.directory.FileName
+        if directory = self.directory
+            directory.FileName
+        else
+            nil
+        end
     end
 
     def get_files

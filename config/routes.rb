@@ -11,6 +11,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.search "/search", :controller => "search", :action => "index"
   map.search_advanced "/search/advanced", :controller => "data_access", :action => "advanced_search"
+  map.search_files "/search/list_files", :controller => "data_access", :action => "list_files"
 
   # legacy links
   map.groups "/groups", :controller => "legacy", :action => "search"

@@ -28,7 +28,7 @@
 <p><strong>ExpoCode:</strong> <%= @cruise.ExpoCode %></p>
 <p><strong>Line:</strong> <%= @cruise.Line %></p>
 <% if @cruise.Alias and @cruise.Alias =~/\w/ %>
-  <p><strong>Alias:</strong> <%= @cruise.Alias %></p>
+  <p><strong>Aliases:</strong> <%= @cruise.Alias %></p>
 <% end %>
 <p><strong>Ship/Country:</strong> <%=self_or_empty(@cruise.Ship_Name)%>/<%=self_or_empty(@cruise.Country)%></p>
 <p><strong>Chief Scientists:</strong> <%=self_or_empty(@cruise.Chief_Scientist)%></p>
@@ -40,12 +40,10 @@
   <p><strong>Expedition Link:</strong> <%= link_to(@cruise.link, @cruise.link) %></p>
 <% end %>
 <%- if session[:user] %>
-  <p><strong>Aliases:</strong> <%= @cruise.Alias %></p>
   <p><strong>Groups:</strong> <%= @cruise.Group %></p>
   <p><strong>Cruise dir:</strong> <%= @cruise.data_dir() %></p>
   <p><strong>Id:</strong> <%= @cruise.id %></p>
 <%- end %>
-
 </div>
 <div class="box_bottom"></div>
 </div>
