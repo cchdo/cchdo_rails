@@ -879,8 +879,7 @@ div.datacart-icon {
 .data_access .boxed td { vertical-align: top;}
 .data_access .boxed td.date { font-weight: bold; white-space: nowrap; }
 .data_access .boxed .upper { max-height: 40em; overflow-y: auto; }
-.data_access .note {}
-.data_access .note pre { overflow: auto; width: 74em; }
+.data_access textarea { width: 99%; min-height: 5em; border: none; background: transparent; font-family: Inconsolata,Courier,monospace; }
 .data_access .note .close { text-align: right; }
 .data_access .note .close a { text-decoration: none; }
 .data_access #general .box_content { padding-top: 0.6em; }

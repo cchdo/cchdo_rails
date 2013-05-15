@@ -1,9 +1,13 @@
 class Event < ActiveRecord::Base
     belongs_to :cruise, :primary_key => :ExpoCode, :foreign_key => :ExpoCode
 
+    def note
+        (self.Note || '').gsub(/[\n\r\f]/, "\n")
+    end
+
     def self.get_feed_events_for(expocode)
-        events = self.find_all_by_ExpoCode(expocode,
-                                           :order => "`Date_Entered` DESC")
+        events = self.find_all_by_ExpoCode(
+            expocode, :order => "`Date_Entered` DESC")
         events
     end
 

@@ -104,10 +104,7 @@ class DataAccessController < ApplicationController
       if params[:Note] and params[:Entry]
          @note = params[:Note]
          @entry = params[:Entry]
-
          @note_entry = Event.find_by_ID(@entry)
-         @note_entry[:Note].gsub!(/[\n\r\f]/,"<br>")
-         @note_entry[:Note].gsub!(/[\t]/,"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
       else
          @note = nil
       end

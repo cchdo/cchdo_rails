@@ -8,16 +8,20 @@ This is an automated confirmation. However, replying to the sender will reach al
 Your submitted <%= 'file'.smart_pluralize(submitted_files.length) %>:
 <%= submitted_files.join("\n") %>
 
-will be <% if @submission.public && @submission.public =~ /argo/ %> available for use exclusively by the Argo program.  <% else %> <%= @submission.public %>.  <% end %>
+will be <% if @submission.public && @submission.public =~ /argo/ %> available for use exclusively by the Argo program.<% else %><%= @submission.public %>.<% end %>
 
 The following actions were specified:
 <%= @submission.action %>
 
 Further information collected with your submission:
+Id: <%= @submission.id %>
 Institute: <%= @submission.institute %>
 Country: <%= @submission.Country %>
 ExpoCode: <%= @submission.ExpoCode %> Line: <%= @submission.Line %>
 Date: <%= @submission.cruise_date %> 
-Notes: <%= @submission.notes %>
+Notes:
+<%= @submission.notes %>
 
 Thank you again for your submission.
+---
+http://cchdo.ucsd.edu/submissions?query=995&submission_list=id

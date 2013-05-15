@@ -9,7 +9,7 @@ class FileSubmittedMailer < ActionMailer::Base
         subject "[CCHDO] Submission by #{submission.name}: #{identifiers.join(' ')}"
         from 'cchdo@ucsd.edu'
         recipients [submission.email].uniq
-        cc ['cchdo@ucsd.edu', 'fieldsjustin@gmail.com']
+        cc ['cchdo@ucsd.edu']
         sent_on Time.now()
         body :submission => submission
     end
