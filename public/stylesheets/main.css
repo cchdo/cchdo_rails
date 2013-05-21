@@ -1034,6 +1034,9 @@ div.scroll {overflow: auto; width: 100%; height: 36em;}
 #submissions .enqueue-form input[type=text] { width: 100%; }
 #submissions .expander { width: 6em; vertical-align: top; }
 
+.submission.confirmation dt { font-weight: bold; margin-top: 0.5em; }
+.submission.confirmation dd { margin-left: 12em; margin-top: -0.5em; }
+
 /* Staff Pages */
 .staff #menu { background: #c0c0c0; color: #A0A0A0; padding: 0.5em; }
 .staff #menu a { color: #333333; text-decoration: none; }
