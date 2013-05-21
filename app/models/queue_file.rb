@@ -11,6 +11,9 @@ class QueueFile < ActiveRecord::Base
         Rails.logger.info("enqueueing #{submission.inspect} #{cruise.inspect}")
         begin
             data_dir = cruise.data_dir()
+            if data_dir.nil?
+                raise 'No data directory'
+            end
         rescue
             raise 'No data directory'
         end
