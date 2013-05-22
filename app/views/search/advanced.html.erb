@@ -1,0 +1,93 @@
+<div class="boxed">
+<h1>Advanced Search</h1>
+<div class="box_content">
+<h2>Search by Cruises</h2>
+<form action="/search/advanced" method="POST">
+<table>
+  <tr>
+    <td align="left">Line Number <%= text_field_tag "Line", "", :size => 12%></td>
+    <td align="left" colspan="3">ExpoCode <%= text_field_tag "ExpoCode", "", :size=>16 %>
+      <div class="auto_complete" id="expocode_auto_complete"></div>
+      <%= javascript_tag("new Autocompleter.Local('ExpoCode','expocode_auto_complete',expocodes,{fullSearch: true, frequency: 0, minChars:1});")%>
+    </td>
+  </tr>
+  <tr>
+    <td align="left">Data Contact <%= text_field_tag "Chief_Scientist", "", :size=>14 %>   
+      <div class="auto_complete" id="Chief_Scientist_auto_complete"></div>
+      <%= javascript_tag("new Autocompleter.Local('Chief_Scientist','Chief_Scientist_auto_complete',pis,{fullSearch: true, frequency: 0, minChars:1});")%>	
+    </td>
+    <td align="left">Ship <%= text_field_tag "Ship_Name", "", :size=>12 %>   
+      <div class="auto_complete" id="Ship_Name_auto_complete"></div>
+      <%= javascript_tag("new Autocompleter.Local('Ship_Name','Ship_Name_auto_complete',ships,{fullSearch: true, frequency: 0, minChars:1});")%>
+    </td>
+    <td colspan="2" align="left">Country <%= text_field_tag "Country", "", :size=>12 %>
+      <div class="auto_complete" id="Country_auto_complete"></div>
+      <%= javascript_tag("new Autocompleter.Local('Country','Country_auto_complete',countries,{fullSearch: true, frequency: 0, minChars:1});")%>
+    </td>
+  </tr>
+</table>
+<table>
+	<tr>
+	<td align="right">From</td>
+  <td>
+    <%= year_month_selector('MONTHSTART', 'YEARSTART') %>
+  </td>
+	<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	<td align="right">To</td>
+  <td>
+    <%= year_month_selector('MONTHEND', 'YEAREND') %>
+  </td>
+</tr>
+</table>
+<%= submit_tag "Find Cruises" %>
+</form>
+
+<p>
+Search by specific parameters is also supported by the site search bar. To
+match a search to a specific parameter, use the following syntax:
+parameter:query. E. g. ship:knorr line:p10  chief_scientist:swift.
+</p>
+<p>
+The following parameters are valid:
+</p>
+<ul>
+  <li>Group</li>
+  <li>Chief_Scientist</li>
+  <li>ExpoCode</li>
+  <li>Alias</li>
+  <li>Ship</li>
+  <li>Line</li>
+</ul>
+
+<hr />
+
+<h2>Search by Data Files</h2>
+<form action="/search/list_files">
+<table>
+<tr>
+  <td>File Type(s)<br>
+    <select name="FileType">
+    <option value="all">all</option>
+    <option value="sum">Sum File</option>
+    <option value="bottle">bottle</option>
+    <option value="ctd">ctd</option>
+    <option value="documentation">Documentation</option>
+    </select>
+  </td>
+</tr>
+<tr>
+  <td>Modified Since</td>
+</tr>
+<tr>
+  <td colspan="4">
+    <%= year_month_selector('MONTHSTART', 'YEARSTART', 1994) %>
+  </td>
+</tr>
+<tr>
+	<td><%= submit_tag "Find Files"%></td>
+</tr>
+</table>
+</form>
+</div>
+<div class="box_bottom"></div>
+</div>

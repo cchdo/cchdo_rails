@@ -208,6 +208,53 @@ class SearchController < ApplicationController
         find_by_params_query()
     end
 
+    def advanced
+        if request.post?
+            ignored_parameters = ['commit', 'controller', 'action']
+            clean_params = params.reject {|k, v| ignored_parameters.include?(k)}
+            puts clean_params.inspect
+
+            dafter = [nil, nil]
+            dbefore = [nil, nil]
+
+            search_params = {}
+            for k, v in clean_params
+                next if v.blank?
+                if k =~ /^(MONTH|YEAR)(START|END)$/
+                    if $1 == 'MONTH'
+                        index = 1
+                    elsif $1 == 'YEAR'
+                        index = 0
+                    end
+                    str = "%02i" % v.to_i
+                    if $2 == 'START'
+                        dafter[index] = str
+                    elsif $2 == 'END'
+                        dbefore[index] = str
+                    end
+                else
+                    search_params[k] = v
+                end
+            end
+            unless dbefore.compact.blank?
+                search_params['before'] = dbefore.join('-')
+            end
+            unless dafter.compact.blank?
+                search_params['after'] = dafter.join('-')
+            end
+
+            queries = []
+            for k, v in search_params
+                queries << "#{k}:#{v}"
+            end
+
+            params[:query] = queries.join(" ")
+            find_by_params_query()
+            render "search/index"
+            return
+        end
+    end
+
     @@parser = SearchParser.new
 
 protected

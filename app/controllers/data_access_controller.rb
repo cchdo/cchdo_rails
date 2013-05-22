@@ -223,8 +223,4 @@ class DataAccessController < ApplicationController
      end
      return(ret_val)
    end
-
-   def advanced_search
-   end
-
 end

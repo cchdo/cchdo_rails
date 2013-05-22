@@ -10,7 +10,7 @@ ActionController::Routing::Routes.draw do |map|
   # This route can be invoked with purchase_url(:id => product.id)
 
   map.search "/search", :controller => "search", :action => "index"
-  map.search_advanced "/search/advanced", :controller => "data_access", :action => "advanced_search"
+  map.search_advanced "/search/advanced", :controller => "search", :action => "advanced"
   map.search_files "/search/list_files", :controller => "data_access", :action => "list_files"
 
   # legacy links
