@@ -16,9 +16,6 @@ class StaffController < ApplicationController
     #cache_sweeper :task_tracker
 
 def index
-    @user = User.find(session[:user])
-    @user = @user.username
-    params[:query] = @user
 end
 
 # Static pages

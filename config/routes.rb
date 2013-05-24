@@ -16,8 +16,10 @@ ActionController::Routing::Routes.draw do |map|
   # legacy links
   map.groups "/groups", :controller => "legacy", :action => "search"
   map.table "/table", :controller => "legacy", :action => "search"
+  map.data_access_list_cruises "/data_access/list_cruises", :controller => "legacy", :action => "data_access_advanced_search"
+  map.data_access_advanced_search "/data_access/advanced_search", :controller => "legacy", :action => "data_access_advanced_search"
   map.data_history "/data_history", :controller => "legacy", :action => "data_history"
-  map.data_history "/data_history/full", :controller => "legacy", :action => "data_history"
+  map.data_history_full "/data_history/full", :controller => "legacy", :action => "data_history"
 
   map.namespace(:argo) do |argo|
     argo.resources :files do |files|
@@ -45,7 +47,7 @@ ActionController::Routing::Routes.draw do |map|
   map.submission '/submit', :controller => :submit, :action => :create,
                         :conditions => {:method => :post}
 
-  map.cruise 'cruise/:expocode', :controller => :data_access, :action => :show_cruise
+  map.cruise 'cruise/:expocode', :controller => :data_access, :action => :show_cruise, :conditions => {:method => :get}
 
   map.feed 'feed/:expocodes', :controller => :data_access, :action => :feed, :format => 'atom'
   

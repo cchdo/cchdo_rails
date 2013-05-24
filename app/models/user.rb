@@ -25,6 +25,10 @@ class User < ActiveRecord::Base
         Digest::SHA256.hexdigest(password + self.password_salt)
     end
 
+    def editor?
+        self.username !~ /guest/
+    end
+
     private
 
     def self.generate_salt

@@ -3,7 +3,7 @@
   <div class="boxed">
   <h1>Cruise not found</h1>
   <div class="box_content">
-    <p>Cruise <%=params[:ExpoCode] %> does not exist.</p>
+    <p>Cruise <%= @expo %> does not exist.</p>
   </div>
   <div class="box_bottom"></div>
   </div>
@@ -41,8 +41,8 @@
 <% end %>
 <%- if session[:user] %>
   <p><strong>Groups:</strong> <%= @cruise.Group %></p>
-  <p><strong>Cruise dir:</strong> <%= @cruise.data_dir() %></p>
-  <p><strong>Id:</strong> <%= @cruise.id %></p>
+  <p><strong>Cruise dir:</strong> <textarea readonly="readonly" class="datadir oneline oneclick"><%= @cruise.data_dir() %></textarea></p>
+  <p><strong>Id:</strong> <textarea readonly="readonly" class="oneline oneclick"><%= @cruise.id %></textarea></p>
 <%- end %>
 </div>
 <div class="box_bottom"></div>
@@ -64,10 +64,31 @@
 <%= render :partial => 'cruise_data_updates' %>
 
 <div class="clear"></div>
+
+<%- if @doc_info %>
+<div id="citation" class="boxed">
+  <h1>Data Originator and Citation Information</h1>
+  <div class="box_content">
+    <% if @user -%>
+      <%= form_tag(request.path, :method => :post) %>
+      <% readonly = false -%>
+    <% else -%>
+      <% readonly = true -%>
+    <% end -%>
+    <%= text_area_tag("citation", @doc_info, :rows => estimate_textarea_height(@doc_info, 150), :readonly => readonly) -%>
+    <% if @user -%>
+        <input type="submit" value="Save">
+      </form>
+    <% end -%>
+  </div>
+  <div class="box_bottom"></div>
+</div>
+<%- end %>
+
 <%= render :partial => 'cruise_data_history' %>
 </div>
 
   <%- content_for :js do %>
-    <%= javascript_include_tag 'datacart', 'click_tracker' -%>
+    <%= javascript_include_tag 'datacart', 'click_tracker', 'cruise' -%>
   <%- end %>
 <% end -%>

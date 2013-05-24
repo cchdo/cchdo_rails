@@ -33,7 +33,7 @@ end
 class ApplicationController < ActionController::Base
     layout 'standard'
 
-    before_filter :setup_datacart
+    before_filter :setup_datacart, :session_user
 
     # Scrub sensitive parameters from your log
     filter_parameter_logging :password, :password_confirmation
@@ -152,15 +152,18 @@ protected
         end
     end
 
+    def session_user
+        @user = nil
+        begin
+            @user = User.find(session[:user])
+        rescue
+        end
+    end
+
     def check_authentication
         unless session[:user]
             session[:intended_path] = request.path
             redirect_to signin_path
-        else
-            user = User.find(session[:user])
-            if user.username =~ /guest/
-                redirect_to :controller => :staff
-            end
         end
     end
 

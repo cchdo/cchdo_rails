@@ -45,74 +45,47 @@ class DataAccessController < ApplicationController
         end
     end
 
-   def show_cruise
-      return if params[:commit] =~ /Cruises/ or params[:commit] =~ /Files/
+    def show_cruise
+        return if params[:commit] =~ /Cruises/ or params[:commit] =~ /Files/
 
-      @expo = params[:ExpoCode] || params[:expocode]
-      return unless @expo
+        @expo = params[:ExpoCode] || params[:expocode]
+        return unless @expo
 
-      @cruise = reduce_specifics(Cruise.find_by_ExpoCode(@expo))
-      return if not @cruise
+        @cruise = reduce_specifics(Cruise.find_by_ExpoCode(@expo))
+        return if not @cruise
 
-      @preliminary = ""
+        @preliminary = preliminary_message(@cruise)
+        @cruise.Chief_Scientist = @cruise.chisci_to_links()
+        @file_result = @cruise.get_files()
 
-      @cruise_groups = Array.new
-      if @groups = @cruise.Group
-         @groups = @groups.split(',')
-      else
-         @groups = []
-      end
-      for group in @groups
-         if group =~ /\w/
-            cruises = reduce_specifics(Cruise.find(:all,:conditions => ["`Group` regexp ?", group]))
-            if @cruise_groups
-               @cruise_groups << cruises
-            else
-               @cruise_groups[0] = cruises
-            end
-         end
-      end
+        @queue_files = QueueFile.find_all_by_ExpoCode_and_Merged(@expo, false)
+        @merged_queue_files = QueueFile.all(
+            :conditions => {:ExpoCode => @expo, :Merged => true},
+            :order => ['DateMerged DESC, DateRecieved DESC'])
+        @support_files = SupportFile.find_all_by_ExpoCode(@expo)
 
-      @cruise.Chief_Scientist = @cruise.chisci_to_links()
+        sort_hist = params[:sort_history]
+        if sort_hist == "person"
+            sort_column = 'LastName'
+        elsif sort_hist == "action"
+            sort_column = 'Action'
+        elsif sort_hist == "summary"
+            sort_column = 'Summary'
+        elsif sort_hist == "data_type"
+            sort_column = 'Data_Type'
+        else
+            sort_column = 'Date_Entered DESC'
+        end
+        @events = Event.find_all_by_ExpoCode(@expo, :order => [sort_column])
+        if params[:Note] and params[:Entry]
+            @note = params[:Note]
+            @entry = params[:Entry]
+            @note_entry = Event.find_by_ID(@entry)
+        else
+            @note = nil
+        end
+    end
 
-      @file_result = @cruise.get_files()
-      @preliminary = preliminary_message(@cruise)
-
-      @queue_files = QueueFile.all(
-        :conditions => {:ExpoCode => @expo, :Merged => false})
-      @merged_queue_files = QueueFile.all(
-        :conditions => {:ExpoCode => @expo, :Merged => true},
-        :order => ['DateMerged DESC, DateRecieved DESC'])
-      @support_files = SupportFile.find(
-        :all, :conditions => {:ExpoCode => @expo})
-
-      sort_hist = params[:sort_history]
-      if sort_hist == "person"
-          sort_column = 'LastName'
-      elsif sort_hist == "action"
-          sort_column = 'Action'
-      elsif sort_hist == "summary"
-          sort_column = 'Summary'
-      elsif sort_hist == "data_type"
-          sort_column = 'Data_Type'
-      else
-          sort_column = 'Date_Entered DESC'
-      end
-      @events = Event.find(
-        :all, :conditions => {:ExpoCode => @expo}, :order => [sort_column])
-
-      if params[:Note] and params[:Entry]
-         @note = params[:Note]
-         @entry = params[:Entry]
-         @note_entry = Event.find_by_ID(@entry)
-      else
-         @note = nil
-      end
-   end
-
-   def list_cruises
-       redirect_to search_path
-   end
 
    def list_files
       @paramerters = params

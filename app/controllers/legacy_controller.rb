@@ -1,4 +1,8 @@
 class LegacyController < ApplicationController
+    def data_access_advanced_search
+        redirect_to search_advanced_path
+    end
+
     def search
         redirect_to search_path(:query => "group:#{params[:id]}")
     end
