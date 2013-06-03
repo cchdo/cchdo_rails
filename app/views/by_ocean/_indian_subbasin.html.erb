@@ -1,0 +1,62 @@
+<h2 id="<%= basin.downcase %>" class="basin_header"><%= basin %> Basin</h2>
+<table class="indian_table">
+  <tr>
+    <th width="10%">Line</th>
+    <th width="12%">Year(s)</th>
+    <th width="20%">Ship</th>
+    <th width="20%">Chief Scientist</th>
+    <th width="10%">Country</th>
+  </tr>
+  <% sgroupmap.each_pair do |area, sgroups| -%>
+    <% next if sgroups.empty? -%>
+    <%
+    hl = cycle('highlighted_cell', '', :name => 'hl1')
+    area_name = area.gsub('/', '_')
+    if FileTest.exists?(RAILS_ROOT + "/public/images/indian/indian_#{area_name}.gif")
+      swap = "_" + area_name
+    else
+      swap = "_base"
+    end
+    key = area.downcase
+    imgswapper = "onmouseover=\"swapImage('indian_base','','/images/indian/indian#{swap}.gif',1);\""
+    -%>
+
+    <% cruise = sgroups[0] -%>
+    <tr valign="top" class="<%if swap.eql?("_base")%>not_in_map<%end%> <%= hl %>" <%= imgswapper %>>
+      <td><a href="/search?query=<%=key%>"><%=cruise.area.upcase.gsub('/', '/ ')%></a></td>
+      <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date[0..3]%></a></td> 
+      <td><%=cruise.Ship_Name%></td>
+      <td><%=cruise.Chief_Scientist.gsub('/', '/ ')%></td> 
+      <td><%=cruise.Country%></td>
+    </tr>
+    <% if sgroups.length > 2 -%>
+      <tr id="<%= area_name %>-more" class="<%= hl %> expander">
+        <td></td>
+        <td colspan="4">
+          <a href="#<%= area_name %>-more">
+            more<img src="/images/expand.png" alt="Show more cruises" title="Show more cruises">
+          </a>
+        </td>
+      </tr>
+      <% for cruise in sgroups.slice(2..-1) -%>
+        <% hl2 = cycle('odd', 'even', :name => 'hl2') %>
+        <tr class="<%if swap.eql?("_base")%>not_in_map<% end %> more <%= area_name %>-inner <%= hl %>" <%= imgswapper %>>
+          <td></td>
+          <td class="<%= hl2 %>" width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date[0..3]%></a></td>
+          <td class="<%= hl2 %>" width="110"><%=cruise.Ship_Name %></td>
+          <td class="<%= hl2 %>" width="160"><%=cruise.Chief_Scientist.gsub('/', '/ ')%></td> 
+          <td class="<%= hl2 %>" width="120"><%=cruise.Country %></td>
+        </tr>
+      <% end -%>
+      <% reset_cycle('hl2') -%>
+      <tr id="<%= area_name %>-less" class="<%= hl %> more expander">
+        <td></td>
+        <td colspan="4">
+          <a href="#<%= area_name %>-less">
+            Show less cruises<img src="/images/collapse.png" alt="Show less cruises" title="Show less cruises">
+          </a>
+        </td>
+      </tr>
+    <% end -%>
+  <% end -%>
+</table>
