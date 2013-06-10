@@ -99,7 +99,7 @@ class Staff::SubmissionsController < StaffController
 
         user = User.find(session[:user])
 
-        sub_link = "<a href=\"#sub_#{submission_id}\">#{submission_id}</a>"
+        sub_link = "<a href=\"query=#{submission_id}&submission_list=id\">#{submission_id}</a>"
         couldnot = "Could not enqueue #{sub_link}: "
 
         cruise = reduce_specifics(Cruise.find_by_ExpoCode(expocode))
@@ -145,7 +145,8 @@ class Staff::SubmissionsController < StaffController
                 Rails.logger.debug(event.inspect)
             end
             flash[:notice] = "Enqueued Submission #{sub_link}"
-            redirect_to :back
+            redirect_to submissions_path(
+                :query => submission_id, :submission_list => 'id')
         rescue => e
             Rails.logger.warn(e)
             flash[:notice] = "#{couldnot}#{e}"

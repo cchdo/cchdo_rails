@@ -65,6 +65,13 @@
             <%- else %>
               <strong>WARNING!</strong> File has bad merge_status <%= file.merge_status %>
             <%- end %>
+            <% if file.documentation == 1 -%>
+              <%= submit_tag 'Mark not documentation' %>
+            <% elsif file.documentation == 0 -%>
+              <%= submit_tag 'Mark documentation' %>
+            <% else -%>
+              <strong>WARNING!</strong> File has bad documentation status <%= file.documentation %>
+            <% end -%>
           </form>
         </td>
       </tr>

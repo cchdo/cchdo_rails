@@ -21,7 +21,8 @@
         <tr id="sub_<%= submission.id %>" class="submission-meta submission-meta-first <%= trclass %>">
           <% correct_expo = nil %>
           <% qfs = @queue_submissions[submission.id] %>
-          <td><%= submission.id %>
+          <td>
+            <%= link_to(submission.id, submissions_path(:query => submission.id, :submission_list => 'id')) %>
             <% unless qfs.empty? %>
               <% correct_expo = qfs[0].ExpoCode %>
               &rarr; QueueFiles [<%= qfs.map {|qf| link_to(qf.id.to_s, queue_path(:id => qf.id)) }.join(', ') %>]

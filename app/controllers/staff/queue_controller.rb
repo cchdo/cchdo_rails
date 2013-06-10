@@ -124,42 +124,51 @@ class Staff::QueueController < ApplicationController
             return redirect_to("/queue")
         end
 
+        queue_link = "<a href=\"queue?id=#{queue.id}\">#{queue.id}</a>"
         if params[:commit] == 'Save parameters'
             queue.Parameters = params[:parameters]
             queue.save
-            flash[:notice] = "Saved parameters for queue file #{queue.id}"
+            flash[:notice] = "Saved parameters for queue file #{queue_link}"
         elsif params[:commit] == 'Save submission note'
             queue.Notes = params[:submission_notes]
             queue.save
-            flash[:notice] = "Saved note for queue file #{queue.id}"
+            flash[:notice] = "Saved note for queue file #{queue_link}"
         elsif params[:commit] == 'Save merge note'
             queue.merge_notes = params[:merge_notes]
             queue.save
-            flash[:notice] = "Saved note for queue file #{queue.id}"
+            flash[:notice] = "Saved note for queue file #{queue_link}"
         elsif params[:commit] == 'Mark unmerged'
             queue.DateMerged = Time.now
             queue.Merged = 0
             queue.save
-            flash[:notice] = "Marked queue file #{queue.id} as unmerged"
+            flash[:notice] = "Marked queue file #{queue_link} as unmerged"
         elsif params[:commit] == 'Mark merged'
             queue.DateMerged = Time.now
             queue.Merged = 1
             queue.save
-            flash[:notice] = "Marked queue file #{queue.id} as merged"
+            flash[:notice] = "Marked queue file #{queue_link} as merged"
             return redirect_to("/queue?merge_status=merged")
+        elsif params[:commit] == 'Mark documentation'
+            queue.documentation = 1
+            queue.save
+            flash[:notice] = "Marked queue file #{queue_link} as documentation"
+        elsif params[:commit] == 'Mark not documentation'
+            queue.documentation = 0
+            queue.save
+            flash[:notice] = "Marked queue file #{queue_link} as not documentation"
         elsif params[:commit] == 'Unhide'
             queue.DateMerged = Time.now
             queue.Merged = 0
             queue.save
-            flash[:notice] = "Unhid queue file #{queue.id}"
+            flash[:notice] = "Unhid queue file #{queue_link}"
         elsif params[:commit] == 'Hide'
             queue.DateMerged = Time.now
             queue.Merged = 2
             queue.save
-            flash[:notice] = "Hid queue file #{queue.id}"
+            flash[:notice] = "Hid queue file #{queue_link}"
             return redirect_to("/queue?merge_status=hidden")
         end
-        redirect_to "/queue"
+        redirect_to :back
     end
 
     def queue_search
