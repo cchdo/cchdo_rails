@@ -94,7 +94,6 @@ class Staff::SubmissionsController < StaffController
     end
 
     def enqueue
-        expocode = params['enqueue_attach_to_expocode']
         submission_id = params['enqueue_submission']
 
         user = User.find(session[:user])
@@ -102,15 +101,23 @@ class Staff::SubmissionsController < StaffController
         sub_link = "<a href=\"query=#{submission_id}&submission_list=id\">#{submission_id}</a>"
         couldnot = "Could not enqueue #{sub_link}: "
 
-        cruise = reduce_specifics(Cruise.find_by_ExpoCode(expocode))
-        if cruise.nil?
-            flash[:notice] = "#{couldnot}Could not find cruise #{expocode} to attach to"
-            redirect_to :back
-            return
-        end
         submission = Submission.find(submission_id)
         if submission.nil?
             flash[:notice] = "#{couldnot}Could not find submission"
+            redirect_to :back
+            return
+        end
+
+        if params['commit'] == 'Mark assimilated'
+            submission.assimilated = true
+            submission.save
+            return redirect_to :back
+        end
+
+        expocode = params['enqueue_attach_to_expocode']
+        cruise = reduce_specifics(Cruise.find_by_ExpoCode(expocode))
+        if cruise.nil?
+            flash[:notice] = "#{couldnot}Could not find cruise #{expocode} to attach to"
             redirect_to :back
             return
         end
