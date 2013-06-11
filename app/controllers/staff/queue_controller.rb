@@ -1,8 +1,12 @@
+require 'file_util'
+
+include ActionView::Helpers::UrlHelper
+
 class Staff::QueueController < ApplicationController
     layout 'staff'
     before_filter :check_authentication, :except => [:signin]
 
-    def queue_files
+    def index
         # Providing any of parameters id, expocode will only show the queue for
         # that file or cruise's files
 
@@ -69,9 +73,7 @@ class Staff::QueueController < ApplicationController
         eudates.reverse!
         @eudates = eudates
         respond_to do |format|
-          format.html {
-            render :file => "/staff/queue_files/queue_files", :layout => true
-          }
+          format.html {}
           format.csv {
             csv_string = FasterCSV.generate do |csv| 
               csv << [
@@ -115,6 +117,69 @@ class Staff::QueueController < ApplicationController
         end
     end
 
+    def new
+        if request.method == :post
+            qfile = params[:queue_file]
+
+            if qfile[:ExpoCode].blank? or qfile[:file].blank?
+                flash[:error] = 'Please fill in an ExpoCode and a file to upload'
+                return redirect_to :back
+            end
+
+            unless cruise = Cruise.find_by_ExpoCode(qfile[:ExpoCode])
+                flash[:error] = 'Please enter an ExpoCode that corresponds to a cruise'
+                return redirect_to :back
+            end
+
+            file = params['file']
+            qfile = QueueFile.new(qfile)
+            qfile.DateRecieved = Time.now
+            qfile.DateMerged = 0
+            qfile.Merged = 0
+            qfile.hidden = 0
+            qfile.CCHDOContact = @user.username
+
+            # Save the queue file in the right spot
+            fname = file.original_filename
+            qfile.Name = fname
+            qpath = QueueFile.get_queue_dir(
+                cruise,
+                "#{Time.now.strftime('%Y%m%d_%H_%M')}_#{qfile[:Contact]}/discarded")
+            qpath = File.join(qpath, fname)
+
+            begin
+                Rails.logger.debug("copying #{file.inspect} to #{qpath}")
+                File.open(qpath, 'wb') do |out|
+                    copy(file, out)
+                end
+            rescue Exception => e
+                Rails.logger.error("Unable to save file for queue #{e.inspect}")
+                raise e
+            end
+            qfile.UnprocessedInput = qpath
+            qfile.save
+
+            qfile_link = link_to(qfile.id, queue_path(:id => qfile.id))
+            begin
+                event = QueueFile.create_history_note(
+                    [qfile], cruise, qfile.Parameters)
+
+                dont_email = params['dontemail'] || false
+                if ENV['RAILS_ENV'] == 'production' and not dont_email
+                    EnqueuedMailer.deliver_confirm(event)
+                else
+                    Rails.logger.debug(event.inspect)
+                end
+                flash[:notice] = "Created queue file #{qfile_link}"
+                redirect_to qfile_link
+            rescue => e
+                Rails.logger.warn(e)
+                flash[:notice] = "Could not enqueue #{qfile_link}: #{e}"
+                redirect_to :back
+            end
+        end
+    end
+
     def queue_edit
         @user = User.find(session[:user]).username
 
@@ -124,7 +189,7 @@ class Staff::QueueController < ApplicationController
             return redirect_to("/queue")
         end
 
-        queue_link = "<a href=\"queue?id=#{queue.id}\">#{queue.id}</a>"
+        queue_link = link_to(queue.id, queue_path(:id => queue.id))
         if params[:commit] == 'Save parameters'
             queue.Parameters = params[:parameters]
             queue.save
@@ -171,7 +236,7 @@ class Staff::QueueController < ApplicationController
         redirect_to :back
     end
 
-    def queue_search
+    def search
         @best_result = []
         @cur_max = 0
         @names = []
@@ -196,6 +261,6 @@ class Staff::QueueController < ApplicationController
             end
         end  
         @cruises.uniq!
-        render :partial => "/staff/queue_files/queue_box"
+        render :partial => "/staff/queue/queue_box"
     end
 end

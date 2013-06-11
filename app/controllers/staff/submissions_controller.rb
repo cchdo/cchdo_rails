@@ -50,8 +50,7 @@ class Staff::SubmissionsController < StaffController
     end
 
     def index
-        user = User.find(session[:user])
-        if not user or user.username =~ /guest/
+        if not @user or not @user.editor?
             raise ActionController::RoutingError.new('Unauthorized')
         end
 

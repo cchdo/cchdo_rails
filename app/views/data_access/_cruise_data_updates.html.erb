@@ -5,17 +5,20 @@
     <%- if @queue_files.blank? and @merged_queue_files.blank? %>
       <p>No as received files.</p>
     <%- end %>
-    <%- if session[:user] %>
+    <%- if @user %>
       <%- colspan = 4 %>
     <%- else %>
       <%- colspan = 3 %>
+    <%- end %>
+    <%- if @user and @user.editor? %>
+      <p><%= link_to('Add queue file', queue_new_path(:expocode => @cruise.ExpoCode)) %></p>
     <%- end %>
     <% unless @queue_files.blank? -%>
       <h2>Unmerged</h2>
       <%# TODO refactor. This table and the merged table is almost the same %>
       <table>
         <tr>
-          <%- if session[:user] %>
+          <%- if @user %>
             <th class="id">Id</th>
           <%- end %>
           <th class="file">File</th>
@@ -25,7 +28,7 @@
         <% @queue_files.each do |file| -%>
           <%- odd = cycle('', 'odd') %>
           <tr class="<%= odd %> first">
-            <%- if session[:user] %>
+            <%- if @user %>
               <td class="id"><%= link_to(file.id, queue_path(:id => file.id)) %></td>
             <%- end %>
             <%= content_tag(:td, link_to(limit_str_len(file.Name, 35), file.UnprocessedInput, :title => file.Name), :class => 'file') -%>
@@ -33,7 +36,7 @@
             <td class="date">Not merged</td>
           </tr>
           <tr class="<%= odd %> last">
-            <%- if session[:user] %>
+            <%- if @user %>
               <%- colspan = 4 %>
             <%- else %>
               <%- colspan = 3 %>
@@ -47,7 +50,7 @@
       <h2>Merged</h2>
       <table class="merged">
         <tr>
-          <%- if session[:user] %>
+          <%- if @user %>
             <th class="id">Id</th>
           <%- end %>
           <th class="file">File</th>
@@ -57,7 +60,7 @@
         <% @merged_queue_files.each do |file| -%>
           <%- odd = cycle('', 'odd') %>
           <tr class="<%= odd %> first">
-            <%- if session[:user] %>
+            <%- if @user %>
               <td class="id"><%= link_to(file.id, queue_path(:id => file.id)) %></td>
             <%- end %>
             <%=content_tag(:td, link_to(limit_str_len(file.Name, 35), file.UnprocessedInput, :title => file.Name), :class => 'file') -%>

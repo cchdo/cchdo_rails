@@ -10,9 +10,7 @@
 <div id='centering'>
   <%= render :partial => 'layouts/cchdo_header' %>
   <div id='content'>
-    <% if flash[:notice] %>
-      <h1 class='notice'><%= flash[:notice] %></h1>
-    <% end %>
+    <%= render :partial => 'layouts/flashes' -%>
     <%= yield -%>
   </div>
   <%= render :partial => 'layouts/cchdo_footer' -%>

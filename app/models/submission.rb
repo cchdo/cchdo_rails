@@ -1,4 +1,5 @@
 require 'zip/zip'
+require 'file_util'
 
 $submission_root = Rails.root.join('public', 'submissions')
 
@@ -183,7 +184,7 @@ class Submission < ActiveRecord::Base
 
         begin
             File.open(path, 'wb') do |f|
-                f.write(file.read())
+                copy(file, f)
             end
             file.close()
         rescue Exception => msg

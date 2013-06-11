@@ -57,8 +57,9 @@ ActionController::Routing::Routes.draw do |map|
   map.submissions 'submissions', :controller => 'staff/submissions', :action => :index
   map.enqueue 'submissions/enqueue', :controller => 'staff/submissions', :action => :enqueue
 
-  map.queue "queue", :controller => 'staff/queue', :action => :queue_files
-  map.queue_csv "queue.:format", :controller => 'staff/queue', :action => :queue_files
+  map.queue "queue", :controller => 'staff/queue', :action => :index
+  map.queue_csv "queue.:format", :controller => 'staff/queue', :action => :index
+  map.queue_new 'queue/new', :controller => 'staff/queue', :action => :new
   map.queue_file_edit 'queue/:id/edit', :controller => 'staff/queue', :action => :queue_edit
 
   map.arctic 'arctic', :controller => :by_ocean, :action => :arctic

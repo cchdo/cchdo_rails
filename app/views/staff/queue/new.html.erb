@@ -1,0 +1,80 @@
+<div class="boxed">
+  <h1>Enqueue</h1>
+  <div class="box_content enqueue-form">
+    <% form_for(QueueFile.new, :url => queue_new_path, :html => {:multipart => true}) do |f| -%>
+      <table>
+        <tr>
+          <th>
+            <%= f.label 'ExpoCode' %><span class="required">*</span>
+          </th>
+          <td>
+            <%= f.text_field 'ExpoCode', :value => params[:expocode] || '' %>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <%= f.label 'Contact' %>
+          </th>
+          <td>
+            <%= f.text_field 'Contact', :value => @user ? @user.username || '' : '' %>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <%= f.label 'submission_id', 'Submission ID' %>
+          </th>
+          <td>
+            <%= f.text_field 'submission_id' %>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <%= f.label 'Parameters' %>
+          </th>
+          <td>
+            <%= f.text_field 'Parameters' %>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <%= f.label 'Notes', 'Submission notes' %>
+          </th>
+          <td>
+            <%= f.text_area 'Notes' %>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <%= f.label 'documentation', 'Is documentation?' %>
+          </th>
+          <td>
+            <%= f.check_box 'documentation' %>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <%= label 'dontemail', 'Do not email confirmation' %>
+          </th>
+          <td>
+            <%= check_box_tag 'dontemail' %>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <%= label 'file', 'File' %><span class="required">*</span>
+          </th>
+          <td>
+            <%= file_field_tag 'file' %>
+          </td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>
+            <%= f.submit 'Enqueue' %>
+          </td>
+        </tr>
+      </table>
+    <% end -%>
+  </div>
+  <div class="box_bottom"></div>
+</div>

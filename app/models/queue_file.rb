@@ -7,20 +7,10 @@ class QueueFile < ActiveRecord::Base
 
     belongs_to :submission
 
+    validates_presence_of :ExpoCode
+
     def self.enqueue(user, submission, cruise, opts={})
         Rails.logger.info("enqueueing #{submission.inspect} #{cruise.inspect}")
-        begin
-            data_dir = cruise.data_dir()
-            if data_dir.nil?
-                raise 'No data directory'
-            end
-        rescue
-            raise 'No data directory'
-        end
-        if not File.directory?(data_dir)
-            Rails.logger.warn('Attempted to attach a submission to cruise with non-existant data directory')
-            raise 'Data directory non-existant'
-        end
 
         submission_public_path = Submission.public_file_path(submission)
         submission_path = $submission_root.join(submission_public_path[13..-1])
@@ -30,25 +20,9 @@ class QueueFile < ActiveRecord::Base
             raise 'No submission file'
         end
 
-        # Ensure Queue directory exists
-        queue_path = File.join(data_dir, 'Queue/unprocessed')
-
-        # Let's make it special for this submission
-        submission_subdir = File.basename(File.dirname(submission_path))
-        queue_path = File.join(queue_path, submission_subdir)
-
-        Rails.logger.info("Queue path: #{queue_path}")
-
-        if not File.directory?(queue_path)
-            if File.exists?(queue_path)
-                Rails.logger.warn("Queue directory exists but is not a directory.")
-                raise 'Bad queue directory'
-            else
-                FileUtils.mkdir_p(queue_path)
-            end
-        end
-
         Rails.logger.debug("Copying submitted file into queue directory.")
+
+        queue_path = self.get_queue_dir(cruise, submission_path)
 
         # copy the submitted file into queue directory
         submission_basename = File.basename(submission_path)
@@ -108,10 +82,55 @@ class QueueFile < ActiveRecord::Base
 
         Rails.logger.debug("Creating history note for cruise")
 
-        # Create history note
+        history = self.create_history_note(queue_files, cruise, parameters)
+
+        submission.assimilated = true
+        submission.save
+
+        return history
+    end
+
+    def self.get_queue_dir(cruise, submission_path)
+        # Make sure cruise directory exists
+        begin
+            data_dir = cruise.data_dir()
+            if data_dir.nil?
+                raise 'No data directory'
+            end
+        rescue
+            raise 'No data directory'
+        end
+        if not File.directory?(data_dir)
+            Rails.logger.warn(
+                'Attempted to attach a submission to cruise with ' + 
+                'non-existant data directory')
+            raise 'Data directory non-existant'
+        end
+
+        # Ensure Queue directory exists
+        queue_path = File.join(data_dir, 'Queue/unprocessed')
+
+        # Let's make it special for this submission
+        submission_subdir = File.basename(File.dirname(submission_path))
+        queue_path = File.join(queue_path, submission_subdir)
+
+        Rails.logger.info("Queue path: #{queue_path}")
+
+        if not File.directory?(queue_path)
+            if File.exists?(queue_path)
+                Rails.logger.warn("Queue directory exists but is not a directory.")
+                raise 'Bad queue directory'
+            else
+                FileUtils.mkdir_p(queue_path)
+            end
+        end
+        queue_path
+    end
+
+    def self.create_history_note(qfiles, cruise, parameters)
         event_note = "The following files are now available online under "
         event_note += "'Files as received', unprocessed by the CCHDO.\n\n"
-        event_note += queue_files.map {|qf| qf.Name}.join("\n")
+        event_note += qfiles.map {|qf| qf.Name}.join("\n")
         history = Event.new(
             :ExpoCode => cruise.ExpoCode,
             :First_Name => 'CCHDO',
@@ -123,10 +142,7 @@ class QueueFile < ActiveRecord::Base
             :Note => event_note
             )
         history.save
-
-        submission.assimilated = true
-        submission.save
-
-        return history
+        history
     end
+
 end

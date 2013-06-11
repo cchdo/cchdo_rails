@@ -1,6 +1,9 @@
 <div class="boxed">
 <h1>Queue</h1>
 <div class="box_content queue">
+  <ul>
+    <li><%= link_to('Add queue file', queue_new_path) %></li>
+  </ul>
   <table class="tabs">
     <%- for t in ['data', 'docs'] %>
       <tr>
@@ -21,7 +24,7 @@
     <%- end %>
   </table>
   <div class="queue-box <%= cls() %>">
-    <%= render :partial => '/staff/queue_files/queue_box' %>
+    <%= render :partial => 'queue_box' %>
   </div>
 </div>
 <div class="box_bottom"></div>
