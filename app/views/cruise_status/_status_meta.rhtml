@@ -19,9 +19,6 @@
 
   <h1>Online</h1>
   <ul>
-    <% for type, text in $file_types %>
-      <%= link_file(@file_result[type], text) %>
-    <% end %>
     <% for section in Document.data_format_sections %>
       <%- for type in section.types %>
         <%- unless @file_result[type.key_name] %>
