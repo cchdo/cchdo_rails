@@ -159,7 +159,8 @@ class Staff::QueueController < ApplicationController
             qfile.UnprocessedInput = qpath
             qfile.save
 
-            qfile_link = link_to(qfile.id, queue_path(:id => qfile.id))
+            qpath = queue_path(:id => qfile.id)
+            qfile_link = link_to(qfile.id, qpath)
             begin
                 event = QueueFile.create_history_note(
                     [qfile], cruise, qfile.Parameters)
@@ -171,7 +172,7 @@ class Staff::QueueController < ApplicationController
                     Rails.logger.debug(event.inspect)
                 end
                 flash[:notice] = "Created queue file #{qfile_link}"
-                redirect_to qfile_link
+                redirect_to qpath
             rescue => e
                 Rails.logger.warn(e)
                 flash[:notice] = "Could not enqueue #{qfile_link}: #{e}"
