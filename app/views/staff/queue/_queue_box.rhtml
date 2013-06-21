@@ -1,6 +1,6 @@
 <% for date in @eudates %>
   <% for expo in @cruises_by_earliest_unmerged_date[date] %>
-    <h3 class="cruise"><span class="date_received"><%= date %></span> <%= link_to(expo, "/cruise/#{expo}") %></h3>
+    <h3 class="cruise"><span class="date_received"><%= date %></span> <%= link_to(expo, cruise_path(expo)) %></h3>
     <table class="files">
     <% for file in @files_by_cruise[expo] %>
       <tr id="queue_<%= file.id %>" class="file <%= cls_status_doc(qfile_status(file), file.documentation) %>">

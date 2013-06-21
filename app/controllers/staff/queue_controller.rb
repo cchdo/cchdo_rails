@@ -121,7 +121,7 @@ class Staff::QueueController < ApplicationController
         if request.method == :post
             qfile = params[:queue_file]
 
-            if qfile[:ExpoCode].blank? or qfile[:file].blank?
+            if qfile[:ExpoCode].blank? or params[:file].blank?
                 flash[:error] = 'Please fill in an ExpoCode and a file to upload'
                 return redirect_to :back
             end
