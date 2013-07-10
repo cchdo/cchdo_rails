@@ -1,93 +1,92 @@
-<div class="boxed">
-<h1>Advanced Search</h1>
-<div class="box_content">
-<h2>Search by Cruises</h2>
-<form action="/search/advanced" method="POST">
-<table>
-  <tr>
-    <td align="left">Line Number <%= text_field_tag "Line", "", :size => 12%></td>
-    <td align="left" colspan="3">ExpoCode <%= text_field_tag "ExpoCode", "", :size=>16 %>
-      <div class="auto_complete" id="expocode_auto_complete"></div>
-      <%= javascript_tag("new Autocompleter.Local('ExpoCode','expocode_auto_complete',expocodes,{fullSearch: true, frequency: 0, minChars:1});")%>
-    </td>
-  </tr>
-  <tr>
-    <td align="left">Data Contact <%= text_field_tag "Chief_Scientist", "", :size=>14 %>   
-      <div class="auto_complete" id="Chief_Scientist_auto_complete"></div>
-      <%= javascript_tag("new Autocompleter.Local('Chief_Scientist','Chief_Scientist_auto_complete',pis,{fullSearch: true, frequency: 0, minChars:1});")%>	
-    </td>
-    <td align="left">Ship <%= text_field_tag "Ship_Name", "", :size=>12 %>   
-      <div class="auto_complete" id="Ship_Name_auto_complete"></div>
-      <%= javascript_tag("new Autocompleter.Local('Ship_Name','Ship_Name_auto_complete',ships,{fullSearch: true, frequency: 0, minChars:1});")%>
-    </td>
-    <td colspan="2" align="left">Country <%= text_field_tag "Country", "", :size=>12 %>
-      <div class="auto_complete" id="Country_auto_complete"></div>
-      <%= javascript_tag("new Autocompleter.Local('Country','Country_auto_complete',countries,{fullSearch: true, frequency: 0, minChars:1});")%>
-    </td>
-  </tr>
-</table>
-<table>
-	<tr>
-	<td align="right">From</td>
-  <td>
-    <%= year_month_selector('MONTHSTART', 'YEARSTART') %>
-  </td>
-	<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-	<td align="right">To</td>
-  <td>
-    <%= year_month_selector('MONTHEND', 'YEAREND') %>
-  </td>
-</tr>
-</table>
-<%= submit_tag "Find Cruises" %>
-</form>
+<div class="boxed search-advanced">
+  <h1>Search</h1>
+  <div class="box_content">
+    <p>
+      The search box provided here is available at the top of every page.
+    </p>
 
-<p>
-Search by specific parameters is also supported by the site search bar. To
-match a search to a specific parameter, use the following syntax:
-parameter:query. E. g. ship:knorr line:p10  chief_scientist:swift.
-</p>
-<p>
-The following parameters are valid:
-</p>
-<ul>
-  <li>Group</li>
-  <li>Chief_Scientist</li>
-  <li>ExpoCode</li>
-  <li>Alias</li>
-  <li>Ship</li>
-  <li>Line</li>
-</ul>
+    <div id="cchdo_search" style="margin: 1em 0 2em 0;">
+      <% form_tag '/search', :method => "GET" do -%>
+        <%= text_field_tag 'query', params[:query], :class=>'search_box' -%>
+        <%= image_submit_tag 'buttons/button_search.png', :class=>'search_button', :alt=>'Find Cruises' -%>
+      <% end -%>
+    </div>
 
-<hr />
+    <p>
+      Type as many terms as you need, e.g. ship name, country, line numbers,
+      and press "Search Data". The terms are combined with AND by default, use
+      OR if needed.
+    </p>
 
-<h2>Search by Data Files</h2>
-<form action="/search/list_files">
-<table>
-<tr>
-  <td>File Type(s)<br>
-    <select name="FileType">
-    <option value="all">all</option>
-    <option value="sum">Sum File</option>
-    <option value="bottle">bottle</option>
-    <option value="ctd">ctd</option>
-    <option value="documentation">Documentation</option>
-    </select>
-  </td>
-</tr>
-<tr>
-  <td>Modified Since</td>
-</tr>
-<tr>
-  <td colspan="4">
-    <%= year_month_selector('MONTHSTART', 'YEARSTART', 1994) %>
-  </td>
-</tr>
-<tr>
-	<td><%= submit_tag "Find Files"%></td>
-</tr>
-</table>
-</form>
-</div>
-<div class="box_bottom"></div>
+    <%#
+
+    <p>
+      E.g. ship:knorr line:p10 chief_scientist:swift
+    </p>
+
+    <p>
+      Search by keyword is supported by the search engine. To use keywords,
+      enter the keyword followed by a colon and then the term to search for.
+    </p>
+
+    <p>
+      Keyword search is literal. Unless searching for specific terms for WOCE
+      lines, simply type the search term and cruises related to your search
+      term will also be returned.
+    </p>
+    <p>
+      Search by keyword only returns exact matches for that keyword.
+      Search without keyword returns all matches.
+      For example, searching for A23 gives more results than line:A23.
+    </p>
+
+    <p>
+      The following keywords are available:
+    </p>
+
+    <ul>
+      <li>group</li> <%# cruise alias >
+      <li>chief_scientist</li>
+      <li>expocode</li>
+      <li>alias</li>
+      <li>ship</li>
+      <li>country</li>
+      <li>line</li>
+      <li>date_before format</li>
+      <li>date_after format</li>
+    </ul>
+    #%>
+
+  <%#
+    <h2>Search by Data Files</h2>
+    <form action="/search/list_files">
+      <table>
+        <tr>
+          <td>File Type(s)<br>
+            <select name="FileType">
+              <option value="all">all</option>
+              <option value="sum">Sum File</option>
+              <option value="bottle">bottle</option>
+              <option value="ctd">ctd</option>
+              <option value="documentation">Documentation</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Modified Since</td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <%= year_month_selector('MONTHSTART', 'YEARSTART', 1994)>
+          </td>
+        </tr>
+        <tr>
+          <td><%= submit_tag "Find Files"></td>
+        </tr>
+      </table>
+    </form>
+    %>
+
+  </div>
+  <div class="box_bottom"></div>
 </div>

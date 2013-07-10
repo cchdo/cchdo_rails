@@ -852,6 +852,14 @@ div.datacart-icon {
 .datacart-add-cruise .datacart-icon { background-position: 0 0px; }
 .datacart-remove-cruise .datacart-icon { background-position: 0 60px; }
 
+.search-advanced p {
+  margin: 0.5em 0;
+}
+.search-advanced ul {
+  list-style-type: disc;
+  padding-left: 1.5em;
+}
+
 #search_results .tools {
   padding: 0.2em 0.3em;
   position: relative;
