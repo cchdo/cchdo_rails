@@ -38,36 +38,36 @@ class Cruise < ActiveRecord::Base
     # Return the Chief_Scientist field with the chief scientists into links if
     # we have a contact entries that match.
     def chief_scientists_as_links
-      pi = self.Chief_Scientist
-      if pi
+        pi = self.Chief_Scientist
+        return pi if not pi
+
         # Take Chief Scientist string and extract multiple names
         pi_names = pi.split(/\/|\\|\:/)
+
         # Substitute name matches for links to the contact's page
-        pi_names.each do |name|
+        for name in pi_names
           if Contact.exists?(:LastName => name)
             pi.sub!(name, "<a href=\"/search?query=#{name}\">#{name}</a>")
           end
         end
-      end
-      pi
+        pi
     end
 
     def chisci_to_links
-        # Regular expression for exctracting multiple names from Chief_Scientist
-        if not self.Chief_Scientist
-            return
-        end
-        pi_names = self.Chief_Scientist.scan( /([a-z]+)\/?\\?([a-z]*):?\/?([a-z]*)\/?\\?([a-z]*)/i)
-        #Substitute name matches for links to the contact's page
-        #if @pi_names.length > 1
-        for group in pi_names
-            for name in group
-                # This says Dickson, MAFF, , . I don't know what's up with the extra empty string entries.
-                RAILS_DEFAULT_LOGGER.warn("#{name} is in #{group} in #{pi_names}")
+        chisci = self.Chief_Scientist
+        return if not chisci
 
-                if pi_found = Contact.find_by_LastName(name)
-                    chisci = self.Chief_Scientist.sub(/(#{name})/,"<a href=\'/contact?contact=#{name}\'>#{name}</a>")
-                end
+        # Regular expression for extracting multiple names from Chief_Scientist
+        name_chars = '[a-zA-Z-]'
+        pi_names = self.Chief_Scientist.scan(/(#{name_chars}+)\/?\\?(?:#{name_chars}*):?\/?(?:#{name_chars}*)\/?\\?(?:#{name_chars}*)/).flatten
+        Rails.logger.warn("app.models.cruise.chisci_to_links: #{chisci.inspect} -> #{pi_names.inspect}")
+
+        # Substitute name matches for links to the contact's page
+        for name in pi_names
+            Rails.logger.warn("app.models.cruise.chisci_to_links: trying last name #{name}")
+
+            if Contact.exists?(:LastName => name)
+                chisci = self.Chief_Scientist.sub(name, "<a href=\'/contact?contact=#{name}\'>#{name}</a>")
             end
         end
         chisci
