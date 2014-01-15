@@ -92,8 +92,8 @@ function preloadImages() { //v3.0
     <%@cruises.each do |cruise|%>
       <% if FileTest.exists?(arctic_path.join("arctic_#{cruise.ExpoCode}.gif"))
          swap = "_" + cruise.ExpoCode
-       elsif FileTest.exists?(arctic_path.join("arctic_#{cruise.Line.upcase}.gif"))
-        swap = "_" + cruise.Line.upcase
+       elsif FileTest.exists?(arctic_path.join("arctic_#{(cruise.Line || '').upcase}.gif"))
+        swap = "_" + (cruise.Line || '').upcase
        else
          swap = "3"
        end %>
