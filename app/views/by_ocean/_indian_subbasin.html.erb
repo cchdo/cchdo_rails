@@ -29,7 +29,7 @@
       <td><%=cruise.Chief_Scientist.gsub('/', '/ ')%></td> 
       <td><%=cruise.Country%></td>
     </tr>
-    <% if sgroups.length > 2 -%>
+    <% if sgroups.length >= 2 -%>
       <tr id="<%= area_name %>-more" class="<%= hl %> expander">
         <td></td>
         <td colspan="4">
@@ -38,7 +38,7 @@
           </a>
         </td>
       </tr>
-      <% for cruise in sgroups.slice(2..-1) -%>
+      <% for cruise in sgroups.slice(1..-1) -%>
         <% hl2 = cycle('odd', 'even', :name => 'hl2') %>
         <tr class="<%if swap.eql?("_base")%>not_in_map<% end %> more <%= area_name %>-inner <%= hl %>" <%= imgswapper %>>
           <td></td>

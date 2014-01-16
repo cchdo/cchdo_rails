@@ -28,7 +28,7 @@ end
 
     def indian 
         documents = []
-        Document.find(:all, :select=>"ExpoCode").each do |document|
+        Document.find(:all, :select=>"DISTINCT ExpoCode").each do |document|
             documents << document.ExpoCode
         end
 
@@ -66,12 +66,11 @@ end
     def group_spatial_groups(sgs)
         grouped = ActiveSupport::OrderedHash.new()
         for sgroup in sgs
-            begin
-                if not grouped[sgroup.area].include?(sgroup)
-                    grouped[sgroup.area] << sgroup
-                end
-            rescue
+            if not grouped[sgroup.area]
                 grouped[sgroup.area] = [sgroup]
+            end
+            if not grouped[sgroup.area].include?(sgroup)
+                grouped[sgroup.area] << sgroup
             end
         end
         grouped
