@@ -1,0 +1,37 @@
+<table class="status_table argo_content">
+<tr>
+  <th>ExpoCode</th>
+  <th class="filename">File</th>
+  <th class="">Added by</th>
+  <th class="time">Added at</th>
+  <th class="description">Description</th>
+  <th></th>
+</tr>
+
+<% files.each do |file| %>
+  <tr<%= cycle(' class="highlighted_cell"', '') %>>
+    <td><%= h(file.ExpoCode || 'Unknown') %></td>
+    <td class="filename">
+    <%- if old %>
+      <%= link_to(h(file.filename), argo_file_get_path(file)) %>
+    <%- else %>
+      <% if file.description == 'in_process' %>in process<% else %><%= link_to(h(File.basename(file.description)), file.description) %><% end %>
+    <%- end %>
+    </td>
+    <td><%= h(file.user ? file.user.username : 'Unknown') %></td>
+    <td class="time"><% if file.created_at %><%= h(file.created_at.strftime('%Y-%m-%d %H:%M %Z')) %><% else %>Unknown<% end %></td>
+    <td class="description">
+    <%- if old %>
+      <pre><%= h(file.description) %></pre>
+    <%- else %>
+      <pre><%= link_to file.ExpoCode, "/cruise/" + file.ExpoCode %></pre>
+    <%- end %>
+    </td>
+    <td>
+      <p><%= link_to 'Edit', edit_argo_file_path(file) %></p>
+      <p><%= link_to 'Delete', file, :confirm => 'Are you sure? This will delete the file and its metadata.',
+                                     :method => :delete %></p>
+    </td>
+  </tr>
+<% end %>
+</table>
