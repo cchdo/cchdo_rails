@@ -35,7 +35,7 @@ class SearchTerm
         'ship' => 'Ship_Name',
         'line' => 'Line',
         'date' => 'Date',
-        'parameter' => 'Parameter',
+        'parameter' => 'parameter',
         'after' => 'after',
         'before' => 'before',
     }
@@ -48,7 +48,7 @@ class SearchTerm
     def query_type_to_clause_params()
         where_clause = nil
         sql_parameters = []
-        param_query = false
+        qextra = false
         all_query = false
 
         type = self.type
@@ -70,7 +70,11 @@ class SearchTerm
         elsif type == 'parameter'
             where_clause = "`bottle_dbs`.`parameters` LIKE ?"
             sql_parameters << "%#{query}%"
-            param_query = true
+            qextra = 'params'
+        elsif type == 'Chief_Scientist'
+            where_clause = "contacts.LastName LIKE ?"
+            sql_parameters << "%#{query}%"
+            qextra = 'contacts'
         else
             if @@cruise_columns.include?(type)
                 where_clause = "`cruises`.`#{type}` REGEXP ?"
@@ -80,7 +84,7 @@ class SearchTerm
                 where_clause = nil
             end
         end
-        [where_clause, sql_parameters, param_query, all_query]
+        [where_clause, sql_parameters, qextra, all_query]
     end
 
 protected
@@ -125,7 +129,12 @@ protected
                         Rails.logger.info("Search: Ignored unknown parameter #{val}")
                     end
                 else 
-                    return [@@keywords[tok], val]
+                    col = @@keywords[tok]
+                    if col.is_a?(Array)
+                        return [col, val]
+                    else
+                        return [col, val]
+                    end
                 end
             else
                 Rails.logger.debug("Search: unrecognized search keyword #{tok}")
@@ -360,10 +369,12 @@ private
     end
 
     def gen_from_qtree(qtree)
-        where_clause, sql_params, parameter_query, all_query = recursive_where(qtree)
+        where_clause, sql_params, qextras, all_query = recursive_where(qtree)
         sql = "FROM `cruises` "
-        if parameter_query
+        if qextras == 'params'
             sql += 'LEFT JOIN `bottle_dbs` ON `cruises`.`ExpoCode` = `bottle_dbs`.`ExpoCode` '
+        elsif qextras == 'contacts'
+            sql += 'LEFT JOIN `contacts_cruises` ON `contacts_cruises`.`cruise_id` = `cruises`.`id` LEFT JOIN `contacts` ON `contacts_cruises`.`contact_id` = `contacts`.`id` '
         end
         unless where_clause.empty? and not all_query
             sql += "WHERE #{where_clause} "
