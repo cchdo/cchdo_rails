@@ -1,3 +1,5 @@
+<div class="boxed">
+  <div class="box_content">
 <% if @contact -%>
 <table>
 <tr><td class="contact_info_label">Name:</td><td><%= @contact.FirstName %> <%= @contact.LastName %></td></tr>
@@ -13,8 +15,8 @@
   <tr><th>Line</th><th>ExpoCode</th><th>Ship</th><th>Date of Departure</th><th>Date of Return</th></tr>
   <% for cruise in @contact.cruises -%>
     <tr>
-      <td><a href="/cruise/<%= cruise.ExpoCode -%>"><%= cruise.Line -%></a></td>
-      <td><%= cruise.ExpoCode %></td>
+      <td><%= cruise.Line -%></td>
+      <td><%= link_to(cruise.ExpoCode, "/cruise/#{cruise.ExpoCode}") %></td>
       <td><%= cruise.Ship_Name %></td><td><%= cruise.Begin_Date -%></td><td><%= cruise.EndDate -%></td>
     </tr>
   <% end -%>
@@ -22,3 +24,5 @@
 <% else -%>
 <p>No contact found.</p>
 <% end -%>
+  </div>
+</div>

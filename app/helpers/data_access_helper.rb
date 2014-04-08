@@ -7,7 +7,7 @@ module DataAccessHelper
         items = []
         for cc in cruise.contact_cruises
             next if not cc.contact
-            link_contact = link_to("#{cc.contact.FirstName} #{cc.contact.LastName}", "/contact?id=#{cc.contact.id}")
+            link_contact = link_to("#{cc.contact.LastName}", "/contact?id=#{cc.contact.id}")
             link_inst = cc.institution
             if link_inst.blank?
                 link_inst = nil
