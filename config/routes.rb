@@ -49,6 +49,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.cruise 'cruise/:expocode', :controller => :data_access, :action => :show_cruise, :conditions => {:method => :get}
 
+  map.cruises 'cruises', :controller => :data_access, :action => :cruises, :conditions => {:method => :get}
+  map.cruises_edit 'cruises', :controller => :data_access, :action => :edit_cruise, :conditions => {:method => :post}
+  map.contacts 'contacts', :controller => :data_access, :action => :contacts, :conditions => {:method => :get}
+
   map.feed 'feed/:expocodes', :controller => :data_access, :action => :feed, :format => 'atom'
   
   map.sea_hunt 'sea_hunt', :controller => 'sea_hunt', :action => 'index'

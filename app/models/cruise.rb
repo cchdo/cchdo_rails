@@ -73,6 +73,21 @@ class Cruise < ActiveRecord::Base
         chisci
     end
 
+    def split_chisci_str
+        str = self.Chief_Scientist
+        return [] if not str
+        pi_insts = str.split(',').map {|x| x.strip}.compact
+        puts pi_insts.inspect
+        return pi_insts.map do |pii|
+            split = pii.split('/')
+            if split.length > 1
+                split
+            else
+                [split[0], nil]
+            end
+        end
+    end
+
     def directory
         return Document.find_by_ExpoCode_and_FileType(self.ExpoCode, 'Directory')
     end
@@ -93,3 +108,4 @@ class Cruise < ActiveRecord::Base
         end
     end
 end
+

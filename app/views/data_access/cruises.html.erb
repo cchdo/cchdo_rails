@@ -1,0 +1,79 @@
+<% content_for :head do %>
+<style>
+.mass-edit .id {
+    font-size: 0.8em;
+}
+.mass-edit .expo {
+    font-size: 1.1em;
+    margin-right: 1em;
+}
+.mass-edit .chief {
+    font-size: 0.8em;
+    margin-left: 1em;
+    margin-bottom: 0.8em;
+}
+.mass-edit .chief p {
+    max-width: none;
+}
+.mass-edit .chief span {
+    display: inline-block;
+    width: 40em;
+}
+.mass-edit .editor {
+    margin-left: 1em;
+}
+textarea {
+  border: 0;
+  height: 1em;
+  width: 8em;
+}
+</style>
+<% end %>
+<% for cruise in @cruises %>
+    <div class="mass-edit">
+        <span class="id"><%= cruise.id %></span>
+        <span class="expo"><%= link_to(cruise.ExpoCode, "/cruise/" + cruise.ExpoCode) %></span>
+        <div class="chief">
+            <p><span>old</span> <%= cruise.Chief_Scientist %></p>
+            <p><span>new</span> <%= contact_cruises(cruise) %></p>
+        </div>
+        <div>
+            <%= render :partial => 'edit_contacts', :locals => {:cruise => cruise} %>
+        </div>
+    </div>
+<% end %>
+<br>
+<%= link_to('prev', cruises_path(:page => params[:page].to_i - 1, :per => params[:per])) %>
+<%= link_to('next', cruises_path(:page => params[:page].to_i + 1, :per => params[:per])) %>
+<% form_tag :method => "GET" do %>
+    <p>
+        Page <input type="number" name="page" value="<%= params[:page] %>">
+        <input type="submit" value="Go">
+    </p>
+    <p>
+        <input type="number" name="per" value="<%= params[:per] %>"> items/page
+    </p>
+<% end %>
+
+<% form_tag do %>
+    <p>Add a ContactCruise for each cruise that has string Chief_Scientist:</p>
+    <input type="text" name="chisci" placeholder="chief scientist">
+    <input type="number" name="contact" placeholder="contact">
+    <input type="text" name="inst" placeholder="institution">
+    <button type="submit" name="act" value="set_for_chisci">Set</button>
+<% end %>
+
+<% form_tag do %>
+    <p>Set the institution for all ContactCruises for the contact, if not already set</p>
+    <input type="hidden" name="limit_cruise" value="<%=@cruises[0].id%>">
+    <input type="number" name="contact" placeholder="contact">
+    <input type="text" name="inst" placeholder="institution">
+    <button type="submit" name="act" value="set_inst_for_cc">Set</button>
+<% end %>
+
+<% content_for :js do %>
+<script>
+  $('textarea.oneclick').click(function() { $(this).select(); });
+</script>
+<% end %>
+

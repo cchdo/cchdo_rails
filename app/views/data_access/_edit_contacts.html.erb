@@ -1,0 +1,43 @@
+<div class="editor">
+<% ccs = cruise.contact_cruises %>
+<% piis = cruise.split_chisci_str %>
+
+  <ol>
+      <% for pii in piis %>
+          <li>
+            <textarea class="oneclick" readonly="readonly"><%= pii[0] %></textarea>
+            <textarea class="oneclick" readonly="readonly"><%= pii[1] %></textarea>
+            <% for contact in Contact.find_all_by_LastName(pii[0]) %>
+                <%= link_to("#{contact.id} #{contact.FirstName} #{contact.Institute.slice(0, 40)}", "/contact?id=#{contact.id}") %>
+                &nbsp;
+            <% end %>
+          </li>
+      <% end %>
+  </ol>
+
+<% for cc in ccs %>
+    <% form_tag do %>
+      <input type="hidden" name="cruiseid" value="<%= cruise.id %>">
+      <input type="hidden" name="id" value="<%= cc.id %>">
+    <p>
+    <% if cc.contact %>
+        <%= link_to(cc.contact.name, "/contact?id=" + cc.contact.id.to_s) %>/
+        <input type="hidden" name="conid" value="<%= cc.contact.id %>">
+    <% else %>
+        Missing contact: <%= h cc.inspect %>
+        <input type="number" name="conid" value="">
+    <% end %>
+        <input type="text" name="inst" value="<%= cc.institution %>">
+        <button type="submit" name="act" value="edit_cc">save</button>
+        <button type="submit" name="act" value="delete_cc">Delete</button>
+    </p>
+    <% end %>
+<% end %>
+<% form_tag do %>
+  <input type="hidden" name="cruiseid" value="<%= cruise.id %>">
+  <input type="number" name="contact" value="" placeholder="contact_id">
+  <input type="text" name="inst" value="" placeholder="institution">
+  <input type="hidden" name="act" value="create_cc">
+  <input type="submit" value="Save">
+<% end %>
+</div>

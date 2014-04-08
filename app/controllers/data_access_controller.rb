@@ -86,6 +86,81 @@ class DataAccessController < ApplicationController
         end
     end
 
+    def cruises
+        @user = User.find(session[:user]).username
+        unless @user
+            return render :nothing => true, :status => :forbidden
+        end
+        page = params[:page]
+        per = params[:per]
+        unless page and per
+            return redirect_to cruises_path(:page => 1, :per => 10)
+        end
+        @cruises = Cruise.find(
+            :all, :include => {:contact_cruises => :contact},
+            :order => 'id', :limit => per, :offset => page.to_i * per.to_i)
+    end
+
+    def contacts
+        @user = User.find(session[:user]).username
+        unless @user
+            return render :nothing => true, :status => :forbidden
+        end
+        @contacts = Contact.find(:all, :order => 'id')
+    end
+
+    def edit_cruise
+        @user = User.find(session[:user]).username
+        unless @user
+            return render :nothing => true, :status => :forbidden
+        end
+        if params[:act] == "delete_cc"
+            cruise = Cruise.find_by_id(params[:cruiseid])
+            ccs = cruise.contact_cruises
+            for cc in ccs
+                if cc.id.to_s == params[:id]
+                    cc.destroy
+                    break
+                end
+            end
+        elsif params[:act] == "edit_cc"
+            cc = ContactCruise.find_by_id(params[:id])
+            cc.contact_id = params[:conid]
+            cc.institution = params[:inst]
+            cc.save
+        elsif params[:act] == "create_cc"
+            cruise = Cruise.find_by_id(params[:cruiseid])
+            ccs = cruise.contact_cruises
+            contact = Contact.find_by_id(params[:contact])
+            inst = params[:inst]
+            ccs << ContactCruise.new(
+                :contact => contact, :cruise => cruise, :institution => inst)
+        elsif params[:act] == "set_for_chisci"
+            contact = Contact.find_by_id(params[:contact])
+            inst = params[:inst]
+            cruises = Cruise.find_all_by_Chief_Scientist(params[:chisci])
+            for cruise in cruises
+                if ContactCruise.find_by_contact_id_and_cruise_id(contact.id, cruise.id)
+                    next
+                end
+                cruise.contact_cruises << ContactCruise.new(
+                    :contact => contact, :cruise => cruise, :institution => inst)
+                cruise.save
+            end
+        elsif params[:act] == "set_inst_for_cc"
+            ccs = ContactCruise.find_all_by_contact_id(params[:contact])
+            lim_cruise_id = params[:limit_cruise].to_i || 0
+            inst = params[:inst]
+            for cc in ccs
+                next if cc.cruise.id < lim_cruise_id
+                next if cc.institution
+                cc.institution = inst
+                cc.save
+            end
+        end
+        return redirect_to(:back)
+    end
+
 
    def list_files
       @paramerters = params

@@ -32,6 +32,10 @@
 <% end %>
 <p><strong>Ship/Country:</strong> <%=self_or_empty(@cruise.Ship_Name)%>/<%=self_or_empty(@cruise.Country)%></p>
 <p><strong>Chief Scientists:</strong> <%=self_or_empty(@cruise.Chief_Scientist)%></p>
+<% if @user %>
+  <p><strong>Chief Scientists:</strong> <%= contact_cruises(@cruise) %></p>
+  <%= render :partial => 'edit_contacts', :locals => {:cruise => @cruise} %>
+<% end %>
 <p><strong>Cruise Dates:</strong> <%= pretty_dates(@cruise) %></p>
 <%#- if @cruise.track_line %>
 <%# <p><strong>Stations:</strong> <%= @cruise.track_line.Track.length ></p> %>
