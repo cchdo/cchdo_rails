@@ -2,6 +2,7 @@ include Math
 
 include ActionView::Helpers::UrlHelper
 include ActionView::Helpers::TagHelper
+include DataAccessHelper
 include DatacartHelper
 include DocumentsHelper
 
@@ -124,7 +125,7 @@ class MapSearchController < SearchController
         :line => (cruise.Line || '').strip,
         :ship => (cruise.Ship_Name || '').strip,
         :country => (cruise.Country || '').strip,
-        :pi => (cruise.chief_scientists_as_links() || ''),
+        :pi => DataAccessHelper.contact_cruises(cruise),
         :date_begin => (cruise.Begin_Date || ''),
         :cruise_id => cruise.id,
         :data => show_files(cruise, load_files_and_params(cruise)[0], short=true),

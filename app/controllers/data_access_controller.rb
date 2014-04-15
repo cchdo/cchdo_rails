@@ -55,7 +55,6 @@ class DataAccessController < ApplicationController
         return if not @cruise
 
         @preliminary = preliminary_message(@cruise)
-        #@cruise.Chief_Scientist = @cruise.chisci_to_links()
         @file_result = @cruise.get_files()
 
         @queue_files = QueueFile.find_all_by_ExpoCode_and_Merged(@expo, false)

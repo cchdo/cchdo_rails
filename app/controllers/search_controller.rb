@@ -104,6 +104,15 @@ protected
                 best_column = column
             end
         end
+        contacts = Contact.find(:all, :conditions => ["LastName LIKE ?", query])
+        for contact in contacts
+            count = contact.cruises.length
+            if count > cur_max
+                cur_max = count
+                best_column = 'Chief_Scientist'
+            end
+        end
+
         best_column || 'Group'
     end
 
@@ -312,7 +321,7 @@ private
 
     @@select_columns = [
         'ExpoCode', 'Line', 'Ship_Name', 'Country', 'Begin_Date', 'EndDate',
-        'Chief_Scientist', 'id']
+        'id']
     @@select_clause = @@select_columns.map {|x| "`cruises`.`#{x}`" }.join(',')
   
     @@sortable_columns = [
@@ -326,7 +335,11 @@ private
             if not dir or not @@sort_directions.include?(dir)
                 dir = @@sort_directions[0]
             end
-            @sort_statement = "ORDER BY cruises.#{sort_by} #{dir}"
+            if sort_by == "Chief_Scientist"
+                @sort_statement = "ORDER BY contacts.LastName #{dir}"
+            else
+                @sort_statement = "ORDER BY cruises.#{sort_by} #{dir}"
+            end
         else
             @sort_statement = ""
         end
