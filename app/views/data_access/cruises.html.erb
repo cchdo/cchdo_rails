@@ -34,7 +34,6 @@ textarea {
         <span class="id"><%= cruise.id %></span>
         <span class="expo"><%= link_to(cruise.ExpoCode, "/cruise/" + cruise.ExpoCode) %></span>
         <div class="chief">
-            <p><span>old</span> <%= cruise.Chief_Scientist %></p>
             <p><span>new</span> <%= contact_cruises(cruise) %></p>
         </div>
         <div>
@@ -53,14 +52,6 @@ textarea {
     <p>
         <input type="number" name="per" value="<%= params[:per] %>"> items/page
     </p>
-<% end %>
-
-<% form_tag do %>
-    <p>Add a ContactCruise for each cruise that has string Chief_Scientist:</p>
-    <input type="text" name="chisci" placeholder="chief scientist">
-    <input type="number" name="contact" placeholder="contact">
-    <input type="text" name="inst" placeholder="institution">
-    <button type="submit" name="act" value="set_for_chisci">Set</button>
 <% end %>
 
 <% form_tag do %>

@@ -101,7 +101,7 @@ function preloadImages() { //v3.0
         <td class='arctic_line'><a href="cruise/<%=cruise.ExpoCode%>"><%=cruise.Line%></a></td>
         <td class='arctic_date'><%=cruise.Begin_Date%><br><span class="end_date"><%=cruise.EndDate%></span></td>
         <td class='arctic_ship'><%=cruise.Ship_Name%></td>
-        <td class='arctic_scientist'><%=cruise.Chief_Scientist%></td>
+        <td class='arctic_scientist'><%=contact_cruises(cruise)%></td>
         <td class='arctic_country'><%=cruise.Country%></td>
       </tr>
     <%end%>

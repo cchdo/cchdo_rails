@@ -13,9 +13,6 @@
 		<td>Country:<%= error_message_on(:cruise, :Country) %></td><td> <%= form.text_field :Country %></td>
 	</tr>
 	<tr valign="top">
-		<td>Chief Scientist:<%= error_message_on(:cruise, :Chief_Scientist) %></td><td> <%= form.text_field :Chief_Scientist %></td>
-    </tr>
-	<tr valign="top">
 		<td>Ship Name:<%= error_message_on(:cruise, :Ship_Name) %></td><td> <%= form.text_field :Ship_Name %></td>
 	</tr>
 	<tr valign="top">
@@ -97,7 +94,6 @@
 			<th>Line</th>
 			<th>ExpoCode</th>
 			<th>Date</th>
-			<th>Chief Scientist</th>
 			<th>Ship</th>
 		</tr>
 	<% if @cruises %>
@@ -112,7 +108,6 @@
 			<td><div class="contact_table_row_height"><%= @cruise.Line %></div></td>
 			<td><div class="contact_table_row_height"><%= @cruise.ExpoCode %></div></td>
 			<td><div class="contact_table_row_height"><%= @cruise.Begin_Date %></div></td>
-			<td><div class="contact_table_row_height"><%= @cruise.Chief_Scientist %></div></td>
 			<td><div class="contact_table_row_height"><%= @cruise.Ship_Name %></div></td>
 		</tr>
 		<% end %>

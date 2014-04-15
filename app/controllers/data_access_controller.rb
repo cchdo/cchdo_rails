@@ -134,18 +134,6 @@ class DataAccessController < ApplicationController
             inst = params[:inst]
             ccs << ContactCruise.new(
                 :contact => contact, :cruise => cruise, :institution => inst)
-        elsif params[:act] == "set_for_chisci"
-            contact = Contact.find_by_id(params[:contact])
-            inst = params[:inst]
-            cruises = Cruise.find_all_by_Chief_Scientist(params[:chisci])
-            for cruise in cruises
-                if ContactCruise.find_by_contact_id_and_cruise_id(contact.id, cruise.id)
-                    next
-                end
-                cruise.contact_cruises << ContactCruise.new(
-                    :contact => contact, :cruise => cruise, :institution => inst)
-                cruise.save
-            end
         elsif params[:act] == "set_inst_for_cc"
             ccs = ContactCruise.find_all_by_contact_id(params[:contact])
             lim_cruise_id = params[:limit_cruise].to_i || 0

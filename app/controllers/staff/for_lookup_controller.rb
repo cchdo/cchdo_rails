@@ -1,7 +1,7 @@
 class Staff::ForLookupController < ApplicationController
     def pis
-        pis = Cruise.find(:all,:select => ["DISTINCT Chief_Scientist"])
-        for_lookup('pis', pis) {|x| x.Chief_Scientist }
+        pis = Contact.find(:all)
+        for_lookup('pis', pis) {|x| x.name }
     end
 
     def expocodes

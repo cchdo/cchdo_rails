@@ -23,6 +23,7 @@ NUMSTATUS = {
   '2' => 'Reformatted'
 }
 
+include ::DataAccessHelper
 class Staff::DataEntryController < ApplicationController
   layout 'staff'
   before_filter :check_authentication, :except => [:signin]

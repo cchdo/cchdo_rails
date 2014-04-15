@@ -5,7 +5,13 @@ module DataAccessHelper
 
     def contact_cruises(cruise)
         items = []
-        for cc in cruise.contact_cruises
+        begin
+            ccs = cruise.contact_cruises
+        rescue => err
+            Rails.logger.info("#{cruise.inspect} has no contact_cruises: #{err.inspect}")
+            ccs = []
+        end
+        for cc in ccs
             next if not cc.contact
             link_contact = link_to("#{cc.contact.LastName}", "/contact?id=#{cc.contact.id}")
             link_inst = cc.institution

@@ -124,7 +124,7 @@ document.getElementById(v).style.display = "none";
         <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
         <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
-        <td><%=cruise.Chief_Scientist%></td> 
+        <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
         </tr>
       <!--bottom-->  
@@ -132,7 +132,7 @@ document.getElementById(v).style.display = "none";
       <tr  <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
         <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
-        <td width="160"><%=cruise.Chief_Scientist%></td> 
+        <td width="160"><%=contact_cruises(cruise)%></td> 
         <td width="120"><%=cruise.Country %></td>
       </tr>
       <tr <class="highlighted_cell">
@@ -149,7 +149,7 @@ document.getElementById(v).style.display = "none";
         <td rowspan="2"><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
         <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
-        <td><%=cruise.Chief_Scientist%></td> 
+        <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
       </tr>
       <tr "highlighted_cell" id="<%=cruise.Line.downcase%>">
@@ -164,7 +164,7 @@ document.getElementById(v).style.display = "none";
       <tr <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
         <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
-        <td width="160"><%=cruise.Chief_Scientist%></td> 
+        <td width="160"><%=contact_cruises(cruise)%></td> 
         <td width="120"><%=cruise.Country %></td>
       </tr>
       <!--Everything else-->
@@ -173,7 +173,7 @@ document.getElementById(v).style.display = "none";
         <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
         <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
-        <td><%=cruise.Chief_Scientist%></td> 
+        <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
       </tr>
       <% end %>
@@ -210,7 +210,7 @@ document.getElementById(v).style.display = "none";
         <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
         <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
-        <td><%=cruise.Chief_Scientist%></td> 
+        <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
         </tr>
       <!--bottom-->  
@@ -218,7 +218,7 @@ document.getElementById(v).style.display = "none";
       <tr  <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
         <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
-        <td width="160"><%=cruise.Chief_Scientist%></td> 
+        <td width="160"><%=contact_cruises(cruise)%></td> 
         <td width="120"><%=cruise.Country %></td>
       </tr>
       <tr <class="highlighted_cell">
@@ -235,7 +235,7 @@ document.getElementById(v).style.display = "none";
         <td rowspan="2"><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
         <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
-        <td><%=cruise.Chief_Scientist%></td> 
+        <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
       </tr>
       <tr "highlighted_cell" id="<%=cruise.Line.downcase%>">
@@ -250,7 +250,7 @@ document.getElementById(v).style.display = "none";
       <tr <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
         <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
-        <td width="160"><%=cruise.Chief_Scientist%></td> 
+        <td width="160"><%=contact_cruises(cruise)%></td> 
         <td width="120"><%=cruise.Country %></td>
       </tr>
       <!--Everything else-->
@@ -259,7 +259,7 @@ document.getElementById(v).style.display = "none";
         <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
         <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
-        <td><%=cruise.Chief_Scientist%></td> 
+        <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
       </tr>
       <% end %>
@@ -297,7 +297,7 @@ document.getElementById(v).style.display = "none";
         <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
         <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
-        <td><%=cruise.Chief_Scientist%></td> 
+        <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
         </tr>
       <!--bottom-->  
@@ -305,7 +305,7 @@ document.getElementById(v).style.display = "none";
       <tr  <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
         <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
-        <td width="160"><%=cruise.Chief_Scientist%></td> 
+        <td width="160"><%=contact_cruises(cruise)%></td> 
         <td width="120"><%=cruise.Country %></td>
       </tr>
       <tr <class="highlighted_cell">
@@ -322,7 +322,7 @@ document.getElementById(v).style.display = "none";
         <td rowspan="2"><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
         <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
-        <td><%=cruise.Chief_Scientist%></td> 
+        <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
       </tr>
       <tr "highlighted_cell" id="<%=cruise.Line.downcase%>">
@@ -337,7 +337,7 @@ document.getElementById(v).style.display = "none";
       <tr <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
         <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
-        <td width="160"><%=cruise.Chief_Scientist%></td> 
+        <td width="160"><%=contact_cruises(cruise)%></td> 
         <td width="120"><%=cruise.Country %></td>
       </tr>
       <!--Everything else-->
@@ -346,7 +346,7 @@ document.getElementById(v).style.display = "none";
         <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
         <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
-        <td><%=cruise.Chief_Scientist%></td> 
+        <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
       </tr>
       <% end %>
@@ -382,7 +382,7 @@ document.getElementById(v).style.display = "none";
         <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
         <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
-        <td><%=cruise.Chief_Scientist%></td> 
+        <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
         </tr>
       <!--bottom-->  
@@ -390,7 +390,7 @@ document.getElementById(v).style.display = "none";
       <tr <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
         <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
-        <td width="160"><%=cruise.Chief_Scientist%></td> 
+        <td width="160"><%=contact_cruises(cruise)%></td> 
         <td width="120"><%=cruise.Country %></td>
       </tr>
       <tr class="highlighted_cell">
@@ -407,7 +407,7 @@ document.getElementById(v).style.display = "none";
         <td rowspan="2"><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
         <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
-        <td><%=cruise.Chief_Scientist%></td> 
+        <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
       </tr>
       <tr "highlighted_cell" id="<%=cruise.Line.downcase%>">
@@ -422,7 +422,7 @@ document.getElementById(v).style.display = "none";
       <tr <%if swap.eql?("")%>class="not_in_map"<%elsif ctr%2==0%>class="highlighted_cell"<%end%> onmouseover="swapImage('southern_new','','../images/southern/southern<%=swap%>.gif',1);">
         <td width="90"><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td>
         <td width="110"><%=cruise.Ship_Name %></td>
-        <td width="160"><%=cruise.Chief_Scientist%></td> 
+        <td width="160"><%=contact_cruises(cruise)%></td> 
         <td width="120"><%=cruise.Country %></td>
       </tr>
       <!--Everything else-->
@@ -431,7 +431,7 @@ document.getElementById(v).style.display = "none";
         <td><a href="/search?query=<%=cruise.Line.downcase%>"><%=cruise.Line.upcase%></a></td>
         <td><a href="/cruise/<%=cruise.ExpoCode%>"><%=cruise.Begin_Date.year%></a></td> 
         <td><%=cruise.Ship_Name%></td>
-        <td><%=cruise.Chief_Scientist%></td> 
+        <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
       </tr>
       <% end %>

@@ -1,30 +1,32 @@
+include DataAccessHelper
 class ByOceanController < ApplicationController
-def arctic 
-  @documents = []
-  Document.find(:all, :select=>"DISTINCT ExpoCode").each do |document|
-    @documents << document.ExpoCode
-  end
-  @cruises = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ?", "%arctic%"], :order=>"Line, Begin_Date ASC"))
-  @cruises.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
-end
 
-def southern
-  @documents =[]
-  Document.find(:all, :select=>"ExpoCode").each do |document|
-    @documents << document.ExpoCode
-  end
-  @southern_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ?)", "%southern%", "S%"], :order=>"Line, Begin_Date ASC"))
-  @southern_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
+    def arctic 
+        @documents = []
+        Document.find(:all, :select=>"DISTINCT ExpoCode").each do |document|
+            @documents << document.ExpoCode
+        end
+        @cruises = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ?", "%arctic%"], :order=>"Line, Begin_Date ASC"))
+        @cruises.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
+    end
 
-  @indian_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ?)", "%southern%", "I%", "AIS%"], :order=>"Line, Begin_Date ASC"))
-  @indian_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)} 
+    def southern
+        @documents =[]
+        Document.find(:all, :select=>"ExpoCode").each do |document|
+            @documents << document.ExpoCode
+        end
+        @southern_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ?)", "%southern%", "S%"], :order=>"Line, Begin_Date ASC"))
+        @southern_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
 
-  @pacific_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ?)", "%southern%", "P%", "AAI%"], :order=>"Line, Begin_Date ASC"))
-  @pacific_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
+        @indian_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ?)", "%southern%", "I%", "AIS%"], :order=>"Line, Begin_Date ASC"))
+        @indian_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)} 
 
-  @atlantic_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ? OR `Line` LIKE ? )", "%southern%", "A__", "AR%", "AJ%"], :order=>"Line, Begin_Date ASC"))
-  @atlantic_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
-end 
+        @pacific_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ?)", "%southern%", "P%", "AAI%"], :order=>"Line, Begin_Date ASC"))
+        @pacific_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
+
+        @atlantic_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ? OR `Line` LIKE ? )", "%southern%", "A__", "AR%", "AJ%"], :order=>"Line, Begin_Date ASC"))
+        @atlantic_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
+    end 
 
     def indian 
         documents = []
@@ -32,25 +34,17 @@ end
             documents << document.ExpoCode
         end
 
-        joined = "SELECT DISTINCT * FROM (cruises INNER JOIN spatial_groups " + 
-            "ON spatial_groups.ExpoCode = cruises.ExpoCode) WHERE" 
-        ind = "indian = ?"
-        atl = "atlantic = ?"
-        sou = "southern = ?"
-        order_by = "ORDER BY area, Begin_Date ASC"
+        order_by = "area, cruises.Begin_Date ASC"
 
-        @indian_basin = SpatialGroups.find_by_sql(
-            ["#{joined} #{ind} AND #{atl} AND #{sou} #{order_by}",'1','0','0'])
+        @indian_basin = SpatialGroups.find(:all, :include => :cruise, :conditions => ["indian = ? AND atlantic = ? AND southern = ?", "1", "0", "0"], :order => order_by)
         filter_sgroup_no_docs(documents, @indian_basin)
         @indian_basin = group_spatial_groups(@indian_basin)
 
-        @atlantic_basin = SpatialGroups.find_by_sql(
-            ["#{joined} #{ind} AND #{atl} #{order_by}",'1','1'])
+        @atlantic_basin = SpatialGroups.find(:all, :include => :cruise, :conditions => ["indian = ? AND atlantic = ?", "1", "1"], :order => order_by)
         filter_sgroup_no_docs(documents, @atlantic_basin)
         @atlantic_basin = group_spatial_groups(@atlantic_basin)
 
-        @southern_basin = SpatialGroups.find_by_sql(
-            ["#{joined} #{ind} AND #{atl} AND #{sou} #{order_by}",'1','0','1'])
+        @southern_basin = SpatialGroups.find(:all, :include => :cruise, :conditions => ["indian = ? AND atlantic = ? AND southern = ?", "1", "0", "1"], :order => order_by)
         filter_sgroup_no_docs(documents, @southern_basin)
         @southern_basin = group_spatial_groups(@southern_basin)
     end
