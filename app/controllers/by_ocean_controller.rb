@@ -36,15 +36,15 @@ class ByOceanController < ApplicationController
 
         order_by = "area, cruises.Begin_Date ASC"
 
-        @indian_basin = SpatialGroups.find(:all, :include => :cruise, :conditions => ["indian = ? AND atlantic = ? AND southern = ?", "1", "0", "0"], :order => order_by)
+        @indian_basin = SpatialGroups.find(:all, :include => {:cruise => {:contact_cruises => :contact}}, :conditions => ["indian = ? AND atlantic = ? AND southern = ?", "1", "0", "0"], :order => order_by)
         filter_sgroup_no_docs(documents, @indian_basin)
         @indian_basin = group_spatial_groups(@indian_basin)
 
-        @atlantic_basin = SpatialGroups.find(:all, :include => :cruise, :conditions => ["indian = ? AND atlantic = ?", "1", "1"], :order => order_by)
+        @atlantic_basin = SpatialGroups.find(:all, :include => {:cruise => {:contact_cruises => :contact}}, :conditions => ["indian = ? AND atlantic = ?", "1", "1"], :order => order_by)
         filter_sgroup_no_docs(documents, @atlantic_basin)
         @atlantic_basin = group_spatial_groups(@atlantic_basin)
 
-        @southern_basin = SpatialGroups.find(:all, :include => :cruise, :conditions => ["indian = ? AND atlantic = ? AND southern = ?", "1", "0", "1"], :order => order_by)
+        @southern_basin = SpatialGroups.find(:all, :include => {:cruise => {:contact_cruises => :contact}}, :conditions => ["indian = ? AND atlantic = ? AND southern = ?", "1", "0", "1"], :order => order_by)
         filter_sgroup_no_docs(documents, @southern_basin)
         @southern_basin = group_spatial_groups(@southern_basin)
     end
