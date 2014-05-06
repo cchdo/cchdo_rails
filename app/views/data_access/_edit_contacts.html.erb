@@ -1,7 +1,7 @@
 <div class="editor">
 <% ccs = cruise.contact_cruises %>
 <% for cc in ccs %>
-    <% form_tag do %>
+    <% form_tag cruises_edit_path do %>
       <input type="hidden" name="cruiseid" value="<%= cruise.id %>">
       <input type="hidden" name="id" value="<%= cc.id %>">
     <p>
@@ -18,7 +18,7 @@
     </p>
     <% end %>
 <% end %>
-<% form_tag do %>
+<% form_tag cruises_edit_path do %>
   <input type="hidden" name="cruiseid" value="<%= cruise.id %>">
   <input type="number" name="contact" value="" placeholder="contact_id">
   <input type="text" name="inst" value="" placeholder="institution">

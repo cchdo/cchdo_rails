@@ -22,10 +22,8 @@
     -%>
 
     <% sgg = sgroups[0] -%>
-    <!--<%= h sgg.inspect %>-->
     <tr valign="top" class="<%if swap.eql?("_base")%>not_in_map<%end%> <%= hl %>" <%= imgswapper %>>
       <td><a href="/search?query=<%=key%>"><%=sgg.area.upcase.gsub('/', '/ ')%></a></td>
-      <!-- CRUISE <%= sgg.cruise.inspect %> -->
       <% if cruise = sgg.cruise %>
         <td><a href="/cruise/<%=sgg.ExpoCode%>"><%date_year(cruise.Begin_Date)%></a></td> 
         <td><%=cruise.Ship_Name%></td>
@@ -51,7 +49,6 @@
         <% hl2 = cycle('odd', 'even', :name => 'hl2') %>
         <tr class="<%if swap.eql?("_base")%>not_in_map<% end %> more <%= area_name %>-inner <%= hl %>" <%= imgswapper %>>
           <td></td>
-          <!-- CRUISE <%= sgg.cruise.inspect %> -->
           <% if cruise = sgg.cruise %>
             <td class="<%= hl2 %>" width="90"><a href="/cruise/<%=sgg.ExpoCode%>"><%=date_year(cruise.Begin_Date)%></a></td>
             <td class="<%= hl2 %>" width="110"><%=cruise.Ship_Name %></td>
