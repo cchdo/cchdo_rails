@@ -293,11 +293,14 @@ protected
         qtree = Term::rewrite(qtree)
         Rails.logger.debug("Search: rewritten #{qtree.inspect}")
 
-        from_clause, sql_params, all_query = gen_from_qtree(qtree)
+        from_clause, main_joins, where_clause, sql_params, all_query = gen_from_qtree(qtree)
+        order_joins, order_clause = gen_order_clause()
+
+        join_clause = joins(main_joins + order_joins)
 
         cruises = Cruise.find_by_sql(
-            ["SELECT DISTINCT #{@@select_clause} #{from_clause} " + 
-             "#{gen_order_clause()} #{gen_limit_clause(skip, limit)}"
+            ["SELECT DISTINCT #{@@select_clause} #{from_clause} #{join_clause} " +
+             "#{where_clause} #{order_clause} #{gen_limit_clause(skip, limit)}"
             ] + sql_params)
 
         @cruises = reduce_specifics(cruises)
@@ -330,12 +333,14 @@ private
     @@sort_directions = ['ASC', 'DESC']
   
     def gen_order_clause
+        joins = []
         if sort_by = params[:Sort] and @@sortable_columns.include?(sort_by)
             dir = params[:Sort_dir]
             if not dir or not @@sort_directions.include?(dir)
                 dir = @@sort_directions[0]
             end
             if sort_by == "Chief_Scientist"
+                joins << 'contacts'
                 @sort_statement = "ORDER BY contacts.LastName #{dir}"
             else
                 @sort_statement = "ORDER BY cruises.#{sort_by} #{dir}"
@@ -343,7 +348,7 @@ private
         else
             @sort_statement = ""
         end
-        @sort_statement
+        [joins, @sort_statement]
     end
 
     def gen_limit_clause(skip=0, limit=nil)
@@ -381,17 +386,27 @@ private
         end
     end
 
+    def qjoins(join_types)
+        joins = []
+        for join_type in join_types
+            if join_type == 'params'
+                joins << 'LEFT JOIN `bottle_dbs` ON `cruises`.`ExpoCode` = `bottle_dbs`.`ExpoCode` '
+            elsif join_type == 'contacts'
+                joins << 'LEFT JOIN `contacts_cruises` ON `contacts_cruises`.`cruise_id` = `cruises`.`id` LEFT JOIN `contacts` ON `contacts_cruises`.`contact_id` = `contacts`.`id` '
+            end
+        end
+        joins
+    end
+
+    def joins(join_types)
+        qjoins(join_types).join(' ')
+    end
+
     def gen_from_qtree(qtree)
         where_clause, sql_params, qextras, all_query = recursive_where(qtree)
-        sql = "FROM `cruises` "
-        if qextras == 'params'
-            sql += 'LEFT JOIN `bottle_dbs` ON `cruises`.`ExpoCode` = `bottle_dbs`.`ExpoCode` '
-        elsif qextras == 'contacts'
-            sql += 'LEFT JOIN `contacts_cruises` ON `contacts_cruises`.`cruise_id` = `cruises`.`id` LEFT JOIN `contacts` ON `contacts_cruises`.`contact_id` = `contacts`.`id` '
-        end
         unless where_clause.empty? and not all_query
-            sql += "WHERE #{where_clause} "
+            where_clause = "WHERE #{where_clause} "
         end
-        [sql, sql_params, all_query]
+        ["FROM `cruises` ", [qextras], where_clause, sql_params, all_query]
     end
 end
