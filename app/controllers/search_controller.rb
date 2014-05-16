@@ -296,7 +296,7 @@ protected
         from_clause, main_joins, where_clause, sql_params, all_query = gen_from_qtree(qtree)
         order_joins, order_clause = gen_order_clause()
 
-        join_clause = joins(main_joins + order_joins)
+        join_clause = joins((main_joins + order_joins).uniq)
 
         cruises = Cruise.find_by_sql(
             ["SELECT DISTINCT #{@@select_clause} #{from_clause} #{join_clause} " +
