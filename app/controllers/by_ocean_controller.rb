@@ -3,22 +3,22 @@ class ByOceanController < ApplicationController
 
     def arctic 
         @documents = documented_cruises()
-        @cruises = spatial_group_cruises(documented_cruises, ["arctic = 1"])
+        @cruises = spatial_group_cruises(documented_cruises, ["arctic"])
     end
 
     def southern
         documented_cruises = documented_cruises()
-        @southern_basin = spatial_group_cruises(documented_cruises, ["southern = 1 AND indian = 0 AND atlantic = 0 AND pacific = 0"])
-        @indian_basin = spatial_group_cruises(documented_cruises, ["southern = 1 AND indian = 1"])
-        @pacific_basin = spatial_group_cruises(documented_cruises, ["southern = 1 AND pacific = 1"])
-        @atlantic_basin = spatial_group_cruises(documented_cruises, ["southern = 1 AND atlantic = 1"])
+        @southern_basin = spatial_group_cruises(documented_cruises, ["southern AND NOT indian AND NOT atlantic AND NOT pacific"])
+        @indian_basin = spatial_group_cruises(documented_cruises, ["southern AND indian"])
+        @pacific_basin = spatial_group_cruises(documented_cruises, ["southern AND pacific"])
+        @atlantic_basin = spatial_group_cruises(documented_cruises, ["southern AND atlantic"])
     end 
 
     def indian 
         documented_cruises = documented_cruises()
-        @indian_basin = spatial_group_cruises(documented_cruises, ["indian = 1 AND atlantic = 0 AND southern = 0"])
-        @atlantic_basin = spatial_group_cruises(documented_cruises, ["indian = 1 AND atlantic = 1"])
-        @southern_basin = spatial_group_cruises(documented_cruises, ["indian = 1 AND atlantic = 0 AND southern = 1"])
+        @indian_basin = spatial_group_cruises(documented_cruises, ["indian AND NOT atlantic AND NOT southern"])
+        @atlantic_basin = spatial_group_cruises(documented_cruises, ["indian AND atlantic"])
+        @southern_basin = spatial_group_cruises(documented_cruises, ["indian AND NOT atlantic AND southern"])
     end
 
     private
@@ -35,7 +35,7 @@ class ByOceanController < ApplicationController
         order_by = "area, cruises.Begin_Date ASC"
 
         groups = SpatialGroups.find(:all,
-            :include => :cruise,
+            :include => {:cruise => :contact_cruises},
             :conditions => conditions, :order => order_by)
         filter_sgroup_no_docs(documented_cruises, groups)
         groups = group_spatial_groups(groups)

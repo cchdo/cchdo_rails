@@ -1,16 +1,17 @@
-<h2 id="<%= basin.downcase %>" class="basin_header"><%= basin.downcase %> Basin</h2>
-<table class="<%= basin.downcase %>_table">
+<h2 id="<%= basin.downcase %>" class="basin_header"><%= basin %> Basin</h2>
+<table class="<%= basin.downcase %>_table subbasin">
   <tr>
-    <th width="10%">Line</th>
-    <th width="12%">Year(s)</th>
-    <th width="20%">Ship</th>
-    <th width="20%">Chief Scientist</th>
-    <th width="10%">Country</th>
+    <th class="line">Line</th>
+    <th class="date">Year(s)</th>
+    <th class="ship">Ship</th>
+    <th class="scientist">Chief Scientist</th>
+    <th class="country">Country</th>
   </tr>
   <% sgroupmap.each_pair do |area, sgroups| -%>
     <% next if sgroups.empty? -%>
     <%
     hl = cycle('highlighted_cell', '', :name => 'hl1')
+    area = area || ''
     area_name = area.gsub('/', '_')
     basin_images = File.join("images", basebasin)
 
@@ -34,9 +35,9 @@
     -%>
 
     <tr valign="top" class="<%= in_map %> <%= hl %>" <%= imgswapper %>>
-      <td><a href="/search?query=<%=key%>"><%=sgg.area.upcase.gsub('/', '/ ')%></a></td>
+      <td><a href="/search?query=<%=key%>"><%=(sgg.area || '').upcase.gsub('/', '/ ')%></a></td>
       <% if cruise = sgg.cruise %>
-        <td><a href="/cruise/<%=sgg.ExpoCode%>"><%date_year(cruise.Begin_Date)%></a></td> 
+        <td><a href="/cruise/<%=sgg.ExpoCode%>"><%= date_year(cruise.Begin_Date) || 'Unknown' %></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
@@ -48,7 +49,7 @@
       <% end %>
     </tr>
     <% if sgroups.length >= 2 -%>
-      <tr id="<%= area_name %>-more" class="<%= hl %> expander">
+      <tr id="<%= area_name %>-more" class="<%= in_map %> <%= hl %> expander">
         <td></td>
         <td colspan="4">
           <a href="#<%= area_name %>-more">
@@ -74,7 +75,7 @@
         </tr>
       <% end -%>
       <% reset_cycle('hl2') -%>
-      <tr id="<%= area_name %>-less" class="<%= hl %> more expander">
+      <tr id="<%= area_name %>-less" class="<%= in_map %> <%= hl %> more expander">
         <td></td>
         <td colspan="4">
           <a href="#<%= area_name %>-less">

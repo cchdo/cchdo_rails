@@ -33,18 +33,33 @@ textarea {
     <div class="mass-edit">
         <span class="id"><%= cruise.id %></span>
         <span class="expo"><%= link_to(cruise.ExpoCode, "/cruise/" + cruise.ExpoCode) %></span>
+        <div class="groups"><%= cruise.groups().join(', ') %></div>
+        <div class="spg">
+          <% spg = cruise.spatial_groups %>
+          <% if spg %>
+              <% if spg.arctic %>arctic<% end %>
+              <% if spg.atlantic %>atlantic<% end %>
+              <% if spg.pacific %>pacific<% end %>
+              <% if spg.indian %>indian<% end %>
+              <% if spg.southern %>southern<% end %>
+          <% end %>
+        </div>
+
+        <% if false %>
         <div class="chief">
             <p><span>new</span> <%= contact_cruises(cruise) %></p>
         </div>
         <div>
             <%= render :partial => 'edit_contacts', :locals => {:cruise => cruise} %>
         </div>
+        <% end %>
     </div>
 <% end %>
 <br>
+<div>
 <%= link_to('prev', cruises_path(:page => params[:page].to_i - 1, :per => params[:per])) %>
 <%= link_to('next', cruises_path(:page => params[:page].to_i + 1, :per => params[:per])) %>
-<% form_tag :method => "GET" do %>
+<% form_tag "", {:method => "GET"} do %>
     <p>
         Page <input type="number" name="page" value="<%= params[:page] %>">
         <input type="submit" value="Go">
@@ -53,13 +68,16 @@ textarea {
         <input type="number" name="per" value="<%= params[:per] %>"> items/page
     </p>
 <% end %>
+</div>
 
+<% if false %>
 <% form_tag do %>
     <p>Set the institution for all ContactCruises for the contact, if not already set</p>
     <input type="hidden" name="limit_cruise" value="<%=@cruises[0].id%>">
     <input type="number" name="contact" placeholder="contact">
     <input type="text" name="inst" placeholder="institution">
     <button type="submit" name="act" value="set_inst_for_cc">Set</button>
+<% end %>
 <% end %>
 
 <% content_for :js do %>

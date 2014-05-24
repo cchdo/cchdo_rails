@@ -6,6 +6,8 @@ class Cruise < ActiveRecord::Base
     has_many :documents, :primary_key => 'ExpoCode', :foreign_key => 'ExpoCode'
     has_one :track_line, :primary_key => 'ExpoCode', :foreign_key => 'ExpoCode'
 
+    belongs_to :spatial_groups, :primary_key => 'ExpoCode', :foreign_key => 'ExpoCode'
+
     has_many :contact_cruises
     has_many :contacts, :through => :contact_cruises
 
@@ -29,6 +31,10 @@ class Cruise < ActiveRecord::Base
                         :with => /^[\w-]+$/,
                         :message => "is missing or invalid",
                         :allow_nil => true
+
+    def groups
+        return (self.Group || '').split(',').map {|x| x.strip}
+    end
 
     def directory
         return Document.find_by_ExpoCode_and_FileType(self.ExpoCode, 'Directory')
