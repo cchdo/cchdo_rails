@@ -22,6 +22,9 @@
 .mass-edit .editor {
     margin-left: 1em;
 }
+.mass-edit.no-spatial {
+    background: #ffeeee;
+}
 textarea {
   border: 0;
   height: 1em;
@@ -30,19 +33,21 @@ textarea {
 </style>
 <% end %>
 <% for cruise in @cruises %>
-    <div class="mass-edit">
+    <div class="mass-edit <% unless cruise.spatial_groups%>no-spatial<% end %>">
         <span class="id"><%= cruise.id %></span>
         <span class="expo"><%= link_to(cruise.ExpoCode, "/cruise/" + cruise.ExpoCode) %></span>
         <div class="groups"><%= cruise.groups().join(', ') %></div>
         <div class="spg">
-          <% spg = cruise.spatial_groups %>
-          <% if spg %>
-              <% if spg.arctic %>arctic<% end %>
-              <% if spg.atlantic %>atlantic<% end %>
-              <% if spg.pacific %>pacific<% end %>
-              <% if spg.indian %>indian<% end %>
-              <% if spg.southern %>southern<% end %>
-          <% end %>
+            <% form_remote_tag :url => cruises_edit_path do %>
+                <input type="hidden" name="cruiseid" value="<%= cruise.id %>">
+                <input type="hidden" name="act" value="set_basin">
+                <% spg = cruise.spatial_groups %>
+                <% spg = SpatialGroups.new() unless spg %>
+                <% for basin in ['arctic', 'atlantic', 'indian', 'pacific', 'southern'] %>
+                    <%= check_box_tag(basin, basin, spg.send(basin)) %>
+                    <%= label_tag(basin) %>
+                <% end %>
+            <% end %>
         </div>
 
         <% if false %>
@@ -82,7 +87,14 @@ textarea {
 
 <% content_for :js do %>
 <script>
-  $('textarea.oneclick').click(function() { $(this).select(); });
+  jQuery.noConflict();
+  jQuery(function ($) {
+      $('textarea.oneclick').click(function() { $(this).select(); });
+      $('.spg :checkbox').click(function() {
+        $(this).parent('form')[0].onsubmit()
+      });
+  });
 </script>
+<%=javascript_include_tag :defaults -%>
 <% end %>
 

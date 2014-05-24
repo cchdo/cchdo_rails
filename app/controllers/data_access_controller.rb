@@ -96,7 +96,7 @@ class DataAccessController < ApplicationController
             return redirect_to cruises_path(:page => 1, :per => 10)
         end
         @cruises = Cruise.find(
-            :all, :include => {:contact_cruises => :contact},
+            :all, :include => [:spatial_groups, {:contact_cruises => :contact}],
             :order => 'id', :limit => per, :offset => page.to_i * per.to_i)
     end
 
@@ -143,6 +143,22 @@ class DataAccessController < ApplicationController
                 next if cc.institution
                 cc.institution = inst
                 cc.save
+            end
+        elsif params[:act] == "set_basin"
+            puts params.inspect
+            cruise = Cruise.find_by_id(params[:cruiseid])
+            spg = cruise.spatial_groups
+            unless spg
+                cruise.spatial_groups = SpatialGroups.new()
+                spg = cruise.spatial_groups
+                spg.ExpoCode = cruise.ExpoCode
+            end
+            for basin in ["arctic", "atlantic", "indian", "pacific", "southern"]
+                spg.send("#{basin}=", !params[basin].blank?)
+            end
+            spg.save()
+            if request.xhr?
+                return render :json => {:status => :ok}
             end
         end
         return redirect_to(:back)
