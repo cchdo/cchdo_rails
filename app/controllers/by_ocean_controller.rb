@@ -2,54 +2,51 @@ include DataAccessHelper
 class ByOceanController < ApplicationController
 
     def arctic 
-        @documents = []
-        Document.find(:all, :select=>"DISTINCT ExpoCode").each do |document|
-            @documents << document.ExpoCode
-        end
-        @cruises = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ?", "%arctic%"], :order=>"Line, Begin_Date ASC"))
-        @cruises.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
+        @documents = documented_cruises()
+        @cruises = spatial_group_cruises(documented_cruises, ["arctic"])
     end
 
     def southern
-        @documents =[]
-        Document.find(:all, :select=>"ExpoCode").each do |document|
-            @documents << document.ExpoCode
-        end
-        @southern_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ?)", "%southern%", "S%"], :order=>"Line, Begin_Date ASC"))
-        @southern_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
-
-        @indian_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ?)", "%southern%", "I%", "AIS%"], :order=>"Line, Begin_Date ASC"))
-        @indian_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)} 
-
-        @pacific_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ?)", "%southern%", "P%", "AAI%"], :order=>"Line, Begin_Date ASC"))
-        @pacific_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
-
-        @atlantic_basin = reduce_specifics(Cruise.find(:all, :conditions => ["`Group` LIKE ? AND (`Line` LIKE ? OR `Line` LIKE ? OR `Line` LIKE ? )", "%southern%", "A__", "AR%", "AJ%"], :order=>"Line, Begin_Date ASC"))
-        @atlantic_basin.delete_if {|cruise| !@documents.include?(cruise.ExpoCode)}
+        documented_cruises = documented_cruises()
+        @southern_basin = spatial_group_cruises(documented_cruises, ["southern AND NOT indian AND NOT atlantic AND NOT pacific"])
+        @indian_basin = spatial_group_cruises(documented_cruises, ["southern AND indian"])
+        @pacific_basin = spatial_group_cruises(documented_cruises, ["southern AND pacific"])
+        @atlantic_basin = spatial_group_cruises(documented_cruises, ["southern AND atlantic"])
     end 
 
     def indian 
-        documents = []
-        Document.find(:all, :select=>"DISTINCT ExpoCode").each do |document|
-            documents << document.ExpoCode
-        end
-
-        order_by = "area, cruises.Begin_Date ASC"
-
-        @indian_basin = SpatialGroups.find(:all, :include => {:cruise => {:contact_cruises => :contact}}, :conditions => ["indian = ? AND atlantic = ? AND southern = ?", "1", "0", "0"], :order => order_by)
-        filter_sgroup_no_docs(documents, @indian_basin)
-        @indian_basin = group_spatial_groups(@indian_basin)
-
-        @atlantic_basin = SpatialGroups.find(:all, :include => {:cruise => {:contact_cruises => :contact}}, :conditions => ["indian = ? AND atlantic = ?", "1", "1"], :order => order_by)
-        filter_sgroup_no_docs(documents, @atlantic_basin)
-        @atlantic_basin = group_spatial_groups(@atlantic_basin)
-
-        @southern_basin = SpatialGroups.find(:all, :include => {:cruise => {:contact_cruises => :contact}}, :conditions => ["indian = ? AND atlantic = ? AND southern = ?", "1", "0", "1"], :order => order_by)
-        filter_sgroup_no_docs(documents, @southern_basin)
-        @southern_basin = group_spatial_groups(@southern_basin)
+        documented_cruises = documented_cruises()
+        @indian_basin = spatial_group_cruises(documented_cruises, ["indian AND NOT atlantic AND NOT southern"])
+        @atlantic_basin = spatial_group_cruises(documented_cruises, ["indian AND atlantic"])
+        @southern_basin = spatial_group_cruises(documented_cruises, ["indian AND NOT atlantic AND southern"])
     end
 
     private
+
+    def documented_cruises
+        cruises = []
+        Document.find(:all, :select => "DISTINCT ExpoCode").each do |document|
+            cruises << document.ExpoCode
+        end
+        cruises
+    end
+
+    def spatial_group_cruises(documented_cruises, conditions)
+        order_by = "area, cruises.Begin_Date ASC"
+
+        groups = SpatialGroups.find(:all,
+            :include => {:cruise => :contact_cruises},
+            :conditions => conditions, :order => order_by)
+        filter_sgroup_no_docs(documented_cruises, groups)
+        groups = group_spatial_groups(groups)
+    end
+
+    def basin_cruises(documented_cruises, conditions)
+        cruises = reduce_specifics(Cruise.find(:all, :conditions => conditions,
+            :order=>"Line, Begin_Date ASC"))
+        filter_sgroup_no_docs(documented_cruises, cruises)
+        cruises
+    end
 
     def filter_sgroup_no_docs(documents, sgroups)
         sgroups.delete_if {|cruise| !documents.include?(cruise.ExpoCode)} 

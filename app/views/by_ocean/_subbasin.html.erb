@@ -1,31 +1,43 @@
 <h2 id="<%= basin.downcase %>" class="basin_header"><%= basin %> Basin</h2>
-<table class="indian_table">
+<table class="<%= basin.downcase %>_table subbasin">
   <tr>
-    <th width="10%">Line</th>
-    <th width="12%">Year(s)</th>
-    <th width="20%">Ship</th>
-    <th width="20%">Chief Scientist</th>
-    <th width="10%">Country</th>
+    <th class="line">Line</th>
+    <th class="date">Year(s)</th>
+    <th class="ship">Ship</th>
+    <th class="scientist">Chief Scientist</th>
+    <th class="country">Country</th>
   </tr>
   <% sgroupmap.each_pair do |area, sgroups| -%>
     <% next if sgroups.empty? -%>
     <%
     hl = cycle('highlighted_cell', '', :name => 'hl1')
+    area = area || ''
     area_name = area.gsub('/', '_')
-    if FileTest.exists?(RAILS_ROOT + "/public/images/indian/indian_#{area_name}.gif")
-      swap = "_" + area_name
+    basin_images = File.join("images", basebasin)
+
+    sgg = sgroups[0]
+
+    expo_path = File.join(basin_images, "#{basebasin}_#{sgg.ExpoCode}.gif")
+    area_path = File.join(basin_images, "#{basebasin}_#{area_name}.gif")
+    base_name = "#{basebasin}_base"
+    if FileTest.exists?(Rails.root.join("public", expo_path))
+      image_path = expo_path
+      in_map = ''
+    elsif FileTest.exists?(Rails.root.join("public", area_path))
+      image_path = area_path
+      in_map = ''
     else
-      swap = "_base"
+      image_path = File.join(basin_images, "#{base_name}.gif")
+      in_map = 'not_in_map'
     end
     key = area.downcase
-    imgswapper = "onmouseover=\"swapImage('indian_base','','/images/indian/indian#{swap}.gif',1);\""
+    imgswapper = "onmouseover=\"swapImage('#{base_name}','','/#{image_path}',1);\""
     -%>
 
-    <% sgg = sgroups[0] -%>
-    <tr valign="top" class="<%if swap.eql?("_base")%>not_in_map<%end%> <%= hl %>" <%= imgswapper %>>
-      <td><a href="/search?query=<%=key%>"><%=sgg.area.upcase.gsub('/', '/ ')%></a></td>
+    <tr valign="top" class="<%= in_map %> <%= hl %>" <%= imgswapper %>>
+      <td><a href="/search?query=<%=key%>"><%=(sgg.area || '').upcase.gsub('/', '/ ')%></a></td>
       <% if cruise = sgg.cruise %>
-        <td><a href="/cruise/<%=sgg.ExpoCode%>"><%date_year(cruise.Begin_Date)%></a></td> 
+        <td><a href="/cruise/<%=sgg.ExpoCode%>"><%= date_year(cruise.Begin_Date) || 'Unknown' %></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
@@ -37,7 +49,7 @@
       <% end %>
     </tr>
     <% if sgroups.length >= 2 -%>
-      <tr id="<%= area_name %>-more" class="<%= hl %> expander">
+      <tr id="<%= area_name %>-more" class="<%= in_map %> <%= hl %> expander">
         <td></td>
         <td colspan="4">
           <a href="#<%= area_name %>-more">
@@ -47,7 +59,7 @@
       </tr>
       <% for sgg in sgroups.slice(1..-1) -%>
         <% hl2 = cycle('odd', 'even', :name => 'hl2') %>
-        <tr class="<%if swap.eql?("_base")%>not_in_map<% end %> more <%= area_name %>-inner <%= hl %>" <%= imgswapper %>>
+        <tr class="<%= in_map %> more <%= area_name %>-inner <%= hl %>" <%= imgswapper %>>
           <td></td>
           <% if cruise = sgg.cruise %>
             <td class="<%= hl2 %>" width="90"><a href="/cruise/<%=sgg.ExpoCode%>"><%=date_year(cruise.Begin_Date)%></a></td>
@@ -63,7 +75,7 @@
         </tr>
       <% end -%>
       <% reset_cycle('hl2') -%>
-      <tr id="<%= area_name %>-less" class="<%= hl %> more expander">
+      <tr id="<%= area_name %>-less" class="<%= in_map %> <%= hl %> more expander">
         <td></td>
         <td colspan="4">
           <a href="#<%= area_name %>-less">

@@ -38,7 +38,9 @@ class SearchTerm
         'parameter' => 'parameter',
         'after' => 'after',
         'before' => 'before',
+        'basin' => 'basin',
     }
+    @@basins = ['arctic', 'atlantic', 'indian', 'pacific', 'southern']
     @@cruise_columns = Cruise.columns.map {|col| col.name}
     @@parameter_names = Parameter.columns.map {|col| col.name}.reject do |x|
         x =~ /(^(id|ExpoCode)$|(_PI|_Date)$)/
@@ -71,6 +73,9 @@ class SearchTerm
             where_clause = "`bottle_dbs`.`parameters` LIKE ?"
             sql_parameters << "%#{query}%"
             qextra = 'params'
+        elsif type == 'basin'
+            where_clause = "spatial_groups.`#{query}` = 1"
+            qextra = 'spatial_group'
         elsif type == 'Chief_Scientist'
             where_clause = "contacts.LastName LIKE ?"
             sql_parameters << "%#{query}%"
@@ -161,6 +166,10 @@ protected
             if ncruises > 0
                 return ['Date', query]
             end
+        end
+
+        if @@basins.include?(query.downcase)
+            return ['basin', query.downcase]
         end
 
         # WOCE line numbers
@@ -393,6 +402,8 @@ private
                 joins << 'LEFT JOIN `bottle_dbs` ON `cruises`.`ExpoCode` = `bottle_dbs`.`ExpoCode` '
             elsif join_type == 'contacts'
                 joins << 'LEFT JOIN `contacts_cruises` ON `contacts_cruises`.`cruise_id` = `cruises`.`id` LEFT JOIN `contacts` ON `contacts_cruises`.`contact_id` = `contacts`.`id` '
+            elsif join_type == 'spatial_group'
+                joins << 'LEFT JOIN `spatial_groups` ON `spatial_groups`.`ExpoCode` = `cruises`.`ExpoCode` '
             end
         end
         joins

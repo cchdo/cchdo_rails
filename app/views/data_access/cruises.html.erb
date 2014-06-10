@@ -22,6 +22,9 @@
 .mass-edit .editor {
     margin-left: 1em;
 }
+.mass-edit.no-spatial {
+    background: #ffeeee;
+}
 textarea {
   border: 0;
   height: 1em;
@@ -30,21 +33,38 @@ textarea {
 </style>
 <% end %>
 <% for cruise in @cruises %>
-    <div class="mass-edit">
+    <div class="mass-edit <% unless cruise.spatial_groups%>no-spatial<% end %>">
         <span class="id"><%= cruise.id %></span>
         <span class="expo"><%= link_to(cruise.ExpoCode, "/cruise/" + cruise.ExpoCode) %></span>
+        <div class="groups"><%= cruise.groups().join(', ') %></div>
+        <div class="spg">
+            <% form_remote_tag :url => cruises_edit_path do %>
+                <input type="hidden" name="cruiseid" value="<%= cruise.id %>">
+                <input type="hidden" name="act" value="set_basin">
+                <% spg = cruise.spatial_groups %>
+                <% spg = SpatialGroups.new() unless spg %>
+                <% for basin in ['arctic', 'atlantic', 'indian', 'pacific', 'southern'] %>
+                    <%= check_box_tag(basin, basin, spg.send(basin)) %>
+                    <%= label_tag(basin) %>
+                <% end %>
+            <% end %>
+        </div>
+
+        <% if false %>
         <div class="chief">
             <p><span>new</span> <%= contact_cruises(cruise) %></p>
         </div>
         <div>
             <%= render :partial => 'edit_contacts', :locals => {:cruise => cruise} %>
         </div>
+        <% end %>
     </div>
 <% end %>
 <br>
+<div>
 <%= link_to('prev', cruises_path(:page => params[:page].to_i - 1, :per => params[:per])) %>
 <%= link_to('next', cruises_path(:page => params[:page].to_i + 1, :per => params[:per])) %>
-<% form_tag :method => "GET" do %>
+<% form_tag "", {:method => "GET"} do %>
     <p>
         Page <input type="number" name="page" value="<%= params[:page] %>">
         <input type="submit" value="Go">
@@ -53,7 +73,9 @@ textarea {
         <input type="number" name="per" value="<%= params[:per] %>"> items/page
     </p>
 <% end %>
+</div>
 
+<% if false %>
 <% form_tag do %>
     <p>Set the institution for all ContactCruises for the contact, if not already set</p>
     <input type="hidden" name="limit_cruise" value="<%=@cruises[0].id%>">
@@ -61,10 +83,18 @@ textarea {
     <input type="text" name="inst" placeholder="institution">
     <button type="submit" name="act" value="set_inst_for_cc">Set</button>
 <% end %>
+<% end %>
 
 <% content_for :js do %>
 <script>
-  $('textarea.oneclick').click(function() { $(this).select(); });
+  jQuery.noConflict();
+  jQuery(function ($) {
+      $('textarea.oneclick').click(function() { $(this).select(); });
+      $('.spg :checkbox').click(function() {
+        $(this).parent('form')[0].onsubmit()
+      });
+  });
 </script>
+<%=javascript_include_tag :defaults -%>
 <% end %>
 
