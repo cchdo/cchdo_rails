@@ -35,7 +35,7 @@ class ByOceanController < ApplicationController
         order_by = "area, cruises.Begin_Date ASC"
 
         groups = SpatialGroups.find(:all,
-            :include => {:cruise => :contact_cruises},
+            :include => :cruise,
             :conditions => conditions, :order => order_by)
         filter_sgroup_no_docs(documented_cruises, groups)
         groups = group_spatial_groups(groups)

@@ -4,7 +4,6 @@
     <th class="line">Line</th>
     <th class="date">Year(s)</th>
     <th class="ship">Ship</th>
-    <th class="scientist">Chief Scientist</th>
     <th class="country">Country</th>
   </tr>
   <% sgroupmap.each_pair do |area, sgroups| -%>
@@ -39,12 +38,10 @@
       <% if cruise = sgg.cruise %>
         <td><a href="/cruise/<%=sgg.ExpoCode%>"><%= date_year(cruise.Begin_Date) || 'Unknown' %></a></td> 
         <td><%=cruise.Ship_Name%></td>
-        <td><%=contact_cruises(cruise)%></td> 
         <td><%=cruise.Country%></td>
       <% else %>
         <td></td> 
         <td></td>
-        <td></td> 
         <td></td>
       <% end %>
     </tr>
@@ -64,12 +61,10 @@
           <% if cruise = sgg.cruise %>
             <td class="<%= hl2 %>" width="90"><a href="/cruise/<%=sgg.ExpoCode%>"><%=date_year(cruise.Begin_Date)%></a></td>
             <td class="<%= hl2 %>" width="110"><%=cruise.Ship_Name %></td>
-            <td class="<%= hl2 %>" width="160"><%=contact_cruises(cruise)%></td> 
             <td class="<%= hl2 %>" width="120"><%=cruise.Country %></td>
           <% else %>
             <td class="<%= hl2 %>" width="90"></td>
             <td class="<%= hl2 %>" width="110"></td>
-            <td class="<%= hl2 %>" width="160"></td> 
             <td class="<%= hl2 %>" width="120"></td>
           <% end %>
         </tr>
@@ -77,7 +72,7 @@
       <% reset_cycle('hl2') -%>
       <tr id="<%= area_name %>-less" class="<%= in_map %> <%= hl %> more expander">
         <td></td>
-        <td colspan="4">
+        <td colspan="3">
           <a href="#<%= area_name %>-less">
             Show less cruises<img src="/images/collapse.png" alt="Show less cruises" title="Show less cruises">
           </a>
