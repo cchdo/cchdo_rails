@@ -1465,7 +1465,7 @@ td.parameter_order { background-color:#7889AB; text-align:center; color:white; f
 .basin_header { border-bottom: 3px solid #006f89; margin-top: 0.5em;}
 .subbasin { font-size: 7.4pt; color: #565656; width: 100%; }
 .subbasin th td { width: 20%; line-break: strict; }
-.subbasin tr td { width: inherit; vertical-align: top; height: 50px; }
+.subbasin tr td { width: inherit; vertical-align: top; }
 .subbasin tr .line td{ width: 10%; }
 .subbasin tr .date td{ width: 18%; }
 .subbasin tr .ship td{ width: 10%; }
