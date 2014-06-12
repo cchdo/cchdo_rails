@@ -4,7 +4,7 @@
 
     <div class="basin_map">
     <p>Mouse over an area of the map below and click on the highlighted cruise to visit its cruise page.</p>  
-    <div class="small_font"><em>Note:</em> The <a href="project_carina">Project Carina Collection</a> is not shown on this map.</div>
+    <div class="small_font"><em>Note:</em> The <a href="search?query=CARINA">Project Carina Collection</a> is not shown on this map.</div>
 
     <img name="arctic_base" src="/images/arctic/arctic_base.gif" width="581" height="587" border="0" usemap="#m_arctic" alt="">
 
@@ -52,7 +52,7 @@
     </map>
     </div>
 <div class="basin_cruises">
-  <p><a href="project_carina">Project Carina Collection</a></p>
+  <p><a href="search?query=CARINA">Project Carina Collection</a></p>
   <%= render :partial => "subbasin",
              :locals => {:basebasin => 'arctic', :basin => '', :sgroupmap => @cruises} %>
 </div>
