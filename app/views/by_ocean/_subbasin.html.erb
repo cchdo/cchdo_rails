@@ -1,4 +1,3 @@
-<h2 id="<%= basin.downcase %>" class="basin_header"><%= basin %> Basin</h2>
 <table class="<%= basin.downcase %>_table subbasin">
   <tr>
     <th class="line">Line</th>
@@ -34,9 +33,9 @@
     -%>
 
     <tr valign="top" class="<%= in_map %> <%= hl %>" <%= imgswapper %>>
-      <td><a href="/search?query=<%=key%>"><%=(sgg.area || '').upcase.gsub('/', '/ ')%></a></td>
+        <td><a href="<%=search_path(:query => key)%>"><%=(sgg.area || '').upcase.gsub('/', '/ ')%></a></td>
       <% if cruise = sgg.cruise %>
-        <td><a href="/cruise/<%=sgg.ExpoCode%>"><%= date_year(cruise.Begin_Date) || 'Unknown' %></a></td> 
+        <td><a href="<%=cruise_path(sgg.ExpoCode)%>"><%= date_year(cruise.Begin_Date) || 'Unknown' %></a></td> 
         <td><%=cruise.Ship_Name%></td>
         <td><%=cruise.Country%></td>
       <% else %>

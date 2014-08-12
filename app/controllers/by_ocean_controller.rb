@@ -8,17 +8,12 @@ class ByOceanController < ApplicationController
 
     def southern
         documented_cruises = documented_cruises()
-        @southern_basin = spatial_group_cruises(documented_cruises, ["southern AND NOT indian AND NOT atlantic AND NOT pacific"])
-        @indian_basin = spatial_group_cruises(documented_cruises, ["southern AND indian"])
-        @pacific_basin = spatial_group_cruises(documented_cruises, ["southern AND pacific"])
-        @atlantic_basin = spatial_group_cruises(documented_cruises, ["southern AND atlantic"])
+        @southern_basin = spatial_group_cruises(documented_cruises, ["southern"])
     end 
 
     def indian 
         documented_cruises = documented_cruises()
-        @indian_basin = spatial_group_cruises(documented_cruises, ["indian AND NOT atlantic AND NOT southern"])
-        @atlantic_basin = spatial_group_cruises(documented_cruises, ["indian AND atlantic"])
-        @southern_basin = spatial_group_cruises(documented_cruises, ["indian AND NOT atlantic AND southern"])
+        @indian_basin = spatial_group_cruises(documented_cruises, ["indian"])
     end
 
     private

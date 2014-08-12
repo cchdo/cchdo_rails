@@ -58,24 +58,9 @@
 </map>
 </div>
     <div class="basin_cruises">
-        <div class="subbasin_selector">
-            <strong>Select a basin to view:</strong>
-            <a href="#southern">Southern</a> |
-            <a href="#atlantic">Atlantic</a> |
-            <a href="#indian">Indian</a> |
-            <a href="#pacific">Pacific</a>
-        </div>
-
         <div class="southern_basins">
             <%= render :partial => "subbasin",
                        :locals => {:basebasin => 'southern', :basin => 'Southern', :sgroupmap => @southern_basin} %>
-            <%= render :partial => "subbasin",
-                       :locals => {:basebasin => 'southern', :basin => 'Atlantic', :sgroupmap => @atlantic_basin} %>
-            <%= render :partial => "subbasin",
-                       :locals => {:basebasin => 'southern', :basin => 'Indian', :sgroupmap => @indian_basin} %>
-            <%= render :partial => "subbasin",
-                       :locals => {:basebasin => 'southern', :basin => 'Pacific', :sgroupmap => @pacific_basin} %>
-        </div>
     </div>
 </div>
 <div class='box_bottom'></div>
