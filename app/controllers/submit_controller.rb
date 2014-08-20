@@ -15,6 +15,15 @@ class SubmitController < ApplicationController
  
     # GET /submit
     def new
+      begin
+        test = Priority.new()
+        test.name = "test"
+        test.save!
+        test.destroy
+        @read_only = false
+      rescue
+        @read_only = true
+      end
     end
 
     # POST /submit

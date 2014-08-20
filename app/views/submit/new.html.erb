@@ -10,6 +10,12 @@ h2 span { color: #000; font-size: 0.8em; text-transform: none; font-weight: norm
 </style>
 <% end -%>
 
+<% if @read_only %>
+  <h1>Site Maintenance: Submissions Disabled</h1>
+  <p>CCHDO is currently undergoing site maintenance and cannot accept uploads via the website.</p>
+  <p>Data submissions may be emailed directly to <a href="mailto:cberysgo@ucsd.edu">cberysgo@ucsd.edu</a></p>
+  <p>All other inquires should be emailed to <a href="mailto:cchdo@ucsd.edu">cchdo@ucsd.edu</a></p>
+<% else %>
 <div class="boxed">
 <h1>Submit Data</h1>
 
@@ -185,6 +191,7 @@ end
 </div>
 <div class="box_bottom"></div>
 </div>
+<% end %>
 <% content_for :js do %>
 <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.js" %>
 <script type="text/javascript">
