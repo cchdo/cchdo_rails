@@ -20,3 +20,4 @@ submissions
 .ruby-version
 config/setup_load_paths.rb
 public/500.html
+app/views/layouts/_banner.html.erb

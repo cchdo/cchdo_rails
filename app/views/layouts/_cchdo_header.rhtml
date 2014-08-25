@@ -1,3 +1,6 @@
+<% if File.exist?("#{RAILS_ROOT}/app/views/layouts/_banner.html.erb") %>
+    <%= render :partial => "layouts/banner" %>
+<% end %>
 <div id='cchdo_header'>
   <div id="cchdo_logo" class="masthead-block">
     <%= link_to(image_tag('logos/CCHDO_logo.png'), '/') -%>

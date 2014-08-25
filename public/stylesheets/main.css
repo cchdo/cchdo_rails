@@ -1512,3 +1512,29 @@ tr.not_in_map { background-color: #FFDDDD; }
   list-style-type: disc;
   margin-left: 2em;
 }
+
+div.banner-top {
+    background: #FAAC58;
+    padding: 1em;
+}
+div.banner-top h1 {
+  padding: 0.2em;
+}
+div.banner-top .btn {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  margin-top: 5px;
+  color: #ffffff;
+  background: #5cb85c;
+  border: 1px solid #4cae4c;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+div.banner-top .btn:hover {
+  background-color: #449d44;
+  border-color: #398439;
+}
