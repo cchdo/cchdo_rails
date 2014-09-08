@@ -34,11 +34,7 @@ module DocumentsHelper
             end
 
             basename = File.basename(file)
-            if @datacart.include?([dir.id, basename])
-                link_file = datacart_link_file('Remove', dir, basename)
-            else
-                link_file = datacart_link_file('Add', dir, basename)
-            end
+            link_file = datacart_link_file(dir, basename, expocode)
 
             liresult = content_tag(:span, 
                 link_to(

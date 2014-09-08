@@ -780,6 +780,7 @@ CM.results = {
 
           $(CM.results).trigger('added');
 
+          jQuery(make_datacart_links($));
           CM.state('');
         } catch(e) {
           console.log('Error handling received cruise information:', e);
