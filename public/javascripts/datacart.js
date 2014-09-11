@@ -67,7 +67,7 @@ function gen_datacart_download_form($){
         files.push(filepath);
       }
       var form = '' + 
-                  '<form action="http://ghdc.ucsd.edu:5000/download.zip" method="post">' + 
+                  '<form action="http://cchdo.ucsd.edu/download/download.zip" method="post">' + 
                   '<input type="hidden" name="archive" value="'+files.join(',')+'">' +
                   '<input type="submit" value="Download All Files" class="download">' +
                   '</form>' +
