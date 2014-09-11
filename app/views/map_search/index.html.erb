@@ -12,8 +12,7 @@
   </script>
   <%= javascript_include_tag 'map_search/Graticule',
                              'map_search/dragTool',
-                             'map_search/map_search',
-                             'datacart'
+                             'map_search/map_search'
    %>
   <% if params[:autoload] -%><script type='text/javascript'>google.setOnLoadCallback(CM.load_with_submit);</script><% end -%>
 <% end -%>

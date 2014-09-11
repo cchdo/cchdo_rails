@@ -11,7 +11,6 @@
           <th width="20%"><%= sort_on('Cruise Dates', "Begin_Date") %></th>
           <th width="30%"><%= sort_on('Chief Scientist', "Chief_Scientist") %></th>
           <th width="10%"><%= sort_on('Country') %></th>
-          <th></th>
       </tr>
     <% end %>
     <%- cruise_table = @table_list[cruise.ExpoCode] %>
@@ -42,9 +41,6 @@
         <% end %>
       </td>
       <td><%= cruise.Country %></td>
-      <td class="datacart">
-        <%= datacart_link_cruise(cruise) %>
-      </td>
     </tr>
   <% end %>
 </table>

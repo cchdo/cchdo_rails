@@ -1,68 +1,9 @@
 <div class="boxed datacart-dl">
   <h1>Data cart</h1>
   <div class="box_content">
-    <%- if @datacart.empty? %>
-      <p>Please visit a cruise page to add files to download.</p>
-    <%- else %>
-      <div class="tools">
-        <%= form_tag(datacart_clear_path) %><input type="submit" value="Clear list" class="clear"></form>
-      <div>
-
-      <div id="quick-dl">
-        <h2>Download all</h2>
-        <p>In order to maintain response times considering file sizes, the list can be downloaded in archives of at most <%= $zip_file_limit %> at a time.</p>
-        <p>Following are all the archives for your <%= pluralize(@datacart.length, 'file') %>. Click each in succession to download the entire list.</p>
-        <ol>
-        <%- @datacart.each_with_index do |(directory, file), i| %>
-          <%- if i % $zip_file_limit == 0 %>
-            <li>
-              <%- num_files_in_archive = [(@datacart.length - i), $zip_file_limit].min %>
-              <%- archive_id = (i / $zip_file_limit).to_i %>
-              <%= form_tag(datacart_download_path) %>
-                <input type="hidden" name="archive" value="<%= archive_id %>">
-                <input type="submit" value="Download <%= (archive_id + 1).ordinalize %> archive (<%= pluralize(num_files_in_archive, 'file') %>)" class="download">
-              </form>
-            </li>
-          <%- end %>
-        <%- end %>
-        </ol>
-      </div>
-
-      <table>
-        <tr class="header">
-          <th>Cruise</th>
-          <th>File</th>
-          <th></th>
-          <th></th>
-        </tr>
-      <%- hlclass = 'hl' %>
-      <%- @datacart.each_with_index do |(directory, file), i| %>
-        <% directory = Document.find_by_id(directory) %>
-        <%- if i % $zip_file_limit == 0 %>
-          <%- hlclass = cycle('hl', '') %>
-        <%- end %>
-        <tr class="<%= hlclass %>">
-          <td class="cruise">
-            <%= link_to(directory.ExpoCode, cruise_path(directory.ExpoCode)) %>
-          </td>
-          <td class="filename">
-            <%= file %>
-          </td>
-          <td class="datacart-remove">
-            <%= datacart_link('Remove', datacart_remove_path(:dirid => directory.id, :file => file)) %>
-          </td>
-          <%- if i % $zip_file_limit == 0 %>
-            <%- num_files_in_archive = [(@datacart.length - i), $zip_file_limit].min %>
-            <td class="tools" rowspan="<%= num_files_in_archive %>">
-              <%= form_tag(datacart_download_path) %>
-                <input type="hidden" name="archive" value="<%= (i / $zip_file_limit).to_i %>">
-                <input type="submit" value="Download archive (<%= pluralize(num_files_in_archive, 'file') %>)" class="download">
-              </form>
-            </td>
-          <%- end %>
-        </tr>
-      <%- end %>
-      </table>
-    <%- end %>
+    <div id="datacart_form_placeholder"></div>
+    <div id="datacart_placeholder">
+      <p>Your browser doesn't appear to support the datacart, or you have javascript disabled.</p>
+    </div>
   </div>
 </div>
